@@ -2190,13 +2190,41 @@ function sendModChat(){
 }
 </script>
 <script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-  const supabaseUrl = "https://ekezdtageniidwjlgyys.supabase.co/";
+const supabaseUrl = "https://ekezdtageniidwjlgyys.supabase.co/";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVrZXpkdGFnZW5paWR3amxneXlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwMTg3NDgsImV4cCI6MjA5NDU5NDc0OH0.aolWqRWGp2sJyHsm3vFNx6wVEyt1uEc7rM5i4fDgb88";
 
-  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVrZXpkdGFnZW5paWR3amxneXlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwMTg3NDgsImV4cCI6MjA5NDU5NDc0OH0.aolWqRWGp2sJyHsm3vFNx6wVEyt1uEc7rM5i4fDgb88";
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-  const supabase = createClient(supabaseUrl, supabaseKey);
+const chatDiv = document.getElementById("chat");
+
+async function loadMessages() {
+  const { data } = await supabase
+    .from("messages")
+    .select("*")
+    .order("created_at", { ascending: true });
+
+  chatDiv.innerHTML = "";
+
+  data.forEach(m => {
+    chatDiv.innerHTML += <p>${m.text}</p>;
+  });
+}
+
+loadMessages();
+
+window.sendMessage = async function () {
+  const msg = document.getElementById("msg").value;
+
+  await supabase.from("messages").insert([
+    { text: msg }
+  ]);
+
+  document.getElementById("msg").value = "";
+
+  loadMessages();
+};
 </script>
 </body>
 </html>
