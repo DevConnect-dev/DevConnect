@@ -1,1 +1,11 @@
+/* Style futuriste pour TOUS les emojis */
+emoji,
+span,
+i {
+  text-shadow:
+    0 0 5px rgba(255, 120, 0, 0.8),
+    0 0 10px rgba(255, 120, 0, 0.7),
+    0 0 20px rgba(255, 120, 0, 0.6);
 
+  filter: saturate(1.2);
+}
