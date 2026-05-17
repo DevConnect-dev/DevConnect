@@ -449,7 +449,55 @@ input::placeholder{color:rgba(107,99,85,.5)}
 .t-back-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(245,158,11,.4)}
 @media(max-width:600px){.priv-grid{grid-template-columns:1fr}}
 
-/* Spotify profile section */
+/* ════════════ MODÉRATION ════════════ */
+.mod-panel{animation:slideUp .3s ease}
+.mod-hero{background:rgba(15,14,10,.9);border:1px solid rgba(239,68,68,.15);border-radius:12px;padding:24px 28px;margin-bottom:16px;position:relative;overflow:hidden;backdrop-filter:blur(8px)}
+.mod-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(239,68,68,.08) 0%,transparent 70%);pointer-events:none}
+.mod-ttl{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.06em;margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.mod-sub{font-size:.75rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.mod-stats{display:flex;gap:20px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.mod-stat{text-align:center}
+.mod-stat-n{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.04em}
+.mod-stat-l{font-size:.62rem;color:var(--muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em;margin-top:1px}
+.mod-tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.mod-tab{padding:7px 16px;font-size:.78rem;color:var(--muted);border:none;background:none;font-family:'Cabinet Grotesk',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;font-weight:500;letter-spacing:.01em}
+.mod-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.mod-tab:hover:not(.active){color:var(--text)}
+.user-row{background:rgba(15,14,10,.8);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;transition:all .2s;backdrop-filter:blur(6px)}
+.user-row:hover{border-color:rgba(245,158,11,.15)}
+.user-row.banned{border-color:rgba(239,68,68,.25);background:rgba(239,68,68,.04)}
+.user-row.muted{border-color:rgba(251,146,60,.2);background:rgba(251,146,60,.03)}
+.ur-av{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:.78rem;font-weight:800;flex-shrink:0;overflow:hidden;position:relative}
+.ur-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.ur-info{flex:1;min-width:0}
+.ur-name{font-size:.85rem;font-weight:700;display:flex;align-items:center;gap:7px}
+.ur-meta{font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:2px}
+.role-pill{padding:2px 8px;border-radius:3px;font-size:.6rem;font-weight:800;letter-spacing:.06em;font-family:'JetBrains Mono',monospace}
+.rp-owner{background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.3)}
+.rp-mod{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.25)}
+.rp-dev{background:rgba(107,99,85,.12);color:var(--muted);border:1px solid var(--border)}
+.rp-banned{background:rgba(239,68,68,.12);color:#ef4444;border:1px solid rgba(239,68,68,.3)}
+.rp-muted{background:rgba(251,146,60,.12);color:#fb923c;border:1px solid rgba(251,146,60,.28)}
+.ur-actions{display:flex;gap:5px;flex-shrink:0}
+.ur-btn{padding:5px 11px;border-radius:5px;font-size:.69rem;font-weight:700;font-family:'JetBrains Mono',monospace;border:1px solid var(--border);background:none;color:var(--muted);transition:all .18s;letter-spacing:.02em}
+.ur-btn:hover{color:var(--text);border-color:rgba(245,158,11,.3)}
+.ur-btn.danger:hover{border-color:rgba(239,68,68,.5);color:#ef4444;background:rgba(239,68,68,.06)}
+.ur-btn.warn:hover{border-color:rgba(251,146,60,.5);color:#fb923c;background:rgba(251,146,60,.06)}
+.ur-btn.success:hover{border-color:rgba(34,197,94,.5);color:#22c55e;background:rgba(34,197,94,.06)}
+.ur-btn.active-state{border-color:rgba(239,68,68,.4);color:#ef4444;background:rgba(239,68,68,.08)}
+.ur-btn.active-warn{border-color:rgba(251,146,60,.4);color:#fb923c;background:rgba(251,146,60,.08)}
+.mod-log{background:rgba(8,8,6,.9);border:1px solid var(--border);border-radius:10px;padding:14px;max-height:320px;overflow-y:auto;font-family:'JetBrains Mono',monospace;font-size:.7rem}
+.mod-log::-webkit-scrollbar{width:3px}
+.mod-log::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.log-entry{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid rgba(245,158,11,.04);align-items:flex-start}
+.log-entry:last-child{border-bottom:none}
+.log-time{color:rgba(107,99,85,.6);flex-shrink:0;width:45px}
+.log-ico{flex-shrink:0;width:16px;text-align:center}
+.log-txt{color:var(--muted);line-height:1.5}
+.log-txt strong{color:var(--accent)}
+.log-txt .log-target{color:var(--text)}
+.empty-mod{text-align:center;padding:32px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.76rem}
+
 .spotify-profile-section{
   background:rgba(29,185,84,.05);border:1px solid var(--green-border);
   border-radius:10px;padding:16px;margin-bottom:16px;
@@ -680,6 +728,7 @@ input::placeholder{color:rgba(107,99,85,.5)}
     <div class="nav-section">
       <div class="nav-lbl">Mon espace</div>
       <button class="nav-item" onclick="setView('profile',this)"><span class="ic">👤</span>Mon profil</button>
+      <button class="nav-item" id="mod-nav-btn" style="display:none" onclick="setView('moderation',this)"><span class="ic">🛡️</span>Modération<span class="n-badge" id="mod-badge" style="display:none">!</span></button>
     </div>
     <div class="sidebar-bot">
       <div class="user-card" onclick="setView('profile',null)" style="cursor:none">
@@ -850,7 +899,6 @@ document.addEventListener('mouseup',()=>{
 });
 
 // ─── NAV ───
-let prevPage=null;
 function goTo(p){
   document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
   const el=document.getElementById('page-'+p);
@@ -865,17 +913,53 @@ function san(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 function validEmail(e){return/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)}
 function timeAgo(ts){const d=Date.now()-ts,s=Math.floor(d/1000),m=Math.floor(s/60),h=Math.floor(m/60),day=Math.floor(h/24);if(s<60)return'À l\'instant';if(m<60)return m+'min';if(h<24)return h+'h';return day+'j'}
 
+// ─── TOUTES LES VARIABLES GLOBALES EN PREMIER (évite la temporal dead zone) ───
+let me=null;
+let prevPage=null;
+let curFilter='all';
+let currentRoom='general';
+let curRole='dev';
+const COLORS=['#f59e0b','#fb923c','#fcd34d','#ef4444','#22c55e','#3b82f6','#a855f7','#ec4899'];
+const SKILLS=['HTML','CSS','JavaScript','TypeScript','Python','Java','C','C++','C#','PHP','Ruby','Go','Rust','Swift','Kotlin','Dart','React','Vue.js','Angular','Next.js','Svelte','Node.js','Express','Django','Flask','Laravel','Flutter','React Native','MongoDB','PostgreSQL','MySQL','Redis','Firebase','Docker','AWS','Git','GraphQL','TailwindCSS','Three.js','Machine Learning','TensorFlow','Figma','Unity','Godot'];
+const selSkills=new Set();
+const tLabel={post:'💬 DISCUSS',offre:'💼 OFFRE',projet:'🚀 PROJET',recrutement:'🏢 RECRUT'};
+const tClass={post:'t-post',offre:'t-offre',projet:'t-projet',recrutement:'t-recrutement'};
+
+// Remplir la grille de compétences dès le chargement
+(function buildSkills(){
+  const g=document.getElementById('skills-grid');
+  if(!g)return;
+  SKILLS.forEach(s=>{const c=document.createElement('span');c.className='skill-chip';c.textContent=s;c.onclick=()=>{if(selSkills.has(s)){selSkills.delete(s);c.classList.remove('on')}else{selSkills.add(s);c.classList.add('on')}};g.appendChild(c)});
+})();
+
+// ─── BROADCAST CHANNEL (synchro temps réel entre onglets) ───
+let bc;
+try{bc=new BroadcastChannel('devconnect_v2')}catch(e){bc={postMessage:()=>{},onmessage:null}}
+bc.onmessage=e=>{
+  if(!me)return;
+  if(e.data==='posts'){renderPosts();const sm=document.getElementById('st-posts');const sm2=document.getElementById('st-jobs');if(sm)sm.textContent=store.posts().length;if(sm2)sm2.textContent=store.posts().filter(p=>p.type==='offre').length;}
+  if(e.data==='chat')renderChat();
+  if(e.data==='users'){renderOnline();updateSpotifyBadge();}
+};
+
+// ─── STORAGE (synchro entre onglets différents navigateurs si même PC) ───
+window.addEventListener('storage',e=>{
+  if(!me)return;
+  if(e.key==='dc_posts')renderPosts();
+  if(e.key==='dc_chats')renderChat();
+  if(e.key==='dc_users'){renderOnline();}
+});
+
+// ─── STORE avec broadcast automatique ───
 const store={
   users:()=>{try{return JSON.parse(localStorage.getItem('dc_users')||'[]')}catch{return[]}},
-  setUsers:d=>localStorage.setItem('dc_users',JSON.stringify(d)),
+  setUsers:d=>{localStorage.setItem('dc_users',JSON.stringify(d));bc.postMessage('users')},
   posts:()=>{try{return JSON.parse(localStorage.getItem('dc_posts')||'[]')}catch{return[]}},
-  setPosts:d=>localStorage.setItem('dc_posts',JSON.stringify(d)),
+  setPosts:d=>{localStorage.setItem('dc_posts',JSON.stringify(d));bc.postMessage('posts')},
   chats:()=>{try{return JSON.parse(localStorage.getItem('dc_chats')||'{}')}catch{return{}}},
-  setChats:d=>localStorage.setItem('dc_chats',JSON.stringify(d)),
+  setChats:d=>{localStorage.setItem('dc_chats',JSON.stringify(d));bc.postMessage('chat')},
   session:()=>{try{return JSON.parse(localStorage.getItem('dc_sess'))}catch{return null}},
   setSession:d=>d?localStorage.setItem('dc_sess',JSON.stringify(d)):localStorage.removeItem('dc_sess'),
-  spotify:()=>{try{return JSON.parse(localStorage.getItem('dc_spotify')||'{}')}catch{return{}}},
-  setSpotify:d=>localStorage.setItem('dc_spotify',JSON.stringify(d)),
 };
 
 async function hashPwd(p){const b=new TextEncoder().encode(p),h=await crypto.subtle.digest('SHA-256',b);return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join('')}
@@ -885,19 +969,208 @@ function failRate(e){const r=rateLimits[e]||(rateLimits[e]={count:0,ts:Date.now(
 function clearRate(e){delete rateLimits[e]}
 function showErr(id,msg){const el=document.getElementById(id);if(el){el.textContent=msg;el.style.display=msg?'block':'none'}}
 
-// Init session
+// ─── INIT SESSION (FIX : recharge l'utilisateur FRAIS depuis le store) ───
 const initSess=store.session();
-if(initSess&&initSess.exp>Date.now()){goTo('dash');initDash(initSess.user)}else{goTo('auth')}
+if(initSess&&initSess.exp>Date.now()){
+  // Recharger les données fraîches depuis localStorage (pas la version en cache)
+  const freshUser=store.users().find(u=>u.id===initSess.userId);
+  if(freshUser){
+    goTo('dash');
+    initDash(freshUser);
+  }else{
+    // Si l'utilisateur n'existe plus dans le store, aller à l'auth
+    store.setSession(null);
+    goTo('auth');
+  }
+}else{
+  store.setSession(null);
+  goTo('auth');
+}
 
-const COLORS=['#f59e0b','#fb923c','#fcd34d','#ef4444','#22c55e','#3b82f6','#a855f7','#ec4899'];
-const SKILLS=['HTML','CSS','JavaScript','TypeScript','Python','Java','C','C++','C#','PHP','Ruby','Go','Rust','Swift','Kotlin','Dart','React','Vue.js','Angular','Next.js','Svelte','Node.js','Express','Django','Flask','Laravel','Flutter','React Native','MongoDB','PostgreSQL','MySQL','Redis','Firebase','Docker','AWS','Git','GraphQL','TailwindCSS','Three.js','Machine Learning','TensorFlow','Figma','Unity','Godot'];
-const selSkills=new Set();
-let curRole='dev';
+// ─── SPOTIFY PKCE OAUTH RÉEL ───
+// Pour activer : va sur https://developer.spotify.com/dashboard
+// Crée une app, ajoute comme Redirect URI : l'URL exacte de ce fichier HTML
+// Ex: http://127.0.0.1:5500/devconnect-v2.html ou file:///...
+// Puis colle ton Client ID ci-dessous :
+const SPOTIFY_CLIENT_ID = localStorage.getItem('dc_sp_client_id') || '';
+const SPOTIFY_REDIRECT = window.location.href.split('?')[0].split('#')[0];
+const SPOTIFY_SCOPES = 'user-read-currently-playing user-read-playback-state user-read-private';
 
-(function buildSkills(){
-  const g=document.getElementById('skills-grid');
-  SKILLS.forEach(s=>{const c=document.createElement('span');c.className='skill-chip';c.textContent=s;c.onclick=()=>{if(selSkills.has(s)){selSkills.delete(s);c.classList.remove('on')}else{selSkills.add(s);c.classList.add('on')}};g.appendChild(c)});
-})();
+function b64url(buf){return btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'')}
+async function spVerifier(){const a=new Uint8Array(32);crypto.getRandomValues(a);return b64url(a)}
+async function spChallenge(v){const d=new TextEncoder().encode(v);return b64url(await crypto.subtle.digest('SHA-256',d))}
+
+async function initiateSpotifyAuth(){
+  const clientId=localStorage.getItem('dc_sp_client_id')||'';
+  if(!clientId){openSpotifySetup();return;}
+  const verifier=await spVerifier();
+  const challenge=await spChallenge(verifier);
+  localStorage.setItem('dc_sp_verifier',verifier);
+  if(me)localStorage.setItem('dc_sp_userid',me.id);
+  const params=new URLSearchParams({client_id:clientId,response_type:'code',redirect_uri:SPOTIFY_REDIRECT,scope:SPOTIFY_SCOPES,code_challenge_method:'S256',code_challenge:challenge,state:'dc_spotify'});
+  window.location.href='https://accounts.spotify.com/authorize?'+params;
+}
+
+async function handleSpotifyCallback(){
+  const params=new URLSearchParams(window.location.search);
+  const code=params.get('code'),state=params.get('state');
+  if(state!=='dc_spotify'||!code)return false;
+  // Nettoyer l'URL
+  window.history.replaceState({},'',window.location.pathname);
+  const clientId=localStorage.getItem('dc_sp_client_id')||'';
+  const verifier=localStorage.getItem('dc_sp_verifier')||'';
+  try{
+    const res=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({client_id:clientId,grant_type:'authorization_code',code,redirect_uri:SPOTIFY_REDIRECT,code_verifier:verifier})});
+    const data=await res.json();
+    if(data.access_token){
+      const exp=Date.now()+data.expires_in*1000;
+      localStorage.setItem('dc_sp_token',JSON.stringify({token:data.access_token,refresh:data.refresh_token||'',exp}));
+      localStorage.removeItem('dc_sp_verifier');
+      // Récupérer le userId stocké avant le redirect
+      const userId=localStorage.getItem('dc_sp_userid')||'';
+      localStorage.removeItem('dc_sp_userid');
+      // Charger le profil Spotify
+      const track=await fetchCurrentlyPlaying(data.access_token);
+      const meProfile=await fetchSpotifyProfile(data.access_token);
+      // Mettre à jour l'utilisateur
+      const users=store.users();
+      const u=users.find(x=>x.id===userId||(me&&x.id===me.id));
+      if(u){
+        u.spotifyConnected=true;
+        u.spotifyTrack=track;
+        u.spotifyProfile=meProfile;
+        store.setUsers(users);
+        if(me&&me.id===u.id){me=u;store.setSession({userId:me.id,user:me,exp:Date.now()+86400000});}
+      }
+      return true;
+    }
+  }catch(err){console.error('Spotify token error',err)}
+  return false;
+}
+
+async function fetchCurrentlyPlaying(token){
+  try{
+    const res=await fetch('https://api.spotify.com/v1/me/player/currently-playing',{headers:{Authorization:'Bearer '+token}});
+    if(res.status===204||res.status===404)return null;
+    if(!res.ok)return null;
+    const data=await res.json();
+    if(data&&data.item){
+      return{track:data.item.name,artist:data.item.artists.map(a=>a.name).join(', '),album:data.item.album?.name||'',cover:data.item.album?.images?.[0]?.url||'',isPlaying:data.is_playing,progress:data.progress_ms,duration:data.item.duration_ms,emoji:'🎵'};
+    }
+  }catch(e){}
+  return null;
+}
+
+async function fetchSpotifyProfile(token){
+  try{
+    const res=await fetch('https://api.spotify.com/v1/me',{headers:{Authorization:'Bearer '+token}});
+    if(!res.ok)return null;
+    const data=await res.json();
+    return{name:data.display_name||'',avatar:data.images?.[0]?.url||'',followers:data.followers?.total||0,id:data.id};
+  }catch(e){}
+  return null;
+}
+
+async function refreshSpotifyToken(){
+  const sp=JSON.parse(localStorage.getItem('dc_sp_token')||'{}');
+  if(!sp.refresh)return null;
+  const clientId=localStorage.getItem('dc_sp_client_id')||'';
+  try{
+    const res=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'refresh_token',refresh_token:sp.refresh,client_id:clientId})});
+    const data=await res.json();
+    if(data.access_token){
+      localStorage.setItem('dc_sp_token',JSON.stringify({token:data.access_token,refresh:data.refresh_token||sp.refresh,exp:Date.now()+data.expires_in*1000}));
+      return data.access_token;
+    }
+  }catch(e){}
+  return null;
+}
+
+async function getSpotifyToken(){
+  const sp=JSON.parse(localStorage.getItem('dc_sp_token')||'{}');
+  if(!sp.token)return null;
+  if(Date.now()<(sp.exp-60000))return sp.token;
+  return await refreshSpotifyToken();
+}
+
+async function refreshNowPlaying(){
+  if(!me||!me.spotifyConnected)return;
+  const token=await getSpotifyToken();
+  if(!token)return;
+  const track=await fetchCurrentlyPlaying(token);
+  const users=store.users();
+  const u=users.find(x=>x.id===me.id);
+  if(u){u.spotifyTrack=track;store.setUsers(users);me=u;store.setSession({userId:me.id,user:me,exp:Date.now()+86400000});}
+  renderSpotifyWidget();
+}
+
+function disconnectSpotify(){
+  localStorage.removeItem('dc_sp_token');
+  if(me){
+    const users=store.users(),u=users.find(x=>x.id===me.id);
+    if(u){u.spotifyConnected=false;u.spotifyTrack=null;u.spotifyProfile=null;store.setUsers(users);me=u;store.setSession({userId:me.id,user:me,exp:Date.now()+86400000});}
+  }
+  renderSpotifyWidget();updateSpotifyBadge();
+}
+
+// Modal setup Spotify
+function openSpotifySetup(){
+  const existing=document.getElementById('sp-setup-modal');if(existing)existing.remove();
+  const m=document.createElement('div');
+  m.id='sp-setup-modal';
+  m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:2000;display:grid;place-items:center;backdrop-filter:blur(8px)';
+  m.innerHTML=`<div style="background:#0f0e0a;border:1px solid rgba(245,158,11,.25);border-radius:14px;padding:28px;max-width:420px;width:90%;box-shadow:0 24px 80px rgba(0,0,0,.7)">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.05em;margin-bottom:6px">CONNECTER SPOTIFY</div>
+    <p style="font-size:.75rem;color:#6b6355;font-family:'JetBrains Mono',monospace;line-height:1.8;margin-bottom:16px">
+      1. Va sur <a href="https://developer.spotify.com/dashboard" target="_blank" style="color:#f59e0b">developer.spotify.com/dashboard</a><br>
+      2. Crée une app → Settings → Redirect URIs<br>
+      3. Ajoute exactement : <code style="background:rgba(245,158,11,.1);padding:2px 6px;border-radius:3px;color:#fcd34d;font-size:.68rem">${SPOTIFY_REDIRECT}</code><br>
+      4. Colle ton Client ID ci-dessous
+    </p>
+    <label style="font-size:.65rem;color:#6b6355;text-transform:uppercase;letter-spacing:.1em;font-family:'JetBrains Mono',monospace;display:block;margin-bottom:5px">Client ID Spotify</label>
+    <input id="sp-cid-input" type="text" placeholder="1a2b3c4d5e6f..." value="${localStorage.getItem('dc_sp_client_id')||''}"
+      style="width:100%;background:#161410;border:1px solid rgba(245,158,11,.15);border-radius:6px;padding:10px 13px;color:#f5f0e8;font-family:'Cabinet Grotesk',sans-serif;font-size:.85rem;outline:none;margin-bottom:12px;transition:border-color .2s"/>
+    <div style="display:flex;gap:8px">
+      <button onclick="document.getElementById('sp-setup-modal').remove()" style="flex:1;padding:10px;background:transparent;border:1px solid rgba(245,158,11,.15);border-radius:6px;color:#6b6355;font-family:'Cabinet Grotesk',sans-serif;font-size:.82rem">Annuler</button>
+      <button onclick="saveSpotifyClientId()" style="flex:2;padding:10px;background:linear-gradient(135deg,#f59e0b,#fb923c);color:#000;border:none;border-radius:6px;font-weight:800;font-family:'Cabinet Grotesk',sans-serif;font-size:.85rem">Connecter →</button>
+    </div>
+  </div>`;
+  document.body.appendChild(m);
+  m.addEventListener('click',e=>{if(e.target===m)m.remove()});
+  setTimeout(()=>{const inp=document.getElementById('sp-cid-input');if(inp){inp.focus();inp.addEventListener('focus',()=>inp.style.borderColor='rgba(245,158,11,.45)');inp.addEventListener('blur',()=>inp.style.borderColor='rgba(245,158,11,.15)');}},50);
+}
+
+function saveSpotifyClientId(){
+  const cid=document.getElementById('sp-cid-input').value.trim();
+  if(!cid){alert('Colle ton Client ID Spotify.');return;}
+  localStorage.setItem('dc_sp_client_id',cid);
+  document.getElementById('sp-setup-modal').remove();
+  initiateSpotifyAuth();
+}
+
+function connectSpotify(){initiateSpotifyAuth();}
+
+function renderSpotifyWidget(){
+  const c=document.getElementById('spotify-content');if(!c)return;
+  const isConn=me&&me.spotifyConnected;
+  const track=me&&me.spotifyTrack;
+  if(isConn){
+    const coverHtml=track&&track.cover?`<img src="${track.cover}" style="width:44px;height:44px;border-radius:4px;object-fit:cover;flex-shrink:0" onerror="this.style.display='none'"/>`:`<div style="width:44px;height:44px;border-radius:4px;background:rgba(29,185,84,.15);display:grid;place-items:center;font-size:1.3rem;flex-shrink:0">🎵</div>`;
+    const trackName=track?san(track.track):'Rien en cours';
+    const artistName=track?san(track.artist):'';
+    const isPlaying=track&&track.isPlaying;
+    const profileHtml=me.spotifyProfile?`<div style="font-size:.62rem;color:#1DB954;margin-bottom:8px;display:flex;align-items:center;gap:5px"><svg width="10" height="10" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>${san(me.spotifyProfile.name||'Spotify')}</div>`:'';
+    c.innerHTML=`${profileHtml}<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">${coverHtml}<div style="min-width:0"><div style="font-size:.79rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${trackName}</div><div style="font-size:.65rem;color:#6b6355;font-family:'JetBrains Mono',monospace">${artistName||'Non connecté'}</div></div>${isPlaying?`<div class="sp-bars" style="margin-left:auto;flex-shrink:0"><div class="sp-bar"></div><div class="sp-bar"></div><div class="sp-bar"></div><div class="sp-bar"></div></div>`:''}</div><div style="display:flex;gap:6px"><button onclick="refreshNowPlaying()" style="flex:1;padding:5px;background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.25);border-radius:5px;color:#1DB954;font-size:.68rem;font-family:'JetBrains Mono',monospace;transition:all .2s">↻ Actualiser</button><button onclick="disconnectSpotify()" style="padding:5px 10px;background:none;border:1px solid rgba(107,99,85,.3);border-radius:5px;font-size:.68rem;color:#6b6355;font-family:'JetBrains Mono',monospace;transition:all .2s" onmouseover="this.style.borderColor='rgba(239,68,68,.4)';this.style.color='#ef4444'" onmouseout="this.style.borderColor='rgba(107,99,85,.3)';this.style.color='#6b6355'">Déco</button></div>`;
+  }else{
+    c.innerHTML=`<p style="font-size:.73rem;color:#6b6355;margin-bottom:10px;line-height:1.7;font-family:'JetBrains Mono',monospace">// Connecte Spotify pour afficher ta musique sur ton profil en temps réel.</p>
+    <button class="spotify-connect-btn" onclick="connectSpotify()"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>Connecter Spotify</button>`;
+  }
+}
+
+function updateSpotifyBadge(){
+  const badge=document.getElementById('sb-spotify-badge');
+  if(badge)badge.style.display=(me&&me.spotifyConnected)?'inline-flex':'none';
+}
 
 function switchAuthTab(t){
   document.querySelectorAll('.auth-tab').forEach((el,i)=>el.classList.toggle('active',(t==='signup'&&i===0)||(t==='login'&&i===1)));
@@ -942,103 +1215,21 @@ async function doLogin(){
   setTimeout(()=>{btn.disabled=false;btn.textContent='Se connecter →';goTo('dash');initDash(user)},700);
 }
 
-function doLogout(){store.setSession(null);goTo('auth')}
-
-// ─── SPOTIFY ───
-const SPOTIFY_TRACKS=[
-  {track:'Midnight City',artist:'M83',emoji:'🎸'},
-  {track:'Blinding Lights',artist:'The Weeknd',emoji:'🌃'},
-  {track:'Levitating',artist:'Dua Lipa',emoji:'✨'},
-  {track:'Peaches',artist:'Justin Bieber',emoji:'🍑'},
-  {track:'Good 4 U',artist:'Olivia Rodrigo',emoji:'🎤'},
-  {track:'Stay',artist:'The Kid LAROI',emoji:'💫'},
-  {track:'Heat Waves',artist:'Glass Animals',emoji:'🌊'},
-  {track:'Industry Baby',artist:'Lil Nas X',emoji:'🎺'},
-];
-let spotifyConnected=false;
-let currentTrack=null;
-
-function connectSpotify(){
-  // Simulate OAuth flow
-  const btn=document.querySelector('.spotify-connect-btn');
-  btn.textContent='Connexion...';btn.disabled=true;
-  setTimeout(()=>{
-    spotifyConnected=true;
-    currentTrack=SPOTIFY_TRACKS[Math.floor(Math.random()*SPOTIFY_TRACKS.length)];
-    // Update user
-    if(me){
-      const users=store.users();
-      const u=users.find(x=>x.id===me.id);
-      if(u){u.spotifyConnected=true;u.spotifyTrack=currentTrack;store.setUsers(users);me=u;store.setSession({userId:me.id,user:me,exp:Date.now()+86400000});}
-    }
-    renderSpotifyWidget();
-    updateSpotifyBadge();
-    btn.disabled=false;
-  },1200);
-}
-
-function disconnectSpotify(){
-  spotifyConnected=false;currentTrack=null;
-  if(me){
-    const users=store.users();
-    const u=users.find(x=>x.id===me.id);
-    if(u){u.spotifyConnected=false;u.spotifyTrack=null;store.setUsers(users);me=u;store.setSession({userId:me.id,user:me,exp:Date.now()+86400000});}
+// ─── CHECK SPOTIFY CALLBACK après redirect ───
+(async function checkSpotifyCallback(){
+  const params=new URLSearchParams(window.location.search);
+  if(params.get('state')==='dc_spotify'&&params.get('code')){
+    const sess=store.session();
+    if(sess&&sess.exp>Date.now()){const fu=store.users().find(u=>u.id===sess.userId);if(fu)me=fu;}
+    const ok=await handleSpotifyCallback();
+    if(ok&&me){goTo('dash');initDash(me);}
+    else goTo('auth');
+    return;
   }
-  renderSpotifyWidget();updateSpotifyBadge();
-}
-
-function renderSpotifyWidget(){
-  const c=document.getElementById('spotify-content');
-  if(!c)return;
-  if(spotifyConnected&&currentTrack){
-    c.innerHTML=`
-      <div class="spotify-connected-card">
-        <div style="font-size:.64rem;color:var(--green);font-family:'JetBrains Mono',monospace;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between">
-          <span>🎵 EN COURS</span>
-          <button onclick="disconnectSpotify()" style="background:none;border:1px solid rgba(107,99,85,.3);padding:2px 8px;border-radius:3px;font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace;transition:all .2s" onmouseover="this.style.borderColor='rgba(239,68,68,.4)';this.style.color='var(--error)'" onmouseout="this.style.borderColor='rgba(107,99,85,.3)';this.style.color='var(--muted)'">Déconnecter</button>
-        </div>
-        <div class="sp-now-playing">
-          <div class="sp-album">${currentTrack.emoji}</div>
-          <div class="sp-info">
-            <div class="sp-track">${currentTrack.track}</div>
-            <div class="sp-artist">${currentTrack.artist}</div>
-          </div>
-          <div class="sp-bars">
-            <div class="sp-bar" style="height:60%"></div>
-            <div class="sp-bar" style="height:100%"></div>
-            <div class="sp-bar" style="height:40%"></div>
-            <div class="sp-bar" style="height:80%"></div>
-          </div>
-        </div>
-      </div>
-    `;
-  }else{
-    c.innerHTML=`
-      <p style="font-size:.75rem;color:var(--muted);margin-bottom:10px;line-height:1.7;font-family:'JetBrains Mono',monospace">Connecte Spotify pour afficher ta musique sur ton profil.</p>
-      <button class="spotify-connect-btn" onclick="connectSpotify()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-        Connecter Spotify
-      </button>
-    `;
-  }
-}
-
-function updateSpotifyBadge(){
-  const badge=document.getElementById('sb-spotify-badge');
-  if(badge)badge.style.display=spotifyConnected?'inline-flex':'none';
-}
-
-// ─── DASH INIT ───
-let me=null;
-let curFilter='all';
-let currentRoom='general';
-const tLabel={post:'💬 DISCUSS',offre:'💼 OFFRE',projet:'🚀 PROJET',recrutement:'🏢 RECRUT'};
-const tClass={post:'t-post',offre:'t-offre',projet:'t-projet',recrutement:'t-recrutement'};
+})();
 
 function initDash(user){
   me=user;
-  spotifyConnected=me.spotifyConnected||false;
-  currentTrack=me.spotifyTrack||null;
   updateSidebarUser();
   renderPosts();
   renderOnline();
@@ -1371,7 +1562,9 @@ function renderChat(){
   c.scrollTop=c.scrollHeight;
 }
 
-setInterval(()=>{if(me){renderChat();renderOnline()}},3000);
+setInterval(()=>{if(me){renderChat();renderOnline();}},3000);
+// Rafraîchir Spotify toutes les 30 secondes
+setInterval(()=>{if(me&&me.spotifyConnected)refreshNowPlaying();},30000);
 </script>
 </body>
 </html>
