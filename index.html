@@ -462,7 +462,6 @@ input::placeholder{color:rgba(107,99,85,.5)}
 .sp-profile-pic{width:52px;height:52px;border-radius:50%;background:var(--surface3);display:grid;place-items:center;font-size:1.5rem;border:2px solid var(--green-border);overflow:hidden}
 .sp-profile-name{font-size:.9rem;font-weight:700;margin-bottom:3px}
 .sp-profile-stats{font-size:.66rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
-
 /* ════════════════ ROLE BADGES ════════════════ */
 :root{
   --owner:#fcd34d;
@@ -568,9 +567,9 @@ input::placeholder{color:rgba(107,99,85,.5)}
 .banned-screen.visible{display:grid}
 .banned-card{text-align:center;padding:48px;background:rgba(12,10,8,.98);border:1px solid rgba(239,68,68,.3);border-radius:16px;max-width:400px;box-shadow:0 0 80px rgba(239,68,68,.1)}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
-
 <!-- ─── BACKGROUND ─── -->
 <div class="bg-scene">
   <div class="bg-orb bg-orb-1"></div>
@@ -586,7 +585,6 @@ input::placeholder{color:rgba(107,99,85,.5)}
 
 <!-- ─── HIDDEN FILE INPUT ─── -->
 <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="handlePhotoUpload(event)"/>
-
 <!-- ==================== AUTH PAGE ==================== -->
 <div class="page" id="page-auth">
   <div class="auth-left">
@@ -894,7 +892,6 @@ input::placeholder{color:rgba(107,99,85,.5)}
     </div>
   </div>
 </div>
-
 <!-- ==================== BANNED SCREEN ==================== -->
 <div class="banned-screen" id="banned-screen">
   <div class="banned-card">
@@ -1106,8 +1103,80 @@ input::placeholder{color:rgba(107,99,85,.5)}
     <button class="t-back-btn" onclick="goBack()">← Retour à l'accueil</button>
   </div>
 </div>
-
 <script>
+// ─── SUPABASE CONFIG ───
+const SUPA_URL = 'https://ekezdtageniidwjlgyys.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVrZXpkdGFnZW5paWR3amxneXlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwMTg3NDgsImV4cCI6MjA5NDU5NDc0OH0.aolWqRWGp2sJyHsm3vFNx6wVEyt1uEc7rM5i4fDgb88';
+const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+// ─── STORE Supabase (remplace localStorage) ───
+const store = {
+  // USERS
+  async getUsers(){
+    const{data,error}=await sb.from('dc_users').select('*');
+    if(error)console.error('getUsers',error);
+    return data||[];
+  },
+  async getUserByEmail(email){
+    const{data,error}=await sb.from('dc_users').select('*').eq('email',email).maybeSingle();
+    if(error)console.error('getUserByEmail',error);
+    return data||null;
+  },
+  async getUserById(id){
+    const{data,error}=await sb.from('dc_users').select('*').eq('id',id).maybeSingle();
+    if(error)console.error('getUserById',error);
+    return data||null;
+  },
+  async upsertUser(user){
+    const{error}=await sb.from('dc_users').upsert(user,{onConflict:'id'});
+    if(error)throw error;
+  },
+  // POSTS
+  async getPosts(){
+    const{data,error}=await sb.from('dc_posts').select('*').order('ts',{ascending:false});
+    if(error)console.error('getPosts',error);
+    return data||[];
+  },
+  async addPost(post){
+    const{error}=await sb.from('dc_posts').insert(post);
+    if(error)throw error;
+  },
+  async updatePost(id,changes){
+    const{error}=await sb.from('dc_posts').update(changes).eq('id',id);
+    if(error)throw error;
+  },
+  async deletePost(id){
+    const{error}=await sb.from('dc_posts').delete().eq('id',id);
+    if(error)throw error;
+  },
+  // CHATS
+  async getChats(room){
+    const{data,error}=await sb.from('dc_chats').select('*').eq('room',room).order('t',{ascending:true}).limit(80);
+    if(error)console.error('getChats',error);
+    return data||[];
+  },
+  async addChat(msg){
+    const{error}=await sb.from('dc_chats').insert(msg);
+    if(error)throw error;
+  },
+  // SESSION (reste en localStorage)
+  session(){try{return JSON.parse(localStorage.getItem('dc_sess'))}catch{return null}},
+  setSession(d){d?localStorage.setItem('dc_sess',JSON.stringify(d)):localStorage.removeItem('dc_sess')},
+};
+
+// ─── USERS CACHE (pour les fonctions admin synchrones) ───
+let _usersCache=[];
+async function refreshUsersCache(){_usersCache=await store.getUsers();}
+// Shim sync pour le code admin (utilise le cache)
+store.users=()=>_usersCache;
+store.setUsers=async(arr)=>{_usersCache=arr;for(const u of arr){try{await store.upsertUser(u);}catch(e){console.error(e);}}renderOnline();};
+// Logs et modchat restent en localStorage
+store.logs=()=>{try{return JSON.parse(localStorage.getItem("dc_logs")||"[]")}catch{return[]}};
+store.setLogs=d=>{localStorage.setItem("dc_logs",JSON.stringify(d))};
+store.posts_sync=()=>[];
+store.modchats=()=>{try{return JSON.parse(localStorage.getItem("dc_modchats")||"[]")}catch{return[]}};
+store.setModchats=d=>{localStorage.setItem("dc_modchats",JSON.stringify(d))};
+
 // ─── CURSOR ───
 const cCross=document.getElementById('cCross');
 const cDotInner=document.getElementById('cDotInner');
@@ -1147,12 +1216,13 @@ function san(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 function validEmail(e){return/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)}
 function timeAgo(ts){const d=Date.now()-ts,s=Math.floor(d/1000),m=Math.floor(s/60),h=Math.floor(m/60),day=Math.floor(h/24);if(s<60)return'À l\'instant';if(m<60)return m+'min';if(h<24)return h+'h';return day+'j'}
 
-// ─── TOUTES LES VARIABLES GLOBALES EN PREMIER (évite la temporal dead zone) ───
+// ─── VARIABLES GLOBALES ───
 let me=null;
 let prevPage=null;
 let curFilter='all';
 let currentRoom='general';
 let curRole='dev';
+let realtimeChannel=null;
 const COLORS=['#f59e0b','#fb923c','#fcd34d','#ef4444','#22c55e','#3b82f6','#a855f7','#ec4899'];
 const SKILLS=['HTML','CSS','JavaScript','TypeScript','Python','Java','C','C++','C#','PHP','Ruby','Go','Rust','Swift','Kotlin','Dart','React','Vue.js','Angular','Next.js','Svelte','Node.js','Express','Django','Flask','Laravel','Flutter','React Native','MongoDB','PostgreSQL','MySQL','Redis','Firebase','Docker','AWS','Git','GraphQL','TailwindCSS','Three.js','Machine Learning','TensorFlow','Figma','Unity','Godot'];
 const selSkills=new Set();
@@ -1166,41 +1236,7 @@ const tClass={post:'t-post',offre:'t-offre',projet:'t-projet',recrutement:'t-rec
   SKILLS.forEach(s=>{const c=document.createElement('span');c.className='skill-chip';c.textContent=s;c.onclick=()=>{if(selSkills.has(s)){selSkills.delete(s);c.classList.remove('on')}else{selSkills.add(s);c.classList.add('on')}};g.appendChild(c)});
 })();
 
-// ─── BROADCAST CHANNEL (synchro temps réel entre onglets) ───
-let bc;
-try{bc=new BroadcastChannel('devconnect_v2')}catch(e){bc={postMessage:()=>{},onmessage:null}}
-bc.onmessage=e=>{
-  if(!me)return;
-  if(e.data==='posts'){renderPosts();const sm=document.getElementById('st-posts');const sm2=document.getElementById('st-jobs');if(sm)sm.textContent=store.posts().length;if(sm2)sm2.textContent=store.posts().filter(p=>p.type==='offre').length;}
-  if(e.data==='chat')renderChat();
-  if(e.data==='users'){renderOnline();updateSpotifyBadge();checkBanStatus();}
-  if(e.data==='modchat'&&isModOrAbove(me))renderModChat();
-};
-
-// ─── STORAGE (synchro entre onglets différents navigateurs si même PC) ───
-window.addEventListener('storage',e=>{
-  if(!me)return;
-  if(e.key==='dc_posts')renderPosts();
-  if(e.key==='dc_chats')renderChat();
-  if(e.key==='dc_users'){renderOnline();}
-});
-
-// ─── STORE avec broadcast automatique ───
-const store={
-  users:()=>{try{return JSON.parse(localStorage.getItem('dc_users')||'[]')}catch{return[]}},
-  setUsers:d=>{localStorage.setItem('dc_users',JSON.stringify(d));bc.postMessage('users')},
-  posts:()=>{try{return JSON.parse(localStorage.getItem('dc_posts')||'[]')}catch{return[]}},
-  setPosts:d=>{localStorage.setItem('dc_posts',JSON.stringify(d));bc.postMessage('posts')},
-  chats:()=>{try{return JSON.parse(localStorage.getItem('dc_chats')||'{}')}catch{return{}}},
-  setChats:d=>{localStorage.setItem('dc_chats',JSON.stringify(d));bc.postMessage('chat')},
-  session:()=>{try{return JSON.parse(localStorage.getItem('dc_sess'))}catch{return null}},
-  setSession:d=>d?localStorage.setItem('dc_sess',JSON.stringify(d)):localStorage.removeItem('dc_sess'),
-  logs:()=>{try{return JSON.parse(localStorage.getItem('dc_logs')||'[]')}catch{return[]}},
-  setLogs:d=>{localStorage.setItem('dc_logs',JSON.stringify(d));bc.postMessage('logs')},
-  modchats:()=>{try{return JSON.parse(localStorage.getItem('dc_modchats')||'[]')}catch{return[]}},
-  setModchats:d=>{localStorage.setItem('dc_modchats',JSON.stringify(d));bc.postMessage('modchat')},
-};
-
+// ─── AUTH UTILS ───
 async function hashPwd(p){const b=new TextEncoder().encode(p),h=await crypto.subtle.digest('SHA-256',b);return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join('')}
 const rateLimits={};
 function checkRate(e){const r=rateLimits[e];if(!r)return null;if(r.count>=5&&Date.now()-r.ts<900000)return`Trop de tentatives. Réessaie dans ${Math.ceil((900000-(Date.now()-r.ts))/60000)} min.`;if(Date.now()-r.ts>900000){delete rateLimits[e];return null}return null}
@@ -1208,32 +1244,83 @@ function failRate(e){const r=rateLimits[e]||(rateLimits[e]={count:0,ts:Date.now(
 function clearRate(e){delete rateLimits[e]}
 function showErr(id,msg){const el=document.getElementById(id);if(el){el.textContent=msg;el.style.display=msg?'block':'none'}}
 
-// ─── INIT SESSION (FIX : recharge l'utilisateur FRAIS depuis le store) ───
-const initSess=store.session();
-if(initSess&&initSess.exp>Date.now()){
-  // Recharger les données fraîches depuis localStorage (pas la version en cache)
-  const freshUser=store.users().find(u=>u.id===initSess.userId);
-  if(freshUser){
-    goTo('dash');
-    initDash(freshUser);
-  }else{
-    // Si l'utilisateur n'existe plus dans le store, aller à l'auth
-    store.setSession(null);
-    goTo('auth');
+// ─── REALTIME SUPABASE ───
+function setupRealtime(){
+  if(realtimeChannel){sb.removeChannel(realtimeChannel)}
+  realtimeChannel=sb.channel('devconnect-rt')
+    .on('postgres_changes',{event:'*',schema:'public',table:'dc_chats'},payload=>{
+      if(payload.new&&payload.new.room===currentRoom)renderChat();
+    })
+    .on('postgres_changes',{event:'*',schema:'public',table:'dc_posts'},()=>{
+      renderPosts();
+      renderProfile();
+    })
+    .on('postgres_changes',{event:'*',schema:'public',table:'dc_users'},()=>{
+      renderOnline();
+      updateSpotifyBadge();
+    })
+    .subscribe();
+}
+
+// ─── SIGNUP ───
+async function doSignup(){
+  const fn=document.getElementById('s-fn').value.trim(),ln=document.getElementById('s-ln').value.trim(),email=document.getElementById('s-email').value.trim().toLowerCase(),pwd=document.getElementById('s-pwd').value,co=document.getElementById('s-co').value.trim(),terms=document.getElementById('terms-cb').checked;
+  if(!fn||!ln)return showErr('s-err','Renseigne ton prénom et ton nom.');
+  if(!validEmail(email))return showErr('s-err','Email invalide.');
+  if(pwd.length<8)return showErr('s-err','Mot de passe trop court (8 caractères min).');
+  if(!terms)return showErr('s-err','Accepte les conditions d\'utilisation.');
+  if(curRole==='recruiter'&&!co)return showErr('s-err','Renseigne le nom de ton entreprise.');
+  const btn=document.getElementById('s-btn');btn.disabled=true;btn.textContent='Création en cours...';
+  try{
+    const existing=await store.getUserByEmail(email);
+    if(existing){btn.disabled=false;btn.textContent='Créer mon compte →';return showErr('s-err','Cet email est déjà utilisé.');}
+    const hash=await hashPwd(pwd);
+    const color=COLORS[Math.floor(Math.random()*COLORS.length)];
+    const user={id:uid(),firstname:san(fn),lastname:san(ln),email,hash,role:curRole,skills:curRole==='dev'?[...selSkills]:[],company:curRole==='recruiter'?san(co):'',initials:(fn[0]+ln[0]).toUpperCase(),color,bio:'',photo:'',created_at:Date.now(),spotify_connected:false,spotify_track:null,spotify_profile:null,rank:email===OWNER_EMAIL?'owner':'member',banned:false,muted:false,muted_until:0};
+    await store.upsertUser(user);
+    store.setSession({userId:user.id,exp:Date.now()+86400000});
+    btn.textContent='✓ Compte créé !';
+    setTimeout(()=>{btn.disabled=false;btn.textContent='Créer mon compte →';goTo('dash');initDash(user)},900);
+  }catch(err){
+    console.error(err);btn.disabled=false;btn.textContent='Créer mon compte →';
+    showErr('s-err','Erreur lors de la création. Réessaie.');
   }
-}else{
+}
+
+// ─── LOGIN ───
+async function doLogin(){
+  const email=document.getElementById('l-email').value.trim().toLowerCase(),pwd=document.getElementById('l-pwd').value;
+  if(!validEmail(email))return showErr('l-err','Email invalide.');
+  if(!pwd)return showErr('l-err','Renseigne ton mot de passe.');
+  const lock=checkRate(email);if(lock)return showErr('l-err',lock);
+  const btn=document.getElementById('l-btn');btn.disabled=true;btn.textContent='Connexion...';
+  try{
+    const user=await store.getUserByEmail(email);
+    if(!user){failRate(email);btn.disabled=false;btn.textContent='Se connecter →';return showErr('l-err','Email ou mot de passe incorrect.')}
+    const hash=await hashPwd(pwd);
+    if(user.hash!==hash){failRate(email);btn.disabled=false;btn.textContent='Se connecter →';return showErr('l-err','Email ou mot de passe incorrect.')}
+    clearRate(email);
+    store.setSession({userId:user.id,exp:Date.now()+86400000});
+    btn.textContent='✓ Connecté !';
+    setTimeout(()=>{btn.disabled=false;btn.textContent='Se connecter →';goTo('dash');initDash(user)},700);
+  }catch(err){
+    console.error(err);btn.disabled=false;btn.textContent='Se connecter →';
+    showErr('l-err','Erreur de connexion. Réessaie.');
+  }
+}
+
+// ─── LOGOUT ───
+function doLogout(){
   store.setSession(null);
+  me=null;
+  if(realtimeChannel){sb.removeChannel(realtimeChannel);realtimeChannel=null;}
   goTo('auth');
 }
 
-// ─── SPOTIFY PKCE OAUTH RÉEL ───
-// Pour activer : va sur https://developer.spotify.com/dashboard
-// Crée une app, ajoute comme Redirect URI : l'URL exacte de ce fichier HTML
-// Ex: http://127.0.0.1:5500/devconnect-v2.html ou file:///...
-// Puis colle ton Client ID ci-dessous :
-const SPOTIFY_CLIENT_ID = localStorage.getItem('dc_sp_client_id') || '';
-const SPOTIFY_REDIRECT = window.location.href.split('?')[0].split('#')[0];
-const SPOTIFY_SCOPES = 'user-read-currently-playing user-read-playback-state user-read-private';
+// ─── SPOTIFY PKCE OAUTH ───
+const SPOTIFY_CLIENT_ID=localStorage.getItem('dc_sp_client_id')||'';
+const SPOTIFY_REDIRECT=window.location.href.split('?')[0].split('#')[0];
+const SPOTIFY_SCOPES='user-read-currently-playing user-read-playback-state user-read-private';
 
 function b64url(buf){return btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'')}
 async function spVerifier(){const a=new Uint8Array(32);crypto.getRandomValues(a);return b64url(a)}
@@ -1254,7 +1341,6 @@ async function handleSpotifyCallback(){
   const params=new URLSearchParams(window.location.search);
   const code=params.get('code'),state=params.get('state');
   if(state!=='dc_spotify'||!code)return false;
-  // Nettoyer l'URL
   window.history.replaceState({},'',window.location.pathname);
   const clientId=localStorage.getItem('dc_sp_client_id')||'';
   const verifier=localStorage.getItem('dc_sp_verifier')||'';
@@ -1265,21 +1351,15 @@ async function handleSpotifyCallback(){
       const exp=Date.now()+data.expires_in*1000;
       localStorage.setItem('dc_sp_token',JSON.stringify({token:data.access_token,refresh:data.refresh_token||'',exp}));
       localStorage.removeItem('dc_sp_verifier');
-      // Récupérer le userId stocké avant le redirect
       const userId=localStorage.getItem('dc_sp_userid')||'';
       localStorage.removeItem('dc_sp_userid');
-      // Charger le profil Spotify
       const track=await fetchCurrentlyPlaying(data.access_token);
       const meProfile=await fetchSpotifyProfile(data.access_token);
-      // Mettre à jour l'utilisateur
-      const users=store.users();
-      const u=users.find(x=>x.id===userId||(me&&x.id===me.id));
+      const u=me||(userId?await store.getUserById(userId):null);
       if(u){
-        u.spotifyConnected=true;
-        u.spotifyTrack=track;
-        u.spotifyProfile=meProfile;
-        store.setUsers(users);
-        if(me&&me.id===u.id){me=u;store.setSession({userId:me.id,user:me,exp:Date.now()+86400000});}
+        const updated={...u,spotify_connected:true,spotify_track:track,spotify_profile:meProfile};
+        await store.upsertUser(updated);
+        if(me&&me.id===u.id){me=updated;store.setSession({userId:me.id,exp:Date.now()+86400000});}
       }
       return true;
     }
@@ -1333,26 +1413,25 @@ async function getSpotifyToken(){
 }
 
 async function refreshNowPlaying(){
-  if(!me||!me.spotifyConnected)return;
-  const token=await getSpotifyToken();
-  if(!token)return;
+  if(!me||!me.spotify_connected)return;
+  const token=await getSpotifyToken();if(!token)return;
   const track=await fetchCurrentlyPlaying(token);
-  const users=store.users();
-  const u=users.find(x=>x.id===me.id);
-  if(u){u.spotifyTrack=track;store.setUsers(users);me=u;store.setSession({userId:me.id,user:me,exp:Date.now()+86400000});}
+  const updated={...me,spotify_track:track};
+  await store.upsertUser(updated);
+  me=updated;store.setSession({userId:me.id,exp:Date.now()+86400000});
   renderSpotifyWidget();
 }
 
-function disconnectSpotify(){
+async function disconnectSpotify(){
   localStorage.removeItem('dc_sp_token');
   if(me){
-    const users=store.users(),u=users.find(x=>x.id===me.id);
-    if(u){u.spotifyConnected=false;u.spotifyTrack=null;u.spotifyProfile=null;store.setUsers(users);me=u;store.setSession({userId:me.id,user:me,exp:Date.now()+86400000});}
+    const updated={...me,spotify_connected:false,spotify_track:null,spotify_profile:null};
+    await store.upsertUser(updated);
+    me=updated;store.setSession({userId:me.id,exp:Date.now()+86400000});
   }
   renderSpotifyWidget();updateSpotifyBadge();
 }
 
-// Modal setup Spotify
 function openSpotifySetup(){
   const existing=document.getElementById('sp-setup-modal');if(existing)existing.remove();
   const m=document.createElement('div');
@@ -1391,14 +1470,14 @@ function connectSpotify(){initiateSpotifyAuth();}
 
 function renderSpotifyWidget(){
   const c=document.getElementById('spotify-content');if(!c)return;
-  const isConn=me&&me.spotifyConnected;
-  const track=me&&me.spotifyTrack;
+  const isConn=me&&me.spotify_connected;
+  const track=me&&me.spotify_track;
   if(isConn){
     const coverHtml=track&&track.cover?`<img src="${track.cover}" style="width:44px;height:44px;border-radius:4px;object-fit:cover;flex-shrink:0" onerror="this.style.display='none'"/>`:`<div style="width:44px;height:44px;border-radius:4px;background:rgba(29,185,84,.15);display:grid;place-items:center;font-size:1.3rem;flex-shrink:0">🎵</div>`;
     const trackName=track?san(track.track):'Rien en cours';
     const artistName=track?san(track.artist):'';
     const isPlaying=track&&track.isPlaying;
-    const profileHtml=me.spotifyProfile?`<div style="font-size:.62rem;color:#1DB954;margin-bottom:8px;display:flex;align-items:center;gap:5px"><svg width="10" height="10" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>${san(me.spotifyProfile.name||'Spotify')}</div>`:'';
+    const profileHtml=me.spotify_profile?`<div style="font-size:.62rem;color:#1DB954;margin-bottom:8px;display:flex;align-items:center;gap:5px"><svg width="10" height="10" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>${san(me.spotify_profile.name||'Spotify')}</div>`:'';
     c.innerHTML=`${profileHtml}<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">${coverHtml}<div style="min-width:0"><div style="font-size:.79rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${trackName}</div><div style="font-size:.65rem;color:#6b6355;font-family:'JetBrains Mono',monospace">${artistName||'Non connecté'}</div></div>${isPlaying?`<div class="sp-bars" style="margin-left:auto;flex-shrink:0"><div class="sp-bar"></div><div class="sp-bar"></div><div class="sp-bar"></div><div class="sp-bar"></div></div>`:''}</div><div style="display:flex;gap:6px"><button onclick="refreshNowPlaying()" style="flex:1;padding:5px;background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.25);border-radius:5px;color:#1DB954;font-size:.68rem;font-family:'JetBrains Mono',monospace;transition:all .2s">↻ Actualiser</button><button onclick="disconnectSpotify()" style="padding:5px 10px;background:none;border:1px solid rgba(107,99,85,.3);border-radius:5px;font-size:.68rem;color:#6b6355;font-family:'JetBrains Mono',monospace;transition:all .2s" onmouseover="this.style.borderColor='rgba(239,68,68,.4)';this.style.color='#ef4444'" onmouseout="this.style.borderColor='rgba(107,99,85,.3)';this.style.color='#6b6355'">Déco</button></div>`;
   }else{
     c.innerHTML=`<p style="font-size:.73rem;color:#6b6355;margin-bottom:10px;line-height:1.7;font-family:'JetBrains Mono',monospace">// Connecte Spotify pour afficher ta musique sur ton profil en temps réel.</p>
@@ -1408,9 +1487,10 @@ function renderSpotifyWidget(){
 
 function updateSpotifyBadge(){
   const badge=document.getElementById('sb-spotify-badge');
-  if(badge)badge.style.display=(me&&me.spotifyConnected)?'inline-flex':'none';
+  if(badge)badge.style.display=(me&&me.spotify_connected)?'inline-flex':'none';
 }
 
+// ─── AUTH UI ───
 function switchAuthTab(t){
   document.querySelectorAll('.auth-tab').forEach((el,i)=>el.classList.toggle('active',(t==='signup'&&i===0)||(t==='login'&&i===1)));
   document.getElementById('f-signup').classList.toggle('active',t==='signup');
@@ -1420,97 +1500,60 @@ function switchAuthTab(t){
 function pickRole(card,role){curRole=role;document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('sel'));card.classList.add('sel');document.getElementById('skills-wrap').style.display=role==='dev'?'block':'none';document.getElementById('f-company').style.display=role==='recruiter'?'block':'none'}
 function checkPwd(v){let s=0;if(v.length>=8)s++;if(/[A-Z]/.test(v))s++;if(/[0-9]/.test(v))s++;if(/[^A-Za-z0-9]/.test(v))s++;['pb1','pb2','pb3','pb4'].forEach((id,i)=>{const b=document.getElementById(id);b.className='pwd-bar';if(i<s)b.classList.add(s===1?'weak':s<=2?'med':'strong')});document.getElementById('pwd-lbl').textContent=v.length>0?['','Faible','Moyen','Fort','Très fort'][s]:''}
 
-async function doSignup(){
-  const fn=document.getElementById('s-fn').value.trim(),ln=document.getElementById('s-ln').value.trim(),email=document.getElementById('s-email').value.trim().toLowerCase(),pwd=document.getElementById('s-pwd').value,co=document.getElementById('s-co').value.trim(),terms=document.getElementById('terms-cb').checked;
-  if(!fn||!ln)return showErr('s-err','Renseigne ton prénom et ton nom.');
-  if(!validEmail(email))return showErr('s-err','Email invalide.');
-  if(pwd.length<8)return showErr('s-err','Mot de passe trop court (8 caractères min).');
-  if(!terms)return showErr('s-err','Accepte les conditions d\'utilisation.');
-  if(curRole==='recruiter'&&!co)return showErr('s-err','Renseigne le nom de ton entreprise.');
-  const users=store.users();
-  if(users.find(u=>u.email===email))return showErr('s-err','Cet email est déjà utilisé.');
-  const btn=document.getElementById('s-btn');btn.disabled=true;btn.textContent='Création en cours...';
-  const hash=await hashPwd(pwd);
-  const color=COLORS[Math.floor(Math.random()*COLORS.length)];
-  const user={id:uid(),firstname:san(fn),lastname:san(ln),email,hash,role:curRole,skills:curRole==='dev'?[...selSkills]:[],company:curRole==='recruiter'?san(co):'',initials:(fn[0]+ln[0]).toUpperCase(),color,bio:'',photo:'',createdAt:Date.now(),spotifyConnected:false,rank:email==='cover.mazo@gmail.com'?'owner':'member',banned:false,muted:false,mutedUntil:0};
-  users.push(user);store.setUsers(users);
-  store.setSession({userId:user.id,user,exp:Date.now()+86400000});
-  btn.textContent='✓ Compte créé !';
-  setTimeout(()=>{btn.disabled=false;btn.textContent='Créer mon compte →';goTo('dash');initDash(user)},900);
-}
-
-async function doLogin(){
-  const email=document.getElementById('l-email').value.trim().toLowerCase(),pwd=document.getElementById('l-pwd').value;
-  if(!validEmail(email))return showErr('l-err','Email invalide.');
-  if(!pwd)return showErr('l-err','Renseigne ton mot de passe.');
-  const lock=checkRate(email);if(lock)return showErr('l-err',lock);
-  const btn=document.getElementById('l-btn');btn.disabled=true;btn.textContent='Connexion...';
-  const users=store.users(),user=users.find(u=>u.email===email);
-  if(!user){failRate(email);btn.disabled=false;btn.textContent='Se connecter →';return showErr('l-err','Email ou mot de passe incorrect.')}
-  const hash=await hashPwd(pwd);
-  if(user.hash!==hash){failRate(email);btn.disabled=false;btn.textContent='Se connecter →';return showErr('l-err','Email ou mot de passe incorrect.')}
-  clearRate(email);
-  // Assure que l'utilisateur a un rank (migration)
-  if(!user.rank)user.rank=user.email==='cover.mazo@gmail.com'?'owner':'member';
-  if(user.banned===undefined)user.banned=false;
-  if(user.muted===undefined)user.muted=false;
-  if(user.mutedUntil===undefined)user.mutedUntil=0;
-  store.setUsers(users);
-  store.setSession({userId:user.id,user,exp:Date.now()+86400000});
-  btn.textContent='✓ Connecté !';
-  setTimeout(()=>{btn.disabled=false;btn.textContent='Se connecter →';goTo('dash');initDash(user)},700);
-}
-
-// ─── LOGOUT ───
-function doLogout(){
-  store.setSession(null);
-  me=null;
-  goTo('auth');
-}
-
-// ─── CHECK SPOTIFY CALLBACK après redirect ───
-(async function checkSpotifyCallback(){
+// ─── INIT SESSION ───
+(async function checkInit(){
+  // Vérif callback Spotify d'abord
   const params=new URLSearchParams(window.location.search);
   if(params.get('state')==='dc_spotify'&&params.get('code')){
     const sess=store.session();
-    if(sess&&sess.exp>Date.now()){const fu=store.users().find(u=>u.id===sess.userId);if(fu)me=fu;}
+    if(sess&&sess.exp>Date.now()){const fu=await store.getUserById(sess.userId);if(fu)me=fu;}
     const ok=await handleSpotifyCallback();
     if(ok&&me){goTo('dash');initDash(me);}
     else goTo('auth');
     return;
   }
+  // Session normale
+  const sess=store.session();
+  if(sess&&sess.exp>Date.now()){
+    const freshUser=await store.getUserById(sess.userId);
+    if(freshUser){goTo('dash');initDash(freshUser);}
+    else{store.setSession(null);goTo('auth');}
+  }else{
+    store.setSession(null);goTo('auth');
+  }
 })();
 
-function initDash(user){
-  // Toujours charger les données fraîches depuis le store
-  const freshUser=store.users().find(u=>u.id===user.id)||user;
-  // Migration : ajouter les champs manquants
-  if(!freshUser.rank)freshUser.rank=freshUser.email===OWNER_EMAIL?'owner':'member';
-  if(freshUser.banned===undefined)freshUser.banned=false;
-  if(freshUser.muted===undefined)freshUser.muted=false;
-  if(freshUser.mutedUntil===undefined)freshUser.mutedUntil=0;
-  me=freshUser;
-  // Check ban
+// ─── INIT DASHBOARD ───
+async function initDash(user){
+  if(!user.rank)user.rank=user.email===OWNER_EMAIL?'owner':'member';
+  if(user.banned===undefined)user.banned=false;
+  if(user.muted===undefined)user.muted=false;
+  if(user.muted_until===undefined)user.muted_until=0;
+  me=user;
   if(me.banned){document.getElementById('banned-screen').classList.add('visible');return;}
   updateSidebarUser();
-  renderPosts();
-  renderOnline();
   renderTrends();
-  renderChat();
   renderSpotifyWidget();
   updateSpotifyBadge();
-  if(!store.posts().length)seedPosts();
+  await refreshUsersCache();
+  await Promise.all([renderPosts(),renderOnline(),renderChat()]);
+  const posts=await store.getPosts();
+  if(!posts.length)await seedPosts();
+  setupRealtime();
 }
 
-function seedPosts(){
+// ─── SEED POSTS ───
+async function seedPosts(){
   const demo=[
-    {id:uid(),an:'Alex Laurent',ai:'AL',ac:'#f59e0b',type:'projet',title:'DevConnect v2 — Refonte complète',body:'J\'ai complètement refondu DevConnect avec un nouveau design inspiré des meilleures apps tech. Nouveau système de thème, meilleure UX, et bientôt une intégration Spotify !',skills:['React','TypeScript','Node.js'],likes:24,comments:[],ts:Date.now()-3600000,liked:[]},
-    {id:uid(),an:'Sarah Chen',ai:'SC',ac:'#fb923c',type:'offre',title:'Cherche Dev React senior — Remote',body:'Notre startup cherche un développeur React expérimenté pour rejoindre notre équipe. Projet passionnant dans la fintech. Full remote, package compétitif.',skills:['React','TypeScript','GraphQL'],likes:12,comments:[],ts:Date.now()-7200000,liked:[]},
-    {id:uid(),an:'Marco Rivera',ai:'MR',ac:'#22c55e',type:'post',title:'',body:'Quelqu\'un a testé Bun.js en prod ? Impressionné par les perfs sur mes benchmarks, 3x plus rapide que Node sur certains endpoints. Worth it ?',skills:['Bun.js','Node.js','Performance'],likes:18,comments:[],ts:Date.now()-10800000,liked:[]},
+    {id:uid(),an:'Alex Laurent',ai:'AL',ac:'#f59e0b',user_id:'',type:'projet',title:'DevConnect — Bienvenue !',body:'Bienvenue sur DevConnect ! Partage tes projets, trouve des collaborateurs, et échange avec la communauté.',skills:['React','TypeScript','Node.js'],likes:0,comments:[],ts:Date.now()-3600000,liked:[]},
+    {id:uid(),an:'Sarah Chen',ai:'SC',ac:'#fb923c',user_id:'',type:'offre',title:'Cherche Dev React senior — Remote',body:'Notre startup cherche un développeur React expérimenté. Projet fintech passionnant. Full remote, package compétitif.',skills:['React','TypeScript','GraphQL'],likes:0,comments:[],ts:Date.now()-7200000,liked:[]},
+    {id:uid(),an:'Marco Rivera',ai:'MR',ac:'#22c55e',user_id:'',type:'post',title:'',body:'Quelqu\'un a testé Bun.js en prod ? 3x plus rapide que Node sur certains endpoints. Worth it ?',skills:['Bun.js','Node.js','Performance'],likes:0,comments:[],ts:Date.now()-10800000,liked:[]},
   ];
-  store.setPosts(demo);
+  for(const p of demo){await store.addPost(p);}
+  renderPosts();
 }
 
+// ─── SIDEBAR / LAYOUT ───
 function updateSidebarUser(){
   if(!me)return;
   const av=document.getElementById('sb-av');
@@ -1521,9 +1564,8 @@ function updateSidebarUser(){
   // Rank badge
   const rankBadge=document.getElementById('sb-rank-badge');
   if(rankBadge&&me.rank&&me.rank!=='member'){
-    const rk=me.rank;
     const labels={owner:'👑 Owner',admin:'🛡️ Admin',moderator:'🔵 Modérateur',vip:'✨ VIP'};
-    rankBadge.innerHTML=`<span class="role-badge rb-${rk}">${labels[rk]||rk}</span>`;
+    rankBadge.innerHTML=`<span class="role-badge rb-${me.rank}">${labels[me.rank]||me.rank}</span>`;
   }else if(rankBadge){rankBadge.innerHTML='';}
   // Admin nav
   const adminNav=document.getElementById('nav-admin');
@@ -1542,15 +1584,19 @@ function updateSidebarUser(){
   }
 }
 
+// ─── PHOTO UPLOAD ───
 function handlePhotoUpload(evt){
   const file=evt.target.files[0];if(!file)return;
-  if(file.size>2*1024*1024)return alert('Image trop volumineuse (max 2Mo)');
+  if(file.size>512000)return alert('Image trop volumineuse (max 500Ko)');
   const reader=new FileReader();
-  reader.onload=e=>{
+  reader.onload=async e=>{
     const dataUrl=e.target.result;
     if(me){
-      const users=store.users(),u=users.find(x=>x.id===me.id);
-      if(u){u.photo=dataUrl;store.setUsers(users);me=u;store.setSession({userId:me.id,user:me,exp:Date.now()+86400000});}
+      const updated={...me,photo:dataUrl};
+      try{
+        await store.upsertUser(updated);
+        me=updated;store.setSession({userId:me.id,exp:Date.now()+86400000});
+      }catch(err){console.error('Photo upload error',err);}
     }
     updateSidebarUser();
     const pp=document.getElementById('edit-photo-preview');
@@ -1559,31 +1605,31 @@ function handlePhotoUpload(evt){
   reader.readAsDataURL(file);
 }
 
-// Posts
+// ─── POSTS RENDER ───
 function filterPosts(f,btn){curFilter=f;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));if(btn)btn.classList.add('active');renderPosts()}
 
-function renderPosts(){
-  const posts=store.posts().slice().reverse();
+async function renderPosts(){
+  const [posts,allUsers]=await Promise.all([store.getPosts(),store.getUsers()]);
   const filtered=curFilter==='all'?posts:posts.filter(p=>p.type===curFilter);
-  document.getElementById('st-posts').textContent=posts.length;
-  document.getElementById('st-jobs').textContent=posts.filter(p=>p.type==='offre').length;
+  const stPosts=document.getElementById('st-posts');
+  const stJobs=document.getElementById('st-jobs');
+  if(stPosts)stPosts.textContent=posts.length;
+  if(stJobs)stJobs.textContent=posts.filter(p=>p.type==='offre').length;
   const c=document.getElementById('posts-list');
+  if(!c)return;
   if(!filtered.length){c.innerHTML='<div class="empty"><div class="ic">📭</div><p>Aucune publication pour l\'instant.<br>Sois le premier à poster !</p></div>';return}
   c.innerHTML=filtered.map(p=>{
     const title=p.title?`<div class="post-title">${san(p.title)}</div>`:'';
     const skills=p.skills&&p.skills.length?`<div class="post-skills">${p.skills.map(s=>`<span class="p-skill">${san(s)}</span>`).join('')}</div>`:'';
     const liked=me&&p.liked&&p.liked.includes(me.id);
-    // Check if author has spotify
-    const allUsers=store.users();
     const author=allUsers.find(u=>u.firstname+' '+u.lastname===p.an);
-    const spotifyBit=author&&author.spotifyConnected&&author.spotifyTrack?`<span class="spotify-badge" title="Écoute ${author.spotifyTrack.track} — ${author.spotifyTrack.artist}"><svg width="8" height="8" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></span>`:'';
-    const authorRankBadge=author&&author.rank&&author.rank!=='member'?rankBadgeHtml(author.rank):'';
-    const avContent=author&&author.photo?`<img src="${author.photo}" alt="${p.ai}" style="width:38px;height:38px;object-fit:cover;border-radius:50%">`:(me&&p.an===me.firstname+' '+me.lastname&&me.photo)?`<img src="${me.photo}" alt="${p.ai}" style="width:38px;height:38px;object-fit:cover;border-radius:50%">`:p.ai;
-    const avBg=(author&&author.photo)||(me&&p.an===me.firstname+' '+me.lastname&&me.photo)?'transparent':p.ac;
+    const spotifyBit=author&&author.spotify_connected&&author.spotify_track?`<span class="spotify-badge" title="Écoute ${author.spotify_track.track} — ${author.spotify_track.artist}"><svg width="8" height="8" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></span>`:'';
+    const avContent=author&&author.photo?`<img src="${author.photo}" alt="${p.ai}" style="width:38px;height:38px;object-fit:cover;border-radius:50%">`:p.ai;
+    const avBg=author&&author.photo?'transparent':p.ac;
     return`<div class="post" id="post-${p.id}">
       <div class="post-hdr">
         <div class="p-av" style="background:${avBg};color:#000">${avContent}</div>
-        <div><div class="p-name">${san(p.an)} ${authorRankBadge} ${spotifyBit}</div><div class="p-info">${timeAgo(p.ts)}</div></div>
+        <div><div class="p-name">${san(p.an)} ${spotifyBit}</div><div class="p-info">${timeAgo(p.ts)}</div></div>
         <span class="type-badge ${tClass[p.type]||'t-post'}">${tLabel[p.type]||p.type}</span>
       </div>
       ${title}
@@ -1593,50 +1639,52 @@ function renderPosts(){
         <button class="p-act${liked?' liked':''}" onclick="likePost('${p.id}',this)">♥ ${p.likes}</button>
         <button class="p-act" onclick="toggleComments('${p.id}',this)">💬 ${(p.comments||[]).length}</button>
         <button class="p-act" onclick="sharePost('${p.id}')">↗ Partager</button>
-        ${(me&&p.an===me.firstname+' '+me.lastname)||isModOrAbove(me)?`<button class="p-act" onclick="deletePost('${p.id}')" style="margin-left:auto;color:var(--error)">🗑</button>`:''}
+        ${me&&p.an===me.firstname+' '+me.lastname?`<button class="p-act" onclick="deletePost('${p.id}')" style="margin-left:auto;color:var(--error)">🗑</button>`:''}
       </div>
       <div class="cmts" id="cmts-${p.id}">
-        <div id="cmt-list-${p.id}">${(p.comments||[]).map(c=>`<div class="cmt"><div class="cmt-av" style="background:${c.col||'#f59e0b'};color:#000">${c.av}</div><div class="cmt-bubble"><div class="cmt-author">${san(c.a)}</div><div class="cmt-text">${san(c.txt)}</div></div></div>`).join('')}</div>
+        <div id="cmt-list-${p.id}">${(p.comments||[]).map(cm=>`<div class="cmt"><div class="cmt-av" style="background:${cm.col||'#f59e0b'};color:#000">${cm.av}</div><div class="cmt-bubble"><div class="cmt-author">${san(cm.a)}</div><div class="cmt-text">${san(cm.txt)}</div></div></div>`).join('')}</div>
         <div class="cmt-row"><input class="cmt-in" id="ci-${p.id}" placeholder="Écris un commentaire..."/><button class="cmt-send" onclick="sendComment('${p.id}')">Envoyer</button></div>
       </div>
     </div>`;
   }).join('');
 }
 
-function likePost(id,btn){
+async function likePost(id,btn){
   if(!me)return;
-  const posts=store.posts(),p=posts.find(x=>x.id===id);if(!p)return;
+  const posts=await store.getPosts();
+  const p=posts.find(x=>x.id===id);if(!p)return;
   if(!p.liked)p.liked=[];
   const i=p.liked.indexOf(me.id);
-  if(i===-1){p.likes++;p.liked.push(me.id);btn.classList.add('liked')}else{p.likes--;p.liked.splice(i,1);btn.classList.remove('liked')}
-  btn.textContent='♥ '+p.likes;
-  store.setPosts(posts);
+  let newLikes,newLiked;
+  if(i===-1){newLikes=p.likes+1;newLiked=[...p.liked,me.id];btn.classList.add('liked')}
+  else{newLikes=p.likes-1;newLiked=p.liked.filter(x=>x!==me.id);btn.classList.remove('liked')}
+  btn.textContent='♥ '+newLikes;
+  await store.updatePost(id,{likes:newLikes,liked:newLiked});
 }
 
 function toggleComments(id,btn){
-  const el=document.getElementById('cmts-'+id);
-  if(!el)return;
+  const el=document.getElementById('cmts-'+id);if(!el)return;
   const open=el.style.display==='block';
   el.style.display=open?'none':'block';
-  btn.textContent='💬 '+(store.posts().find(p=>p.id===id)?.comments?.length||0);
 }
 
-function sendComment(id){
+async function sendComment(id){
   if(!me)return;
   const inp=document.getElementById('ci-'+id);const txt=inp.value.trim();if(!txt)return;
-  const posts=store.posts(),p=posts.find(x=>x.id===id);if(!p)return;
-  if(!p.comments)p.comments=[];
-  p.comments.push({id:uid(),a:me.firstname+' '+me.lastname,av:me.initials,col:me.color,txt:san(txt),t:Date.now()});
-  store.setPosts(posts);inp.value='';
+  const posts=await store.getPosts();
+  const p=posts.find(x=>x.id===id);if(!p)return;
+  const comments=[...(p.comments||[]),{id:uid(),a:me.firstname+' '+me.lastname,av:me.initials,col:me.color,txt:san(txt),t:Date.now()}];
+  await store.updatePost(id,{comments});
+  inp.value='';
   const list=document.getElementById('cmt-list-'+id);
-  const c=p.comments[p.comments.length-1];
-  if(list)list.innerHTML+=`<div class="cmt"><div class="cmt-av" style="background:${c.col};color:#000">${c.av}</div><div class="cmt-bubble"><div class="cmt-author">${san(c.a)}</div><div class="cmt-text">${san(c.txt)}</div></div></div>`;
+  const cm=comments[comments.length-1];
+  if(list)list.innerHTML+=`<div class="cmt"><div class="cmt-av" style="background:${cm.col};color:#000">${cm.av}</div><div class="cmt-bubble"><div class="cmt-author">${san(cm.a)}</div><div class="cmt-text">${san(cm.txt)}</div></div></div>`;
 }
 
-function deletePost(id){
+async function deletePost(id){
   if(!me)return;
-  const posts=store.posts().filter(p=>!(p.id===id&&p.an===me.firstname+' '+me.lastname));
-  store.setPosts(posts);renderPosts();
+  await store.deletePost(id);
+  renderPosts();
 }
 
 function sharePost(id){
@@ -1644,36 +1692,36 @@ function sharePost(id){
   const el=event.target;const orig=el.textContent;el.textContent='✓ Copié !';setTimeout(()=>el.textContent=orig,2000);
 }
 
+// ─── MODAL POST ───
 function openModal(){document.getElementById('postModal').classList.add('open')}
 function closeModal(){document.getElementById('postModal').classList.remove('open')}
 
-function submitModal(){
+async function submitModal(){
   if(!me)return;
   const type=document.getElementById('m-type').value,title=document.getElementById('m-title').value.trim(),body=document.getElementById('m-content').value.trim(),skillsRaw=document.getElementById('m-skills').value;
   if(!body)return;
   const skills=skillsRaw?skillsRaw.split(',').map(s=>s.trim()).filter(Boolean):[];
-  const posts=store.posts();
-  posts.push({id:uid(),an:me.firstname+' '+me.lastname,ai:me.initials,ac:me.color,type,title,body:san(body),skills,likes:0,comments:[],ts:Date.now(),liked:[]});
-  store.setPosts(posts);
-  closeModal();curFilter='all';document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===0));
+  const post={id:uid(),an:me.firstname+' '+me.lastname,ai:me.initials,ac:me.color,user_id:me.id,type,title,body:san(body),skills,likes:0,comments:[],ts:Date.now(),liked:[]};
+  await store.addPost(post);
+  closeModal();curFilter='all';
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===0));
   renderPosts();
   ['m-title','m-content','m-skills'].forEach(id=>document.getElementById(id).value='');
 }
 
-function quickPost(){
+async function quickPost(){
   if(!me)return;
   const txt=document.getElementById('q-txt').value.trim();if(!txt)return;
   const type=document.getElementById('q-type').value;
   const skillsRaw=document.getElementById('q-skills').value;
   const skills=skillsRaw?skillsRaw.split(',').map(s=>s.trim()).filter(Boolean):[];
-  const posts=store.posts();
-  posts.push({id:uid(),an:me.firstname+' '+me.lastname,ai:me.initials,ac:me.color,type,title:'',body:san(txt),skills,likes:0,comments:[],ts:Date.now(),liked:[]});
-  store.setPosts(posts);
+  const post={id:uid(),an:me.firstname+' '+me.lastname,ai:me.initials,ac:me.color,user_id:me.id,type,title:'',body:san(txt),skills,likes:0,comments:[],ts:Date.now(),liked:[]};
+  await store.addPost(post);
   document.getElementById('q-txt').value='';document.getElementById('q-skills').value='';
   curFilter='all';renderPosts();
 }
 
-// PROFILE
+// ─── PROFILE ───
 let editSelSkills=new Set();
 
 function openProfileModal(){
@@ -1698,63 +1746,42 @@ function openProfileModal(){
 function closeProfileModal(){document.getElementById('profileModal').classList.remove('open')}
 document.getElementById('profileModal').addEventListener('click',function(e){if(e.target===this)closeProfileModal()});
 
-function saveProfile(){
+async function saveProfile(){
   if(!me)return;
   const fn=document.getElementById('edit-fn').value.trim(),ln=document.getElementById('edit-ln').value.trim();
   if(!fn||!ln)return alert('Prénom et nom requis.');
-  const users=store.users(),u=users.find(x=>x.id===me.id);
-  if(u){
-    u.firstname=san(fn);u.lastname=san(ln);u.initials=(fn[0]+ln[0]).toUpperCase();
-    u.bio=san(document.getElementById('edit-bio').value.trim());
-    if(me.role==='recruiter')u.company=san(document.getElementById('edit-co').value.trim());
-    if(me.role==='dev')u.skills=[...editSelSkills];
-    store.setUsers(users);me=u;store.setSession({userId:me.id,user:me,exp:Date.now()+86400000});
-  }
-  closeProfileModal();updateSidebarUser();renderProfile();
+  const updated={
+    ...me,
+    firstname:san(fn),lastname:san(ln),initials:(fn[0]+ln[0]).toUpperCase(),
+    bio:san(document.getElementById('edit-bio').value.trim()),
+    ...(me.role==='recruiter'?{company:san(document.getElementById('edit-co').value.trim())}:{}),
+    ...(me.role==='dev'?{skills:[...editSelSkills]}:{})
+  };
+  try{
+    await store.upsertUser(updated);
+    me=updated;store.setSession({userId:me.id,exp:Date.now()+86400000});
+    closeProfileModal();updateSidebarUser();renderProfile();
+  }catch(err){console.error(err);alert('Erreur lors de la sauvegarde.');}
 }
 
-const viewTitles={feed:'⚡ FEED',devs:'💻 DÉVELOPPEURS',projects:'🚀 PROJETS',jobs:'💼 OFFRES',recruiters:'🏢 RECRUTEURS',profile:'👤 MON PROFIL'};
-function setView(view,btn){
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));if(btn)btn.classList.add('active');
-  document.getElementById('page-ttl').textContent=viewTitles[view]||view;
-  document.getElementById('feed-tabs').style.display=view==='feed'?'flex':'none';
-  document.getElementById('compose-area').style.display=(view==='feed')?'block':'none';
-  if(view==='feed'){curFilter='all';renderPosts();return}
-  if(view==='devs'){renderUserList('dev');return}
-  if(view==='projects'){curFilter='projet';renderPosts();return}
-  if(view==='jobs'){curFilter='offre';renderPosts();return}
-  if(view==='recruiters'){renderUserList('recruiter');return}
-  if(view==='profile'){renderProfile();return}
-}
-
-function renderUserList(role){
-  const users=store.users().filter(u=>u.role===role);
-  const c=document.getElementById('posts-list');
-  if(!users.length){c.innerHTML=`<div class="empty"><div class="ic">${role==='dev'?'💻':'🏢'}</div><p>Aucun ${role==='dev'?'développeur':'recruteur'} inscrit.</p></div>`;return}
-  c.innerHTML=users.map(u=>{
-    const spotifyBit=u.spotifyConnected&&u.spotifyTrack?`<span class="spotify-badge"><svg width="8" height="8" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg> ${san(u.spotifyTrack.track)}</span>`:'';
-    const avContent=u.photo?`<img src="${u.photo}" alt="${u.initials}" style="width:38px;height:38px;object-fit:cover;border-radius:50%">`:u.initials;
-    const avBg=u.photo?'transparent':u.color;
-    return`<div class="post"><div class="post-hdr"><div class="p-av" style="background:${avBg};color:#000">${avContent}</div><div><div class="p-name">${san(u.firstname)} ${san(u.lastname)} ${spotifyBit}</div><div class="p-info">${role==='dev'?'// Dev':'// Recruteur'}${u.company?' · '+san(u.company):''} · Membre depuis ${timeAgo(u.createdAt)}</div></div><span class="type-badge ${role==='dev'?'t-offre':'t-recrutement'}">${role==='dev'?'DEV':'RECRUT'}</span></div>${u.skills&&u.skills.length?`<div class="post-skills">${u.skills.slice(0,8).map(s=>`<span class="p-skill">${san(s)}</span>`).join('')}</div>`:'<div style="font-size:.72rem;color:var(--muted);margin-bottom:8px;font-family:JetBrains Mono,monospace">// aucune compétence renseignée</div>'}</div>`;
-  }).join('');
-}
-
-function renderProfile(){
+// ─── VUE PROFIL ───
+async function renderProfile(){
   if(!me)return;
-  const myPosts=store.posts().filter(p=>p.an===me.firstname+' '+me.lastname).slice().reverse();
-  const c=document.getElementById('posts-list');
+  const [allPosts]=await Promise.all([store.getPosts()]);
+  const myPosts=allPosts.filter(p=>p.an===me.firstname+' '+me.lastname);
+  const c=document.getElementById('posts-list');if(!c)return;
   const photoBlock=me.photo?`<img src="${me.photo}" alt="${me.initials}">`:`<span style="font-size:1.5rem;font-weight:800;color:#000">${me.initials}</span>`;
   const photoBg=me.photo?'transparent':me.color;
-  const spotifySection=me.spotifyConnected&&me.spotifyTrack?`
+  const spotifySection=me.spotify_connected&&me.spotify_track?`
     <div class="spotify-profile-section">
       <div class="sp-profile-header">
         <div class="sp-profile-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg> SPOTIFY CONNECTÉ</div>
       </div>
       <div class="sp-now-playing">
-        <div class="sp-album">${me.spotifyTrack.emoji}</div>
+        <div class="sp-album">${me.spotify_track.emoji||'🎵'}</div>
         <div class="sp-info">
-          <div class="sp-track">${san(me.spotifyTrack.track)}</div>
-          <div class="sp-artist">${san(me.spotifyTrack.artist)}</div>
+          <div class="sp-track">${san(me.spotify_track.track)}</div>
+          <div class="sp-artist">${san(me.spotify_track.artist)}</div>
         </div>
         <div class="sp-bars"><div class="sp-bar" style="height:60%"></div><div class="sp-bar" style="height:100%"></div><div class="sp-bar" style="height:40%"></div><div class="sp-bar" style="height:80%"></div></div>
       </div>
@@ -1789,65 +1816,94 @@ function renderProfile(){
   }).join('')||'<div class="empty"><div class="ic">📝</div><p>Tu n\'as pas encore publié.</p></div>'}`;
 }
 
-function renderOnline(){
-  const users=store.users().slice(0,5);
-  document.getElementById('st-mem').textContent=store.users().length;
-  document.getElementById('ch-online').textContent=(users.length||0)+' en ligne';
-  const el=document.getElementById('online-list');
-  if(!users.length){el.innerHTML='<div style="font-size:.72rem;color:var(--muted);font-family:JetBrains Mono,monospace">// aucun membre</div>';return}
-  el.innerHTML=users.map(u=>{
+// ─── ONLINE ───
+async function renderOnline(){
+  const users=await store.getUsers();
+  _usersCache=users;
+  const el=document.getElementById('st-mem');if(el)el.textContent=users.length;
+  const cho=document.getElementById('ch-online');if(cho)cho.textContent=users.length+' en ligne';
+  const list=document.getElementById('online-list');if(!list)return;
+  const top=users.slice(0,5);
+  if(!top.length){list.innerHTML='<div style="font-size:.72rem;color:var(--muted);font-family:JetBrains Mono,monospace">// aucun membre</div>';return}
+  list.innerHTML=top.map(u=>{
     const avContent=u.photo?`<img src="${u.photo}" alt="${u.initials}">`:u.initials;
     const avBg=u.photo?'transparent':u.color;
-    const spBit=u.spotifyConnected?`<div class="spotify-badge" style="margin-top:2px"><svg width="6" height="6" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></div>`:'';
+    const spBit=u.spotify_connected?`<div class="spotify-badge" style="margin-top:2px"><svg width="6" height="6" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.c-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></div>`:'';
     return`<div class="online-item"><div class="o-av" style="background:${avBg};color:#000">${avContent}<span class="o-dot"></span></div><div><div class="o-name">${san(u.firstname)} ${san(u.lastname)}</div><div class="o-skill">${u.role==='dev'?(u.skills&&u.skills[0]||'Dev'):'Recruteur'}</div>${spBit}</div></div>`;
   }).join('');
 }
 
+// ─── TRENDS ───
 function renderTrends(){
   document.getElementById('trend-tags').innerHTML=['React','Python','TypeScript','Node.js','Flutter','Rust','Next.js','ML','Docker','Vue.js'].map(t=>`<span class="trend-tag">#${t}</span>`).join('');
 }
 
+// ─── CHAT ───
 function switchRoom(btn,room){
   currentRoom=room;
   document.querySelectorAll('.c-room').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('chat-in').placeholder=`Message #${room}...`;
   renderChat();
+  // Mise à jour Realtime pour le nouveau salon
+  if(realtimeChannel)setupRealtime();
 }
 
-function sendMsg(){
+async function sendMsg(){
   if(!me)return;
-  // Check mute
-  if(isUserMuted(me)){showToast('🔇 Tu es muté(e). Tu ne peux pas envoyer de messages.');return;}
+  if(typeof isUserMuted==="function"&&isUserMuted(me)){showToast("🔇 Tu es muté(e). Tu ne peux pas envoyer de messages.");return;}
   const inp=document.getElementById('chat-in'),txt=inp.value.trim();if(!txt)return;
-  const chats=store.chats();
-  if(!chats[currentRoom])chats[currentRoom]=[];
-  chats[currentRoom].push({id:'m'+uid(),a:me.firstname+' '+me.lastname,av:me.initials,col:me.color,uid:me.id,photo:me.photo||'',txt:san(txt),t:Date.now(),rank:me.rank||'member'});
-  if(chats[currentRoom].length>80)chats[currentRoom]=chats[currentRoom].slice(-80);
-  store.setChats(chats);inp.value='';renderChat();
+  const msg={id:'m'+uid(),room:currentRoom,a:me.firstname+' '+me.lastname,av:me.initials,col:me.color,uid:me.id,photo:me.photo||'',txt:san(txt),t:Date.now()};
+  inp.value='';
+  try{
+    await store.addChat(msg);
+    renderChat();
+  }catch(err){console.error('sendMsg',err);}
 }
 
-function renderChat(){
-  const chats=store.chats(),msgs=(chats[currentRoom]||[]);
-  const c=document.getElementById('chat-msgs');
+async function renderChat(){
+  const msgs=await store.getChats(currentRoom);
+  const c=document.getElementById('chat-msgs');if(!c)return;
   if(!msgs.length){c.innerHTML='<div class="empty" style="padding:16px"><div class="ic" style="font-size:1.5rem">💬</div><p style="font-size:.74rem;font-family:JetBrains Mono,monospace">// aucun message<br>Sois le premier !</p></div>';return}
   c.innerHTML=msgs.map(m=>{
     const mine=me&&m.uid===me.id;
     const avContent=m.photo?`<img src="${m.photo}" alt="${m.av}">`:m.av;
     const avBg=m.photo?'transparent':m.col;
-    const rk=m.rank&&m.rank!=='member'?`<span class="role-badge rb-${m.rank}" style="font-size:.52rem">${m.rank==='owner'?'👑':''}${m.rank==='admin'?'🛡️':''}${m.rank==='moderator'?'🔵':''}${m.rank==='vip'?'✨':''}</span>`:'';
-    return`<div class="msg ${mine?'mine':''}"><div class="m-av" style="background:${avBg};color:#000">${avContent}</div><div class="m-body">${!mine?`<div class="m-author">${san(m.a)} ${rk}</div>`:''}<div class="m-bubble">${m.txt}</div><div class="m-time">${timeAgo(m.t)}</div></div></div>`;
+    const rk=m.rank&&m.rank!=='member'?`<span class="role-badge rb-${m.rank}">${m.rank==='owner'?'👑':m.rank==='admin'?'🛡️':m.rank==='moderator'?'🔵':'✨'}</span>`:'';return`<div class="msg ${mine?'mine':''}"><div class="m-av" style="background:${avBg};color:#000">${avContent}</div><div class="m-body">${!mine?`<div class="m-author">${san(m.a)} ${rk}</div>`:''}<div class="m-bubble">${m.txt}</div><div class="m-time">${timeAgo(m.t)}</div></div></div>`;
   }).join('');
   c.scrollTop=c.scrollHeight;
-  // Show muted overlay
-  const mo=document.getElementById('muted-overlay');
-  if(mo)mo.classList.toggle('visible',!!isUserMuted(me));
 }
 
-setInterval(()=>{if(me){renderChat();renderOnline();checkBanStatus();}},3000);
-// Rafraîchir Spotify toutes les 30 secondes
-setInterval(()=>{if(me&&me.spotifyConnected)refreshNowPlaying();},30000);
+// ─── USER LIST ───
+async function renderUserList(role){
+  const users=(await store.getUsers()).filter(u=>u.role===role);
+  const c=document.getElementById('posts-list');if(!c)return;
+  if(!users.length){c.innerHTML=`<div class="empty"><div class="ic">${role==='dev'?'💻':'🏢'}</div><p>Aucun ${role==='dev'?'développeur':'recruteur'} inscrit.</p></div>`;return}
+  c.innerHTML=users.map(u=>{
+    const spotifyBit=u.spotify_connected&&u.spotify_track?`<span class="spotify-badge"><svg width="8" height="8" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg> ${san(u.spotify_track.track)}</span>`:'';
+    const avContent=u.photo?`<img src="${u.photo}" alt="${u.initials}" style="width:38px;height:38px;object-fit:cover;border-radius:50%">`:u.initials;
+    const avBg=u.photo?'transparent':u.color;
+    return`<div class="post"><div class="post-hdr"><div class="p-av" style="background:${avBg};color:#000">${avContent}</div><div><div class="p-name">${san(u.firstname)} ${san(u.lastname)} ${spotifyBit}</div><div class="p-info">${role==='dev'?'// Dev':'// Recruteur'}${u.company?' · '+san(u.company):''} · Membre depuis ${timeAgo(u.created_at)}</div></div><span class="type-badge ${role==='dev'?'t-offre':'t-recrutement'}">${role==='dev'?'DEV':'RECRUT'}</span></div>${u.skills&&u.skills.length?`<div class="post-skills">${u.skills.slice(0,8).map(s=>`<span class="p-skill">${san(s)}</span>`).join('')}</div>`:'<div style="font-size:.72rem;color:var(--muted);margin-bottom:8px;font-family:JetBrains Mono,monospace">// aucune compétence renseignée</div>'}</div>`;
+  }).join('');
+}
 
+// ─── VIEWS ───
+const viewTitles={feed:'⚡ FEED',devs:'💻 DÉVELOPPEURS',projects:'🚀 PROJETS',jobs:'💼 OFFRES',recruiters:'🏢 RECRUTEURS',profile:'👤 MON PROFIL'};
+function setView(view,btn){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));if(btn)btn.classList.add('active');
+  document.getElementById('page-ttl').textContent=viewTitles[view]||view;
+  document.getElementById('feed-tabs').style.display=view==='feed'?'flex':'none';
+  document.getElementById('compose-area').style.display=(view==='feed')?'block':'none';
+  if(view==='feed'){curFilter='all';renderPosts();return}
+  if(view==='devs'){renderUserList('dev');return}
+  if(view==='projects'){curFilter='projet';renderPosts();return}
+  if(view==='jobs'){curFilter='offre';renderPosts();return}
+  if(view==='recruiters'){renderUserList('recruiter');return}
+  if(view==='profile'){renderProfile();return}
+}
+
+// ─── REFRESH SPOTIFY toutes les 30s ───
+setInterval(()=>{if(me&&me.spotify_connected)refreshNowPlaying();},30000);
 // ════════════════════════════════════════════
 // ════  SYSTÈME DE RÔLES & ADMIN PANEL  ════
 // ════════════════════════════════════════════
@@ -1870,20 +1926,17 @@ function canTarget(actor,target){
 // ── Helpers mute/ban ──
 function isUserMuted(u){
   if(!u||!u.muted)return false;
-  if(u.mutedUntil===0)return true; // permanent
-  if(Date.now()<u.mutedUntil)return true;
+  const until=u.muted_until||u.mutedUntil||0;
+  if(until===0)return true;
+  if(Date.now()<until)return true;
   return false;
 }
-function checkBanStatus(){
+async function checkBanStatus(){
   if(!me)return;
-  // Refresh from store
-  const freshUsers=store.users();
-  const freshMe=freshUsers.find(u=>u.id===me.id);
+  await refreshUsersCache();
+  const freshMe=store.users().find(u=>u.id===me.id);
   if(!freshMe)return;
-  if(freshMe.banned){
-    document.getElementById('banned-screen').classList.add('visible');
-    return;
-  }
+  if(freshMe.banned){document.getElementById("banned-screen").classList.add("visible");return;}
   me=freshMe;
 }
 
@@ -1941,20 +1994,21 @@ window.DevConnect={
     if(isOwner(u)&&u.email===OWNER_EMAIL&&rank!=='owner'){showToast('❌ Impossible de rétrograder l\'Owner principal');return;}
     const oldRank=u.rank;
     u.rank=rank;
-    store.setUsers(users);
+    await store.setUsers(users);
+  await refreshUsersCache();
     addLog('role',`${u.firstname} ${u.lastname} : ${oldRank} → ${rank}`);
     showToast(`✅ ${u.firstname} ${u.lastname} est maintenant ${rank}`,'rgba(34,197,94,.85)');
     console.log(`✅ Rang de ${email} mis à jour: ${oldRank} → ${rank}`);
   }
 };
 
-function openAdminPanel(){
-  // Refresh me from store
+async function openAdminPanel(){
+  await refreshUsersCache();
   const fresh=store.users().find(u=>u.id===me.id);
   if(fresh)me=fresh;
-  if(!isAdminOrAbove(me)){showToast('❌ Accès refusé');return;}
-  goTo('admin');
-  document.getElementById('admin-me-name').textContent=me.firstname+' '+me.lastname+' ('+me.rank+')';
+  if(!isAdminOrAbove(me)){showToast("❌ Accès refusé");return;}
+  goTo("admin");
+  document.getElementById("admin-me-name").textContent=me.firstname+" "+me.lastname+" ("+me.rank+")";
   renderAdminOverview();
 }
 
@@ -1973,18 +2027,18 @@ function adminTab(tab,btn){
   if(tab==='logs')renderAdminLogs();
 }
 
-function renderAdminOverview(){
+async function renderAdminOverview(){
   const users=store.users();
-  const posts=store.posts();
-  document.getElementById('as-members').textContent=users.length;
-  document.getElementById('as-posts').textContent=posts.length;
-  document.getElementById('as-banned').textContent=users.filter(u=>u.banned).length;
-  document.getElementById('as-muted').textContent=users.filter(u=>isUserMuted(u)).length;
-  // Recent logs
+  const posts=await store.getPosts();
+  document.getElementById("as-members").textContent=users.length;
+  document.getElementById("as-posts").textContent=posts.length;
+  document.getElementById("as-banned").textContent=users.filter(u=>u.banned).length;
+  document.getElementById("as-muted").textContent=users.filter(u=>isUserMuted(u)).length;
   const logs=store.logs().slice(0,8);
-  const el=document.getElementById('overview-logs');
+  const el=document.getElementById("overview-logs");
+  if(!el)return;
   if(!logs.length){el.innerHTML='<div style="padding:18px;font-size:.75rem;color:var(--muted);font-family:JetBrains Mono,monospace">// aucune action de modération</div>';return;}
-  el.innerHTML=logs.map(l=>logEntryHtml(l)).join('');
+  el.innerHTML=logs.map(l=>logEntryHtml(l)).join("");
 }
 
 function logEntryHtml(l){
@@ -2043,27 +2097,27 @@ function renderAdminRoles(){
   </tr>`).join('');
 }
 
-function renderAdminPosts(){
-  const posts=store.posts().slice().reverse();
-  const tbody=document.getElementById('admin-posts-tbody');
+async function renderAdminPosts(){
+  const posts=(await store.getPosts()).slice().reverse();
+  const tbody=document.getElementById("admin-posts-tbody");
   if(!posts.length){tbody.innerHTML=`<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:18px;font-size:.74rem;font-family:JetBrains Mono,monospace">// aucune publication</td></tr>`;return}
   tbody.innerHTML=posts.map(p=>`<tr>
     <td style="font-size:.8rem;font-weight:600">${san(p.an)}</td>
-    <td><span class="type-badge ${tClass[p.type]||'t-post'}" style="font-size:.6rem">${p.type}</span></td>
+    <td><span class="type-badge ${tClass[p.type]||"t-post"}" style="font-size:.6rem">${p.type}</span></td>
     <td style="font-size:.74rem;color:rgba(245,240,232,.7);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${san(p.title||p.body).slice(0,60)}...</td>
     <td style="font-size:.68rem;color:var(--muted);font-family:JetBrains Mono,monospace">${timeAgo(p.ts)}</td>
     <td><button class="admin-btn admin-btn-del" onclick="adminDeletePost('${p.id}')">🗑 Supprimer</button></td>
-  </tr>`).join('');
+  </tr>`).join("");
 }
 
-function adminDeletePost(id){
-  if(!confirm('Supprimer cette publication ?'))return;
-  const posts=store.posts();
+async function adminDeletePost(id){
+  if(!confirm("Supprimer cette publication ?"))return;
+  const posts=await store.getPosts();
   const p=posts.find(x=>x.id===id);
-  if(p){addLog('delete',`Post supprimé de ${p.an}: "${(p.title||p.body).slice(0,40)}"`);}
-  store.setPosts(posts.filter(x=>x.id!==id));
+  if(p){addLog("delete",`Post supprimé de ${p.an}: "${(p.title||p.body).slice(0,40)}"`);}  
+  try{await store.deletePost(id);}catch(e){console.error(e);}
   renderAdminPosts();
-  showToast('✅ Publication supprimée','rgba(34,197,94,.85)');
+  showToast("✅ Publication supprimée","rgba(34,197,94,.85)");
 }
 
 // ── Role Modal ──
@@ -2083,14 +2137,15 @@ function selectRole(rank){
   event.currentTarget.classList.add('selected');
 }
 function closeRoleModal(){document.getElementById('roleModal').classList.remove('open');roleTargetId=null;}
-function confirmRoleAssign(){
+async function confirmRoleAssign(){
   if(!roleTargetId)return;
   const users=store.users();
   const u=users.find(x=>x.id===roleTargetId);
   if(!u)return;
   const old=u.rank;
   u.rank=selectedNewRank;
-  store.setUsers(users);
+  await store.setUsers(users);
+  await refreshUsersCache();
   addLog('role',`${u.firstname} ${u.lastname} : ${old} → ${selectedNewRank}`);
   showToast(`✅ ${u.firstname} est maintenant ${selectedNewRank}`,'rgba(34,197,94,.85)');
   closeRoleModal();
@@ -2111,7 +2166,7 @@ function openMuteModal(userId){
   document.getElementById('muteModal').classList.add('open');
 }
 function closeMuteModal(){document.getElementById('muteModal').classList.remove('open');muteTargetId=null;}
-function confirmMute(){
+async function confirmMute(){
   if(!muteTargetId)return;
   const users=store.users();
   const u=users.find(x=>x.id===muteTargetId);
@@ -2119,45 +2174,49 @@ function confirmMute(){
   const dur=parseInt(document.getElementById('mute-duration').value);
   const reason=document.getElementById('mute-reason').value||'Aucune raison spécifiée';
   u.muted=true;
-  u.mutedUntil=dur===0?0:Date.now()+dur;
-  store.setUsers(users);
+  u.muted_until=dur===0?0:Date.now()+dur;
+  await store.setUsers(users);
+  await refreshUsersCache();
   addLog('mute',`${u.firstname} ${u.lastname} muté (${dur===0?'permanent':dur/60000+'min'}) — ${reason}`);
   showToast(`✅ ${u.firstname} a été muté`,'rgba(251,191,36,.85)');
   closeMuteModal();
   renderAdminUsers();
   renderAdminOverview();
 }
-function unmuteUser(userId){
+async function unmuteUser(userId){
   const users=store.users();
   const u=users.find(x=>x.id===userId);
   if(!u||!canTarget(me,u)){showToast('❌ Tu ne peux pas démuter cet utilisateur');return;}
-  u.muted=false;u.mutedUntil=0;
-  store.setUsers(users);
+  u.muted=false;u.muted_until=0;
+  await store.setUsers(users);
+  await refreshUsersCache();
   addLog('unmute',`${u.firstname} ${u.lastname} démuté`);
   showToast(`✅ ${u.firstname} a été démuté`,'rgba(34,197,94,.85)');
   renderAdminUsers();renderAdminOverview();
 }
 
 // ── Ban / Unban ──
-function banUser(userId){
+async function banUser(userId){
   if(!isAdminOrAbove(me)){showToast('❌ Rang insuffisant');return;}
   const users=store.users();
   const u=users.find(x=>x.id===userId);
   if(!u||!canTarget(me,u)){showToast('❌ Tu ne peux pas bannir cet utilisateur');return;}
   if(!confirm(`Bannir ${u.firstname} ${u.lastname} ?`))return;
   u.banned=true;
-  store.setUsers(users);
+  await store.setUsers(users);
+  await refreshUsersCache();
   addLog('ban',`${u.firstname} ${u.lastname} (${u.email}) banni`);
   showToast(`✅ ${u.firstname} a été banni`,'rgba(239,68,68,.85)');
   renderAdminUsers();renderAdminOverview();
 }
-function unbanUser(userId){
+async function unbanUser(userId){
   if(!isAdminOrAbove(me)){showToast('❌ Rang insuffisant');return;}
   const users=store.users();
   const u=users.find(x=>x.id===userId);
   if(!u){return;}
   u.banned=false;
-  store.setUsers(users);
+  await store.setUsers(users);
+  await refreshUsersCache();
   addLog('unban',`${u.firstname} ${u.lastname} (${u.email}) débanni`);
   showToast(`✅ ${u.firstname} a été débanni`,'rgba(34,197,94,.85)');
   renderAdminUsers();renderAdminOverview();
