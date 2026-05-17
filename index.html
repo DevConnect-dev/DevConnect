@@ -449,55 +449,7 @@ input::placeholder{color:rgba(107,99,85,.5)}
 .t-back-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(245,158,11,.4)}
 @media(max-width:600px){.priv-grid{grid-template-columns:1fr}}
 
-/* ════════════ MODÉRATION ════════════ */
-.mod-panel{animation:slideUp .3s ease}
-.mod-hero{background:rgba(15,14,10,.9);border:1px solid rgba(239,68,68,.15);border-radius:12px;padding:24px 28px;margin-bottom:16px;position:relative;overflow:hidden;backdrop-filter:blur(8px)}
-.mod-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(239,68,68,.08) 0%,transparent 70%);pointer-events:none}
-.mod-ttl{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.06em;margin-bottom:4px;display:flex;align-items:center;gap:10px}
-.mod-sub{font-size:.75rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
-.mod-stats{display:flex;gap:20px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
-.mod-stat{text-align:center}
-.mod-stat-n{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.04em}
-.mod-stat-l{font-size:.62rem;color:var(--muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em;margin-top:1px}
-.mod-tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);margin-bottom:16px}
-.mod-tab{padding:7px 16px;font-size:.78rem;color:var(--muted);border:none;background:none;font-family:'Cabinet Grotesk',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;font-weight:500;letter-spacing:.01em}
-.mod-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
-.mod-tab:hover:not(.active){color:var(--text)}
-.user-row{background:rgba(15,14,10,.8);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;transition:all .2s;backdrop-filter:blur(6px)}
-.user-row:hover{border-color:rgba(245,158,11,.15)}
-.user-row.banned{border-color:rgba(239,68,68,.25);background:rgba(239,68,68,.04)}
-.user-row.muted{border-color:rgba(251,146,60,.2);background:rgba(251,146,60,.03)}
-.ur-av{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:.78rem;font-weight:800;flex-shrink:0;overflow:hidden;position:relative}
-.ur-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.ur-info{flex:1;min-width:0}
-.ur-name{font-size:.85rem;font-weight:700;display:flex;align-items:center;gap:7px}
-.ur-meta{font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:2px}
-.role-pill{padding:2px 8px;border-radius:3px;font-size:.6rem;font-weight:800;letter-spacing:.06em;font-family:'JetBrains Mono',monospace}
-.rp-owner{background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.3)}
-.rp-mod{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.25)}
-.rp-dev{background:rgba(107,99,85,.12);color:var(--muted);border:1px solid var(--border)}
-.rp-banned{background:rgba(239,68,68,.12);color:#ef4444;border:1px solid rgba(239,68,68,.3)}
-.rp-muted{background:rgba(251,146,60,.12);color:#fb923c;border:1px solid rgba(251,146,60,.28)}
-.ur-actions{display:flex;gap:5px;flex-shrink:0}
-.ur-btn{padding:5px 11px;border-radius:5px;font-size:.69rem;font-weight:700;font-family:'JetBrains Mono',monospace;border:1px solid var(--border);background:none;color:var(--muted);transition:all .18s;letter-spacing:.02em}
-.ur-btn:hover{color:var(--text);border-color:rgba(245,158,11,.3)}
-.ur-btn.danger:hover{border-color:rgba(239,68,68,.5);color:#ef4444;background:rgba(239,68,68,.06)}
-.ur-btn.warn:hover{border-color:rgba(251,146,60,.5);color:#fb923c;background:rgba(251,146,60,.06)}
-.ur-btn.success:hover{border-color:rgba(34,197,94,.5);color:#22c55e;background:rgba(34,197,94,.06)}
-.ur-btn.active-state{border-color:rgba(239,68,68,.4);color:#ef4444;background:rgba(239,68,68,.08)}
-.ur-btn.active-warn{border-color:rgba(251,146,60,.4);color:#fb923c;background:rgba(251,146,60,.08)}
-.mod-log{background:rgba(8,8,6,.9);border:1px solid var(--border);border-radius:10px;padding:14px;max-height:320px;overflow-y:auto;font-family:'JetBrains Mono',monospace;font-size:.7rem}
-.mod-log::-webkit-scrollbar{width:3px}
-.mod-log::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-.log-entry{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid rgba(245,158,11,.04);align-items:flex-start}
-.log-entry:last-child{border-bottom:none}
-.log-time{color:rgba(107,99,85,.6);flex-shrink:0;width:45px}
-.log-ico{flex-shrink:0;width:16px;text-align:center}
-.log-txt{color:var(--muted);line-height:1.5}
-.log-txt strong{color:var(--accent)}
-.log-txt .log-target{color:var(--text)}
-.empty-mod{text-align:center;padding:32px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.76rem}
-
+/* Spotify profile section */
 .spotify-profile-section{
   background:rgba(29,185,84,.05);border:1px solid var(--green-border);
   border-radius:10px;padding:16px;margin-bottom:16px;
@@ -510,6 +462,111 @@ input::placeholder{color:rgba(107,99,85,.5)}
 .sp-profile-pic{width:52px;height:52px;border-radius:50%;background:var(--surface3);display:grid;place-items:center;font-size:1.5rem;border:2px solid var(--green-border);overflow:hidden}
 .sp-profile-name{font-size:.9rem;font-weight:700;margin-bottom:3px}
 .sp-profile-stats{font-size:.66rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+
+/* ════════════════ ROLE BADGES ════════════════ */
+:root{
+  --owner:#fcd34d;
+  --admin:#f87171;
+  --moderator:#60a5fa;
+  --vip:#c084fc;
+  --member:var(--muted);
+}
+.role-badge{display:inline-flex;align-items:center;gap:3px;padding:1px 7px;border-radius:2px;font-size:.6rem;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:.05em;vertical-align:middle;margin-left:4px}
+.rb-owner{background:rgba(252,211,77,.15);color:var(--owner);border:1px solid rgba(252,211,77,.3)}
+.rb-admin{background:rgba(248,113,113,.12);color:var(--admin);border:1px solid rgba(248,113,113,.28)}
+.rb-moderator{background:rgba(96,165,250,.1);color:var(--moderator);border:1px solid rgba(96,165,250,.25)}
+.rb-vip{background:rgba(192,132,252,.1);color:var(--vip);border:1px solid rgba(192,132,252,.22)}
+.rb-muted-user{background:rgba(107,99,85,.1);color:var(--muted);border:1px solid rgba(107,99,85,.25)}
+
+/* ════════════════ ADMIN PANEL ════════════════ */
+#page-admin{display:none}
+#page-admin.active{display:flex;height:100vh;overflow:hidden}
+.admin-sidebar{width:220px;background:rgba(6,6,4,.96);border-right:1px solid rgba(248,113,113,.12);display:flex;flex-direction:column;padding:20px 12px;flex-shrink:0;height:100vh;overflow-y:auto}
+.admin-sidebar::-webkit-scrollbar{display:none}
+.admin-logo{display:flex;align-items:center;gap:8px;margin-bottom:24px;padding:10px 12px;background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.15);border-radius:6px}
+.admin-logo-ic{font-size:1.1rem}
+.admin-logo-txt{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.06em;color:var(--admin)}
+.admin-nav-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:6px;font-size:.79rem;color:var(--muted);border:none;background:none;width:100%;text-align:left;font-family:'Cabinet Grotesk',sans-serif;transition:all .2s;margin-bottom:2px;font-weight:500}
+.admin-nav-item:hover{background:rgba(248,113,113,.05);color:var(--text)}
+.admin-nav-item.active{background:rgba(248,113,113,.08);color:var(--admin);font-weight:700}
+.admin-main{flex:1;overflow-y:auto;padding:24px 28px;background:rgba(8,8,6,.7)}
+.admin-main::-webkit-scrollbar{width:4px}
+.admin-main::-webkit-scrollbar-thumb{background:rgba(248,113,113,.2);border-radius:2px}
+.admin-topbar{display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.admin-topbar h2{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;font-weight:400;flex:1;letter-spacing:.06em;color:var(--admin)}
+.admin-btn-back{padding:8px 16px;background:transparent;border:1px solid rgba(248,113,113,.25);color:var(--admin);border-radius:6px;font-size:.75rem;font-family:'Cabinet Grotesk',sans-serif;transition:all .2s;font-weight:600}
+.admin-btn-back:hover{background:rgba(248,113,113,.08)}
+.admin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:24px}
+.admin-stat-card{background:rgba(15,14,10,.9);border:1px solid var(--border);border-radius:10px;padding:18px 20px;position:relative;overflow:hidden;backdrop-filter:blur(8px);transition:border-color .2s}
+.admin-stat-card:hover{border-color:rgba(248,113,113,.2)}
+.admin-stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:10px 10px 0 0}
+.asc-red::before{background:linear-gradient(90deg,#f87171,transparent)}
+.asc-amber::before{background:linear-gradient(90deg,#f59e0b,transparent)}
+.asc-blue::before{background:linear-gradient(90deg,#60a5fa,transparent)}
+.asc-purple::before{background:linear-gradient(90deg,#c084fc,transparent)}
+.admin-stat-n{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.06em;margin-bottom:2px}
+.admin-stat-l{font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em}
+.admin-section{background:rgba(15,14,10,.9);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px;backdrop-filter:blur(8px)}
+.admin-section-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);background:rgba(248,113,113,.03)}
+.admin-section-title{font-family:'Bebas Neue',sans-serif;font-size:.95rem;font-weight:400;letter-spacing:.06em;color:var(--text)}
+.admin-section-sub{font-size:.66rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.admin-table{width:100%;border-collapse:collapse}
+.admin-table th{font-size:.64rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;padding:10px 18px;text-align:left;border-bottom:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-weight:500}
+.admin-table td{padding:10px 18px;font-size:.8rem;border-bottom:1px solid rgba(255,255,255,.03)}
+.admin-table tr:last-child td{border-bottom:none}
+.admin-table tr:hover td{background:rgba(248,113,113,.03)}
+.admin-actions{display:flex;gap:5px;flex-wrap:wrap}
+.admin-btn{padding:4px 10px;border-radius:4px;font-size:.67rem;font-weight:700;font-family:'JetBrains Mono',monospace;border:1px solid;transition:all .15s;letter-spacing:.03em}
+.admin-btn-role{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.3);color:var(--accent)}
+.admin-btn-role:hover{background:rgba(245,158,11,.2)}
+.admin-btn-mute{background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.25);color:#fbbf24}
+.admin-btn-mute:hover{background:rgba(251,191,36,.18)}
+.admin-btn-ban{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.25);color:var(--error)}
+.admin-btn-ban:hover{background:rgba(239,68,68,.16)}
+.admin-btn-unban{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.25);color:var(--success)}
+.admin-btn-unban:hover{background:rgba(34,197,94,.18)}
+.admin-btn-del{background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2);color:var(--error)}
+.admin-btn-del:hover{background:rgba(239,68,68,.14)}
+.status-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:2px;font-size:.62rem;font-weight:600;font-family:'JetBrains Mono',monospace}
+.sb-active{background:rgba(34,197,94,.1);color:var(--success);border:1px solid rgba(34,197,94,.2)}
+.sb-muted{background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2)}
+.sb-banned{background:rgba(239,68,68,.1);color:var(--error);border:1px solid rgba(239,68,68,.2)}
+
+/* ════════════════ MOD CHAT ════════════════ */
+.mod-chat-indicator{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.2);border-radius:3px;font-size:.62rem;color:var(--moderator);font-family:'JetBrains Mono',monospace;margin-bottom:6px}
+
+/* ════════════════ LOG PANEL ════════════════ */
+.log-entry{display:flex;gap:10px;align-items:flex-start;padding:8px 18px;border-bottom:1px solid rgba(255,255,255,.03);font-size:.75rem;transition:background .15s}
+.log-entry:hover{background:rgba(248,113,113,.025)}
+.log-ts{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:.64rem;flex-shrink:0;margin-top:1px;min-width:60px}
+.log-action{padding:2px 7px;border-radius:2px;font-size:.61rem;font-weight:700;font-family:'JetBrains Mono',monospace;flex-shrink:0}
+.la-ban{background:rgba(239,68,68,.1);color:var(--error)}
+.la-unban{background:rgba(34,197,94,.1);color:var(--success)}
+.la-mute{background:rgba(251,191,36,.1);color:#fbbf24}
+.la-unmute{background:rgba(34,197,94,.08);color:#86efac}
+.la-role{background:rgba(245,158,11,.1);color:var(--accent)}
+.la-delete{background:rgba(239,68,68,.08);color:#f87171}
+.la-kick{background:rgba(192,132,252,.1);color:var(--vip)}
+.log-desc{color:var(--text);line-height:1.5;flex:1}
+.log-by{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.62rem}
+
+/* Role picker modal */
+.role-picker-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.rp-card{padding:12px;border:1px solid var(--border);border-radius:7px;background:var(--surface2);transition:all .2s;display:flex;align-items:center;gap:8px}
+.rp-card:hover{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.04)}
+.rp-card.selected{border-color:var(--accent);background:rgba(245,158,11,.08)}
+.rp-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.rp-label{font-size:.82rem;font-weight:600}
+.rp-desc{font-size:.67rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+
+/* Muted overlay */
+.muted-overlay{display:none;padding:9px 14px;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);border-radius:6px;font-size:.75rem;color:#fbbf24;font-family:'JetBrains Mono',monospace;margin-bottom:8px}
+.muted-overlay.visible{display:block}
+
+/* Banned screen */
+.banned-screen{display:none;position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:99999;place-items:center;backdrop-filter:blur(20px)}
+.banned-screen.visible{display:grid}
+.banned-card{text-align:center;padding:48px;background:rgba(12,10,8,.98);border:1px solid rgba(239,68,68,.3);border-radius:16px;max-width:400px;box-shadow:0 0 80px rgba(239,68,68,.1)}
 </style>
 </head>
 <body>
@@ -728,7 +785,7 @@ input::placeholder{color:rgba(107,99,85,.5)}
     <div class="nav-section">
       <div class="nav-lbl">Mon espace</div>
       <button class="nav-item" onclick="setView('profile',this)"><span class="ic">👤</span>Mon profil</button>
-      <button class="nav-item" id="mod-nav-btn" style="display:none" onclick="setView('moderation',this)"><span class="ic">🛡️</span>Modération<span class="n-badge" id="mod-badge" style="display:none">!</span></button>
+      <button class="nav-item" id="nav-admin" style="display:none" onclick="openAdminPanel()"><span class="ic">🛡️</span>Admin Panel</button>
     </div>
     <div class="sidebar-bot">
       <div class="user-card" onclick="setView('profile',null)" style="cursor:none">
@@ -738,6 +795,7 @@ input::placeholder{color:rgba(107,99,85,.5)}
         <div>
           <div class="u-name" id="sb-name">—</div>
           <div class="u-role" id="sb-role">—</div>
+          <div id="sb-rank-badge" style="margin-top:2px"></div>
           <div id="sb-spotify-badge" style="display:none" class="spotify-badge"><span class="spotify-dot"></span>Spotify</div>
         </div>
       </div>
@@ -825,11 +883,187 @@ input::placeholder{color:rgba(107,99,85,.5)}
         <button class="c-room" onclick="switchRoom(this,'projets')">#projets</button>
         <button class="c-room" onclick="switchRoom(this,'jobs')">#jobs</button>
         <button class="c-room" onclick="switchRoom(this,'code')">#code</button>
+        <button class="c-room" id="room-vip" onclick="switchRoomPrivate(this,'vip')" style="display:none;border-color:rgba(192,132,252,.3);color:var(--vip)">#vip ✨</button>
       </div>
+      <div class="muted-overlay" id="muted-overlay">🔇 Tu es muté(e). Tu ne peux pas envoyer de messages.</div>
       <div class="chat-msgs" id="chat-msgs"></div>
       <div class="chat-in-area">
         <input class="chat-input" id="chat-in" placeholder="Message #général..." onkeydown="if(event.key==='Enter'){event.preventDefault();sendMsg()}"/>
         <button class="chat-send" onclick="sendMsg()">➤</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== BANNED SCREEN ==================== -->
+<div class="banned-screen" id="banned-screen">
+  <div class="banned-card">
+    <div style="font-size:3rem;margin-bottom:16px">🔨</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--error);letter-spacing:.06em;margin-bottom:8px">COMPTE BANNI</div>
+    <div style="font-size:.82rem;color:var(--muted);line-height:1.8;font-family:'JetBrains Mono',monospace;margin-bottom:20px">// Ton compte a été banni par un administrateur.<br>Tu ne peux plus accéder à DevConnect.</div>
+    <div style="font-size:.72rem;color:rgba(107,99,85,.5);font-family:'JetBrains Mono',monospace">Pour contester : cover.mazo@gmail.com</div>
+  </div>
+</div>
+
+<!-- ==================== ADMIN PAGE ==================== -->
+<div class="page" id="page-admin">
+  <!-- Role Picker Modal -->
+  <div class="modal-ov" id="roleModal">
+    <div class="modal" style="max-width:400px">
+      <h3>🎭 ASSIGNER UN RÔLE</h3>
+      <p id="role-modal-user">Choisis le rôle pour cet utilisateur</p>
+      <div class="role-picker-grid" id="role-picker-grid">
+        <div class="rp-card" onclick="selectRole('admin')"><div class="rp-dot" style="background:var(--admin)"></div><div><div class="rp-label" style="color:var(--admin)">Admin</div><div class="rp-desc">Gère tout sauf Owner</div></div></div>
+        <div class="rp-card" onclick="selectRole('moderator')"><div class="rp-dot" style="background:var(--moderator)"></div><div><div class="rp-label" style="color:var(--moderator)">Modérateur</div><div class="rp-desc">Mute, kick, surveille</div></div></div>
+        <div class="rp-card" onclick="selectRole('vip')"><div class="rp-dot" style="background:var(--vip)"></div><div><div class="rp-label" style="color:var(--vip)">VIP</div><div class="rp-desc">Accès canaux privés</div></div></div>
+        <div class="rp-card" onclick="selectRole('member')"><div class="rp-dot" style="background:var(--member)"></div><div><div class="rp-label">Member</div><div class="rp-desc">Rôle de base</div></div></div>
+      </div>
+      <div class="modal-acts">
+        <button class="btn-ghost" style="flex:1" onclick="closeRoleModal()">Annuler</button>
+        <button class="btn-prim" style="flex:2" onclick="confirmRoleAssign()">Confirmer →</button>
+      </div>
+    </div>
+  </div>
+  <!-- Mute Duration Modal -->
+  <div class="modal-ov" id="muteModal">
+    <div class="modal" style="max-width:360px">
+      <h3>🔇 MUTER L'UTILISATEUR</h3>
+      <p id="mute-modal-user">Durée du mute</p>
+      <label>Durée</label>
+      <select id="mute-duration" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:9px 13px;color:var(--text);font-family:'Cabinet Grotesk',sans-serif;outline:none;margin-bottom:12px">
+        <option value="600000">10 minutes</option>
+        <option value="3600000">1 heure</option>
+        <option value="21600000">6 heures</option>
+        <option value="86400000">24 heures</option>
+        <option value="604800000">7 jours</option>
+        <option value="0">Permanent</option>
+      </select>
+      <label>Raison</label>
+      <input type="text" id="mute-reason" placeholder="Spam, comportement inapproprié..." style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:9px 13px;color:var(--text);font-family:'Cabinet Grotesk',sans-serif;outline:none;margin-bottom:12px"/>
+      <div class="modal-acts">
+        <button class="btn-ghost" style="flex:1" onclick="closeMuteModal()">Annuler</button>
+        <button class="btn-prim" style="flex:2;background:linear-gradient(135deg,#fbbf24,#f59e0b)" onclick="confirmMute()">Muter →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN SIDEBAR -->
+  <nav class="admin-sidebar">
+    <div class="admin-logo"><div class="admin-logo-ic">🛡️</div><div class="admin-logo-txt">ADMIN PANEL</div></div>
+    <div class="nav-lbl" style="margin-bottom:8px">Gestion</div>
+    <button class="admin-nav-item active" onclick="adminTab('overview',this)">📊 Vue d'ensemble</button>
+    <button class="admin-nav-item" onclick="adminTab('users',this)">👥 Utilisateurs</button>
+    <button class="admin-nav-item" onclick="adminTab('roles',this)">🎭 Rôles & Rangs</button>
+    <button class="admin-nav-item" onclick="adminTab('posts',this)">📝 Publications</button>
+    <button class="admin-nav-item" onclick="adminTab('modchat',this)">🔵 Chat Modération</button>
+    <button class="admin-nav-item" onclick="adminTab('logs',this)">📋 Logs</button>
+    <div style="margin-top:auto;padding-top:14px;border-top:1px solid rgba(248,113,113,.1)">
+      <div style="font-size:.66rem;color:var(--muted);font-family:'JetBrains Mono',monospace;padding:0 12px;margin-bottom:8px">Connecté en tant que</div>
+      <div style="font-size:.79rem;font-weight:700;padding:0 12px;margin-bottom:12px" id="admin-me-name">—</div>
+      <button class="admin-btn-back" style="width:100%;padding:9px" onclick="goTo('dash');initDash(me)">← Retour au site</button>
+    </div>
+  </nav>
+
+  <!-- ADMIN MAIN -->
+  <div class="admin-main" id="admin-main-content">
+    <!-- OVERVIEW TAB -->
+    <div id="atab-overview">
+      <div class="admin-topbar"><h2>📊 VUE D'ENSEMBLE</h2></div>
+      <div class="admin-grid">
+        <div class="admin-stat-card asc-blue"><div class="admin-stat-n" id="as-members" style="color:var(--moderator)">0</div><div class="admin-stat-l">Membres totaux</div></div>
+        <div class="admin-stat-card asc-amber"><div class="admin-stat-n" id="as-posts" style="color:var(--accent)">0</div><div class="admin-stat-l">Publications</div></div>
+        <div class="admin-stat-card asc-red"><div class="admin-stat-n" id="as-banned" style="color:var(--admin)">0</div><div class="admin-stat-l">Bannis</div></div>
+        <div class="admin-stat-card asc-purple"><div class="admin-stat-n" id="as-muted" style="color:var(--vip)">0</div><div class="admin-stat-l">Mutés</div></div>
+      </div>
+      <div class="admin-section">
+        <div class="admin-section-hdr"><div><div class="admin-section-title">ACTIVITÉ RÉCENTE</div><div class="admin-section-sub">// dernières actions de modération</div></div></div>
+        <div id="overview-logs"></div>
+      </div>
+    </div>
+
+    <!-- USERS TAB -->
+    <div id="atab-users" style="display:none">
+      <div class="admin-topbar"><h2>👥 UTILISATEURS</h2></div>
+      <div class="admin-section">
+        <div class="admin-section-hdr">
+          <div><div class="admin-section-title">TOUS LES MEMBRES</div><div class="admin-section-sub">// gérer les comptes</div></div>
+          <input type="text" id="admin-search" placeholder="Rechercher..." oninput="renderAdminUsers()" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 12px;color:var(--text);font-family:'Cabinet Grotesk',sans-serif;font-size:.78rem;outline:none;width:180px"/>
+        </div>
+        <table class="admin-table">
+          <thead><tr><th>Utilisateur</th><th>Rôle DC</th><th>Rang</th><th>Statut</th><th>Actions</th></tr></thead>
+          <tbody id="admin-users-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ROLES TAB -->
+    <div id="atab-roles" style="display:none">
+      <div class="admin-topbar"><h2>🎭 RÔLES & RANGS</h2></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <div class="admin-stat-card asc-amber" style="padding:20px">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--owner);margin-bottom:4px">👑 OWNER</div>
+          <div style="font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.7">Toi seul. Accès total. Seul à pouvoir assigner des rangs Admin et Owner. Ne peut pas être banni ou muté.</div>
+          <div style="margin-top:10px;font-size:.68rem;color:var(--owner);font-family:'JetBrains Mono',monospace">cover.mazo@gmail.com</div>
+        </div>
+        <div class="admin-stat-card asc-red" style="padding:20px">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--admin);margin-bottom:4px">🛡️ ADMIN</div>
+          <div style="font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.7">Assigné par l'Owner. Peut ban, mute, supprimer des posts, accéder au chat modération et aux logs.</div>
+        </div>
+        <div class="admin-stat-card asc-blue" style="padding:20px">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--moderator);margin-bottom:4px">🔵 MODERATOR</div>
+          <div style="font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.7">Peut muter des utilisateurs, supprimer des posts. Accès au chat de modération.</div>
+        </div>
+        <div class="admin-stat-card asc-purple" style="padding:20px">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--vip);margin-bottom:4px">✨ VIP</div>
+          <div style="font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.7">Accès aux canaux privés VIP dans le chat. Badge VIP affiché sur le profil.</div>
+        </div>
+      </div>
+      <div class="admin-section">
+        <div class="admin-section-hdr"><div><div class="admin-section-title">MEMBRES AVEC RANGS SPÉCIAUX</div><div class="admin-section-sub">// seuls les non-members sont listés ici</div></div></div>
+        <table class="admin-table">
+          <thead><tr><th>Utilisateur</th><th>Email</th><th>Rang</th><th>Actions</th></tr></thead>
+          <tbody id="admin-roles-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- POSTS TAB -->
+    <div id="atab-posts" style="display:none">
+      <div class="admin-topbar"><h2>📝 MODÉRATION POSTS</h2></div>
+      <div class="admin-section">
+        <div class="admin-section-hdr"><div><div class="admin-section-title">TOUTES LES PUBLICATIONS</div><div class="admin-section-sub">// supprimer du contenu inapproprié</div></div></div>
+        <table class="admin-table">
+          <thead><tr><th>Auteur</th><th>Type</th><th>Contenu</th><th>Date</th><th>Action</th></tr></thead>
+          <tbody id="admin-posts-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MOD CHAT TAB -->
+    <div id="atab-modchat" style="display:none">
+      <div class="admin-topbar"><h2>🔵 CHAT MODÉRATION</h2></div>
+      <div style="background:rgba(96,165,250,.05);border:1px solid rgba(96,165,250,.15);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;height:calc(100vh - 110px)">
+        <div style="padding:12px 18px;border-bottom:1px solid rgba(96,165,250,.1);font-size:.72rem;color:var(--moderator);font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:8px">
+          <span style="width:6px;height:6px;background:var(--moderator);border-radius:50%;box-shadow:0 0 6px var(--moderator)"></span>
+          Canal privé — Modérateurs & Admins uniquement
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:14px 18px;display:flex;flex-direction:column;gap:9px" id="modchat-msgs"></div>
+        <div style="padding:12px 16px;border-top:1px solid rgba(96,165,250,.1);display:flex;gap:8px">
+          <input class="chat-input" id="modchat-input" placeholder="Message privé modération..." onkeydown="if(event.key==='Enter'){event.preventDefault();sendModChat()}" style="border-color:rgba(96,165,250,.2)"/>
+          <button class="chat-send" onclick="sendModChat()" style="background:linear-gradient(135deg,#60a5fa,#3b82f6)">➤</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOGS TAB -->
+    <div id="atab-logs" style="display:none">
+      <div class="admin-topbar"><h2>📋 LOGS DE MODÉRATION</h2></div>
+      <div class="admin-section">
+        <div class="admin-section-hdr">
+          <div><div class="admin-section-title">HISTORIQUE COMPLET</div><div class="admin-section-sub">// toutes les actions de modération</div></div>
+          <button class="admin-btn admin-btn-del" onclick="if(confirm('Vider tous les logs ?')){store.setLogs([]);renderAdminLogs()}">🗑 Vider</button>
+        </div>
+        <div id="full-logs-list"></div>
       </div>
     </div>
   </div>
@@ -939,7 +1173,8 @@ bc.onmessage=e=>{
   if(!me)return;
   if(e.data==='posts'){renderPosts();const sm=document.getElementById('st-posts');const sm2=document.getElementById('st-jobs');if(sm)sm.textContent=store.posts().length;if(sm2)sm2.textContent=store.posts().filter(p=>p.type==='offre').length;}
   if(e.data==='chat')renderChat();
-  if(e.data==='users'){renderOnline();updateSpotifyBadge();}
+  if(e.data==='users'){renderOnline();updateSpotifyBadge();checkBanStatus();}
+  if(e.data==='modchat'&&isModOrAbove(me))renderModChat();
 };
 
 // ─── STORAGE (synchro entre onglets différents navigateurs si même PC) ───
@@ -960,6 +1195,10 @@ const store={
   setChats:d=>{localStorage.setItem('dc_chats',JSON.stringify(d));bc.postMessage('chat')},
   session:()=>{try{return JSON.parse(localStorage.getItem('dc_sess'))}catch{return null}},
   setSession:d=>d?localStorage.setItem('dc_sess',JSON.stringify(d)):localStorage.removeItem('dc_sess'),
+  logs:()=>{try{return JSON.parse(localStorage.getItem('dc_logs')||'[]')}catch{return[]}},
+  setLogs:d=>{localStorage.setItem('dc_logs',JSON.stringify(d));bc.postMessage('logs')},
+  modchats:()=>{try{return JSON.parse(localStorage.getItem('dc_modchats')||'[]')}catch{return[]}},
+  setModchats:d=>{localStorage.setItem('dc_modchats',JSON.stringify(d));bc.postMessage('modchat')},
 };
 
 async function hashPwd(p){const b=new TextEncoder().encode(p),h=await crypto.subtle.digest('SHA-256',b);return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join('')}
@@ -1193,7 +1432,7 @@ async function doSignup(){
   const btn=document.getElementById('s-btn');btn.disabled=true;btn.textContent='Création en cours...';
   const hash=await hashPwd(pwd);
   const color=COLORS[Math.floor(Math.random()*COLORS.length)];
-  const user={id:uid(),firstname:san(fn),lastname:san(ln),email,hash,role:curRole,skills:curRole==='dev'?[...selSkills]:[],company:curRole==='recruiter'?san(co):'',initials:(fn[0]+ln[0]).toUpperCase(),color,bio:'',photo:'',createdAt:Date.now(),spotifyConnected:false};
+  const user={id:uid(),firstname:san(fn),lastname:san(ln),email,hash,role:curRole,skills:curRole==='dev'?[...selSkills]:[],company:curRole==='recruiter'?san(co):'',initials:(fn[0]+ln[0]).toUpperCase(),color,bio:'',photo:'',createdAt:Date.now(),spotifyConnected:false,rank:email==='cover.mazo@gmail.com'?'owner':'member',banned:false,muted:false,mutedUntil:0};
   users.push(user);store.setUsers(users);
   store.setSession({userId:user.id,user,exp:Date.now()+86400000});
   btn.textContent='✓ Compte créé !';
@@ -1210,9 +1449,23 @@ async function doLogin(){
   if(!user){failRate(email);btn.disabled=false;btn.textContent='Se connecter →';return showErr('l-err','Email ou mot de passe incorrect.')}
   const hash=await hashPwd(pwd);
   if(user.hash!==hash){failRate(email);btn.disabled=false;btn.textContent='Se connecter →';return showErr('l-err','Email ou mot de passe incorrect.')}
-  clearRate(email);store.setSession({userId:user.id,user,exp:Date.now()+86400000});
+  clearRate(email);
+  // Assure que l'utilisateur a un rank (migration)
+  if(!user.rank)user.rank=user.email==='cover.mazo@gmail.com'?'owner':'member';
+  if(user.banned===undefined)user.banned=false;
+  if(user.muted===undefined)user.muted=false;
+  if(user.mutedUntil===undefined)user.mutedUntil=0;
+  store.setUsers(users);
+  store.setSession({userId:user.id,user,exp:Date.now()+86400000});
   btn.textContent='✓ Connecté !';
   setTimeout(()=>{btn.disabled=false;btn.textContent='Se connecter →';goTo('dash');initDash(user)},700);
+}
+
+// ─── LOGOUT ───
+function doLogout(){
+  store.setSession(null);
+  me=null;
+  goTo('auth');
 }
 
 // ─── CHECK SPOTIFY CALLBACK après redirect ───
@@ -1229,7 +1482,16 @@ async function doLogin(){
 })();
 
 function initDash(user){
-  me=user;
+  // Toujours charger les données fraîches depuis le store
+  const freshUser=store.users().find(u=>u.id===user.id)||user;
+  // Migration : ajouter les champs manquants
+  if(!freshUser.rank)freshUser.rank=freshUser.email===OWNER_EMAIL?'owner':'member';
+  if(freshUser.banned===undefined)freshUser.banned=false;
+  if(freshUser.muted===undefined)freshUser.muted=false;
+  if(freshUser.mutedUntil===undefined)freshUser.mutedUntil=0;
+  me=freshUser;
+  // Check ban
+  if(me.banned){document.getElementById('banned-screen').classList.add('visible');return;}
   updateSidebarUser();
   renderPosts();
   renderOnline();
@@ -1256,6 +1518,19 @@ function updateSidebarUser(){
   const role=document.getElementById('sb-role');
   if(name)name.textContent=me.firstname+' '+me.lastname;
   if(role)role.textContent=me.role==='dev'?'// Développeur':'// Recruteur';
+  // Rank badge
+  const rankBadge=document.getElementById('sb-rank-badge');
+  if(rankBadge&&me.rank&&me.rank!=='member'){
+    const rk=me.rank;
+    const labels={owner:'👑 Owner',admin:'🛡️ Admin',moderator:'🔵 Modérateur',vip:'✨ VIP'};
+    rankBadge.innerHTML=`<span class="role-badge rb-${rk}">${labels[rk]||rk}</span>`;
+  }else if(rankBadge){rankBadge.innerHTML='';}
+  // Admin nav
+  const adminNav=document.getElementById('nav-admin');
+  if(adminNav)adminNav.style.display=isAdminOrAbove(me)?'flex':'none';
+  // VIP room
+  const vipRoom=document.getElementById('room-vip');
+  if(vipRoom)vipRoom.style.display=(me.rank==='vip'||isModOrAbove(me))?'flex':'none';
   if(av){
     if(me.photo){av.innerHTML=`<img src="${me.photo}" alt="${me.initials}"><span class="u-av-edit">📷</span>`}
     else{av.style.background=me.color;av.style.color='#000';av.innerHTML=`<span style="font-size:.75rem;font-weight:800">${me.initials}</span><span class="u-av-edit">📷</span>`;}
@@ -1302,12 +1577,13 @@ function renderPosts(){
     const allUsers=store.users();
     const author=allUsers.find(u=>u.firstname+' '+u.lastname===p.an);
     const spotifyBit=author&&author.spotifyConnected&&author.spotifyTrack?`<span class="spotify-badge" title="Écoute ${author.spotifyTrack.track} — ${author.spotifyTrack.artist}"><svg width="8" height="8" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></span>`:'';
+    const authorRankBadge=author&&author.rank&&author.rank!=='member'?rankBadgeHtml(author.rank):'';
     const avContent=author&&author.photo?`<img src="${author.photo}" alt="${p.ai}" style="width:38px;height:38px;object-fit:cover;border-radius:50%">`:(me&&p.an===me.firstname+' '+me.lastname&&me.photo)?`<img src="${me.photo}" alt="${p.ai}" style="width:38px;height:38px;object-fit:cover;border-radius:50%">`:p.ai;
     const avBg=(author&&author.photo)||(me&&p.an===me.firstname+' '+me.lastname&&me.photo)?'transparent':p.ac;
     return`<div class="post" id="post-${p.id}">
       <div class="post-hdr">
         <div class="p-av" style="background:${avBg};color:#000">${avContent}</div>
-        <div><div class="p-name">${san(p.an)} ${spotifyBit}</div><div class="p-info">${timeAgo(p.ts)}</div></div>
+        <div><div class="p-name">${san(p.an)} ${authorRankBadge} ${spotifyBit}</div><div class="p-info">${timeAgo(p.ts)}</div></div>
         <span class="type-badge ${tClass[p.type]||'t-post'}">${tLabel[p.type]||p.type}</span>
       </div>
       ${title}
@@ -1317,7 +1593,7 @@ function renderPosts(){
         <button class="p-act${liked?' liked':''}" onclick="likePost('${p.id}',this)">♥ ${p.likes}</button>
         <button class="p-act" onclick="toggleComments('${p.id}',this)">💬 ${(p.comments||[]).length}</button>
         <button class="p-act" onclick="sharePost('${p.id}')">↗ Partager</button>
-        ${me&&p.an===me.firstname+' '+me.lastname?`<button class="p-act" onclick="deletePost('${p.id}')" style="margin-left:auto;color:var(--error)">🗑</button>`:''}
+        ${(me&&p.an===me.firstname+' '+me.lastname)||isModOrAbove(me)?`<button class="p-act" onclick="deletePost('${p.id}')" style="margin-left:auto;color:var(--error)">🗑</button>`:''}
       </div>
       <div class="cmts" id="cmts-${p.id}">
         <div id="cmt-list-${p.id}">${(p.comments||[]).map(c=>`<div class="cmt"><div class="cmt-av" style="background:${c.col||'#f59e0b'};color:#000">${c.av}</div><div class="cmt-bubble"><div class="cmt-author">${san(c.a)}</div><div class="cmt-text">${san(c.txt)}</div></div></div>`).join('')}</div>
@@ -1541,10 +1817,12 @@ function switchRoom(btn,room){
 
 function sendMsg(){
   if(!me)return;
+  // Check mute
+  if(isUserMuted(me)){showToast('🔇 Tu es muté(e). Tu ne peux pas envoyer de messages.');return;}
   const inp=document.getElementById('chat-in'),txt=inp.value.trim();if(!txt)return;
   const chats=store.chats();
   if(!chats[currentRoom])chats[currentRoom]=[];
-  chats[currentRoom].push({id:'m'+uid(),a:me.firstname+' '+me.lastname,av:me.initials,col:me.color,uid:me.id,photo:me.photo||'',txt:san(txt),t:Date.now()});
+  chats[currentRoom].push({id:'m'+uid(),a:me.firstname+' '+me.lastname,av:me.initials,col:me.color,uid:me.id,photo:me.photo||'',txt:san(txt),t:Date.now(),rank:me.rank||'member'});
   if(chats[currentRoom].length>80)chats[currentRoom]=chats[currentRoom].slice(-80);
   store.setChats(chats);inp.value='';renderChat();
 }
@@ -1557,14 +1835,359 @@ function renderChat(){
     const mine=me&&m.uid===me.id;
     const avContent=m.photo?`<img src="${m.photo}" alt="${m.av}">`:m.av;
     const avBg=m.photo?'transparent':m.col;
-    return`<div class="msg ${mine?'mine':''}"><div class="m-av" style="background:${avBg};color:#000">${avContent}</div><div class="m-body">${!mine?`<div class="m-author">${san(m.a)}</div>`:''}<div class="m-bubble">${m.txt}</div><div class="m-time">${timeAgo(m.t)}</div></div></div>`;
+    const rk=m.rank&&m.rank!=='member'?`<span class="role-badge rb-${m.rank}" style="font-size:.52rem">${m.rank==='owner'?'👑':''}${m.rank==='admin'?'🛡️':''}${m.rank==='moderator'?'🔵':''}${m.rank==='vip'?'✨':''}</span>`:'';
+    return`<div class="msg ${mine?'mine':''}"><div class="m-av" style="background:${avBg};color:#000">${avContent}</div><div class="m-body">${!mine?`<div class="m-author">${san(m.a)} ${rk}</div>`:''}<div class="m-bubble">${m.txt}</div><div class="m-time">${timeAgo(m.t)}</div></div></div>`;
+  }).join('');
+  c.scrollTop=c.scrollHeight;
+  // Show muted overlay
+  const mo=document.getElementById('muted-overlay');
+  if(mo)mo.classList.toggle('visible',!!isUserMuted(me));
+}
+
+setInterval(()=>{if(me){renderChat();renderOnline();checkBanStatus();}},3000);
+// Rafraîchir Spotify toutes les 30 secondes
+setInterval(()=>{if(me&&me.spotifyConnected)refreshNowPlaying();},30000);
+
+// ════════════════════════════════════════════
+// ════  SYSTÈME DE RÔLES & ADMIN PANEL  ════
+// ════════════════════════════════════════════
+
+const OWNER_EMAIL = 'cover.mazo@gmail.com';
+
+// ── Hiérarchie des rangs ──
+const RANK_HIERARCHY = {owner:4,admin:3,moderator:2,vip:1,member:0};
+function rankLevel(rank){return RANK_HIERARCHY[rank]||0}
+function isOwner(u){return u&&u.rank==='owner'}
+function isAdminOrAbove(u){return u&&(u.rank==='owner'||u.rank==='admin')}
+function isModOrAbove(u){return u&&(u.rank==='owner'||u.rank==='admin'||u.rank==='moderator')}
+function isVipOrAbove(u){return u&&u.rank&&u.rank!=='member'}
+function canTarget(actor,target){
+  // Ne peut pas agir sur quelqu'un de même rang ou supérieur
+  if(isOwner(target))return false; // personne ne peut toucher l'owner
+  return rankLevel(actor.rank)>rankLevel(target.rank);
+}
+
+// ── Helpers mute/ban ──
+function isUserMuted(u){
+  if(!u||!u.muted)return false;
+  if(u.mutedUntil===0)return true; // permanent
+  if(Date.now()<u.mutedUntil)return true;
+  return false;
+}
+function checkBanStatus(){
+  if(!me)return;
+  // Refresh from store
+  const freshUsers=store.users();
+  const freshMe=freshUsers.find(u=>u.id===me.id);
+  if(!freshMe)return;
+  if(freshMe.banned){
+    document.getElementById('banned-screen').classList.add('visible');
+    return;
+  }
+  me=freshMe;
+}
+
+// ── Log helper ──
+function addLog(action,desc,by){
+  const logs=store.logs();
+  logs.unshift({id:uid(),action,desc,by:by||(me?me.firstname+' '+me.lastname:'System'),ts:Date.now()});
+  if(logs.length>200)logs.pop();
+  store.setLogs(logs);
+}
+
+// ── Toast ──
+function showToast(msg,color){
+  const t=document.createElement('div');
+  t.style.cssText=`position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:${color||'rgba(15,14,10,.97)'};border:1px solid ${color?'transparent':'rgba(245,158,11,.25)'};color:#fff;padding:10px 20px;border-radius:8px;font-size:.8rem;font-family:'Cabinet Grotesk',sans-serif;z-index:99999;box-shadow:0 8px 32px rgba(0,0,0,.5);animation:fIn .25s ease;pointer-events:none`;
+  t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),3000);
+}
+
+// ── VIP room switcher ──
+function switchRoomPrivate(btn,room){
+  if(!me)return;
+  if(room==='vip'&&!isVipOrAbove(me)){showToast('⛔ Accès réservé aux membres VIP+');return;}
+  switchRoom(btn,room);
+}
+
+// ── Role badge HTML helper ──
+function rankBadgeHtml(rank){
+  if(!rank||rank==='member')return'';
+  const icons={owner:'👑 OWNER',admin:'🛡️ ADMIN',moderator:'🔵 MOD',vip:'✨ VIP'};
+  return`<span class="role-badge rb-${rank}">${icons[rank]||rank.toUpperCase()}</span>`;
+}
+
+// ── Admin panel access ──
+// Accessible via console JS : DevConnect.openAdmin()
+// ou via le bouton dans la sidebar si admin+
+window.DevConnect={
+  openAdmin:function(){
+    if(!me){showToast('❌ Tu dois être connecté');return;}
+    const fresh=store.users().find(u=>u.id===me.id);
+    if(!fresh||!isAdminOrAbove(fresh)){showToast('❌ Accès refusé — rang insuffisant');return;}
+    me=fresh;
+    openAdminPanel();
+  },
+  // Owner only : assigner un rang depuis la console
+  // Usage: DevConnect.setRank('email@example.com', 'admin')
+  setRank:async function(email,rank){
+    if(!me||!isOwner(me)){showToast('❌ Réservé à l\'Owner');return;}
+    const validRanks=['owner','admin','moderator','vip','member'];
+    if(!validRanks.includes(rank)){console.error('Rang invalide. Valeurs: owner, admin, moderator, vip, member');return;}
+    const users=store.users();
+    const u=users.find(x=>x.email===email);
+    if(!u){console.error('Utilisateur introuvable');return;}
+    if(isOwner(u)&&u.email===OWNER_EMAIL&&rank!=='owner'){showToast('❌ Impossible de rétrograder l\'Owner principal');return;}
+    const oldRank=u.rank;
+    u.rank=rank;
+    store.setUsers(users);
+    addLog('role',`${u.firstname} ${u.lastname} : ${oldRank} → ${rank}`);
+    showToast(`✅ ${u.firstname} ${u.lastname} est maintenant ${rank}`,'rgba(34,197,94,.85)');
+    console.log(`✅ Rang de ${email} mis à jour: ${oldRank} → ${rank}`);
+  }
+};
+
+function openAdminPanel(){
+  // Refresh me from store
+  const fresh=store.users().find(u=>u.id===me.id);
+  if(fresh)me=fresh;
+  if(!isAdminOrAbove(me)){showToast('❌ Accès refusé');return;}
+  goTo('admin');
+  document.getElementById('admin-me-name').textContent=me.firstname+' '+me.lastname+' ('+me.rank+')';
+  renderAdminOverview();
+}
+
+function adminTab(tab,btn){
+  document.querySelectorAll('.admin-nav-item').forEach(n=>n.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  ['overview','users','roles','posts','modchat','logs'].forEach(t=>{
+    const el=document.getElementById('atab-'+t);
+    if(el)el.style.display=t===tab?'block':'none';
+  });
+  if(tab==='overview')renderAdminOverview();
+  if(tab==='users')renderAdminUsers();
+  if(tab==='roles')renderAdminRoles();
+  if(tab==='posts')renderAdminPosts();
+  if(tab==='modchat')renderModChat();
+  if(tab==='logs')renderAdminLogs();
+}
+
+function renderAdminOverview(){
+  const users=store.users();
+  const posts=store.posts();
+  document.getElementById('as-members').textContent=users.length;
+  document.getElementById('as-posts').textContent=posts.length;
+  document.getElementById('as-banned').textContent=users.filter(u=>u.banned).length;
+  document.getElementById('as-muted').textContent=users.filter(u=>isUserMuted(u)).length;
+  // Recent logs
+  const logs=store.logs().slice(0,8);
+  const el=document.getElementById('overview-logs');
+  if(!logs.length){el.innerHTML='<div style="padding:18px;font-size:.75rem;color:var(--muted);font-family:JetBrains Mono,monospace">// aucune action de modération</div>';return;}
+  el.innerHTML=logs.map(l=>logEntryHtml(l)).join('');
+}
+
+function logEntryHtml(l){
+  const cls={ban:'la-ban',unban:'la-unban',mute:'la-mute',unmute:'la-unmute',role:'la-role',delete:'la-delete',kick:'la-kick'}[l.action]||'la-role';
+  return`<div class="log-entry"><div class="log-ts">${timeAgo(l.ts)}</div><div class="log-action ${cls}">${l.action.toUpperCase()}</div><div class="log-desc">${san(l.desc)}</div><div class="log-by">par ${san(l.by)}</div></div>`;
+}
+
+function renderAdminLogs(){
+  const logs=store.logs();
+  const el=document.getElementById('full-logs-list');
+  if(!logs.length){el.innerHTML='<div style="padding:18px;font-size:.75rem;color:var(--muted);font-family:JetBrains Mono,monospace">// aucun log</div>';return;}
+  el.innerHTML=logs.map(l=>logEntryHtml(l)).join('');
+}
+
+function renderAdminUsers(){
+  const q=(document.getElementById('admin-search')||{}).value||'';
+  const users=store.users().filter(u=>!q||(u.firstname+' '+u.lastname+u.email).toLowerCase().includes(q.toLowerCase()));
+  const tbody=document.getElementById('admin-users-tbody');
+  if(!users.length){tbody.innerHTML=`<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:18px;font-family:JetBrains Mono,monospace;font-size:.74rem">// aucun utilisateur</td></tr>`;return}
+  tbody.innerHTML=users.map(u=>{
+    const statusCls=u.banned?'sb-banned':isUserMuted(u)?'sb-muted':'sb-active';
+    const statusTxt=u.banned?'Banni':isUserMuted(u)?'Muté':'Actif';
+    const isMe=u.id===me.id;
+    const canAct=!isMe&&canTarget(me,u);
+    const isMutedNow=isUserMuted(u);
+    const isBanned=u.banned;
+    let actions='';
+    if(isMe){actions='<span style="font-size:.68rem;color:var(--muted);font-family:JetBrains Mono,monospace">// vous</span>';}
+    else if(!canAct){actions='<span style="font-size:.68rem;color:var(--muted);font-family:JetBrains Mono,monospace">// protégé</span>';}
+    else{
+      actions=`<div class="admin-actions">
+        ${isOwner(me)?`<button class="admin-btn admin-btn-role" onclick="openRoleModal('${u.id}')">🎭 Rang</button>`:''}
+        ${!isMutedNow?`<button class="admin-btn admin-btn-mute" onclick="openMuteModal('${u.id}')">🔇 Mute</button>`:`<button class="admin-btn admin-btn-unban" onclick="unmuteUser('${u.id}')">🔊 Unmute</button>`}
+        ${!isBanned?`<button class="admin-btn admin-btn-ban" onclick="banUser('${u.id}')">🔨 Ban</button>`:`<button class="admin-btn admin-btn-unban" onclick="unbanUser('${u.id}')">✅ Unban</button>`}
+      </div>`;
+    }
+    return`<tr>
+      <td><div style="font-weight:700;font-size:.82rem">${san(u.firstname)} ${san(u.lastname)}</div><div style="font-size:.65rem;color:var(--muted);font-family:JetBrains Mono,monospace">${san(u.email)}</div></td>
+      <td><span style="font-size:.74rem;color:var(--muted)">${u.role==='dev'?'Dev':'Recruteur'}</span></td>
+      <td>${rankBadgeHtml(u.rank)||'<span style="font-size:.68rem;color:var(--muted)">member</span>'}</td>
+      <td><span class="status-badge ${statusCls}">${statusTxt}</span></td>
+      <td>${actions}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderAdminRoles(){
+  const users=store.users().filter(u=>u.rank&&u.rank!=='member');
+  const tbody=document.getElementById('admin-roles-tbody');
+  if(!users.length){tbody.innerHTML=`<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:18px;font-family:JetBrains Mono,monospace;font-size:.74rem">// aucun rang spécial assigné</td></tr>`;return}
+  tbody.innerHTML=users.map(u=>`<tr>
+    <td><div style="font-weight:700;font-size:.82rem">${san(u.firstname)} ${san(u.lastname)}</div></td>
+    <td><span style="font-size:.68rem;color:var(--muted);font-family:JetBrains Mono,monospace">${san(u.email)}</span></td>
+    <td>${rankBadgeHtml(u.rank)}</td>
+    <td>${isOwner(me)&&!isOwner(u)?`<button class="admin-btn admin-btn-role" onclick="openRoleModal('${u.id}')">✏️ Changer</button>`:''}</td>
+  </tr>`).join('');
+}
+
+function renderAdminPosts(){
+  const posts=store.posts().slice().reverse();
+  const tbody=document.getElementById('admin-posts-tbody');
+  if(!posts.length){tbody.innerHTML=`<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:18px;font-size:.74rem;font-family:JetBrains Mono,monospace">// aucune publication</td></tr>`;return}
+  tbody.innerHTML=posts.map(p=>`<tr>
+    <td style="font-size:.8rem;font-weight:600">${san(p.an)}</td>
+    <td><span class="type-badge ${tClass[p.type]||'t-post'}" style="font-size:.6rem">${p.type}</span></td>
+    <td style="font-size:.74rem;color:rgba(245,240,232,.7);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${san(p.title||p.body).slice(0,60)}...</td>
+    <td style="font-size:.68rem;color:var(--muted);font-family:JetBrains Mono,monospace">${timeAgo(p.ts)}</td>
+    <td><button class="admin-btn admin-btn-del" onclick="adminDeletePost('${p.id}')">🗑 Supprimer</button></td>
+  </tr>`).join('');
+}
+
+function adminDeletePost(id){
+  if(!confirm('Supprimer cette publication ?'))return;
+  const posts=store.posts();
+  const p=posts.find(x=>x.id===id);
+  if(p){addLog('delete',`Post supprimé de ${p.an}: "${(p.title||p.body).slice(0,40)}"`);}
+  store.setPosts(posts.filter(x=>x.id!==id));
+  renderAdminPosts();
+  showToast('✅ Publication supprimée','rgba(34,197,94,.85)');
+}
+
+// ── Role Modal ──
+let roleTargetId=null,selectedNewRank='member';
+function openRoleModal(userId){
+  if(!isOwner(me)){showToast('❌ Seul l\'Owner peut assigner des rangs');return;}
+  roleTargetId=userId;
+  selectedNewRank='member';
+  const u=store.users().find(x=>x.id===userId);
+  document.getElementById('role-modal-user').textContent=`Rang pour ${u?u.firstname+' '+u.lastname:'?'}`;
+  document.querySelectorAll('.rp-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('roleModal').classList.add('open');
+}
+function selectRole(rank){
+  selectedNewRank=rank;
+  document.querySelectorAll('.rp-card').forEach(c=>c.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
+function closeRoleModal(){document.getElementById('roleModal').classList.remove('open');roleTargetId=null;}
+function confirmRoleAssign(){
+  if(!roleTargetId)return;
+  const users=store.users();
+  const u=users.find(x=>x.id===roleTargetId);
+  if(!u)return;
+  const old=u.rank;
+  u.rank=selectedNewRank;
+  store.setUsers(users);
+  addLog('role',`${u.firstname} ${u.lastname} : ${old} → ${selectedNewRank}`);
+  showToast(`✅ ${u.firstname} est maintenant ${selectedNewRank}`,'rgba(34,197,94,.85)');
+  closeRoleModal();
+  renderAdminUsers();
+  renderAdminRoles();
+  renderAdminOverview();
+}
+
+// ── Mute Modal ──
+let muteTargetId=null;
+function openMuteModal(userId){
+  if(!isModOrAbove(me)){showToast('❌ Rang insuffisant');return;}
+  const u=store.users().find(x=>x.id===userId);
+  if(!u||!canTarget(me,u)){showToast('❌ Tu ne peux pas muter cet utilisateur');return;}
+  muteTargetId=userId;
+  document.getElementById('mute-modal-user').textContent=`Muter : ${u.firstname} ${u.lastname}`;
+  document.getElementById('mute-reason').value='';
+  document.getElementById('muteModal').classList.add('open');
+}
+function closeMuteModal(){document.getElementById('muteModal').classList.remove('open');muteTargetId=null;}
+function confirmMute(){
+  if(!muteTargetId)return;
+  const users=store.users();
+  const u=users.find(x=>x.id===muteTargetId);
+  if(!u)return;
+  const dur=parseInt(document.getElementById('mute-duration').value);
+  const reason=document.getElementById('mute-reason').value||'Aucune raison spécifiée';
+  u.muted=true;
+  u.mutedUntil=dur===0?0:Date.now()+dur;
+  store.setUsers(users);
+  addLog('mute',`${u.firstname} ${u.lastname} muté (${dur===0?'permanent':dur/60000+'min'}) — ${reason}`);
+  showToast(`✅ ${u.firstname} a été muté`,'rgba(251,191,36,.85)');
+  closeMuteModal();
+  renderAdminUsers();
+  renderAdminOverview();
+}
+function unmuteUser(userId){
+  const users=store.users();
+  const u=users.find(x=>x.id===userId);
+  if(!u||!canTarget(me,u)){showToast('❌ Tu ne peux pas démuter cet utilisateur');return;}
+  u.muted=false;u.mutedUntil=0;
+  store.setUsers(users);
+  addLog('unmute',`${u.firstname} ${u.lastname} démuté`);
+  showToast(`✅ ${u.firstname} a été démuté`,'rgba(34,197,94,.85)');
+  renderAdminUsers();renderAdminOverview();
+}
+
+// ── Ban / Unban ──
+function banUser(userId){
+  if(!isAdminOrAbove(me)){showToast('❌ Rang insuffisant');return;}
+  const users=store.users();
+  const u=users.find(x=>x.id===userId);
+  if(!u||!canTarget(me,u)){showToast('❌ Tu ne peux pas bannir cet utilisateur');return;}
+  if(!confirm(`Bannir ${u.firstname} ${u.lastname} ?`))return;
+  u.banned=true;
+  store.setUsers(users);
+  addLog('ban',`${u.firstname} ${u.lastname} (${u.email}) banni`);
+  showToast(`✅ ${u.firstname} a été banni`,'rgba(239,68,68,.85)');
+  renderAdminUsers();renderAdminOverview();
+}
+function unbanUser(userId){
+  if(!isAdminOrAbove(me)){showToast('❌ Rang insuffisant');return;}
+  const users=store.users();
+  const u=users.find(x=>x.id===userId);
+  if(!u){return;}
+  u.banned=false;
+  store.setUsers(users);
+  addLog('unban',`${u.firstname} ${u.lastname} (${u.email}) débanni`);
+  showToast(`✅ ${u.firstname} a été débanni`,'rgba(34,197,94,.85)');
+  renderAdminUsers();renderAdminOverview();
+}
+
+// ── Mod Chat ──
+function renderModChat(){
+  if(!isModOrAbove(me))return;
+  const msgs=store.modchats();
+  const c=document.getElementById('modchat-msgs');
+  if(!c)return;
+  if(!msgs.length){c.innerHTML='<div style="font-size:.74rem;color:var(--muted);font-family:JetBrains Mono,monospace;padding:8px">// Aucun message — canal privé de modération</div>';return;}
+  c.innerHTML=msgs.map(m=>{
+    const mine=me&&m.uid===me.id;
+    const avContent=m.photo?`<img src="${m.photo}" alt="${m.av}" style="width:24px;height:24px;object-fit:cover;border-radius:50%">`:m.av;
+    const avBg=m.photo?'transparent':m.col;
+    return`<div class="msg ${mine?'mine':''}"><div class="m-av" style="background:${avBg};color:#000;background-color:${avBg}">${avContent}</div><div class="m-body">${!mine?`<div class="m-author" style="color:var(--moderator)">${san(m.a)} ${rankBadgeHtml(m.rank)}</div>`:''}<div class="m-bubble" style="${mine?'background:linear-gradient(135deg,#60a5fa,#3b82f6)':''}">${m.txt}</div><div class="m-time">${timeAgo(m.t)}</div></div></div>`;
   }).join('');
   c.scrollTop=c.scrollHeight;
 }
-
-setInterval(()=>{if(me){renderChat();renderOnline();}},3000);
-// Rafraîchir Spotify toutes les 30 secondes
-setInterval(()=>{if(me&&me.spotifyConnected)refreshNowPlaying();},30000);
+function sendModChat(){
+  if(!me||!isModOrAbove(me)){showToast('❌ Accès réservé aux modérateurs');return;}
+  const inp=document.getElementById('modchat-input');
+  const txt=inp.value.trim();if(!txt)return;
+  const msgs=store.modchats();
+  msgs.push({id:uid(),a:me.firstname+' '+me.lastname,av:me.initials,col:me.color,uid:me.id,photo:me.photo||'',txt:san(txt),t:Date.now(),rank:me.rank||'member'});
+  if(msgs.length>100)msgs.shift();
+  store.setModchats(msgs);
+  inp.value='';renderModChat();
+}
 </script>
 </body>
 </html>
