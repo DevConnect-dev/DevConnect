@@ -1,4 +1,3 @@
-cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -18,6 +17,17 @@ cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
   --grad:linear-gradient(135deg,#f59e0b,#fb923c);
   --grad2:linear-gradient(135deg,#fcd34d,#f59e0b);
   --grad-subtle:linear-gradient(135deg,rgba(245,158,11,.12),rgba(251,146,60,.06));
+  /* Role colors */
+  --founder:#fcd34d;--co-founder:#fb923c;--ceo:#f97316;--cto:#60a5fa;
+  --lead-dev:#34d399;--core-team:#6ee7b7;--management:#a78bfa;
+  --head-mod:#f87171;--security:#ef4444;--senior-mod:#60a5fa;
+  --moderator:#60a5fa;--support-lead:#4ade80;--media-team:#f472b6;
+  --junior-mod:#93c5fd;--support-team:#86efac;--qa-tester:#fde68a;
+  --content-creator:#f9a8d4;--partner:#e879f9;--investor:#c084fc;
+  --community:#a3a3a3;--vip:#c084fc;--early-supporter:#fb923c;
+  /* keep old names for compat */
+  --owner:#fcd34d;--co-owner:#fb923c;--admin:#f87171;
+  --developer:#93c5fd;--member:#6b7280;
 }
 html,body{height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--text);font-family:'Cabinet Grotesk',sans-serif;-webkit-font-smoothing:antialiased;position:relative}
@@ -314,6 +324,47 @@ input::placeholder{color:rgba(107,99,85,.5)}
 .btn-edit-profile{display:inline-flex;align-items:center;gap:7px;padding:8px 18px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.22);color:var(--accent);border-radius:6px;font-size:.79rem;font-weight:700;font-family:'Cabinet Grotesk',sans-serif;transition:all .2s}
 .btn-edit-profile:hover{background:rgba(245,158,11,.18);border-color:rgba(245,158,11,.4);transform:translateY(-1px)}
 
+/* ═══ PROFILE BANNER ═══ */
+.profile-banner{width:100%;height:140px;border-radius:10px 10px 0 0;position:relative;overflow:hidden;background:linear-gradient(135deg,#1a1200,#2d1a00);cursor:none;flex-shrink:0}
+.profile-banner img{width:100%;height:100%;object-fit:cover}
+.profile-banner-edit{position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;gap:6px;font-size:.72rem;color:#fff;font-family:'JetBrains Mono',monospace;opacity:0;transition:opacity .2s}
+.profile-banner:hover .profile-banner-edit{opacity:1}
+.profile-hero-card{background:rgba(15,14,10,.95);border:1px solid var(--border);border-radius:12px;margin-bottom:18px;position:relative;overflow:hidden;backdrop-filter:blur(8px);animation:slideUp .3s ease}
+.profile-card-body{padding:0 24px 22px}
+.profile-photo-abs{position:relative;margin-top:-42px;margin-bottom:12px;display:inline-block}
+.profile-photo-abs .profile-photo{width:84px;height:84px;border:3px solid var(--bg);box-shadow:0 4px 20px rgba(0,0,0,.6)}
+
+/* ═══ STATUS DOT ═══ */
+.status-dot{width:14px;height:14px;border-radius:50%;border:2.5px solid var(--bg);position:absolute;bottom:4px;right:4px;flex-shrink:0}
+.sd-online{background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.6)}
+.sd-away{background:#f59e0b;box-shadow:0 0 8px rgba(245,158,11,.5)}
+.sd-dnd{background:#ef4444;box-shadow:0 0 8px rgba(239,68,68,.5)}
+.sd-invisible{background:#6b7280;box-shadow:none}
+.status-pill{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:99px;font-size:.65rem;font-family:'JetBrains Mono',monospace;border:1px solid;cursor:none}
+.sp-online{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.25);color:#22c55e}
+.sp-away{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.25);color:#f59e0b}
+.sp-dnd{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.25);color:#ef4444}
+.sp-invisible{background:rgba(107,99,85,.1);border-color:rgba(107,99,85,.25);color:var(--muted)}
+
+/* ═══ SETTINGS MODAL ═══ */
+.settings-tabs{display:flex;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:3px;margin-bottom:18px}
+.settings-tab{flex:1;padding:7px 10px;text-align:center;font-size:.75rem;font-weight:600;border-radius:4px;border:none;background:transparent;color:var(--muted);transition:all .2s;font-family:'Cabinet Grotesk',sans-serif;letter-spacing:.02em}
+.settings-tab.active{background:var(--grad);color:#000}
+.settings-panel{display:none}.settings-panel.active{display:block}
+.settings-section{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px}
+.settings-section-title{font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.status-pick{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:0}
+.sp-opt{display:flex;align-items:center;gap:9px;padding:9px 12px;border:1px solid var(--border);border-radius:7px;background:var(--surface3);transition:all .2s;font-size:.8rem;font-weight:600}
+.sp-opt:hover{border-color:var(--border-h)}
+.sp-opt.active{border-color:var(--accent);background:rgba(245,158,11,.06)}
+.danger-zone{border-color:rgba(239,68,68,.2)!important;background:rgba(239,68,68,.03)!important}
+.btn-danger{padding:9px 18px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--error);border-radius:6px;font-size:.8rem;font-weight:700;font-family:'Cabinet Grotesk',sans-serif;transition:all .2s;display:inline-flex;align-items:center;gap:7px}
+.btn-danger:hover{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.5)}
+.banner-presets{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
+.banner-preset{width:52px;height:32px;border-radius:5px;border:2px solid transparent;transition:all .2s;overflow:hidden;flex-shrink:0}
+.banner-preset:hover{border-color:var(--accent);transform:scale(1.05)}
+.banner-preset.sel{border-color:var(--accent);box-shadow:0 0 0 2px rgba(245,158,11,.25)}
+
 /* ═══ ROLE BADGES & HIERARCHY ═══ */
 :root{
   --owner:#fcd34d;
@@ -481,10 +532,16 @@ input::placeholder{color:rgba(107,99,85,.5)}
       <path d="M10 1.2L12.3 4.8L16.5 5.6L13.7 8.6L14.2 12.9L10 10.8L5.8 12.9L6.3 8.6L3.5 5.6L7.7 4.8Z" fill="#93c5fd" opacity=".15" stroke="#93c5fd" stroke-width="1.1" stroke-linejoin="round"/>
       <polyline points="7,10 9.2,12.2 13.5,7.8" fill="none" stroke="#93c5fd" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
+    <!-- RECRUITER seal — green -->
+    <symbol id="cert-recruiter" viewBox="0 0 20 20">
+      <path d="M10 1.2L12.3 4.8L16.5 5.6L13.7 8.6L14.2 12.9L10 10.8L5.8 12.9L6.3 8.6L3.5 5.6L7.7 4.8Z" fill="#4ade80" opacity=".15" stroke="#4ade80" stroke-width="1.1" stroke-linejoin="round"/>
+      <polyline points="7,10 9.2,12.2 13.5,7.8" fill="none" stroke="#4ade80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
   </defs>
 </svg>
 
 <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="handlePhotoUpload(event)"/>
+<input type="file" id="banner-input" accept="image/*" style="display:none" onchange="handleBannerUpload(event)"/>
 
 <!-- AUTH PAGE -->
 <div class="page" id="page-auth">
@@ -597,24 +654,106 @@ input::placeholder{color:rgba(107,99,85,.5)}
     </div>
   </div>
   <div class="modal-ov" id="profileModal">
-    <div class="modal">
-      <h3>MODIFIER LE PROFIL</h3><p>Mets à jour tes informations</p>
-      <div class="photo-upload-area">
-        <div class="photo-preview" id="edit-photo-preview"></div>
-        <div>
-          <div style="font-size:.82rem;font-weight:700;margin-bottom:5px">Photo de profil</div>
-          <div style="font-size:.7rem;color:var(--muted);margin-bottom:8px;font-family:'JetBrains Mono',monospace">JPG, PNG · Max 500Ko</div>
-          <button class="photo-upload-btn" onclick="document.getElementById('photo-input').click()">Choisir une photo</button>
+    <div class="modal" style="max-width:500px;max-height:90vh;overflow-y:auto;padding:20px 22px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <h3 style="font-size:1rem;margin:0">PARAMÈTRES</h3>
+        <button onclick="closeProfileModal()" style="background:none;border:none;color:var(--muted);font-size:1.2rem;line-height:1;padding:2px 6px">✕</button>
+      </div>
+      <!-- SETTINGS TABS -->
+      <div class="settings-tabs">
+        <button class="settings-tab active" onclick="switchSettingsTab('profil',this)">Profil</button>
+        <button class="settings-tab" onclick="switchSettingsTab('apparence',this)">Apparence</button>
+        <button class="settings-tab" onclick="switchSettingsTab('compte',this)">Compte</button>
+      </div>
+
+      <!-- TAB: PROFIL -->
+      <div class="settings-panel active" id="stab-profil">
+        <div class="settings-section">
+          <div class="settings-section-title">Photo de profil</div>
+          <div class="photo-upload-area" style="margin-bottom:0">
+            <div class="photo-preview" id="edit-photo-preview"></div>
+            <div>
+              <div style="font-size:.82rem;font-weight:700;margin-bottom:5px">Avatar</div>
+              <div style="font-size:.7rem;color:var(--muted);margin-bottom:8px;font-family:'JetBrains Mono',monospace">JPG, PNG · Max 500Ko</div>
+              <button class="photo-upload-btn" onclick="document.getElementById('photo-input').click()">Choisir une photo</button>
+            </div>
+          </div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-section-title">Identité</div>
+          <div class="field-row">
+            <div class="field"><label>Prénom</label><input type="text" id="edit-fn" placeholder="Prénom"/></div>
+            <div class="field"><label>Nom</label><input type="text" id="edit-ln" placeholder="Nom"/></div>
+          </div>
+          <div class="field"><label>Bio</label><textarea id="edit-bio" placeholder="Parle un peu de toi..." style="min-height:70px;width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:9px 13px;color:var(--text);font-family:'Cabinet Grotesk',sans-serif;font-size:.84rem;outline:none;margin-bottom:0;resize:vertical;transition:border-color .2s"></textarea></div>
+          <div id="edit-company-wrap" style="display:none"><div class="field"><label>Entreprise</label><input type="text" id="edit-co" placeholder="Nom de l'entreprise"/></div></div>
+        </div>
+        <div id="edit-skills-wrap">
+          <div class="settings-section">
+            <div class="settings-section-title">Compétences</div>
+            <div class="skills-grid" id="edit-skills-grid" style="max-height:100px"></div>
+          </div>
+        </div>
+        <div class="modal-acts" style="margin-top:12px">
+          <button class="btn-ghost" style="flex:1" onclick="closeProfileModal()">Annuler</button>
+          <button class="btn-prim" style="flex:2" onclick="saveProfile()">Enregistrer →</button>
         </div>
       </div>
-      <label>Prénom</label><input type="text" id="edit-fn" placeholder="Prénom"/>
-      <label>Nom</label><input type="text" id="edit-ln" placeholder="Nom"/>
-      <label>Bio</label><textarea id="edit-bio" placeholder="Parle un peu de toi..." style="min-height:70px;width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:9px 13px;color:var(--text);font-family:'Cabinet Grotesk',sans-serif;font-size:.84rem;outline:none;margin-bottom:12px;resize:vertical;transition:border-color .2s"></textarea>
-      <div id="edit-company-wrap" style="display:none"><label>Entreprise</label><input type="text" id="edit-co" placeholder="Nom de l'entreprise"/></div>
-      <div id="edit-skills-wrap"><label style="margin-bottom:6px;display:block">Compétences</label><div class="skills-grid" id="edit-skills-grid" style="max-height:100px"></div></div>
-      <div class="modal-acts" style="margin-top:16px">
-        <button class="btn-ghost" style="flex:1" onclick="closeProfileModal()">Annuler</button>
-        <button class="btn-prim" style="flex:2" onclick="saveProfile()">Enregistrer →</button>
+
+      <!-- TAB: APPARENCE -->
+      <div class="settings-panel" id="stab-apparence">
+        <div class="settings-section">
+          <div class="settings-section-title">Bannière de profil</div>
+          <div style="margin-bottom:10px;font-size:.74rem;color:var(--muted);font-family:'JetBrains Mono',monospace">Dégradés prédéfinis</div>
+          <div class="banner-presets" id="banner-presets-list"></div>
+          <div style="margin-bottom:8px;font-size:.74rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:4px">ou image personnalisée (URL)</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="text" id="edit-banner-url" placeholder="https://... (image)" style="flex:1;font-size:.78rem"/>
+            <button class="btn-prim" style="padding:9px 14px;font-size:.75rem;white-space:nowrap" onclick="applyBannerUrl()">Appliquer</button>
+          </div>
+          <div style="margin-top:10px;height:70px;border-radius:7px;overflow:hidden;border:1px solid var(--border)" id="banner-preview-box"></div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-section-title">Statut de présence</div>
+          <div class="status-pick">
+            <div class="sp-opt" onclick="setStatus('online',this)"><span class="rp-dot sd-online" style="width:10px;height:10px;flex-shrink:0;border:none"></span>En ligne</div>
+            <div class="sp-opt" onclick="setStatus('away',this)"><span class="rp-dot sd-away" style="width:10px;height:10px;flex-shrink:0;border:none"></span>Absent</div>
+            <div class="sp-opt" onclick="setStatus('dnd',this)"><span class="rp-dot sd-dnd" style="width:10px;height:10px;flex-shrink:0;border:none"></span>Ne pas déranger</div>
+            <div class="sp-opt" onclick="setStatus('invisible',this)"><span class="rp-dot sd-invisible" style="width:10px;height:10px;flex-shrink:0;border:none"></span>Invisible</div>
+          </div>
+        </div>
+        <div class="modal-acts" style="margin-top:12px">
+          <button class="btn-ghost" style="flex:1" onclick="closeProfileModal()">Fermer</button>
+          <button class="btn-prim" style="flex:2" onclick="saveAppearance()">Enregistrer →</button>
+        </div>
+      </div>
+
+      <!-- TAB: COMPTE -->
+      <div class="settings-panel" id="stab-compte">
+        <div class="settings-section">
+          <div class="settings-section-title">Changer l'adresse email</div>
+          <div class="field"><label>Email actuel</label><input type="email" id="current-email-display" disabled style="opacity:.5"/></div>
+          <div class="field"><label>Nouvel email</label><input type="email" id="new-email" placeholder="nouvel@email.com"/></div>
+          <div class="field"><label>Confirmer le mot de passe</label><input type="password" id="confirm-pwd-email" placeholder="Ton mot de passe actuel"/></div>
+          <div id="email-change-err" class="err-box"></div>
+          <button class="btn-prim" style="width:100%;padding:10px" onclick="changeEmail()">Changer l'email →</button>
+        </div>
+        <div class="settings-section">
+          <div class="settings-section-title">Changer le mot de passe</div>
+          <div class="field"><label>Mot de passe actuel</label><input type="password" id="old-pwd" placeholder="••••••••"/></div>
+          <div class="field"><label>Nouveau mot de passe</label><input type="password" id="new-pwd" placeholder="8 caractères min"/></div>
+          <div class="field"><label>Confirmer</label><input type="password" id="new-pwd-confirm" placeholder="••••••••"/></div>
+          <div id="pwd-change-err" class="err-box"></div>
+          <button class="btn-prim" style="width:100%;padding:10px" onclick="changePwd()">Changer le mot de passe →</button>
+        </div>
+        <div class="settings-section danger-zone">
+          <div class="settings-section-title" style="color:var(--error)">⚠ Zone de danger</div>
+          <p style="font-size:.78rem;color:var(--muted);margin-bottom:12px;line-height:1.7;font-family:'JetBrains Mono',monospace">// Supprimer ton compte est irréversible. Toutes tes données, posts et messages seront effacés définitivement.</p>
+          <button class="btn-danger" onclick="confirmDeleteAccount()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            Supprimer mon compte
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -656,6 +795,9 @@ input::placeholder{color:rgba(107,99,85,.5)}
       <div class="nav-lbl">Mon espace</div>
       <button class="nav-item" onclick="setView('profile',this)">
         <span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>Mon profil
+      </button>
+      <button class="nav-item" onclick="setView('settings',this)">
+        <span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>Paramètres
       </button>
       <button class="nav-item" id="nav-admin" style="display:none" onclick="openAdminPanel()">
         <span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>Admin Panel
@@ -796,37 +938,106 @@ input::placeholder{color:rgba(107,99,85,.5)}
 <div class="page" id="page-admin">
   <!-- Role Modal -->
   <div class="modal-ov" id="roleModal">
-    <div class="modal" style="max-width:460px">
+    <div class="modal" style="max-width:520px;max-height:88vh;overflow-y:auto">
       <h3>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         ASSIGNER UN RÔLE
       </h3>
-      <p id="role-modal-user">Choisis le rôle pour cet utilisateur</p>
-      <!-- Certified roles — shown only to co-owner/owner -->
-      <div style="margin-bottom:8px;font-size:.65rem;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:.06em">// RÔLES CERTIFIÉS — Owner &amp; Co-Owner uniquement</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px" id="cert-roles-grid">
-        <div class="rp-card" id="rpc-co-owner" onclick="selectRole('co-owner')" style="border-color:rgba(251,146,60,.2)">
-          <div class="rp-dot" style="background:var(--co-owner)"></div>
-          <div>
-            <div class="rp-label" style="color:var(--co-owner)">Co-Owner <svg width="11" height="11" viewBox="0 0 20 20" style="vertical-align:middle"><use href="#cert-co-owner"/></svg></div>
-            <div class="rp-desc">Badge certifié orange</div>
-          </div>
-        </div>
-        <div class="rp-card" id="rpc-developer" onclick="selectRole('developer')" style="border-color:rgba(147,197,253,.2)">
-          <div class="rp-dot" style="background:var(--developer)"></div>
-          <div>
-            <div class="rp-label" style="color:var(--developer)">Developer <svg width="11" height="11" viewBox="0 0 20 20" style="vertical-align:middle"><use href="#cert-developer"/></svg></div>
-            <div class="rp-desc">Badge certifié bleu</div>
-          </div>
+      <p id="role-modal-user" style="margin-bottom:14px">Choisis le rôle pour cet utilisateur</p>
+
+      <!-- EXECUTIVE — Owner/Co-Founder only -->
+      <div id="exec-roles-section">
+        <div style="margin-bottom:6px;font-size:.62rem;color:rgba(252,211,77,.7);font-family:'JetBrains Mono',monospace;letter-spacing:.08em;border-bottom:1px solid rgba(252,211,77,.1);padding-bottom:4px">━ EXECUTIVE ━ Owner &amp; Co-Founder uniquement</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+          <div class="rp-card" onclick="selectRole('co-founder')" style="border-color:rgba(251,146,60,.25)"><div class="rp-dot" style="background:var(--co-founder)"></div><div><div class="rp-label" style="color:var(--co-founder)">Co-Founder</div><div class="rp-desc">Badge certifié orange</div></div></div>
+          <div class="rp-card" onclick="selectRole('ceo')" style="border-color:rgba(249,115,22,.2)"><div class="rp-dot" style="background:var(--ceo)"></div><div><div class="rp-label" style="color:var(--ceo)">CEO</div><div class="rp-desc">Direction générale</div></div></div>
+          <div class="rp-card" onclick="selectRole('cto')" style="border-color:rgba(96,165,250,.2)"><div class="rp-dot" style="background:var(--cto)"></div><div><div class="rp-label" style="color:var(--cto)">CTO</div><div class="rp-desc">Direction technique</div></div></div>
         </div>
       </div>
-      <div style="margin-bottom:8px;font-size:.65rem;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:.06em">// RÔLES STANDARD</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px" id="role-picker-grid">
-        <div class="rp-card" onclick="selectRole('admin')"><div class="rp-dot" style="background:var(--admin)"></div><div><div class="rp-label" style="color:var(--admin)">Admin</div><div class="rp-desc">Gère tout sauf Owner</div></div></div>
-        <div class="rp-card" onclick="selectRole('moderator')"><div class="rp-dot" style="background:var(--moderator)"></div><div><div class="rp-label" style="color:var(--moderator)">Modérateur</div><div class="rp-desc">Mute, surveille</div></div></div>
-        <div class="rp-card" onclick="selectRole('vip')"><div class="rp-dot" style="background:var(--vip)"></div><div><div class="rp-label" style="color:var(--vip)">VIP</div><div class="rp-desc">Canaux privés</div></div></div>
-        <div class="rp-card" onclick="selectRole('member')"><div class="rp-dot" style="background:var(--member)"></div><div><div class="rp-label">Member</div><div class="rp-desc">Rôle de base</div></div></div>
+
+      <!-- CORE TEAM -->
+      <div style="margin-bottom:6px;font-size:.62rem;color:rgba(52,211,153,.7);font-family:'JetBrains Mono',monospace;letter-spacing:.08em;border-bottom:1px solid rgba(52,211,153,.1);padding-bottom:4px">━ CORE TEAM ━</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+        <div class="rp-card" onclick="selectRole('lead-developer')"><div class="rp-dot" style="background:var(--lead-dev)"></div><div><div class="rp-label" style="color:var(--lead-dev)">Lead Developer</div><div class="rp-desc">Gestion technique</div></div></div>
+        <div class="rp-card" onclick="selectRole('ai-engineer')"><div class="rp-dot" style="background:var(--lead-dev)"></div><div><div class="rp-label" style="color:var(--lead-dev)">AI Engineer</div><div class="rp-desc">Bots & IA</div></div></div>
+        <div class="rp-card" onclick="selectRole('backend-developer')"><div class="rp-dot" style="background:var(--core-team)"></div><div><div class="rp-label" style="color:var(--core-team)">Backend Dev</div><div class="rp-desc">API & serveurs</div></div></div>
+        <div class="rp-card" onclick="selectRole('frontend-developer')"><div class="rp-dot" style="background:var(--core-team)"></div><div><div class="rp-label" style="color:var(--core-team)">Frontend Dev</div><div class="rp-desc">UI & interfaces</div></div></div>
+        <div class="rp-card" onclick="selectRole('fullstack-developer')"><div class="rp-dot" style="background:var(--core-team)"></div><div><div class="rp-label" style="color:var(--core-team)">Full Stack Dev</div><div class="rp-desc">Full access dev</div></div></div>
+        <div class="rp-card" onclick="selectRole('uiux-designer')"><div class="rp-dot" style="background:var(--core-team)"></div><div><div class="rp-label" style="color:var(--core-team)">UI/UX Designer</div><div class="rp-desc">Design & UX</div></div></div>
+        <div class="rp-card" onclick="selectRole('infra-engineer')"><div class="rp-dot" style="background:var(--core-team)"></div><div><div class="rp-label" style="color:var(--core-team)">Infra Engineer</div><div class="rp-desc">DevOps & infra</div></div></div>
       </div>
+
+      <!-- MANAGEMENT -->
+      <div style="margin-bottom:6px;font-size:.62rem;color:rgba(167,139,250,.7);font-family:'JetBrains Mono',monospace;letter-spacing:.08em;border-bottom:1px solid rgba(167,139,250,.1);padding-bottom:4px">━ MANAGEMENT ━</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+        <div class="rp-card" onclick="selectRole('community-manager')"><div class="rp-dot" style="background:var(--management)"></div><div><div class="rp-label" style="color:var(--management)">Community Mgr</div><div class="rp-desc">Gestion communauté</div></div></div>
+        <div class="rp-card" onclick="selectRole('ops-manager')"><div class="rp-dot" style="background:var(--management)"></div><div><div class="rp-label" style="color:var(--management)">Ops Manager</div><div class="rp-desc">Opérations</div></div></div>
+        <div class="rp-card" onclick="selectRole('partnership-manager')"><div class="rp-dot" style="background:var(--management)"></div><div><div class="rp-label" style="color:var(--management)">Partnership Mgr</div><div class="rp-desc">Partenariats</div></div></div>
+        <div class="rp-card" onclick="selectRole('project-manager')"><div class="rp-dot" style="background:var(--management)"></div><div><div class="rp-label" style="color:var(--management)">Project Manager</div><div class="rp-desc">Gestion projets</div></div></div>
+      </div>
+
+      <!-- MODERATION -->
+      <div style="margin-bottom:6px;font-size:.62rem;color:rgba(248,113,113,.7);font-family:'JetBrains Mono',monospace;letter-spacing:.08em;border-bottom:1px solid rgba(248,113,113,.1);padding-bottom:4px">━ MODÉRATION ━</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+        <div class="rp-card" onclick="selectRole('head-moderator')" style="border-color:rgba(248,113,113,.2)"><div class="rp-dot" style="background:var(--head-mod)"></div><div><div class="rp-label" style="color:var(--head-mod)">Head Moderator</div><div class="rp-desc">Ban, kick, logs</div></div></div>
+        <div class="rp-card" onclick="selectRole('security-team')" style="border-color:rgba(239,68,68,.2)"><div class="rp-dot" style="background:var(--security)"></div><div><div class="rp-label" style="color:var(--security)">Security Team</div><div class="rp-desc">Sécurité du serveur</div></div></div>
+        <div class="rp-card" onclick="selectRole('senior-moderator')"><div class="rp-dot" style="background:var(--senior-mod)"></div><div><div class="rp-label" style="color:var(--senior-mod)">Senior Mod</div><div class="rp-desc">Timeout, kick</div></div></div>
+        <div class="rp-card" onclick="selectRole('moderator')"><div class="rp-dot" style="background:var(--moderator)"></div><div><div class="rp-label" style="color:var(--moderator)">Moderator</div><div class="rp-desc">Mute, messages</div></div></div>
+        <div class="rp-card" onclick="selectRole('junior-moderator')"><div class="rp-dot" style="background:var(--junior-mod)"></div><div><div class="rp-label" style="color:var(--junior-mod)">Junior Mod</div><div class="rp-desc">Warn, delete</div></div></div>
+      </div>
+
+      <!-- SUPPORT -->
+      <div style="margin-bottom:6px;font-size:.62rem;color:rgba(74,222,128,.7);font-family:'JetBrains Mono',monospace;letter-spacing:.08em;border-bottom:1px solid rgba(74,222,128,.1);padding-bottom:4px">━ SUPPORT ━</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+        <div class="rp-card" onclick="selectRole('support-lead')"><div class="rp-dot" style="background:var(--support-lead)"></div><div><div class="rp-label" style="color:var(--support-lead)">Support Lead</div><div class="rp-desc">Tickets & threads</div></div></div>
+        <div class="rp-card" onclick="selectRole('support-team')"><div class="rp-dot" style="background:var(--support-team)"></div><div><div class="rp-label" style="color:var(--support-team)">Support Team</div><div class="rp-desc">Tickets utilisateurs</div></div></div>
+        <div class="rp-card" onclick="selectRole('helper')"><div class="rp-dot" style="background:var(--support-team)"></div><div><div class="rp-label" style="color:var(--support-team)">Helper</div><div class="rp-desc">Aide communauté</div></div></div>
+      </div>
+
+      <!-- QUALITY & SECURITY -->
+      <div style="margin-bottom:6px;font-size:.62rem;color:rgba(253,230,138,.7);font-family:'JetBrains Mono',monospace;letter-spacing:.08em;border-bottom:1px solid rgba(253,230,138,.1);padding-bottom:4px">━ QUALITY &amp; SECURITY ━</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+        <div class="rp-card" onclick="selectRole('qa-tester')"><div class="rp-dot" style="background:var(--qa-tester)"></div><div><div class="rp-label" style="color:var(--qa-tester)">QA Tester</div><div class="rp-desc">Tests & features</div></div></div>
+        <div class="rp-card" onclick="selectRole('beta-tester')"><div class="rp-dot" style="background:var(--qa-tester)"></div><div><div class="rp-label" style="color:var(--qa-tester)">Beta Tester</div><div class="rp-desc">Canaux beta</div></div></div>
+        <div class="rp-card" onclick="selectRole('bug-hunter')"><div class="rp-dot" style="background:var(--qa-tester)"></div><div><div class="rp-label" style="color:var(--qa-tester)">Bug Hunter</div><div class="rp-desc">Rapports de bugs</div></div></div>
+      </div>
+
+      <!-- CREATOR PROGRAM -->
+      <div style="margin-bottom:6px;font-size:.62rem;color:rgba(244,114,182,.7);font-family:'JetBrains Mono',monospace;letter-spacing:.08em;border-bottom:1px solid rgba(244,114,182,.1);padding-bottom:4px">━ CREATOR PROGRAM ━</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+        <div class="rp-card" onclick="selectRole('content-creator')"><div class="rp-dot" style="background:var(--content-creator)"></div><div><div class="rp-label" style="color:var(--content-creator)">Content Creator</div><div class="rp-desc">Embed, stream</div></div></div>
+        <div class="rp-card" onclick="selectRole('streamer')"><div class="rp-dot" style="background:var(--content-creator)"></div><div><div class="rp-label" style="color:var(--content-creator)">Streamer</div><div class="rp-desc">Voice prioritaire</div></div></div>
+        <div class="rp-card" onclick="selectRole('media-team')"><div class="rp-dot" style="background:var(--media-team)"></div><div><div class="rp-label" style="color:var(--media-team)">Media Team</div><div class="rp-desc">Annonces & médias</div></div></div>
+      </div>
+
+      <!-- COMMUNITY -->
+      <div style="margin-bottom:6px;font-size:.62rem;color:rgba(232,121,249,.7);font-family:'JetBrains Mono',monospace;letter-spacing:.08em;border-bottom:1px solid rgba(232,121,249,.1);padding-bottom:4px">━ COMMUNITY ━</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+        <div class="rp-card" onclick="selectRole('partner')" style="border-color:rgba(232,121,249,.2)"><div class="rp-dot" style="background:var(--partner)"></div><div><div class="rp-label" style="color:var(--partner)">Partner</div><div class="rp-desc">Lounge privé</div></div></div>
+        <div class="rp-card" onclick="selectRole('investor')"><div class="rp-dot" style="background:var(--investor)"></div><div><div class="rp-label" style="color:var(--investor)">Investor</div><div class="rp-desc">Accès investisseur</div></div></div>
+        <div class="rp-card" onclick="selectRole('verified-member')"><div class="rp-dot" style="background:var(--developer)"></div><div><div class="rp-label" style="color:var(--developer)">Verified Member</div><div class="rp-desc">Accès complet</div></div></div>
+        <div class="rp-card" onclick="selectRole('premium-member')"><div class="rp-dot" style="background:var(--vip)"></div><div><div class="rp-label" style="color:var(--vip)">Premium Member</div><div class="rp-desc">Canaux premium</div></div></div>
+        <div class="rp-card" onclick="selectRole('contributor')"><div class="rp-dot" style="background:var(--developer)"></div><div><div class="rp-label" style="color:var(--developer)">Contributor</div><div class="rp-desc">Contributions</div></div></div>
+        <div class="rp-card" onclick="selectRole('developer-community')"><div class="rp-dot" style="background:var(--developer)"></div><div><div class="rp-label" style="color:var(--developer)">Developer</div><div class="rp-desc">Rôle communauté</div></div></div>
+        <div class="rp-card" onclick="selectRole('recruiter')"><div class="rp-dot" style="background:var(--support-lead)"></div><div><div class="rp-label" style="color:var(--support-lead)">Recruiter</div><div class="rp-desc">Recruteur</div></div></div>
+        <div class="rp-card" onclick="selectRole('developer-certified')" style="border-color:rgba(147,197,253,.25)"><div class="rp-dot" style="background:var(--developer)"></div><div><div class="rp-label" style="color:var(--developer)">Dev <svg width="10" height="10" viewBox="0 0 20 20" style="vertical-align:middle"><use href="#cert-developer"/></svg></div><div class="rp-desc">Dev + badge certifié</div></div></div>
+        <div class="rp-card" onclick="selectRole('recruiter-certified')" style="border-color:rgba(74,222,128,.25)"><div class="rp-dot" style="background:var(--support-lead)"></div><div><div class="rp-label" style="color:var(--support-lead)">Recruiter <svg width="10" height="10" viewBox="0 0 20 20" style="vertical-align:middle"><use href="#cert-recruiter"/></svg></div><div class="rp-desc">Entreprise certifiée</div></div></div>
+      </div>
+
+      <!-- SPECIAL -->
+      <div style="margin-bottom:6px;font-size:.62rem;color:rgba(251,146,60,.7);font-family:'JetBrains Mono',monospace;letter-spacing:.08em;border-bottom:1px solid rgba(251,146,60,.1);padding-bottom:4px">━ SPECIAL ━</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+        <div class="rp-card" onclick="selectRole('early-supporter')" style="border-color:rgba(251,146,60,.2)"><div class="rp-dot" style="background:var(--early-supporter)"></div><div><div class="rp-label" style="color:var(--early-supporter)">Early Supporter</div><div class="rp-desc">Soutien initial</div></div></div>
+        <div class="rp-card" onclick="selectRole('vip')" style="border-color:rgba(192,132,252,.2)"><div class="rp-dot" style="background:var(--vip)"></div><div><div class="rp-label" style="color:var(--vip)">VIP</div><div class="rp-desc">Accès premium</div></div></div>
+      </div>
+
+      <!-- BASE -->
+      <div style="margin-bottom:6px;font-size:.62rem;color:rgba(107,99,85,.6);font-family:'JetBrains Mono',monospace;letter-spacing:.08em;border-bottom:1px solid rgba(107,99,85,.1);padding-bottom:4px">━ BASE ━</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px">
+        <div class="rp-card" onclick="selectRole('member')"><div class="rp-dot" style="background:var(--muted)"></div><div><div class="rp-label">Member</div><div class="rp-desc">Rôle de base</div></div></div>
+        <div class="rp-card" onclick="selectRole('new-member')"><div class="rp-dot" style="background:rgba(107,99,85,.4)"></div><div><div class="rp-label" style="color:var(--muted)">New Member</div><div class="rp-desc">Lecture seule</div></div></div>
+      </div>
+
       <div class="modal-acts">
         <button class="btn-ghost" style="flex:1" onclick="closeRoleModal()">Annuler</button>
         <button class="btn-prim" style="flex:2" onclick="confirmRoleAssign()">Confirmer →</button>
@@ -920,38 +1131,50 @@ input::placeholder{color:rgba(107,99,85,.5)}
     <!-- ROLES -->
     <div id="atab-roles" style="display:none">
       <div class="admin-topbar"><h2>RÔLES & RANGS</h2></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
-        <div class="admin-stat-card asc-amber" style="padding:20px">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--owner);margin-bottom:4px;display:flex;align-items:center;gap:6px">
-            <svg width="14" height="14" viewBox="0 0 20 20"><use href="#cert-owner"/></svg> OWNER
-          </div>
-          <div style="font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.7">Accès total. Badge certifié or. Peut assigner tous les rangs.</div>
-          <div style="margin-top:8px;font-size:.68rem;color:var(--owner);font-family:'JetBrains Mono',monospace">cover.mazo@gmail.com</div>
+      <!-- EXECUTIVE -->
+      <div style="font-size:.65rem;color:rgba(252,211,77,.6);font-family:'JetBrains Mono',monospace;letter-spacing:.1em;margin-bottom:8px;padding-left:2px">━━ EXECUTIVE ━━</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
+        <div class="admin-stat-card asc-amber" style="padding:16px">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--founder);margin-bottom:3px;display:flex;align-items:center;gap:5px"><svg width="12" height="12" viewBox="0 0 20 20"><use href="#cert-owner"/></svg> FOUNDER</div>
+          <div style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.6">Accès total. Peut tout assigner.</div>
+          <div style="margin-top:6px;font-size:.62rem;color:var(--founder);font-family:'JetBrains Mono',monospace">cover.mazo@gmail.com</div>
         </div>
-        <div class="admin-stat-card asc-orange" style="padding:20px">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--co-owner);margin-bottom:4px;display:flex;align-items:center;gap:6px">
-            <svg width="14" height="14" viewBox="0 0 20 20"><use href="#cert-co-owner"/></svg> CO-OWNER
-          </div>
-          <div style="font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.7">Assigné par l'Owner. Badge certifié orange. Peut assigner Developer + rangs inférieurs.</div>
+        <div class="admin-stat-card asc-orange" style="padding:16px">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--co-founder);margin-bottom:3px;display:flex;align-items:center;gap:5px"><svg width="12" height="12" viewBox="0 0 20 20"><use href="#cert-co-owner"/></svg> CO-FOUNDER</div>
+          <div style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.6">Assigné par Founder. Accès quasi-total.</div>
         </div>
-        <div class="admin-stat-card asc-red" style="padding:20px">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--admin);margin-bottom:4px">ADMIN</div>
-          <div style="font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.7">Ban, mute, supprime des posts. Accès chat modération et logs.</div>
+        <div class="admin-stat-card asc-orange" style="padding:16px">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--ceo);margin-bottom:3px">CEO / CTO</div>
+          <div style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.6">Direction générale / technique. Gestion avancée.</div>
         </div>
-        <div class="admin-stat-card asc-cyan" style="padding:20px">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--developer);margin-bottom:4px;display:flex;align-items:center;gap:6px">
-            <svg width="14" height="14" viewBox="0 0 20 20"><use href="#cert-developer"/></svg> DEVELOPER
-          </div>
-          <div style="font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.7">Badge certifié bleu. En-dessous d'Admin. Assignable par Owner/Co-owner uniquement. Accès modchat.</div>
-        </div>
-        <div class="admin-stat-card asc-blue" style="padding:20px">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--moderator);margin-bottom:4px">MODERATOR</div>
-          <div style="font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.7">Mute, supprime des posts. Accès chat modération.</div>
-        </div>
-        <div class="admin-stat-card asc-purple" style="padding:20px">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--vip);margin-bottom:4px">VIP</div>
-          <div style="font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.7">Accès canaux privés VIP. Badge VIP affiché sur le profil.</div>
-        </div>
+      </div>
+      <!-- CORE TEAM -->
+      <div style="font-size:.65rem;color:rgba(52,211,153,.6);font-family:'JetBrains Mono',monospace;letter-spacing:.1em;margin-bottom:8px;padding-left:2px">━━ CORE TEAM ━━</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
+        <div class="admin-stat-card asc-cyan" style="padding:16px"><div style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--lead-dev);margin-bottom:3px">LEAD DEV</div><div style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.6">Webhooks, channels, threads. Pas de ban/kick.</div></div>
+        <div class="admin-stat-card asc-cyan" style="padding:16px"><div style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--core-team);margin-bottom:3px">AI ENGINEER</div><div style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.6">Canaux IA, gestion bots, embeds.</div></div>
+        <div class="admin-stat-card asc-cyan" style="padding:16px"><div style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--core-team);margin-bottom:3px">DEV TEAM</div><div style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.6">Backend, Frontend, Fullstack, UI/UX, Infra.</div></div>
+      </div>
+      <!-- MANAGEMENT -->
+      <div style="font-size:.65rem;color:rgba(167,139,250,.6);font-family:'JetBrains Mono',monospace;letter-spacing:.1em;margin-bottom:8px;padding-left:2px">━━ MANAGEMENT ━━</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+        <div class="admin-stat-card asc-purple" style="padding:16px"><div style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--management);margin-bottom:3px">COMMUNITY / OPS MGR</div><div style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.6">Gestion serveur, opérations, canaux.</div></div>
+        <div class="admin-stat-card asc-purple" style="padding:16px"><div style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--management);margin-bottom:3px">PARTNERSHIP / PM</div><div style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.6">Partenariats & gestion projets.</div></div>
+      </div>
+      <!-- MODERATION -->
+      <div style="font-size:.65rem;color:rgba(248,113,113,.6);font-family:'JetBrains Mono',monospace;letter-spacing:.1em;margin-bottom:8px;padding-left:2px">━━ MODÉRATION ━━</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
+        <div class="admin-stat-card asc-red" style="padding:16px"><div style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--head-mod);margin-bottom:3px">HEAD MOD</div><div style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.6">Ban, kick, timeout, audit logs.</div></div>
+        <div class="admin-stat-card asc-red" style="padding:16px"><div style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--moderator);margin-bottom:3px">MODERATOR</div><div style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.6">Timeout, kick, mute. Pas de ban.</div></div>
+        <div class="admin-stat-card asc-red" style="padding:16px"><div style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--junior-mod);margin-bottom:3px">JUNIOR MOD</div><div style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.6">Warn, delete. Pas de kick/ban.</div></div>
+      </div>
+      <!-- CERTIFICATION -->
+      <div style="font-size:.65rem;color:rgba(252,211,77,.6);font-family:'JetBrains Mono',monospace;letter-spacing:.1em;margin-bottom:8px;padding-left:2px">━━ CERTIFICATION — OWNER &amp; CO-FOUNDER UNIQUEMENT ━━</div>
+      <div style="background:rgba(252,211,77,.04);border:1px solid rgba(252,211,77,.12);border-radius:10px;padding:14px 18px;margin-bottom:16px;font-size:.75rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.9">
+        // La <span style="color:var(--accent)">certification</span> est un badge séparé du rang, accordé individuellement.<br>
+        // Accordez-la via le bouton <span style="color:var(--accent)">Cert</span> dans l'onglet Utilisateurs.<br>
+        // Applicable à : Developer, Recruiter, et tout rôle communauté.<br>
+        // Visible dans le chat, les posts et le profil.
       </div>
       <div class="admin-section">
         <div class="admin-section-hdr"><div><div class="admin-section-title">MEMBRES AVEC RANGS SPÉCIAUX</div><div class="admin-section-sub">// non-members uniquement</div></div></div>
@@ -1087,40 +1310,116 @@ const tClass={post:'t-post',offre:'t-offre',projet:'t-projet',recrutement:'t-rec
 
 // ═══════════════════════════════════════════
 // ════  HIÉRARCHIE DES RÔLES  ════════════
-// owner(6) > co-owner(5) > admin(4) > developer(3) > moderator(2) > vip(1) > member(0)
+// founder(10) > co-founder(9) > ceo(8) > cto(7) > core-team(6) > management(5)
+// > head-mod/security(4) > moderator/support-lead(3) > junior-mod/support(2) > community(1) > member(0)
 // ═══════════════════════════════════════════
 const OWNER_EMAIL='cover.mazo@gmail.com';
-const RANK_HIERARCHY={owner:6,'co-owner':5,admin:4,developer:3,moderator:2,vip:1,member:0};
-function rankLevel(r){return RANK_HIERARCHY[r]||0}
-function isOwner(u){return u&&u.rank==='owner'}
-function isCoOwnerOrAbove(u){return u&&rankLevel(u.rank)>=5}
+const RANK_HIERARCHY={
+  // ━━ EXECUTIVE ━━
+  'founder':10,'owner':10,
+  'co-founder':9,'co-owner':9,
+  'ceo':8,
+  'cto':7,
+  // ━━ CORE TEAM ━━
+  'lead-developer':6,'ai-engineer':6,'backend-developer':6,
+  'frontend-developer':6,'fullstack-developer':6,'uiux-designer':6,'infra-engineer':6,
+  // ━━ MANAGEMENT ━━
+  'community-manager':5,'ops-manager':5,'partnership-manager':5,'project-manager':5,
+  // legacy compat
+  'admin':5,'developer':5,
+  // ━━ MODERATION / SECURITY ━━
+  'head-moderator':4,'security-team':4,
+  'senior-moderator':3,'moderator':3,'support-lead':3,'media-team':3,
+  'junior-moderator':2,'support-team':2,'qa-tester':2,'bug-hunter':2,
+  'content-creator':2,'streamer':2,'partner':2,'investor':2,'beta-tester':2,
+  // ━━ COMMUNITY ━━
+  'helper':1,'verified-member':1,'premium-member':1,'contributor':1,
+  'developer-community':1,'recruiter':1,'developer-certified':1,'recruiter-certified':1,
+  'early-supporter':1,'vip':1,
+  // ━━ BASE ━━
+  'member':0,'new-member':0,'bot':0,'system':0
+};
+function rankLevel(r){return RANK_HIERARCHY[r]??0}
+function isOwner(u){return u&&(u.rank==='founder'||u.rank==='owner')}
+function isCoOwnerOrAbove(u){return u&&rankLevel(u.rank)>=9}
 function isAdminOrAbove(u){return u&&rankLevel(u.rank)>=4}
-function isDevOrAbove(u){return u&&rankLevel(u.rank)>=3}
-function isModOrAbove(u){return u&&rankLevel(u.rank)>=2}
+function isDevOrAbove(u){return u&&rankLevel(u.rank)>=5}
+function isModOrAbove(u){return u&&rankLevel(u.rank)>=3}
 function isVipOrAbove(u){return u&&rankLevel(u.rank)>=1}
 function canTarget(actor,target){if(isOwner(target))return false;return rankLevel(actor.rank)>rankLevel(target.rank)}
-function hasCertBadge(u){return u&&(u.rank==='owner'||u.rank==='co-owner'||u.rank==='developer')}
+// Certification: separate toggle (certified:true/false) – only Owner/Co-Founder can grant
+function hasCertBadge(u){return u&&u.certified===true}
 
 // ─── SVG CERTIFIED SEAL (Twitter/X style) ───
 function certBadgeSvg(rank,size=14){
-  const sym={owner:'cert-owner','co-owner':'cert-co-owner',developer:'cert-developer'};
-  if(!sym[rank])return'';
-  return`<span class="cert-badge cb-${rank}" title="${rank} certifié"><svg width="${size}" height="${size}" viewBox="0 0 20 20"><use href="#${sym[rank]}"/></svg></span>`;
+  // Determine seal type by rank category
+  let sym,cbClass;
+  if(rank==='founder'||rank==='owner'||rank==='co-founder'||rank==='co-owner'||rank==='ceo'){sym='cert-owner';cbClass='cb-owner'}
+  else if(rank==='co-founder'||rank==='co-owner'){sym='cert-co-owner';cbClass='cb-co-owner'}
+  else if(rank&&(rank.includes('recruiter')||rank==='partner'||rank==='investor')){sym='cert-recruiter';cbClass='cb-recruiter'}
+  else{sym='cert-developer';cbClass='cb-developer'}
+  return`<span class="cert-badge ${cbClass}" title="Certifié ✓"><svg width="${size}" height="${size}" viewBox="0 0 20 20"><use href="#${sym}"/></svg></span>`;
 }
 
 // ─── RANK BADGE HTML ───
 function rankBadgeHtml(rank){
-  if(!rank||rank==='member')return'';
+  if(!rank||rank==='member'||rank==='new-member'||rank==='bot'||rank==='system')return'';
   const cfg={
-    owner:{cls:'rb-owner',label:'OWNER'},
+    // EXECUTIVE
+    'founder':{cls:'rb-owner',label:'FOUNDER'},
+    'owner':{cls:'rb-owner',label:'OWNER'},
+    'co-founder':{cls:'rb-co-owner',label:'CO-FOUNDER'},
     'co-owner':{cls:'rb-co-owner',label:'CO-OWNER'},
-    admin:{cls:'rb-admin',label:'ADMIN'},
-    developer:{cls:'rb-developer',label:'DEV'},
-    moderator:{cls:'rb-moderator',label:'MOD'},
-    vip:{cls:'rb-vip',label:'VIP'},
+    'ceo':{cls:'rb-co-owner',label:'CEO'},
+    'cto':{cls:'rb-developer',label:'CTO'},
+    // CORE TEAM
+    'lead-developer':{cls:'rb-developer',label:'LEAD DEV'},
+    'ai-engineer':{cls:'rb-developer',label:'AI ENG'},
+    'backend-developer':{cls:'rb-developer',label:'BACKEND'},
+    'frontend-developer':{cls:'rb-developer',label:'FRONTEND'},
+    'fullstack-developer':{cls:'rb-developer',label:'FULLSTACK'},
+    'uiux-designer':{cls:'rb-developer',label:'UI/UX'},
+    'infra-engineer':{cls:'rb-developer',label:'INFRA'},
+    // MANAGEMENT
+    'community-manager':{cls:'rb-vip',label:'COM.MGR'},
+    'ops-manager':{cls:'rb-vip',label:'OPS.MGR'},
+    'partnership-manager':{cls:'rb-vip',label:'PARTNER.MGR'},
+    'project-manager':{cls:'rb-vip',label:'PM'},
+    // legacy
+    'admin':{cls:'rb-admin',label:'ADMIN'},
+    'developer':{cls:'rb-developer',label:'DEV'},
+    // MODERATION
+    'head-moderator':{cls:'rb-admin',label:'HEAD MOD'},
+    'security-team':{cls:'rb-admin',label:'SECURITY'},
+    'senior-moderator':{cls:'rb-moderator',label:'SR.MOD'},
+    'moderator':{cls:'rb-moderator',label:'MOD'},
+    'support-lead':{cls:'rb-moderator',label:'SUP.LEAD'},
+    'media-team':{cls:'rb-moderator',label:'MEDIA'},
+    'junior-moderator':{cls:'rb-moderator',label:'JR.MOD'},
+    // SUPPORT / QA
+    'support-team':{cls:'rb-developer',label:'SUPPORT'},
+    'helper':{cls:'rb-developer',label:'HELPER'},
+    'qa-tester':{cls:'rb-developer',label:'QA'},
+    'beta-tester':{cls:'rb-developer',label:'BETA'},
+    'bug-hunter':{cls:'rb-developer',label:'BUG HUNT'},
+    // CREATORS
+    'content-creator':{cls:'rb-vip',label:'CREATOR'},
+    'streamer':{cls:'rb-vip',label:'STREAMER'},
+    // COMMUNITY
+    'partner':{cls:'rb-vip',label:'PARTNER'},
+    'investor':{cls:'rb-vip',label:'INVESTOR'},
+    'verified-member':{cls:'rb-developer',label:'VERIFIED'},
+    'premium-member':{cls:'rb-vip',label:'PREMIUM'},
+    'contributor':{cls:'rb-developer',label:'CONTRIB'},
+    'developer-community':{cls:'rb-developer',label:'DEV'},
+    'recruiter':{cls:'rb-moderator',label:'RECRUITER'},
+    'developer-certified':{cls:'rb-developer',label:'DEV ✓'},
+    'recruiter-certified':{cls:'rb-moderator',label:'RECRUITER ✓'},
+    'early-supporter':{cls:'rb-co-owner',label:'EARLY SUP'},
+    'vip':{cls:'rb-vip',label:'VIP'},
   };
-  const c=cfg[rank];if(!c)return'';
-  return`<span class="role-badge ${c.cls}">${c.label}</span>${hasCertBadge({rank})?certBadgeSvg(rank,11):''}`;
+  const c=cfg[rank];if(!c)return`<span class="role-badge" style="background:rgba(107,99,85,.1);border:1px solid rgba(107,99,85,.2);color:var(--muted)">${rank.toUpperCase()}</span>`;
+  return`<span class="role-badge ${c.cls}">${c.label}</span>`;
 }
 
 // ─── BUILD SKILLS ───
@@ -1166,7 +1465,7 @@ async function doSignup(){
     if(existing){btn.disabled=false;btn.textContent='Créer mon compte →';return showErr('s-err','Cet email est déjà utilisé.')}
     const hash=await hashPwd(pwd);
     const color=COLORS[Math.floor(Math.random()*COLORS.length)];
-    const user={id:uid(),firstname:san(fn),lastname:san(ln),email,hash,role:curRole,skills:curRole==='dev'?[...selSkills]:[],company:curRole==='recruiter'?san(co):'',initials:(fn[0]+ln[0]).toUpperCase(),color,bio:'',photo:'',created_at:Date.now(),spotify_connected:false,spotify_track:null,spotify_profile:null,rank:email===OWNER_EMAIL?'owner':'member',banned:false,muted:false,muted_until:0};
+    const user={id:uid(),firstname:san(fn),lastname:san(ln),email,hash,role:curRole,skills:curRole==='dev'?[...selSkills]:[],company:curRole==='recruiter'?san(co):'',initials:(fn[0]+ln[0]).toUpperCase(),color,bio:'',photo:'',created_at:Date.now(),spotify_connected:false,spotify_track:null,spotify_profile:null,rank:email===OWNER_EMAIL?'founder':'member',certified:false,banned:false,muted:false,muted_until:0};
     await store.upsertUser(user);store.setSession({userId:user.id,exp:Date.now()+86400000});
     btn.textContent='✓ Compte créé !';
     setTimeout(()=>{btn.disabled=false;btn.textContent='Créer mon compte →';goTo('dash');initDash(user)},900);
@@ -1366,8 +1665,11 @@ async function renderProfile(){
   const photoBlock=me.photo?`<img src="${me.photo}" alt="${me.initials}">`:`<span style="font-size:1.5rem;font-weight:800;color:#000">${me.initials}</span>`;
   const photoBg=me.photo?'transparent':me.color;
   const certHtml=hasCertBadge(me)?certBadgeSvg(me.rank,18):'';
+  const statusCfg={online:{cls:'sd-online',label:'En ligne'},away:{cls:'sd-away',label:'Absent'},dnd:{cls:'sd-dnd',label:'Ne pas déranger'},invisible:{cls:'sd-invisible',label:'Invisible'}};
+  const st=statusCfg[me.status||'online']||statusCfg.online;
+  const bannerStyle=me.banner?(me.banner.startsWith('http')?`background:url('${me.banner}') center/cover`:`background:${me.banner}`):`background:linear-gradient(135deg,${me.color||'#f59e0b'}22,#1a1200)`;
   const spotifySection=me.spotify_connected&&me.spotify_track?`<div class="spotify-profile-section"><div class="sp-profile-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg> EN ÉCOUTE</div><div style="display:flex;align-items:center;gap:10px;margin-top:8px"><div style="width:40px;height:40px;border-radius:4px;background:rgba(29,185,84,.15);display:grid;place-items:center;flex-shrink:0;overflow:hidden">${me.spotify_track.cover?`<img src="${me.spotify_track.cover}" style="width:40px;height:40px;object-fit:cover;border-radius:4px">`:'🎵'}</div><div style="min-width:0"><div style="font-size:.8rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${san(me.spotify_track.track)}</div><div style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace">${san(me.spotify_track.artist)}</div></div><div class="sp-bars"><div class="sp-bar" style="height:60%"></div><div class="sp-bar" style="height:100%"></div><div class="sp-bar" style="height:40%"></div><div class="sp-bar" style="height:80%"></div></div></div></div>`:'';
-  c.innerHTML=`<div class="profile-hero"><div class="profile-hero-inner"><div class="profile-photo-wrap" onclick="document.getElementById('photo-input').click()"><div class="profile-photo" style="background:${photoBg}">${photoBlock}</div><div class="profile-photo-edit"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span style="font-size:.6rem">Modifier</span></div></div><div class="profile-info"><div class="profile-name">${san(me.firstname)} ${san(me.lastname)} ${certHtml}</div><div class="profile-role-tag">${me.role==='dev'?'// Développeur':'// Recruteur'}${me.company?' · '+san(me.company):''}</div>${me.bio?`<div class="profile-bio">${san(me.bio)}</div>`:'<div class="profile-bio" style="opacity:.35;font-style:italic;font-size:.78rem;font-family:JetBrains Mono,monospace">// Ajoute une bio...</div>'}</div></div>${spotifySection}${me.skills&&me.skills.length?`<div class="post-skills" style="margin-bottom:14px">${me.skills.map(s=>`<span class="p-skill">${san(s)}</span>`).join('')}</div>`:''}<div class="profile-stats"><div class="profile-stat"><div class="profile-stat-n">${myPosts.length}</div><div class="profile-stat-l">Publications</div></div><div class="profile-stat"><div class="profile-stat-n">${myPosts.reduce((a,p)=>a+p.likes,0)}</div><div class="profile-stat-l">Likes reçus</div></div><div class="profile-stat"><div class="profile-stat-n">${me.skills&&me.skills.length||0}</div><div class="profile-stat-l">Compétences</div></div><button class="btn-edit-profile" onclick="openProfileModal()" style="margin-left:auto"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Modifier</button></div></div>${myPosts.map(p=>`<div class="post"><div class="post-hdr"><div class="p-av" style="background:${photoBg};color:#000">${me.photo?`<img src="${me.photo}" alt="${p.ai}" style="width:38px;height:38px;object-fit:cover;border-radius:50%">`:p.ai}</div><div><div class="p-name">${san(p.an)} ${certHtml}</div><div class="p-info">${timeAgo(p.ts)}</div></div><span class="type-badge ${tClass[p.type]||'t-post'}">${tLabel[p.type]||p.type}</span></div>${p.title?`<div class="post-title">${san(p.title)}</div>`:''}<div class="post-body">${san(p.body)}</div>${p.skills&&p.skills.length?`<div class="post-skills">${p.skills.map(s=>`<span class="p-skill">${san(s)}</span>`).join('')}</div>`:''}</div>`).join('')||'<div class="empty"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-empty"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><p>Pas encore de publications.</p></div>'}`;
+  c.innerHTML=`<div class="profile-hero-card"><div class="profile-banner" style="${bannerStyle}" onclick="document.getElementById('banner-input').click()"><div class="profile-banner-edit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> Changer la bannière</div></div><div class="profile-card-body"><div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:12px"><div class="profile-photo-abs"><div class="profile-photo" style="background:${photoBg}" onclick="document.getElementById('photo-input').click()">${photoBlock}<div class="profile-photo-edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="status-dot ${st.cls}"></span></div></div><button class="btn-edit-profile" onclick="openProfileModal()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Paramètres</button></div><div class="profile-name">${san(me.firstname)} ${san(me.lastname)} ${certHtml} <span class="status-pill sp-${me.status||'online'}" style="font-size:.62rem">${st.label}</span></div><div class="profile-role-tag">${me.role==='dev'?'// Développeur':'// Recruteur'}${me.company?' · '+san(me.company):''}</div>${me.bio?`<div class="profile-bio" style="margin-bottom:10px">${san(me.bio)}</div>`:'<div class="profile-bio" style="opacity:.35;font-style:italic;font-size:.78rem;font-family:JetBrains Mono,monospace;margin-bottom:10px">// Ajoute une bio dans Paramètres...</div>'}</div>${spotifySection}${me.skills&&me.skills.length?`<div class="post-skills" style="margin:0 0 14px 24px">${me.skills.map(s=>`<span class="p-skill">${san(s)}</span>`).join('')}</div>`:''}<div class="profile-stats" style="padding:14px 24px 16px;border-top:1px solid var(--border);margin-top:0"><div class="profile-stat"><div class="profile-stat-n">${myPosts.length}</div><div class="profile-stat-l">Publications</div></div><div class="profile-stat"><div class="profile-stat-n">${myPosts.reduce((a,p)=>a+p.likes,0)}</div><div class="profile-stat-l">Likes reçus</div></div><div class="profile-stat"><div class="profile-stat-n">${me.skills&&me.skills.length||0}</div><div class="profile-stat-l">Compétences</div></div></div></div>${myPosts.map(p=>`<div class="post"><div class="post-hdr"><div class="p-av" style="background:${photoBg};color:#000">${me.photo?`<img src="${me.photo}" alt="${p.ai}" style="width:38px;height:38px;object-fit:cover;border-radius:50%">`:p.ai}</div><div><div class="p-name">${san(p.an)} ${certHtml}</div><div class="p-info">${timeAgo(p.ts)}</div></div><span class="type-badge ${tClass[p.type]||'t-post'}">${tLabel[p.type]||p.type}</span></div>${p.title?`<div class="post-title">${san(p.title)}</div>`:''}<div class="post-body">${san(p.body)}</div>${p.skills&&p.skills.length?`<div class="post-skills">${p.skills.map(s=>`<span class="p-skill">${san(s)}</span>`).join('')}</div>`:''}</div>`).join('')||'<div class="empty"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-empty"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><p>Pas encore de publications.</p></div>'}`;
 }
 
 async function renderOnline(){
@@ -1518,7 +1820,8 @@ function renderAdminUsers(){
     else{
       // Rank button: only co-owner+ can assign
       const rankBtn=isCoOwnerOrAbove(me)?`<button class="admin-btn admin-btn-role" onclick="openRoleModal('${u.id}')"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Rang</button>`:'';
-      actions=`<div class="admin-actions">${rankBtn}${!isMutedNow?`<button class="admin-btn admin-btn-mute" onclick="openMuteModal('${u.id}')">Mute</button>`:`<button class="admin-btn admin-btn-unban" onclick="unmuteUser('${u.id}')">Unmute</button>`}${!isBanned?`<button class="admin-btn admin-btn-ban" onclick="banUser('${u.id}')">Ban</button>`:`<button class="admin-btn admin-btn-unban" onclick="unbanUser('${u.id}')">Unban</button>`}</div>`;
+      const certBtn=isCoOwnerOrAbove(me)?`<button class="admin-btn" onclick="openCertModal('${u.id}')" style="background:${u.certified?'rgba(252,211,77,.12)':'rgba(107,99,85,.08)'};border-color:${u.certified?'rgba(252,211,77,.35)':'rgba(107,99,85,.2)'};color:${u.certified?'var(--accent)':'var(--muted)'}"><svg width="9" height="9" viewBox="0 0 20 20"><use href="${u.certified?'#cert-owner':'#cert-developer'}"/></svg> Cert</button>`:'';
+      actions=`<div class="admin-actions">${rankBtn}${certBtn}${!isMutedNow?`<button class="admin-btn admin-btn-mute" onclick="openMuteModal('${u.id}')">Mute</button>`:`<button class="admin-btn admin-btn-unban" onclick="unmuteUser('${u.id}')">Unmute</button>`}${!isBanned?`<button class="admin-btn admin-btn-ban" onclick="banUser('${u.id}')">Ban</button>`:`<button class="admin-btn admin-btn-unban" onclick="unbanUser('${u.id}')">Unban</button>`}</div>`;
     }
     const certHtml=hasCertBadge(u)?certBadgeSvg(u.rank,11):'';
     return`<tr>
@@ -1560,6 +1863,39 @@ async function adminDeletePost(id){
   renderAdminPosts();showToast('Publication supprimée','rgba(34,197,94,.85)');
 }
 
+// ─── CERTIFICATION MODAL ─── Owner & Co-Founder only
+let certTargetId=null;
+function openCertModal(userId){
+  if(!isCoOwnerOrAbove(me)){showToast("Réservé à l'Owner et Co-Founder");return}
+  certTargetId=userId;
+  const u=store.users().find(x=>x.id===userId);if(!u)return;
+  document.getElementById('cert-modal-user').textContent=`Certification pour ${u.firstname} ${u.lastname}`;
+  const statusEl=document.getElementById('cert-current-status');
+  const btn=document.getElementById('cert-toggle-btn');
+  if(u.certified){
+    statusEl.style.cssText='background:rgba(252,211,77,.08);border:1px solid rgba(252,211,77,.2);color:var(--accent)';
+    statusEl.innerHTML='✓ Certifié(e) — badge visible sur le profil';
+    btn.textContent='Retirer la certification';
+    btn.style.background='linear-gradient(135deg,#ef4444,#dc2626)';
+  }else{
+    statusEl.style.cssText='background:rgba(107,99,85,.06);border:1px solid rgba(107,99,85,.18);color:var(--muted)';
+    statusEl.innerHTML='✗ Non certifié(e)';
+    btn.textContent='Accorder la certification ✓';
+    btn.style.background='linear-gradient(135deg,#fcd34d,#f59e0b)';
+  }
+  document.getElementById('certModal').classList.add('open');
+}
+function closeCertModal(){document.getElementById('certModal').classList.remove('open');certTargetId=null}
+async function confirmCertToggle(){
+  if(!certTargetId||!isCoOwnerOrAbove(me))return;
+  const users=store.users(),u=users.find(x=>x.id===certTargetId);if(!u)return;
+  u.certified=!u.certified;
+  await store.setUsers(users);await refreshUsersCache();
+  addLog('role',`${u.firstname} ${u.lastname} : certification ${u.certified?'accordée':'retirée'}`);
+  showToast(u.certified?`${u.firstname} est maintenant certifié(e) ✓`:`Certification retirée pour ${u.firstname}`,u.certified?'rgba(252,211,77,.85)':'rgba(107,99,85,.85)');
+  closeCertModal();renderAdminUsers();renderAdminRoles();
+}
+
 // ─── ROLE MODAL ───
 // Co-owner/Owner only for certified roles (co-owner, developer)
 // Admin only for standard roles (moderator, vip, member)
@@ -1581,9 +1917,10 @@ function closeRoleModal(){document.getElementById('roleModal').classList.remove(
 async function confirmRoleAssign(){
   if(!roleTargetId)return;
   const users=store.users(),u=users.find(x=>x.id===roleTargetId);if(!u)return;
-  // Developer & co-owner: only owner/co-owner can assign
-  if((selectedNewRank==='developer'||selectedNewRank==='co-owner')&&!isCoOwnerOrAbove(me)){
-    showToast('Rang certifié réservé à Owner/Co-owner');return;
+  // Executive roles: only founder/owner can assign
+  const execRanks=['co-founder','co-owner','ceo','cto'];
+  if(execRanks.includes(selectedNewRank)&&!isOwner(me)){
+    showToast('Rangs Exécutifs réservés au Founder uniquement');return;
   }
   const old=u.rank;u.rank=selectedNewRank;
   await store.setUsers(users);await refreshUsersCache();
@@ -1627,6 +1964,139 @@ async function unbanUser(userId){
   addLog('unban',`${u.firstname} ${u.lastname} débanni`);showToast(`${u.firstname} a été débanni`,'rgba(34,197,94,.85)');renderAdminUsers();renderAdminOverview();
 }
 
+// ─── SETTINGS TABS ───
+function switchSettingsTab(tab,btn){
+  document.querySelectorAll('.settings-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.settings-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('stab-'+tab).classList.add('active');
+  if(tab==='apparence')initBannerPresets();
+  if(tab==='compte'&&me){document.getElementById('current-email-display').value=me.email||''}
+}
+
+// ─── BANNER PRESETS ───
+const BANNER_PRESETS=[
+  'linear-gradient(135deg,#1a0a00,#f59e0b33)',
+  'linear-gradient(135deg,#000d1a,#0ea5e933)',
+  'linear-gradient(135deg,#0a001a,#a855f733)',
+  'linear-gradient(135deg,#001a0a,#22c55e33)',
+  'linear-gradient(135deg,#1a0010,#ec489933)',
+  'linear-gradient(135deg,#0d0d0d,#ffffff11)',
+  'linear-gradient(135deg,#1a1000,#fcd34d44)',
+  'linear-gradient(135deg,#00101a,#38bdf833)',
+];
+function initBannerPresets(){
+  const el=document.getElementById('banner-presets-list');if(!el||el.children.length)return;
+  BANNER_PRESETS.forEach((g,i)=>{
+    const d=document.createElement('div');
+    d.className='banner-preset'+(me&&me.banner===g?' sel':'');
+    d.style.background=g;
+    d.onclick=()=>{
+      document.querySelectorAll('.banner-preset').forEach(x=>x.classList.remove('sel'));
+      d.classList.add('sel');
+      document.getElementById('banner-preview-box').style.background=g;
+      document.getElementById('edit-banner-url').value='';
+      document._selectedBanner=g;
+    };
+    el.appendChild(d);
+  });
+  const preview=document.getElementById('banner-preview-box');
+  if(preview&&me&&me.banner){
+    preview.style.cssText=me.banner.startsWith('http')?`background:url('${me.banner}') center/cover;background-size:cover`:`background:${me.banner}`;
+    document._selectedBanner=me.banner;
+  }
+}
+function applyBannerUrl(){
+  const url=document.getElementById('edit-banner-url').value.trim();if(!url)return;
+  const preview=document.getElementById('banner-preview-box');
+  preview.style.cssText=`background:url('${url}') center/cover;background-size:cover`;
+  document.querySelectorAll('.banner-preset').forEach(x=>x.classList.remove('sel'));
+  document._selectedBanner=url;
+}
+function handleBannerUpload(e){
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    const data=ev.target.result;
+    const preview=document.getElementById('banner-preview-box');
+    if(preview){preview.style.cssText=`background:url('${data}') center/cover;background-size:cover`}
+    document.querySelectorAll('.banner-preset').forEach(x=>x.classList.remove('sel'));
+    document._selectedBanner=data;
+  };
+  r.readAsDataURL(file);
+}
+async function saveAppearance(){
+  if(!me)return;
+  const banner=document._selectedBanner||me.banner||'';
+  const updated={...me,banner,status:me.status||'online'};
+  try{await store.upsertUser(updated);me=updated;store.setSession({userId:me.id,exp:Date.now()+86400000});
+  closeProfileModal();renderProfile();updateSidebarUser();showToast('Apparence enregistrée','rgba(34,197,94,.85)');}
+  catch(err){console.error(err);showToast('Erreur lors de la sauvegarde')}
+}
+function setStatus(s,btn){
+  me={...me,status:s};
+  document.querySelectorAll('.sp-opt').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');
+  updateSidebarUser();
+}
+
+// ─── CHANGE EMAIL ───
+async function changeEmail(){
+  const newEmail=document.getElementById('new-email').value.trim().toLowerCase();
+  const pwd=document.getElementById('confirm-pwd-email').value;
+  showErr('email-change-err','');
+  if(!validEmail(newEmail))return showErr('email-change-err','Email invalide.');
+  if(!pwd)return showErr('email-change-err','Confirme ton mot de passe.');
+  const hash=await hashPwd(pwd);
+  if(hash!==me.hash)return showErr('email-change-err','Mot de passe incorrect.');
+  const existing=await store.getUserByEmail(newEmail);
+  if(existing&&existing.id!==me.id)return showErr('email-change-err','Cet email est déjà utilisé.');
+  const updated={...me,email:newEmail};
+  try{await store.upsertUser(updated);me=updated;store.setSession({userId:me.id,exp:Date.now()+86400000});
+  document.getElementById('current-email-display').value=newEmail;
+  document.getElementById('new-email').value='';document.getElementById('confirm-pwd-email').value='';
+  showToast('Email mis à jour ✓','rgba(34,197,94,.85)');}
+  catch(err){showErr('email-change-err','Erreur serveur.')}
+}
+
+// ─── CHANGE PASSWORD ───
+async function changePwd(){
+  const old=document.getElementById('old-pwd').value;
+  const nw=document.getElementById('new-pwd').value;
+  const conf=document.getElementById('new-pwd-confirm').value;
+  showErr('pwd-change-err','');
+  if(!old||!nw||!conf)return showErr('pwd-change-err','Remplis tous les champs.');
+  if(nw.length<8)return showErr('pwd-change-err','Nouveau mot de passe trop court.');
+  if(nw!==conf)return showErr('pwd-change-err','Les mots de passe ne correspondent pas.');
+  const oldHash=await hashPwd(old);
+  if(oldHash!==me.hash)return showErr('pwd-change-err','Ancien mot de passe incorrect.');
+  const newHash=await hashPwd(nw);
+  const updated={...me,hash:newHash};
+  try{await store.upsertUser(updated);me=updated;
+  ['old-pwd','new-pwd','new-pwd-confirm'].forEach(id=>document.getElementById(id).value='');
+  showToast('Mot de passe mis à jour ✓','rgba(34,197,94,.85)');}
+  catch(err){showErr('pwd-change-err','Erreur serveur.')}
+}
+
+// ─── DELETE ACCOUNT ───
+async function confirmDeleteAccount(){
+  const confirmed=prompt('Pour supprimer ton compte, tape "SUPPRIMER" ci-dessous :');
+  if(confirmed!=='SUPPRIMER')return;
+  try{
+    // Delete user posts
+    const posts=await store.getPosts();
+    for(const p of posts.filter(p=>p.user_id===me.id)){await store.deletePost(p.id)}
+    // Delete user
+    await sb.from('dc_users').delete().eq('id',me.id);
+    store.setSession(null);
+    showToast('Compte supprimé. À bientôt !');
+    setTimeout(()=>location.reload(),1500);
+  }catch(err){console.error(err);showToast('Erreur lors de la suppression')}
+}
+
+// ─── SIDEBAR STATUS UPDATE ───
+const _origUpdateSidebarUser=typeof updateSidebarUser==='function'?updateSidebarUser:null;
+
 // ─── MOD CHAT — Supabase dc_modchats + Realtime ───
 async function renderModChat(){
   if(!isModOrAbove(me)&&!isDevOrAbove(me))return;
@@ -1652,6 +2122,3 @@ async function sendModChat(){
 }
 </script>
 </body>
-</html>
-HTMLEOF
-echo "Done: $(wc -c < /mnt/user-data/outputs/index.html) bytes"
