@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8"/>
@@ -796,7 +795,7 @@ input::placeholder{color:rgba(107,99,85,.5)}
       <button class="nav-item" onclick="setView('profile',this)">
         <span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>Mon profil
       </button>
-      <button class="nav-item" onclick="setView('settings',this)">
+      <button class="nav-item" onclick="openProfileModal()" id="nav-settings">
         <span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>Paramètres
       </button>
       <button class="nav-item" id="nav-admin" style="display:none" onclick="openAdminPanel()">
@@ -912,6 +911,16 @@ input::placeholder{color:rgba(107,99,85,.5)}
       </div>
       <div class="muted-overlay" id="muted-overlay">Muté(e) — envoi de messages désactivé.</div>
       <div class="chat-msgs" id="chat-msgs"></div>
+      <!-- Chat SQL setup banner (hidden by default, shown on error) -->
+      <div id="chat-setup-banner" style="display:none;background:rgba(245,158,11,.05);border-top:1px solid rgba(245,158,11,.15);padding:10px 14px;font-size:.7rem;font-family:JetBrains Mono,monospace;color:var(--muted)">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+          <span>// Table <span style="color:var(--accent)">dc_chats</span> manquante ou RLS bloquant. Crée-la dans Supabase :</span>
+          <div style="display:flex;gap:6px">
+            <button onclick="showSqlSetup()" style="background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);color:var(--accent);padding:4px 10px;border-radius:5px;font-size:.68rem">Voir le SQL →</button>
+            <button onclick="document.getElementById('chat-setup-banner').style.display='none'" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 8px;border-radius:5px;font-size:.68rem">✕</button>
+          </div>
+        </div>
+      </div>
       <div class="chat-in-area">
         <input class="chat-input" id="chat-in" placeholder="Message #général..." onkeydown="if(event.key==='Enter'){event.preventDefault();sendMsg()}"/>
         <button class="chat-send" onclick="sendMsg()">
@@ -1088,6 +1097,10 @@ input::placeholder{color:rgba(107,99,85,.5)}
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       Chat Modération
     </button>
+    <button class="admin-nav-item" onclick="adminTab('messages',this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Messages Chat
+    </button>
     <button class="admin-nav-item" onclick="adminTab('logs',this)">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
       Logs
@@ -1207,6 +1220,31 @@ input::placeholder{color:rgba(107,99,85,.5)}
       </div>
     </div>
     <!-- LOGS -->
+    <!-- MESSAGES -->
+    <div id="atab-messages" style="display:none">
+      <div class="admin-topbar">
+        <h2 style="color:#f472b6">MESSAGES CHAT</h2>
+        <div style="display:flex;gap:8px;margin-left:auto">
+          <select id="msg-room-filter" onchange="renderAdminMessages()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:.78rem;font-family:'Cabinet Grotesk',sans-serif">
+            <option value="general">🌐 #général</option>
+            <option value="dev">💻 #dev</option>
+            <option value="jobs">💼 #offres</option>
+            <option value="vip">⭐ #vip</option>
+          </select>
+          <button class="admin-btn" onclick="refreshAdminMessages()" style="background:rgba(96,165,250,.08);border-color:rgba(96,165,250,.2);color:#60a5fa">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.08-4.34"/></svg> Rafraîchir
+          </button>
+          <button class="admin-btn btn-danger" onclick="clearRoomMessages()" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.25);color:var(--error)">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg> Vider ce salon
+          </button>
+          <button class="admin-btn btn-danger" onclick="clearAllMessages()" style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.35);color:var(--error);font-weight:700">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg> TOUT supprimer
+          </button>
+        </div>
+      </div>
+      <div id="admin-messages-list" style="display:flex;flex-direction:column;gap:6px"></div>
+    </div>
+
     <div id="atab-logs" style="display:none">
       <div class="admin-topbar"><h2>LOGS DE MODÉRATION</h2></div>
       <div class="admin-section">
@@ -1267,6 +1305,9 @@ const store={
   async deletePost(id){const{error}=await sb.from('dc_posts').delete().eq('id',id);if(error)throw error},
   async getChats(room){const{data}=await sb.from('dc_chats').select('*').eq('room',room).order('t',{ascending:true}).limit(80);return data||[]},
   async addChat(m){const{error}=await sb.from('dc_chats').insert(m);if(error)throw error},
+  async deleteChat(id){await sb.from('dc_chats').delete().eq('id',id)},
+  async deleteChatsByRoom(room){await sb.from('dc_chats').delete().eq('room',room)},
+  async deleteAllChats(){await sb.from('dc_chats').delete().neq('id','__none__')},
   // MOD CHAT — Supabase dc_modchats
   async getModchats(){const{data}=await sb.from('dc_modchats').select('*').order('t',{ascending:true}).limit(100);return data||[]},
   async addModchat(m){const{error}=await sb.from('dc_modchats').insert(m);if(error)throw error},
@@ -1340,7 +1381,7 @@ const RANK_HIERARCHY={
   'member':0,'new-member':0,'bot':0,'system':0
 };
 function rankLevel(r){return RANK_HIERARCHY[r]??0}
-function isOwner(u){return u&&(u.rank==='founder'||u.rank==='owner')}
+function isOwner(u){return u&&u.rank==='founder'}
 function isCoOwnerOrAbove(u){return u&&rankLevel(u.rank)>=9}
 function isAdminOrAbove(u){return u&&rankLevel(u.rank)>=4}
 function isDevOrAbove(u){return u&&rankLevel(u.rank)>=5}
@@ -1354,8 +1395,8 @@ function hasCertBadge(u){return u&&u.certified===true}
 function certBadgeSvg(rank,size=14){
   // Determine seal type by rank category
   let sym,cbClass;
-  if(rank==='founder'||rank==='owner'||rank==='co-founder'||rank==='co-owner'||rank==='ceo'){sym='cert-owner';cbClass='cb-owner'}
-  else if(rank==='co-founder'||rank==='co-owner'){sym='cert-co-owner';cbClass='cb-co-owner'}
+  if(rank==='founder'||rank==='owner'){sym='cert-owner';cbClass='cb-owner'}
+  else if(rank==='co-founder'||rank==='co-owner'||rank==='ceo'){sym='cert-co-owner';cbClass='cb-co-owner'}
   else if(rank&&(rank.includes('recruiter')||rank==='partner'||rank==='investor')){sym='cert-recruiter';cbClass='cb-recruiter'}
   else{sym='cert-developer';cbClass='cb-developer'}
   return`<span class="cert-badge ${cbClass}" title="Certifié ✓"><svg width="${size}" height="${size}" viewBox="0 0 20 20"><use href="#${sym}"/></svg></span>`;
@@ -1367,7 +1408,7 @@ function rankBadgeHtml(rank){
   const cfg={
     // EXECUTIVE
     'founder':{cls:'rb-owner',label:'FOUNDER'},
-    'owner':{cls:'rb-owner',label:'OWNER'},
+    'owner':{cls:'rb-owner',label:'FOUNDER'},
     'co-founder':{cls:'rb-co-owner',label:'CO-FOUNDER'},
     'co-owner':{cls:'rb-co-owner',label:'CO-OWNER'},
     'ceo':{cls:'rb-co-owner',label:'CEO'},
@@ -1505,7 +1546,7 @@ function checkPwd(v){let s=0;if(v.length>=8)s++;if(/[A-Z]/.test(v))s++;if(/[0-9]
 
 // ─── INIT DASH ───
 async function initDash(user){
-  if(!user.rank)user.rank=user.email===OWNER_EMAIL?'owner':'member';
+  if(!user.rank||user.rank==='owner')user.rank=user.email===OWNER_EMAIL?'founder':'member';
   if(user.banned===undefined)user.banned=false;if(user.muted===undefined)user.muted=false;if(user.muted_until===undefined)user.muted_until=0;
   me=user;
   if(me.banned){document.getElementById('banned-screen').classList.add('visible');return}
@@ -1691,12 +1732,39 @@ function renderTrends(){document.getElementById('trend-tags').innerHTML=['React'
 
 function switchRoom(btn,room){currentRoom=room;document.querySelectorAll('.c-room').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('chat-in').placeholder=`Message #${room}...`;renderChat();if(realtimeChannel)setupRealtime()}
 async function sendMsg(){
-  if(!me)return;if(isUserMuted(me)){showToast('Muté(e) — messages désactivés.');return}
-  const inp=document.getElementById('chat-in'),txt=inp.value.trim();if(!txt)return;inp.value='';
-  try{await store.addChat({id:'m'+uid(),room:currentRoom,a:me.firstname+' '+me.lastname,av:me.initials,col:me.color,uid:me.id,photo:me.photo||'',txt:san(txt),t:Date.now(),rank:me.rank||'member'});renderChat()}catch(err){console.error(err)}
+  if(!me)return;
+  if(isUserMuted(me)){showToast('Muté(e) — messages désactivés.');return}
+  const inp=document.getElementById('chat-in'),txt=inp.value.trim();if(!txt)return;
+  inp.value='';inp.disabled=true;
+  try{
+    const msg={id:'m'+uid(),room:currentRoom,a:me.firstname+' '+me.lastname,av:me.initials,col:me.color,uid:me.id,photo:me.photo||'',txt:san(txt),t:Date.now(),rank:me.rank||'member'};
+    await store.addChat(msg);
+    renderChat();
+  }catch(err){
+    console.error('sendMsg error:',err);
+    inp.value=txt; // restore text
+    showChatError(err);
+  }finally{inp.disabled=false;inp.focus()}
+}
+function showChatError(err){
+  const c=document.getElementById('chat-msgs');if(!c)return;
+  const msg=err?.message||String(err);
+  const div=document.createElement('div');
+  div.style.cssText='background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:12px 14px;margin:6px 0;font-size:.74rem;font-family:JetBrains Mono,monospace;color:var(--error)';
+  div.innerHTML='// Erreur chat: '+msg+'<br><span style="color:var(--muted);font-size:.68rem">→ La table dc_chats est manquante ou RLS bloquant.</span>';
+  c.appendChild(div);c.scrollTop=c.scrollHeight;
+  // Show the setup banner
+  const banner=document.getElementById('chat-setup-banner');
+  if(banner)banner.style.display='block';
 }
 async function renderChat(){
-  const msgs=await store.getChats(currentRoom);const c=document.getElementById('chat-msgs');if(!c)return;
+  const c=document.getElementById('chat-msgs');if(!c)return;
+  let msgs=[];
+  try{msgs=await store.getChats(currentRoom);}
+  catch(err){
+    c.innerHTML='<div style="color:var(--error);font-size:.74rem;font-family:JetBrains Mono,monospace;padding:16px;text-align:center">// Erreur: '+( err.message||'')+' <br><button onclick="renderChat()" style="margin-top:8px;background:rgba(245,158,11,.1);border:1px solid var(--border);color:var(--accent);padding:5px 14px;border-radius:5px;font-size:.74rem">Réessayer</button></div>';
+    const banner=document.getElementById('chat-setup-banner');if(banner)banner.style.display='block';
+    return;}
   if(!msgs.length){c.innerHTML='<div class="empty" style="padding:16px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="ic-empty"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><p style="font-size:.74rem;font-family:JetBrains Mono,monospace">// Premier message !</p></div>';return}
   c.innerHTML=msgs.map(m=>{
     const mine=me&&m.uid===me.id;const avContent=m.photo?`<img src="${m.photo}" alt="${m.av}">`:m.av;const avBg=m.photo?'transparent':m.col;
@@ -1789,7 +1857,8 @@ async function openAdminPanel(){
 
 function adminTab(tab,btn){
   document.querySelectorAll('.admin-nav-item').forEach(n=>n.classList.remove('active'));if(btn)btn.classList.add('active');
-  ['overview','users','roles','posts','modchat','logs'].forEach(t=>{const el=document.getElementById('atab-'+t);if(el)el.style.display=t===tab?'block':'none'});
+  ['overview','users','roles','posts','messages','modchat','logs'].forEach(t=>{const el=document.getElementById('atab-'+t);if(el)el.style.display=t===tab?'block':'none'});
+  if(tab==='messages')renderAdminMessages();
   if(tab==='overview')renderAdminOverview();if(tab==='users')renderAdminUsers();if(tab==='roles')renderAdminRoles();
   if(tab==='posts')renderAdminPosts();if(tab==='modchat')renderModChat();if(tab==='logs')renderAdminLogs();
 }
@@ -1991,12 +2060,13 @@ function initBannerPresets(){
     const d=document.createElement('div');
     d.className='banner-preset'+(me&&me.banner===g?' sel':'');
     d.style.background=g;
-    d.onclick=()=>{
+    d.onclick=async()=>{
       document.querySelectorAll('.banner-preset').forEach(x=>x.classList.remove('sel'));
       d.classList.add('sel');
       document.getElementById('banner-preview-box').style.background=g;
       document.getElementById('edit-banner-url').value='';
       document._selectedBanner=g;
+      if(me){const u={...me,banner:g,status:me.status||'online'};try{await store.upsertUser(u);me=u;store.setSession({userId:me.id,exp:Date.now()+86400000});renderProfile();updateSidebarUser();showToast('Bannière mise à jour ✓','rgba(34,197,94,.85)');}catch(e){showToast('Erreur sauvegarde bannière');}}
     };
     el.appendChild(d);
   });
@@ -2006,22 +2076,36 @@ function initBannerPresets(){
     document._selectedBanner=me.banner;
   }
 }
-function applyBannerUrl(){
+async function applyBannerUrl(){
   const url=document.getElementById('edit-banner-url').value.trim();if(!url)return;
   const preview=document.getElementById('banner-preview-box');
   preview.style.cssText=`background:url('${url}') center/cover;background-size:cover`;
   document.querySelectorAll('.banner-preset').forEach(x=>x.classList.remove('sel'));
   document._selectedBanner=url;
+  if(me){const updated={...me,banner:url,status:me.status||'online'};try{await store.upsertUser(updated);me=updated;store.setSession({userId:me.id,exp:Date.now()+86400000});renderProfile();updateSidebarUser();showToast('Bannière mise à jour ✓','rgba(34,197,94,.85)');}catch(err){console.error(err);showToast('Erreur sauvegarde bannière');}}
 }
 function handleBannerUpload(e){
   const file=e.target.files[0];if(!file)return;
+  if(file.size>512000)return alert('Image trop volumineuse (max 500Ko)');
   const r=new FileReader();
-  r.onload=ev=>{
+  r.onload=async ev=>{
     const data=ev.target.result;
     const preview=document.getElementById('banner-preview-box');
     if(preview){preview.style.cssText=`background:url('${data}') center/cover;background-size:cover`}
     document.querySelectorAll('.banner-preset').forEach(x=>x.classList.remove('sel'));
     document._selectedBanner=data;
+    // Auto-sauvegarde immédiate comme pour la photo de profil
+    if(me){
+      const updated={...me,banner:data,status:me.status||'online'};
+      try{
+        await store.upsertUser(updated);
+        me=updated;
+        store.setSession({userId:me.id,exp:Date.now()+86400000});
+        renderProfile();
+        updateSidebarUser();
+        showToast('Bannière mise à jour ✓','rgba(34,197,94,.85)');
+      }catch(err){console.error(err);showToast('Erreur sauvegarde bannière');}
+    }
   };
   r.readAsDataURL(file);
 }
@@ -2096,6 +2180,79 @@ async function confirmDeleteAccount(){
 
 // ─── SIDEBAR STATUS UPDATE ───
 const _origUpdateSidebarUser=typeof updateSidebarUser==='function'?updateSidebarUser:null;
+
+// ─── ADMIN MESSAGES ───
+async function renderAdminMessages(){
+  if(!isAdminOrAbove(me))return;
+  const room=document.getElementById('msg-room-filter')?.value||'general';
+  const el=document.getElementById('admin-messages-list');if(!el)return;
+  el.innerHTML='<div style="color:var(--muted);font-family:JetBrains Mono,monospace;font-size:.74rem;padding:12px">// Chargement...</div>';
+  try{
+    const msgs=await store.getChats(room);
+    if(!msgs.length){el.innerHTML='<div style="color:var(--muted);font-family:JetBrains Mono,monospace;font-size:.74rem;padding:12px">// Aucun message dans ce salon.</div>';return}
+    el.innerHTML=msgs.map(m=>`
+      <div style="display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px" id="amsg-${m.id}">
+        <div style="width:32px;height:32px;border-radius:50%;background:${m.col||'var(--accent)'};display:grid;place-items:center;font-size:.7rem;font-weight:700;color:#000;flex-shrink:0;overflow:hidden">${m.photo?`<img src="${m.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:(m.av||'?')}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:.74rem;font-weight:700;color:var(--accent);margin-bottom:2px">${san(m.a||'?')} <span style="color:var(--muted);font-weight:400;font-family:JetBrains Mono,monospace;font-size:.65rem">${timeAgo(m.t)}</span></div>
+          <div style="font-size:.8rem;color:var(--text);word-break:break-word">${san(m.txt||'')}</div>
+        </div>
+        <button onclick="adminDeleteMsg('${m.id}')" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:var(--error);border-radius:5px;padding:5px 10px;font-size:.7rem;flex-shrink:0;transition:all .2s" onmouseover="this.style.background='rgba(239,68,68,.2)'" onmouseout="this.style.background='rgba(239,68,68,.1)'">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+        </button>
+      </div>`).join('');
+  }catch(err){el.innerHTML='<div style="color:var(--error);font-size:.74rem;padding:12px">Erreur: '+err.message+'</div>'}
+}
+async function refreshAdminMessages(){await renderAdminMessages();showToast('Messages rafraîchis')}
+async function adminDeleteMsg(id){
+  if(!isAdminOrAbove(me))return;
+  await store.deleteChat(id);
+  const el=document.getElementById('amsg-'+id);if(el)el.remove();
+  addLog('mod','Message supprimé (ID: '+id+')');
+  showToast('Message supprimé');
+}
+async function clearRoomMessages(){
+  if(!isAdminOrAbove(me))return;
+  const room=document.getElementById('msg-room-filter')?.value||'general';
+  if(!confirm('Vider tous les messages du salon #'+room+' ?'))return;
+  try{await store.deleteChatsByRoom(room);addLog('mod','Salon #'+room+' vidé par '+me.firstname);showToast('Salon #'+room+' vidé ✓','rgba(239,68,68,.85)');renderAdminMessages()}
+  catch(err){showToast('Erreur: '+err.message)}
+}
+async function clearAllMessages(){
+  if(!isOwner(me)&&!isCoOwnerOrAbove(me)){showToast('Réservé au Founder / Co-Founder');return}
+  const conf=prompt('Supprimer TOUS les messages de TOUS les salons ? Tape "CONFIRMER" :');
+  if(conf!=='CONFIRMER')return;
+  try{await store.deleteAllChats();addLog('mod','TOUS les messages supprimés par '+me.firstname);showToast('Tous les messages supprimés ✓','rgba(239,68,68,.85)');renderAdminMessages()}
+  catch(err){showToast('Erreur: '+err.message)}
+}
+
+// ─── CHAT DIAGNOSTICS ───
+function showSqlSetup(){
+  document.getElementById('sqlModal').classList.add('open');
+}
+function copySql(){
+  const txt=document.getElementById('sql-setup-code').textContent;
+  navigator.clipboard.writeText(txt).then(()=>showToast('SQL copié ✓','rgba(34,197,94,.85)')).catch(()=>showToast('Copie manuelle nécessaire'));
+}
+async function testChatConnection(){
+  const btn=event.target;btn.textContent='Test en cours...';btn.disabled=true;
+  try{
+    // Try read
+    const {data,error}=await sb.from('dc_chats').select('id').limit(1);
+    if(error)throw error;
+    // Try insert + delete
+    const testId='test_'+Date.now();
+    const {error:ie}=await sb.from('dc_chats').insert({id:testId,room:'test',a:'test',av:'T',col:'#000',uid:'test',photo:'',txt:'__test__',t:Date.now(),rank:'member'});
+    if(ie)throw ie;
+    await sb.from('dc_chats').delete().eq('id',testId);
+    document.getElementById('sqlModal').classList.remove('open');
+    document.getElementById('chat-setup-banner').style.display='none';
+    showToast('✓ Connexion chat OK ! Rechargement...','rgba(34,197,94,.85)');
+    setTimeout(()=>renderChat(),800);
+  }catch(err){
+    showToast('✗ Erreur: '+err.message,'rgba(239,68,68,.85)');
+  }finally{btn.textContent='Tester la connexion →';btn.disabled=false}
+}
 
 // ─── MOD CHAT — Supabase dc_modchats + Realtime ───
 async function renderModChat(){
