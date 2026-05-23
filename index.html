@@ -1054,6 +1054,18 @@ input::placeholder{color:rgba(107,99,85,.5)}
     </div>
   </div>
   <!-- Mute Modal -->
+
+  <div class="modal-ov" id="certModal">
+    <div class="modal" style="max-width:380px">
+      <h3 style="color:var(--accent)">CERTIFICATION</h3>
+      <p id="cert-modal-user" style="font-size:.82rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:14px">—</p>
+      <div id="cert-current-status" style="padding:10px 14px;border-radius:7px;font-size:.78rem;font-family:'JetBrains Mono',monospace;margin-bottom:16px">—</div>
+      <div class="modal-acts">
+        <button class="btn-ghost" style="flex:1" onclick="closeCertModal()">Annuler</button>
+        <button id="cert-toggle-btn" class="btn-prim" style="flex:2" onclick="confirmCertToggle()">—</button>
+      </div>
+    </div>
+  </div>
   <div class="modal-ov" id="muteModal">
     <div class="modal" style="max-width:360px">
       <h3>MUTER L'UTILISATEUR</h3>
