@@ -1453,12 +1453,13 @@ function saveVipChatColor(){
   if(!me||!hasVipPerks(me)){showToast('Réservé aux VIP ⭐');return}
   const color=document.getElementById('vip-chat-color').value;
   saveVipLocal('chat_color',color);
+  renderChat();
   showToast('Couleur appliquée ✓','rgba(192,132,252,.85)');
 }
 function selectVipDeco(decoId){
   if(!me||!hasVipPerks(me)){showToast('Réservé aux VIP ⭐');return}
   saveVipLocal('decoration',decoId);
-  initVipTab();renderProfile();updateSidebarUser();
+  initVipTab();renderProfile();updateSidebarUser();renderChat();
   showToast('Décoration appliquée ✓','rgba(192,132,252,.85)');
 }
 function selectVipTheme(themeId){
@@ -1490,7 +1491,7 @@ function initVipTab(){
   if(scSection)scSection.style.display=me&&isCoOwnerOrAbove(me)?'block':'none';
   // Déco grid
   const dg=document.getElementById('deco-grid');
-  if(dg){dg.innerHTML=VIP_DECOS.map(d=>`<div class="deco-card${me&&me.vip_decoration===d.id?' sel':''}" onclick="selectVipDeco('${d.id}')"><div class="deco-av-preview ${d.cls}" style="box-shadow:0 0 0 2px ${d.color}44">VIP</div><div class="deco-label">${d.label}</div></div>`).join('')}
+  if(dg){dg.innerHTML=VIP_DECOS.map(d=>`<div class="deco-card${me&&me.vip_decoration===d.id?' sel':''}" onclick="selectVipDeco('${d.id}')"><div class="deco-av-preview ${d.cls}" style="outline:2px solid ${d.color};outline-offset:2px">VIP</div><div class="deco-label">${d.label}</div></div>`).join('')}
   // Theme grid
   const tg=document.getElementById('theme-grid');
   if(tg){tg.innerHTML=VIP_THEMES.map(t=>`<div class="theme-card${me&&(me.vip_theme||'default')===t.id?' sel':''}" onclick="selectVipTheme('${t.id}')"><div class="theme-dot" style="background:${t.color}"></div><div class="deco-label">${t.label}</div></div>`).join('')}
@@ -1593,7 +1594,12 @@ const store={
   async getUsers(){const{data}=await sb.from('dc_users').select('*');return data||[]},
   async getUserByEmail(e){const{data}=await sb.from('dc_users').select('*').eq('email',e).maybeSingle();return data||null},
   async getUserById(id){const{data}=await sb.from('dc_users').select('*').eq('id',id).maybeSingle();return data||null},
-  async upsertUser(u){const{error}=await sb.from('dc_users').upsert(u,{onConflict:'id'});if(error)throw error},
+  async upsertUser(u){
+    // Strip fields that don't exist in Supabase schema (stored in localStorage)
+    const {vip_decoration,vip_theme,vip_wallpaper,vip_chat_color,vip_pinned_post,...cleanU}=u;
+    const{error}=await sb.from('dc_users').upsert(cleanU,{onConflict:'id'});
+    if(error)throw error
+  },
   async getPosts(){const{data}=await sb.from('dc_posts').select('*').order('ts',{ascending:false});return data||[]},
   async addPost(p){const{error}=await sb.from('dc_posts').insert(p);if(error)throw error},
   async updatePost(id,ch){const{error}=await sb.from('dc_posts').update(ch).eq('id',id);if(error)throw error},
@@ -1854,6 +1860,11 @@ async function initDash(user){
   const posts=await store.getPosts();if(!posts.length)await seedPosts();
   setupRealtime();
   if(isDevOrAbove(me))setupModchatRealtime();
+  // Spotify auto-sync toutes les 30 secondes
+  if(window._spotifyInterval)clearInterval(window._spotifyInterval);
+  window._spotifyInterval=setInterval(async()=>{
+    if(me&&me.spotify_connected){await refreshNowPlaying();renderProfile();updateSpotifyBadge();}
+  },30000);
 }
 
 async function seedPosts(){
@@ -2007,7 +2018,7 @@ async function renderProfile(){
   if(!me)return;const allPosts=await store.getPosts();const myPosts=allPosts.filter(p=>p.an===me.firstname+' '+me.lastname);
   const c=document.getElementById('posts-list');if(!c)return;
   const photoBlock=me.photo?`<img src="${me.photo}" alt="${me.initials}">`:`<span style="font-size:1.5rem;font-weight:800;color:#000">${me.initials}</span>`;
-  const photoBg=me.photo?'transparent':me.color;
+  const photoBg=me.photo?'transparent':me.color;const myDecoC=vipDecoClass(me);
   const certHtml=hasCertBadge(me)?certBadgeSvg(me.rank,18):'';const vipHtml=hasVipPerks(me)?vipBadgeHtml(16):'';
   const statusCfg={online:{cls:'sd-online',label:'En ligne'},away:{cls:'sd-away',label:'Absent'},dnd:{cls:'sd-dnd',label:'Ne pas déranger'},invisible:{cls:'sd-invisible',label:'Invisible'}};
   const st=statusCfg[me.status||'online']||statusCfg.online;
@@ -2062,6 +2073,7 @@ function showChatError(err){
 }
 async function renderChat(){
   const c=document.getElementById('chat-msgs');if(!c)return;
+  if(!_usersCache.length)await refreshUsersCache();
   let msgs=[];
   try{msgs=await store.getChats(currentRoom);}
   catch(err){
@@ -2072,7 +2084,7 @@ async function renderChat(){
   c.innerHTML=msgs.map(m=>{
     const mine=me&&m.uid===me.id;const avContent=m.photo?`<img src="${m.photo}" alt="${m.av}">`:m.av;const avBg=m.photo?'transparent':m.col;
     const rank=m.rank&&m.rank!=='member'?rankBadgeHtml(m.rank):'';
-    const msgUser=store.users().find(u=>u.id===m.uid);
+    const msgUser=m.uid===me?.id ? me : store.users().find(u=>u.id===m.uid);
     const vipBdg=msgUser&&hasVipPerks(msgUser)?vipBadgeHtml(10):'';
     const chatCol=msgUser&&msgUser.vip_chat_color?msgUser.vip_chat_color:'';
     const decoC=msgUser?vipDecoClass(msgUser):'';
@@ -2113,17 +2125,19 @@ function setView(view,btn){
 // ─── SPOTIFY ───
 const SPOTIFY_REDIRECT=window.location.href.split('?')[0].split('#')[0];
 const SPOTIFY_SCOPES='user-read-currently-playing user-read-playback-state user-read-private';
+const SPOTIFY_CLIENT_ID='53d7737f89d04211ab1777657855804c';
 function b64url(buf){return btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'')}
 async function spVerifier(){const a=new Uint8Array(32);crypto.getRandomValues(a);return b64url(a)}
 async function spChallenge(v){const d=new TextEncoder().encode(v);return b64url(await crypto.subtle.digest('SHA-256',d))}
-async function initiateSpotifyAuth(){const clientId=localStorage.getItem('dc_sp_client_id')||'';if(!clientId){openSpotifySetup();return}const verifier=await spVerifier(),challenge=await spChallenge(verifier);localStorage.setItem('dc_sp_verifier',verifier);if(me)localStorage.setItem('dc_sp_userid',me.id);const params=new URLSearchParams({client_id:clientId,response_type:'code',redirect_uri:SPOTIFY_REDIRECT,scope:SPOTIFY_SCOPES,code_challenge_method:'S256',code_challenge:challenge,state:'dc_spotify'});window.location.href='https://accounts.spotify.com/authorize?'+params}
-async function handleSpotifyCallback(){const params=new URLSearchParams(window.location.search);const code=params.get('code'),state=params.get('state');if(state!=='dc_spotify'||!code)return false;window.history.replaceState({},'',window.location.pathname);const clientId=localStorage.getItem('dc_sp_client_id')||'',verifier=localStorage.getItem('dc_sp_verifier')||'';try{const res=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({client_id:clientId,grant_type:'authorization_code',code,redirect_uri:SPOTIFY_REDIRECT,code_verifier:verifier})});const data=await res.json();if(data.access_token){const exp=Date.now()+data.expires_in*1000;localStorage.setItem('dc_sp_token',JSON.stringify({token:data.access_token,refresh:data.refresh_token||'',exp}));localStorage.removeItem('dc_sp_verifier');const userId=localStorage.getItem('dc_sp_userid')||'';localStorage.removeItem('dc_sp_userid');const track=await fetchCurrentlyPlaying(data.access_token),meProfile=await fetchSpotifyProfile(data.access_token),u=me||(userId?await store.getUserById(userId):null);if(u){const updated={...u,spotify_connected:true,spotify_track:track,spotify_profile:meProfile};await store.upsertUser(updated);if(me&&me.id===u.id){me=updated;store.setSession({userId:me.id,exp:Date.now()+86400000})}}return true}}catch(err){console.error(err)}return false}
+async function initiateSpotifyAuth(){const verifier=await spVerifier(),challenge=await spChallenge(verifier);localStorage.setItem('dc_sp_verifier',verifier);if(me)localStorage.setItem('dc_sp_userid',me.id);const params=new URLSearchParams({client_id:SPOTIFY_CLIENT_ID,response_type:'code',redirect_uri:SPOTIFY_REDIRECT,scope:SPOTIFY_SCOPES,code_challenge_method:'S256',code_challenge:challenge,state:'dc_spotify'});window.location.href='https://accounts.spotify.com/authorize?'+params}
+async function handleSpotifyCallback(){const params=new URLSearchParams(window.location.search);const code=params.get('code'),state=params.get('state');if(state!=='dc_spotify'||!code)return false;window.history.replaceState({},'',window.location.pathname);const clientId=SPOTIFY_CLIENT_ID,verifier=localStorage.getItem('dc_sp_verifier')||'';try{const res=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({client_id:clientId,grant_type:'authorization_code',code,redirect_uri:SPOTIFY_REDIRECT,code_verifier:verifier})});const data=await res.json();if(data.access_token){const exp=Date.now()+data.expires_in*1000;localStorage.setItem('dc_sp_token',JSON.stringify({token:data.access_token,refresh:data.refresh_token||'',exp}));localStorage.removeItem('dc_sp_verifier');const userId=localStorage.getItem('dc_sp_userid')||'';localStorage.removeItem('dc_sp_userid');const track=await fetchCurrentlyPlaying(data.access_token),meProfile=await fetchSpotifyProfile(data.access_token),u=me||(userId?await store.getUserById(userId):null);if(u){const updated={...u,spotify_connected:true,spotify_track:track,spotify_profile:meProfile};await store.upsertUser(updated);if(me&&me.id===u.id){me=updated;store.setSession({userId:me.id,exp:Date.now()+86400000})}}return true}}catch(err){console.error(err)}return false}
 async function fetchCurrentlyPlaying(token){try{const res=await fetch('https://api.spotify.com/v1/me/player/currently-playing',{headers:{Authorization:'Bearer '+token}});if(res.status===204||res.status===404)return null;if(!res.ok)return null;const data=await res.json();if(data&&data.item)return{track:data.item.name,artist:data.item.artists.map(a=>a.name).join(', '),cover:data.item.album?.images?.[0]?.url||'',isPlaying:data.is_playing}}catch(e){}return null}
 async function fetchSpotifyProfile(token){try{const res=await fetch('https://api.spotify.com/v1/me',{headers:{Authorization:'Bearer '+token}});if(!res.ok)return null;const data=await res.json();return{name:data.display_name||''}}catch(e){}return null}
-async function getSpotifyToken(){const sp=JSON.parse(localStorage.getItem('dc_sp_token')||'{}');if(!sp.token)return null;if(Date.now()<(sp.exp-60000))return sp.token;try{const clientId=localStorage.getItem('dc_sp_client_id')||'';const res=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'refresh_token',refresh_token:sp.refresh,client_id:clientId})});const data=await res.json();if(data.access_token){localStorage.setItem('dc_sp_token',JSON.stringify({token:data.access_token,refresh:data.refresh_token||sp.refresh,exp:Date.now()+data.expires_in*1000}));return data.access_token}}catch(e){}return null}
+async function getSpotifyToken(){const sp=JSON.parse(localStorage.getItem('dc_sp_token')||'{}');if(!sp.token)return null;if(Date.now()<(sp.exp-60000))return sp.token;try{const clientId=SPOTIFY_CLIENT_ID;const res=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'refresh_token',refresh_token:sp.refresh,client_id:clientId})});const data=await res.json();if(data.access_token){localStorage.setItem('dc_sp_token',JSON.stringify({token:data.access_token,refresh:data.refresh_token||sp.refresh,exp:Date.now()+data.expires_in*1000}));return data.access_token}}catch(e){}return null}
 async function refreshNowPlaying(){if(!me||!me.spotify_connected)return;const token=await getSpotifyToken();if(!token)return;const track=await fetchCurrentlyPlaying(token);const updated={...me,spotify_track:track};await store.upsertUser(updated);me=updated;store.setSession({userId:me.id,exp:Date.now()+86400000});renderSpotifyWidget()}
 async function disconnectSpotify(){localStorage.removeItem('dc_sp_token');if(me){const updated={...me,spotify_connected:false,spotify_track:null,spotify_profile:null};await store.upsertUser(updated);me=updated;store.setSession({userId:me.id,exp:Date.now()+86400000})}renderSpotifyWidget();updateSpotifyBadge()}
 function connectSpotify(){initiateSpotifyAuth()}
+function openSpotifySetup(){initiateSpotifyAuth()} // redirect openSpotifySetup to direct auth
 function openSpotifySetup(){const existing=document.getElementById('sp-setup-modal');if(existing)existing.remove();const m=document.createElement('div');m.id='sp-setup-modal';m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:2000;display:grid;place-items:center;backdrop-filter:blur(8px)';m.innerHTML=`<div style="background:#0f0e0a;border:1px solid rgba(245,158,11,.25);border-radius:14px;padding:28px;max-width:420px;width:90%;box-shadow:0 24px 80px rgba(0,0,0,.7)"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.05em;margin-bottom:6px">CONNECTER SPOTIFY</div><p style="font-size:.75rem;color:#6b6355;font-family:'JetBrains Mono',monospace;line-height:1.8;margin-bottom:16px">1. Va sur <a href="https://developer.spotify.com/dashboard" target="_blank" style="color:#f59e0b">developer.spotify.com/dashboard</a><br>2. Crée une app → Redirect URI : <code style="background:rgba(245,158,11,.1);padding:2px 6px;border-radius:3px;color:#fcd34d;font-size:.68rem">${SPOTIFY_REDIRECT}</code></p><label style="font-size:.65rem;color:#6b6355;text-transform:uppercase;letter-spacing:.1em;font-family:'JetBrains Mono',monospace;display:block;margin-bottom:5px">Client ID Spotify</label><input id="sp-cid-input" type="text" placeholder="1a2b3c4d5e6f..." value="${localStorage.getItem('dc_sp_client_id')||''}" style="width:100%;background:#161410;border:1px solid rgba(245,158,11,.15);border-radius:6px;padding:10px 13px;color:#f5f0e8;font-family:'Cabinet Grotesk',sans-serif;font-size:.85rem;outline:none;margin-bottom:12px"/><div style="display:flex;gap:8px"><button onclick="document.getElementById('sp-setup-modal').remove()" style="flex:1;padding:10px;background:transparent;border:1px solid rgba(245,158,11,.15);border-radius:6px;color:#6b6355;font-family:'Cabinet Grotesk',sans-serif">Annuler</button><button onclick="saveSpotifyClientId()" style="flex:2;padding:10px;background:linear-gradient(135deg,#f59e0b,#fb923c);color:#000;border:none;border-radius:6px;font-weight:800;font-family:'Cabinet Grotesk',sans-serif">Connecter →</button></div></div>`;document.body.appendChild(m);m.addEventListener('click',e=>{if(e.target===m)m.remove()})}
 function saveSpotifyClientId(){const cid=document.getElementById('sp-cid-input').value.trim();if(!cid){alert('Colle ton Client ID Spotify.');return}localStorage.setItem('dc_sp_client_id',cid);document.getElementById('sp-setup-modal').remove();initiateSpotifyAuth()}
 function renderSpotifyWidget(){
