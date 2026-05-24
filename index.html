@@ -1422,6 +1422,8 @@ body.has-wallpaper .sidebar,.body.has-wallpaper .main-area{background:transparen
 
 // ══ VIP SYSTEM ══
 const VIP_DECOS=[
+  {id:'founder-ring',label:'👑 Founder',color:'#3b82f6',cls:'rank-deco-founder',rankOnly:['founder','owner']},
+  {id:'co-founder-ring',label:'🥇 Co-Founder',color:'#fcd34d',cls:'rank-deco-co-founder',rankOnly:['co-founder','co-owner','ceo']},
   {id:'halo',label:'✨ Halo',color:'#fffbc8',cls:'vip-deco-halo'},
   {id:'neon-ring',label:'🌀 Neon',color:'#818cf8',cls:'vip-deco-neon-ring'},
   {id:'constellation',label:'🌟 Étoiles',color:'#60a5fa',cls:'vip-deco-constellation'},
@@ -1445,12 +1447,12 @@ function vipBadgeHtml(size=12){
 }
 function vipDecoClass(u){
   if(!u)return '';
-  // Rang exécutif → décoration automatique (prioritaire sur VIP)
+  // Décoration choisie manuellement (prioritaire)
+  if(u.vip_decoration){const d=VIP_DECOS.find(x=>x.id===u.vip_decoration);if(d)return d.cls;}
+  // Décoration de rang par défaut
   if(u.rank==='founder'||u.rank==='owner')return 'rank-deco-founder';
   if(u.rank==='co-founder'||u.rank==='co-owner'||u.rank==='ceo')return 'rank-deco-co-founder';
-  // Décoration VIP choisie
-  if(!u.vip_decoration)return '';
-  const d=VIP_DECOS.find(x=>x.id===u.vip_decoration);return d?d.cls:'';
+  return '';
 }
 function applyTheme(themeId){
   document.body.className=document.body.className.replace(/theme-\S+/g,'').trim();
@@ -1535,7 +1537,7 @@ function initVipTab(){
   if(scSection)scSection.style.display=me&&isCoOwnerOrAbove(me)?'block':'none';
   // Déco grid
   const dg=document.getElementById('deco-grid');
-  if(dg){dg.innerHTML=VIP_DECOS.map(d=>`<div class="deco-card${me&&me.vip_decoration===d.id?' sel':''}" onclick="selectVipDeco('${d.id}')" style="border-color:${me&&me.vip_decoration===d.id?d.color:'var(--border)'}"><div class="deco-av-preview ${d.cls}" style="font-size:.65rem;letter-spacing:.02em">${me&&me.initials||'VIP'}</div><div class="deco-label" style="color:${me&&me.vip_decoration===d.id?d.color:'var(--muted)'}">${d.label}</div></div>`).join('')}
+  if(dg){dg.innerHTML=VIP_DECOS.filter(d=>!d.rankOnly||(me&&d.rankOnly.includes(me.rank))).map(d=>`<div class="deco-card${me&&me.vip_decoration===d.id?' sel':''}" onclick="selectVipDeco('${d.id}')" style="border-color:${me&&me.vip_decoration===d.id?d.color:'var(--border)'}"><div class="deco-av-preview ${d.cls}" style="font-size:.65rem;letter-spacing:.02em">${me&&me.initials||'VIP'}</div><div class="deco-label" style="color:${me&&me.vip_decoration===d.id?d.color:'var(--muted)'}">${d.label}</div></div>`).join('')}
   // Theme grid
   const tg=document.getElementById('theme-grid');
   if(tg){tg.innerHTML=VIP_THEMES.map(t=>`<div class="theme-card${me&&(me.vip_theme||'default')===t.id?' sel':''}" onclick="selectVipTheme('${t.id}')" style="border-color:${me&&(me.vip_theme||'default')===t.id?t.color:'var(--border)'}"><div style="width:100%;height:28px;border-radius:5px;margin-bottom:5px;background:${t.preview||t.color}"></div><div class="deco-label" style="font-size:.65rem;color:${me&&(me.vip_theme||'default')===t.id?t.color:'var(--muted)'}">${t.label}</div></div>`).join('')}
@@ -2362,8 +2364,10 @@ async function confirmCertToggle(){
 let roleTargetId=null,selectedNewRank='member';
 function openRoleModal(userId){
   if(!isCoOwnerOrAbove(me)){showToast('Seul l\'Owner ou Co-owner peut assigner des rangs');return}
-  roleTargetId=userId;selectedNewRank='member';
   const u=store.users().find(x=>x.id===userId);
+  if(u&&u.id===me.id){showToast('Tu ne peux pas modifier ton propre rang');return}
+  if(u&&!isOwner(me)&&!canTarget(me,u)){showToast('Rang insuffisant pour modifier ce profil');return}
+  roleTargetId=userId;selectedNewRank='member';
   document.getElementById('role-modal-user').textContent=`Rang pour ${u?u.firstname+' '+u.lastname:'?'}`;
   document.querySelectorAll('.rp-card').forEach(c=>c.classList.remove('selected'));
   document.getElementById('roleModal').classList.add('open');
@@ -2382,7 +2386,10 @@ async function confirmRoleAssign(){
   if(execRanks.includes(selectedNewRank)&&!isOwner(me)){
     showToast('Rangs Exécutifs réservés au Founder uniquement');return;
   }
-  const old=u.rank;u.rank=selectedNewRank;
+  const old=u.rank;
+  // Vérif finale : co-owner ne peut pas modifier un rang égal ou supérieur au sien
+  if(!isOwner(me)&&(u.id===me.id||!canTarget(me,u))){showToast('Modification non autorisée');return}
+  u.rank=selectedNewRank;
   await store.setUsers(users);await refreshUsersCache();
   addLog('role',`${u.firstname} ${u.lastname} : ${old} → ${selectedNewRank}`);
   showToast(`${u.firstname} est maintenant ${selectedNewRank}`,'rgba(34,197,94,.85)');
