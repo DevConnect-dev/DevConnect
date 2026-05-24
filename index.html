@@ -522,11 +522,9 @@ input::placeholder{color:rgba(107,99,85,.5)}
 /* 🌙 Moonlight — anneau argenté calme */
 .vip-deco-moonlight{outline:2px solid #94a3b8!important;outline-offset:4px!important;animation:moonlight 5s ease-in-out infinite!important}
 @keyframes moonlight{0%,100%{outline-color:#64748b;filter:drop-shadow(0 0 3px #64748b)}50%{outline-color:#e2e8f0;filter:drop-shadow(0 0 8px #e2e8f0) drop-shadow(0 0 16px rgba(148,163,184,.3))}}
-/* ══ RANK RING DECORATIONS (automatiques selon le rang) ══ */
-/* 👑 Founder / Owner — anneau bleu verified + lueur géométrique blanche */
+/* ══ RANK RING DECORATIONS ══ */
 .rank-deco-founder{outline:2.5px solid rgba(59,130,246,.9)!important;outline-offset:3px!important;animation:founderRing 3.5s ease-in-out infinite!important}
 @keyframes founderRing{0%,100%{outline-color:#3b82f6;filter:drop-shadow(0 0 6px rgba(255,255,255,.55)) drop-shadow(0 0 14px rgba(59,130,246,.5))}50%{outline-color:#60a5fa;filter:drop-shadow(0 0 11px rgba(255,255,255,.9)) drop-shadow(0 0 22px rgba(96,165,250,.75)) drop-shadow(0 0 36px rgba(59,130,246,.3))}}
-/* 🥇 Co-Founder / Co-Owner — anneau doré couronne lumineuse */
 .rank-deco-co-founder{outline:2.5px solid #fcd34d!important;outline-offset:3px!important;animation:coFounderRing 4.5s ease-in-out infinite!important}
 @keyframes coFounderRing{0%,100%{outline-color:#fcd34d;filter:drop-shadow(0 0 5px rgba(252,211,77,.7)) drop-shadow(0 0 12px rgba(245,158,11,.3))}50%{outline-color:#f59e0b;filter:drop-shadow(0 0 10px rgba(252,211,77,.95)) drop-shadow(0 0 22px rgba(245,158,11,.55)) drop-shadow(0 0 36px rgba(251,146,60,.2))}}
 /* Thèmes VIP */
@@ -1381,7 +1379,7 @@ body.has-wallpaper .sidebar,.body.has-wallpaper .main-area{background:transparen
       <div class="admin-section">
         <div class="admin-section-hdr">
           <div><div class="admin-section-title">HISTORIQUE COMPLET</div><div class="admin-section-sub">// toutes les actions</div></div>
-          <button class="admin-btn admin-btn-del" onclick="if(confirm('Vider tous les logs ?')){store.setLogs([]);renderAdminLogs()}">Vider</button>
+          <button class="admin-btn admin-btn-del" onclick="if(confirm('Vider tous les logs ?')){store.clearLogs().then(()=>renderAdminLogs())}">Vider</button>
         </div>
         <div id="full-logs-list"></div>
       </div>
@@ -1447,9 +1445,7 @@ function vipBadgeHtml(size=12){
 }
 function vipDecoClass(u){
   if(!u)return '';
-  // Décoration choisie manuellement (prioritaire)
   if(u.vip_decoration){const d=VIP_DECOS.find(x=>x.id===u.vip_decoration);if(d)return d.cls;}
-  // Décoration de rang par défaut
   if(u.rank==='founder'||u.rank==='owner')return 'rank-deco-founder';
   if(u.rank==='co-founder'||u.rank==='co-owner'||u.rank==='ceo')return 'rank-deco-co-founder';
   return '';
@@ -1560,8 +1556,9 @@ async function openUserProfile(userId){
   if(userId&&userId===me.id){openProfileModal();return;}
   if(!userId){showToast('Profil introuvable');return;}
   try{
-  const users=await store.getUsers();
-  let u=users.find(x=>x.id===userId);
+  // Utilise le cache d'abord, sinon recharge depuis Supabase
+  let u=_usersCache.find(x=>x.id===userId);
+  if(!u){await refreshUsersCache();u=_usersCache.find(x=>x.id===userId);}
   if(!u){showToast('Profil introuvable');return;}
   const posts=(await store.getPosts()).filter(p=>(p.user_id||p.uid)===userId);
   const modal=document.getElementById('userProfileModal');
@@ -1663,8 +1660,10 @@ const store={
   async addModchat(m){const{error}=await sb.from('dc_modchats').insert(m);if(error)throw error},
   session(){try{return JSON.parse(localStorage.getItem('dc_sess'))}catch{return null}},
   setSession(d){d?localStorage.setItem('dc_sess',JSON.stringify(d)):localStorage.removeItem('dc_sess')},
-  logs(){try{return JSON.parse(localStorage.getItem('dc_logs')||'[]')}catch{return[]}},
-  setLogs(d){localStorage.setItem('dc_logs',JSON.stringify(d))},
+  logs:async function(){const{data}=await sb.from('dc_logs').select('*').order('ts',{ascending:false}).limit(200);return data||[]},
+  setLogs:async function(d){/* unused - logs are added/deleted individually */},
+  addLogEntry:async function(entry){await sb.from('dc_logs').insert(entry)},
+  clearLogs:async function(){await sb.from('dc_logs').delete().neq('id','__never__')},
 };
 let _usersCache=[];
 async function refreshUsersCache(){_usersCache=await store.getUsers()}
@@ -2222,7 +2221,10 @@ setInterval(()=>{if(me&&me.spotify_connected)refreshNowPlaying()},30000);
 // ══════════════════════════════════
 // ════  ADMIN PANEL  ════════════
 // ══════════════════════════════════
-function addLog(action,desc,by){const logs=store.logs();logs.unshift({id:uid(),action,desc,by:by||(me?me.firstname+' '+me.lastname:'System'),ts:Date.now()});if(logs.length>200)logs.pop();store.setLogs(logs)}
+function addLog(action,desc,by){
+  const entry={id:uid(),action,description:desc,by_user:by||(me?me.firstname+' '+me.lastname:'System'),ts:Date.now()};
+  store.addLogEntry(entry).catch(e=>console.error('log error',e));
+}
 
 window.DevConnect={
   openAdmin:function(){if(!me){showToast('Connecte-toi d\'abord');return}const fresh=store.users().find(u=>u.id===me.id);if(!fresh||!isAdminOrAbove(fresh)){showToast('Accès refusé — rang insuffisant');return}me=fresh;openAdminPanel()},
@@ -2260,12 +2262,12 @@ async function renderAdminOverview(){
   const users=store.users(),posts=await store.getPosts();
   document.getElementById('as-members').textContent=users.length;document.getElementById('as-posts').textContent=posts.length;
   document.getElementById('as-banned').textContent=users.filter(u=>u.banned).length;document.getElementById('as-muted').textContent=users.filter(u=>isUserMuted(u)).length;
-  const logs=store.logs().slice(0,8),el=document.getElementById('overview-logs');if(!el)return;
+  const logs=(await store.logs()).slice(0,8),el=document.getElementById('overview-logs');if(!el)return;
   if(!logs.length){el.innerHTML='<div style="padding:18px;font-size:.75rem;color:var(--muted);font-family:JetBrains Mono,monospace">// aucune action</div>';return}
   el.innerHTML=logs.map(l=>logEntryHtml(l)).join('');
 }
-function logEntryHtml(l){const cls={ban:'la-ban',unban:'la-unban',mute:'la-mute',unmute:'la-unmute',role:'la-role',delete:'la-delete',kick:'la-kick'}[l.action]||'la-role';return`<div class="log-entry"><div class="log-ts">${timeAgo(l.ts)}</div><div class="log-action ${cls}">${l.action.toUpperCase()}</div><div class="log-desc">${san(l.desc)}</div><div class="log-by">par ${san(l.by)}</div></div>`}
-function renderAdminLogs(){const logs=store.logs(),el=document.getElementById('full-logs-list');if(!logs.length){el.innerHTML='<div style="padding:18px;font-size:.75rem;color:var(--muted);font-family:JetBrains Mono,monospace">// aucun log</div>';return}el.innerHTML=logs.map(l=>logEntryHtml(l)).join('')}
+function logEntryHtml(l){const cls={ban:'la-ban',unban:'la-unban',mute:'la-mute',unmute:'la-unmute',role:'la-role',delete:'la-delete',kick:'la-kick'}[l.action]||'la-role';return`<div class="log-entry"><div class="log-ts">${timeAgo(l.ts)}</div><div class="log-action ${cls}">${l.action.toUpperCase()}</div><div class="log-desc">${san(l.description||l.desc||'')}</div><div class="log-by">par ${san(l.by_user||l.by||'?')}</div></div>`}
+async function renderAdminLogs(){const logs=await store.logs(),el=document.getElementById('full-logs-list');if(!el)return;if(!logs.length){el.innerHTML='<div style="padding:18px;font-size:.75rem;color:var(--muted);font-family:JetBrains Mono,monospace">// aucun log</div>';return}el.innerHTML=logs.map(l=>logEntryHtml(l)).join('')}
 
 function renderAdminUsers(){
   const q=(document.getElementById('admin-search')||{}).value||'';
@@ -2387,7 +2389,6 @@ async function confirmRoleAssign(){
     showToast('Rangs Exécutifs réservés au Founder uniquement');return;
   }
   const old=u.rank;
-  // Vérif finale : co-owner ne peut pas modifier un rang égal ou supérieur au sien
   if(!isOwner(me)&&(u.id===me.id||!canTarget(me,u))){showToast('Modification non autorisée');return}
   u.rank=selectedNewRank;
   await store.setUsers(users);await refreshUsersCache();
