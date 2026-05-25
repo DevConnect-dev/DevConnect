@@ -698,6 +698,13 @@ body.has-wallpaper .sidebar,.body.has-wallpaper .main-area{background:transparen
 .vip-stat-n{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--vip);line-height:1}
 .vip-stat-l{font-size:.62rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:2px}
 
+/* ══ FOUNDER / CO-FOUNDER RING DECORATIONS ══ */
+.founder-deco{outline:2.5px solid #fcd34d!important;outline-offset:4px!important;animation:founderRing 3s ease-in-out infinite!important}
+@keyframes founderRing{0%,100%{outline-color:#fcd34d;filter:drop-shadow(0 0 7px #fcd34d) drop-shadow(0 0 16px rgba(252,211,77,.5))}50%{outline-color:#f59e0b;filter:drop-shadow(0 0 14px #f59e0b) drop-shadow(0 0 28px rgba(245,158,11,.7))}}
+
+.co-founder-deco{outline:2.5px solid #fb923c!important;outline-offset:4px!important;animation:coFounderRing 4s ease-in-out infinite!important}
+@keyframes coFounderRing{0%,100%{outline-color:#fb923c;filter:drop-shadow(0 0 6px #fb923c) drop-shadow(0 0 12px rgba(251,146,60,.4))}50%{outline-color:#fcd34d;filter:drop-shadow(0 0 11px #fcd34d) drop-shadow(0 0 22px rgba(252,211,77,.5))}}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
@@ -1643,7 +1650,12 @@ function vipBadgeHtml(size=12){
   return `<span class="vip-badge" title="VIP ⭐"><svg width="${size}" height="${size}" viewBox="0 0 20 20" fill="#c084fc"><path d="M10 1l2.39 5.26L18 7.27l-4 3.9.94 5.5L10 14.1l-4.94 2.57.94-5.5-4-3.9 5.61-.01z"/></svg></span>`;
 }
 function vipDecoClass(u){
-  if(!u||!u.vip_decoration)return '';
+  if(!u)return '';
+  // Décorations automatiques selon le rang
+  if(u.rank==='founder'||u.rank==='owner')return 'founder-deco';
+  if(u.rank==='co-founder'||u.rank==='co-owner')return 'co-founder-deco';
+  // Décorations VIP manuelles
+  if(!u.vip_decoration)return '';
   const d=VIP_DECOS.find(x=>x.id===u.vip_decoration);return d?d.cls:'';
 }
 function applyTheme(themeId){
