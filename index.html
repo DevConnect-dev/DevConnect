@@ -3535,9 +3535,10 @@ async function renderDMChat(otherId){
     await sb.from('dc_dms').update({read:true}).eq('from_id',otherId).eq('to_id',me.id);
     el.innerHTML=msgs.length?msgs.map(m=>{
       const mine=m.from_id===me.id;
-      const delBtn=mine?`<button onclick="deleteDMMsg('${m.id}')" title="Supprimer" style="background:none;border:none;color:var(--muted);opacity:0;transition:opacity .15s;padding:0 3px;font-size:.75rem;cursor:pointer;flex-shrink:0" class="dm-del-btn">🗑</button>`:'';
+      const svgTrash=`<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>`;
+      const delBtn=mine?`<button onclick="deleteDMMsg('${m.id}',this)" title="Supprimer" style="background:none;border:none;color:var(--muted);opacity:0;transition:opacity .15s;padding:2px 4px;cursor:pointer;flex-shrink:0;border-radius:4px;display:flex;align-items:center" class="dm-del-btn">${svgTrash}</button>`:'';
       const readMark=mine?`<span title="${m.read?'Lu':'Envoyé'}" style="font-size:.6rem;color:${m.read?'var(--accent)':'var(--muted)'}">${m.read?'✓✓':'✓'}</span>`:'';
-      return`<div class="dm-msg${mine?' mine':''}" style="position:relative" onmouseenter="this.querySelector('.dm-del-btn')&&(this.querySelector('.dm-del-btn').style.opacity='1')" onmouseleave="this.querySelector('.dm-del-btn')&&(this.querySelector('.dm-del-btn').style.opacity='0')"><div style="display:flex;align-items:flex-end;gap:4px;${mine?'flex-direction:row-reverse':''}">${delBtn}<div class="dm-bubble">${san(m.txt)}</div></div><div class="dm-msg-time" style="${mine?'text-align:right':''}">${timeAgo(m.t)} ${readMark}</div></div>`;
+      return`<div class="dm-msg${mine?' mine':''}" style="position:relative" onmouseenter="const b=this.querySelector('.dm-del-btn');if(b)b.style.opacity='1'" onmouseleave="const b=this.querySelector('.dm-del-btn');if(b)b.style.opacity='0'"><div style="display:flex;align-items:flex-end;gap:4px;${mine?'flex-direction:row-reverse':''}"><div class="dm-bubble">${san(m.txt)}</div>${delBtn}</div><div class="dm-msg-time" style="${mine?'text-align:right':''}">${timeAgo(m.t)} ${readMark}</div></div>`;
     }).join('')
       :'<div style="text-align:center;color:var(--muted);font-size:.72rem;padding:24px;font-family:JetBrains Mono,monospace">// Début de la conversation</div>';
     el.scrollTop=el.scrollHeight;
@@ -3717,7 +3718,11 @@ async function dmFrSearch(q){
 async function dmGetFriends(){
   if(!me)return[];
   try{
-    const{data}=await sb.from('dc_friends').select('*').or(`from_id.eq.${me.id},to_id.eq.${me.id}`);
+    const[{data:sent},{data:recv}]=await Promise.all([
+      sb.from('dc_friends').select('*').eq('from_id',me.id),
+      sb.from('dc_friends').select('*').eq('to_id',me.id)
+    ]);
+    const data=[...(sent||[]),...(recv||[])];
     return data||[];
   }catch(e){return[]}
 }
@@ -3735,8 +3740,11 @@ function dmGetRelation(friends,userId){
 async function dmSendRequest(toId,toName){
   if(!me)return;
   try{
-    const existing=await sb.from('dc_friends').select('id').or(`and(from_id.eq.${me.id},to_id.eq.${toId}),and(from_id.eq.${toId},to_id.eq.${me.id})`);
-    if(existing.data&&existing.data.length)return showToast('Demande déjà envoyée');
+    const[{data:e1},{data:e2}]=await Promise.all([
+      sb.from('dc_friends').select('id').eq('from_id',me.id).eq('to_id',toId),
+      sb.from('dc_friends').select('id').eq('from_id',toId).eq('to_id',me.id)
+    ]);
+    if((e1&&e1.length)||(e2&&e2.length))return showToast('Relation déjà existante');
     await sb.from('dc_friends').insert({id:uid(),from_id:me.id,to_id:toId,status:'pending',t:Date.now()});
     showToast(`Demande envoyée à ${toName} ✓`,'rgba(34,197,94,.85)');
     addNotif('👥','#f59e0b',`Demande d'ami envoyée à <strong>${san(toName)}</strong>`);
@@ -4043,11 +4051,22 @@ function dmOnType(){
 // ══════════════════════════════════════════════
 // ─── SUPPRESSION MESSAGE DM ───────────────────
 // ══════════════════════════════════════════════
-async function deleteDMMsg(id){
+async function deleteDMMsg(id,btn){
   if(!me)return;
+  // Mini confirm: bouton devient rouge 1s, 2e clic = supprime
+  if(!btn._confirmPending){
+    btn._confirmPending=true;
+    btn.style.opacity='1';
+    btn.style.color='var(--error)';
+    btn.title='Cliquer encore pour confirmer';
+    setTimeout(()=>{btn._confirmPending=false;btn.style.color='var(--muted)';btn.style.opacity='0';btn.title='Supprimer'},2000);
+    return;
+  }
   try{
-    await sb.from('dc_dms').delete().eq('id',id).eq('from_id',me.id);
+    const{error}=await sb.from('dc_dms').delete().eq('id',id).eq('from_id',me.id);
+    if(error)throw error;
     if(_dmCurrentUser)renderDMChat(_dmCurrentUser.id);
+    showToast('Message supprimé','rgba(239,68,68,.7)');
   }catch(e){showToast('Erreur suppression: '+e.message)}
 }
 
