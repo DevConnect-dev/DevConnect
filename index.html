@@ -1305,21 +1305,25 @@ body.has-wallpaper .sidebar,.body.has-wallpaper .main-area{background:transparen
 
   <!-- USER PROFILE MODAL -->
   <div class="modal-ov" id="userProfileModal" onclick="if(event.target===this)closeUserProfile()">
-    <div class="modal" style="max-width:360px;padding:0;overflow:hidden;max-height:80vh;overflow-y:auto">
-      <div id="upm-banner" style="height:72px;background:var(--surface2);position:relative;flex-shrink:0">
-        <button onclick="closeUserProfile()" style="position:absolute;top:8px;right:10px;background:rgba(0,0,0,.5);border:none;color:#fff;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;line-height:1">×</button>
+    <div class="modal" style="max-width:420px;padding:0;overflow:hidden;max-height:88vh;overflow-y:auto;border-radius:14px">
+      <div id="upm-banner" style="height:100px;background:var(--surface2);position:relative;flex-shrink:0">
+        <button onclick="closeUserProfile()" style="position:absolute;top:10px;right:12px;background:rgba(0,0,0,.6);border:none;color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:.9rem;line-height:1;backdrop-filter:blur(4px)">×</button>
       </div>
-      <div style="padding:0 16px 16px">
-        <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-top:-22px;margin-bottom:10px">
-          <div id="upm-av" style="width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:.9rem;font-weight:700;border:3px solid var(--bg);flex-shrink:0"></div>
-          <div id="upm-badges" style="display:flex;gap:5px;align-items:center;padding-bottom:2px"></div>
+      <div style="padding:0 20px 20px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-top:-28px;margin-bottom:12px">
+          <div id="upm-av" style="width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-size:1.1rem;font-weight:800;border:3px solid var(--bg);flex-shrink:0;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.5)"></div>
+          <div id="upm-badges" style="display:flex;gap:5px;align-items:center;padding-bottom:4px;flex-wrap:wrap;justify-content:flex-end"></div>
         </div>
-        <div id="upm-name" style="font-weight:700;font-size:.88rem;margin-bottom:1px"></div>
-        <div id="upm-role" style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:7px"></div>
-        <div id="upm-bio" style="font-size:.74rem;color:var(--text);line-height:1.5;margin-bottom:8px"></div>
-        <div id="upm-skills" style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:10px"></div>
-        <div id="upm-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px"></div>
-        <div id="upm-posts" style="border-top:1px solid var(--border);padding-top:10px"></div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px">
+          <div id="upm-name" style="font-weight:800;font-size:.95rem;color:var(--text)"></div>
+          <div id="upm-online-dot" style="display:none;width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px rgba(34,197,94,.6);flex-shrink:0"></div>
+        </div>
+        <div id="upm-role" style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:10px"></div>
+        <div id="upm-bio" style="font-size:.78rem;color:var(--muted);line-height:1.7;margin-bottom:10px;padding:10px 12px;background:var(--surface2);border-radius:7px;border:1px solid var(--border);display:none"></div>
+        <div id="upm-skills" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px"></div>
+        <div id="upm-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px"></div>
+        <div id="upm-actions" style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap"></div>
+        <div id="upm-posts" style="border-top:1px solid var(--border);padding-top:12px"></div>
       </div>
     </div>
   </div>
@@ -1651,28 +1655,239 @@ body.has-wallpaper .sidebar,.body.has-wallpaper .main-area{background:transparen
 <div class="page" id="page-terms">
   <div class="terms-wrap">
     <div style="margin-bottom:32px"><button class="t-back-btn" onclick="goBack()">← Retour</button></div>
+
+    <!-- HERO -->
     <div class="terms-hero">
-      <div class="terms-tag">// Dernière mise à jour — Juin 2025</div>
-      <div class="terms-h1">CONDITIONS<br>D'UTILISATION<br><span>DEVCONNECT</span></div>
-      <p class="terms-desc">En rejoignant DevConnect, tu rejoins une communauté basée sur le respect mutuel et la collaboration.</p>
+      <div class="terms-tag">// Version 2.0 — Entrée en vigueur : 1er Juin 2025</div>
+      <div class="terms-h1">CONDITIONS GÉNÉRALES<br>D'UTILISATION<br><span>DEVCONNECT</span></div>
+      <p class="terms-desc">Les présentes Conditions Générales d'Utilisation (ci-après « CGU ») régissent l'accès et l'utilisation de la plateforme DevConnect, accessible à l'adresse <strong>devconnect.app</strong>, éditée par <strong>DevConnect SAS</strong>. En créant un compte ou en utilisant nos services, vous acceptez sans réserve l'intégralité des présentes CGU. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser la plateforme.</p>
+      <div style="display:flex;gap:18px;margin-top:18px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:7px;font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace"><span style="width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block"></span>Plateforme sécurisée RGPD</div>
+        <div style="display:flex;align-items:center;gap:7px;font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace"><span style="width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block"></span>Données hébergées en Europe</div>
+        <div style="display:flex;align-items:center;gap:7px;font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace"><span style="width:7px;height:7px;border-radius:50%;background:#60a5fa;display:inline-block"></span>Communauté sans publicité</div>
+      </div>
     </div>
+
+    <!-- TABLE DES MATIÈRES -->
+    <div class="t-section" style="border-color:rgba(245,158,11,.15)">
+      <div class="t-sec-hdr"><div class="t-sec-icon">📑</div><div><div class="t-sec-title">TABLE DES MATIÈRES</div><div class="t-sec-sub">// navigation rapide</div></div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 24px">
+        <div style="font-size:.74rem;color:var(--muted);font-family:'JetBrains Mono',monospace;padding:3px 0;border-bottom:1px solid var(--border)">Art. 1 — Objet & définitions</div>
+        <div style="font-size:.74rem;color:var(--muted);font-family:'JetBrains Mono',monospace;padding:3px 0;border-bottom:1px solid var(--border)">Art. 2 — Accès & inscription</div>
+        <div style="font-size:.74rem;color:var(--muted);font-family:'JetBrains Mono',monospace;padding:3px 0;border-bottom:1px solid var(--border)">Art. 3 — Description des services</div>
+        <div style="font-size:.74rem;color:var(--muted);font-family:'JetBrains Mono',monospace;padding:3px 0;border-bottom:1px solid var(--border)">Art. 4 — Règles de conduite</div>
+        <div style="font-size:.74rem;color:var(--muted);font-family:'JetBrains Mono',monospace;padding:3px 0;border-bottom:1px solid var(--border)">Art. 5 — Contenus & propriété intellectuelle</div>
+        <div style="font-size:.74rem;color:var(--muted);font-family:'JetBrains Mono',monospace;padding:3px 0;border-bottom:1px solid var(--border)">Art. 6 — Protection des données (RGPD)</div>
+        <div style="font-size:.74rem;color:var(--muted);font-family:'JetBrains Mono',monospace;padding:3px 0;border-bottom:1px solid var(--border)">Art. 7 — Modération & sanctions</div>
+        <div style="font-size:.74rem;color:var(--muted);font-family:'JetBrains Mono',monospace;padding:3px 0;border-bottom:1px solid var(--border)">Art. 8 — Responsabilité</div>
+        <div style="font-size:.74rem;color:var(--muted);font-family:'JetBrains Mono',monospace;padding:3px 0;border-bottom:1px solid var(--border)">Art. 9 — Suspension & résiliation</div>
+        <div style="font-size:.74rem;color:var(--muted);font-family:'JetBrains Mono',monospace;padding:3px 0;border-bottom:1px solid var(--border)">Art. 10 — Droit applicable</div>
+      </div>
+    </div>
+
+    <!-- ART. 1 -->
     <div class="t-section">
-      <div class="t-sec-hdr"><div class="t-sec-icon">📋</div><div><div class="t-sec-title">RÈGLES DE LA COMMUNAUTÉ</div><div class="t-sec-sub">// ce qui est attendu</div></div></div>
+      <div class="t-sec-hdr"><div class="t-sec-icon">📋</div><div><div class="t-sec-title">ART. 1 — OBJET ET DÉFINITIONS</div><div class="t-sec-sub">// cadre légal</div></div></div>
+      <p style="font-size:.8rem;color:var(--muted);line-height:1.8;margin-bottom:12px">Les présentes CGU ont pour objet de définir les conditions dans lesquelles <strong style="color:var(--text)">DevConnect SAS</strong> (ci-après « DevConnect », « nous », « la Plateforme ») met à disposition de ses utilisateurs un réseau social communautaire dédié aux développeurs, designers et professionnels du numérique.</p>
       <div class="rule-list">
-        <div class="rule"><div class="rule-n">01</div><div class="rule-txt">Traite chaque membre avec <strong>respect et bienveillance</strong>.</div></div>
-        <div class="rule"><div class="rule-n">02</div><div class="rule-txt">Partage du contenu <strong>en lien avec le développement</strong>.</div></div>
-        <div class="rule"><div class="rule-n">03</div><div class="rule-txt">Les <strong>informations personnelles</strong> des membres restent confidentielles.</div></div>
-        <div class="rule"><div class="rule-n">04</div><div class="rule-txt">Sois <strong>honnête</strong> dans tes offres et projets.</div></div>
+        <div class="rule"><div class="rule-n" style="color:var(--accent)">DEF</div><div class="rule-txt"><strong>« Utilisateur »</strong> désigne toute personne physique majeure (18 ans ou plus) ou morale ayant créé un compte sur DevConnect.</div></div>
+        <div class="rule"><div class="rule-n" style="color:var(--accent)">DEF</div><div class="rule-txt"><strong>« Compte »</strong> désigne l'espace personnel créé par l'Utilisateur, accessible via ses identifiants uniques.</div></div>
+        <div class="rule"><div class="rule-n" style="color:var(--accent)">DEF</div><div class="rule-txt"><strong>« Contenu »</strong> désigne tout texte, code source, image, lien, commentaire, offre d'emploi ou projet publié par un Utilisateur.</div></div>
+        <div class="rule"><div class="rule-n" style="color:var(--accent)">DEF</div><div class="rule-txt"><strong>« Services »</strong> désigne l'ensemble des fonctionnalités proposées par DevConnect : feed, messagerie, profils, offres, salons vocaux, etc.</div></div>
       </div>
     </div>
+
+    <!-- ART. 2 -->
     <div class="t-section">
-      <div class="t-sec-hdr"><div class="t-sec-icon">🔒</div><div><div class="t-sec-title">CONFIDENTIALITÉ</div></div></div>
-      <div class="priv-grid">
-        <div class="priv-card"><div class="priv-ttl g">✓ Ce que nous faisons</div><div class="priv-item">· Stockage Supabase sécurisé<br>· Contrôle total de vos données<br>· Aucune revente</div></div>
-        <div class="priv-card"><div class="priv-ttl r">✗ Ce que nous ne faisons pas</div><div class="priv-item">· Pas de tracking pub<br>· Pas de cookies tiers<br>· Pas de partage tiers</div></div>
+      <div class="t-sec-hdr"><div class="t-sec-icon">🔑</div><div><div class="t-sec-title">ART. 2 — ACCÈS ET INSCRIPTION</div><div class="t-sec-sub">// conditions d'accès</div></div></div>
+      <p style="font-size:.8rem;color:var(--muted);line-height:1.8;margin-bottom:14px">L'accès aux Services est réservé aux personnes physiques âgées d'au moins <strong style="color:var(--text)">16 ans</strong>, ou aux personnes morales représentées par un mandataire habilité. En cas de fausse déclaration sur l'âge, la responsabilité de l'Utilisateur est pleinement engagée.</p>
+      <div class="rule-list">
+        <div class="rule"><div class="rule-n">2.1</div><div class="rule-txt">L'inscription est <strong>gratuite</strong>. Elle nécessite la fourniture d'une adresse e-mail valide, d'un prénom, d'un nom et d'un mot de passe sécurisé.</div></div>
+        <div class="rule"><div class="rule-n">2.2</div><div class="rule-txt">L'Utilisateur s'engage à fournir des informations <strong>exactes, complètes et à jour</strong>. Tout profil manifestement fictif, usurpant l'identité d'un tiers ou contenant des informations erronées pourra être suspendu sans préavis.</div></div>
+        <div class="rule"><div class="rule-n">2.3</div><div class="rule-txt">Les identifiants de connexion sont <strong>strictement personnels et confidentiels</strong>. L'Utilisateur est seul responsable de leur sécurisation et de toute activité réalisée depuis son compte.</div></div>
+        <div class="rule"><div class="rule-n">2.4</div><div class="rule-txt">Tout accès non autorisé ou suspicion de compromission doit être <strong>immédiatement signalé</strong> à notre équipe de sécurité via la messagerie interne ou à l'adresse security@devconnect.app.</div></div>
+        <div class="rule"><div class="rule-n">2.5</div><div class="rule-txt">Un seul compte par personne physique est autorisé. La création de <strong>comptes multiples</strong> dans le but de contourner une sanction ou d'abuser des services est strictement interdite.</div></div>
       </div>
     </div>
-    <button class="t-back-btn" onclick="goBack()">← Retour à l'accueil</button>
+
+    <!-- ART. 3 -->
+    <div class="t-section">
+      <div class="t-sec-hdr"><div class="t-sec-icon">⚙️</div><div><div class="t-sec-title">ART. 3 — DESCRIPTION DES SERVICES</div><div class="t-sec-sub">// fonctionnalités disponibles</div></div></div>
+      <p style="font-size:.8rem;color:var(--muted);line-height:1.8;margin-bottom:14px">DevConnect met à disposition un ensemble de services communautaires et professionnels accessibles selon le type de compte de l'Utilisateur.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px">
+        <div style="background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:12px 14px">
+          <div style="font-size:.7rem;font-weight:700;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:7px">// FEED & POSTS</div>
+          <p style="font-size:.75rem;color:var(--muted);line-height:1.6">Publication de posts, offres d'emploi, projets open-source, demandes de collaboration et ressources techniques.</p>
+        </div>
+        <div style="background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:12px 14px">
+          <div style="font-size:.7rem;font-weight:700;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:7px">// PROFIL & PORTFOLIO</div>
+          <p style="font-size:.75rem;color:var(--muted);line-height:1.6">Présentation de son stack technique, expériences, projets réalisés et liens vers ses travaux.</p>
+        </div>
+        <div style="background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:12px 14px">
+          <div style="font-size:.7rem;font-weight:700;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:7px">// MESSAGERIE PRIVÉE</div>
+          <p style="font-size:.75rem;color:var(--muted);line-height:1.6">Échange de messages directs entre membres, système d'amis et appels vocaux peer-to-peer.</p>
+        </div>
+        <div style="background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:12px 14px">
+          <div style="font-size:.7rem;font-weight:700;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:7px">// SALONS COMMUNAUTAIRES</div>
+          <p style="font-size:.75rem;color:var(--muted);line-height:1.6">Canaux de discussion thématiques, salons vocaux temps réel, et canal modérateur réservé aux équipes.</p>
+        </div>
+      </div>
+      <div class="rule-list">
+        <div class="rule"><div class="rule-n">3.1</div><div class="rule-txt">DevConnect se réserve le droit de <strong>modifier, suspendre ou supprimer</strong> tout ou partie des services à tout moment, notamment pour maintenance ou évolution technique.</div></div>
+        <div class="rule"><div class="rule-n">3.2</div><div class="rule-txt">Certaines fonctionnalités avancées (rôles VIP, badges certifiés, accès aux salons privés) peuvent être soumises à des <strong>conditions spécifiques d'attribution</strong> décidées par l'équipe DevConnect.</div></div>
+      </div>
+    </div>
+
+    <!-- ART. 4 -->
+    <div class="t-section">
+      <div class="t-sec-hdr"><div class="t-sec-icon">⚖️</div><div><div class="t-sec-title">ART. 4 — RÈGLES DE CONDUITE</div><div class="t-sec-sub">// comportements attendus et interdits</div></div></div>
+      <p style="font-size:.8rem;color:var(--muted);line-height:1.8;margin-bottom:14px">DevConnect est une plateforme professionnelle et bienveillante. Chaque Utilisateur s'engage à respecter les règles suivantes, sans quoi des sanctions pourront être prononcées conformément à l'article 7.</p>
+
+      <div style="display:flex;gap:4px;margin-bottom:6px;align-items:center"><div style="width:3px;height:14px;background:var(--success);border-radius:2px"></div><div style="font-size:.68rem;color:var(--success);font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.06em">COMPORTEMENTS ATTENDUS</div></div>
+      <div class="rule-list" style="margin-bottom:16px">
+        <div class="rule"><div class="rule-n">✓</div><div class="rule-txt">Adopter un comportement <strong>respectueux, professionnel et constructif</strong> envers tous les membres, quel que soit leur niveau ou leur profil.</div></div>
+        <div class="rule"><div class="rule-n">✓</div><div class="rule-txt">Publier du contenu <strong>pertinent, honnête et en lien</strong> avec le développement, le design ou l'entrepreneuriat technologique.</div></div>
+        <div class="rule"><div class="rule-n">✓</div><div class="rule-txt"><strong>Citer les sources</strong> de tout code, article ou ressource partagé dont vous n'êtes pas l'auteur original.</div></div>
+        <div class="rule"><div class="rule-n">✓</div><div class="rule-txt"><strong>Signaler</strong> tout contenu inapproprié, comportement abusif ou faille de sécurité à l'équipe de modération.</div></div>
+      </div>
+
+      <div style="display:flex;gap:4px;margin-bottom:6px;align-items:center"><div style="width:3px;height:14px;background:var(--error);border-radius:2px"></div><div style="font-size:.68rem;color:var(--error);font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.06em">COMPORTEMENTS STRICTEMENT INTERDITS</div></div>
+      <div class="rule-list">
+        <div class="rule"><div class="rule-n" style="color:var(--error)">✗</div><div class="rule-txt"><strong>Harcèlement, intimidation ou discrimination</strong> fondée sur le genre, l'origine, la religion, le handicap, l'orientation sexuelle ou toute autre caractéristique personnelle.</div></div>
+        <div class="rule"><div class="rule-n" style="color:var(--error)">✗</div><div class="rule-txt">Publication de <strong>contenu illicite</strong> (contenu à caractère pornographique, haineux, incitant à la violence, portant atteinte à la vie privée d'un tiers).</div></div>
+        <div class="rule"><div class="rule-n" style="color:var(--error)">✗</div><div class="rule-txt"><strong>Spam, démarchage commercial non sollicité</strong>, liens d'affiliation abusifs, escroqueries ou tentatives de phishing.</div></div>
+        <div class="rule"><div class="rule-n" style="color:var(--error)">✗</div><div class="rule-txt">Diffusion de <strong>malware, exploits, code malveillant</strong> ou tout contenu compromettant la sécurité des autres utilisateurs ou de la plateforme.</div></div>
+        <div class="rule"><div class="rule-n" style="color:var(--error)">✗</div><div class="rule-txt"><strong>Usurpation d'identité</strong>, que ce soit d'un autre membre, d'une personnalité publique ou d'une entreprise.</div></div>
+        <div class="rule"><div class="rule-n" style="color:var(--error)">✗</div><div class="rule-txt">Toute tentative de <strong>scraping, reverse engineering ou attaque</strong> contre l'infrastructure de DevConnect.</div></div>
+        <div class="rule"><div class="rule-n" style="color:var(--error)">✗</div><div class="rule-txt">Publication d'<strong>offres d'emploi fictives ou mensongères</strong>, ou sollicitation de travail gratuit sous prétexte de « visibilité ».</div></div>
+      </div>
+    </div>
+
+    <!-- ART. 5 -->
+    <div class="t-section">
+      <div class="t-sec-hdr"><div class="t-sec-icon">💡</div><div><div class="t-sec-title">ART. 5 — CONTENUS ET PROPRIÉTÉ INTELLECTUELLE</div><div class="t-sec-sub">// qui possède quoi</div></div></div>
+      <div class="rule-list">
+        <div class="rule"><div class="rule-n">5.1</div><div class="rule-txt"><strong>Propriété de l'Utilisateur :</strong> L'Utilisateur conserve l'intégralité des droits de propriété intellectuelle sur les contenus qu'il publie (code, textes, projets, designs).</div></div>
+        <div class="rule"><div class="rule-n">5.2</div><div class="rule-txt"><strong>Licence accordée à DevConnect :</strong> En publiant un contenu, l'Utilisateur accorde à DevConnect une licence non exclusive, mondiale, gratuite et transférable aux fins d'affichage, de stockage et de diffusion au sein de la plateforme uniquement. Cette licence prend fin à la suppression du contenu.</div></div>
+        <div class="rule"><div class="rule-n">5.3</div><div class="rule-txt"><strong>Contenu tiers :</strong> L'Utilisateur s'engage à ne publier que des contenus dont il détient les droits ou pour lesquels il a obtenu une autorisation explicite. DevConnect ne saurait être tenu responsable des infractions commises par ses utilisateurs.</div></div>
+        <div class="rule"><div class="rule-n">5.4</div><div class="rule-txt"><strong>Marque DevConnect :</strong> Le nom, le logo et la charte graphique de DevConnect sont des marques protégées. Toute reproduction ou utilisation sans autorisation écrite préalable est strictement interdite.</div></div>
+        <div class="rule"><div class="rule-n">5.5</div><div class="rule-txt"><strong>Code open-source :</strong> Lorsqu'un Utilisateur publie du code soumis à une licence open-source (MIT, GPL, Apache, etc.), il doit l'indiquer explicitement. DevConnect encourage le partage de code sous licence libre.</div></div>
+      </div>
+    </div>
+
+    <!-- ART. 6 -->
+    <div class="t-section">
+      <div class="t-sec-hdr"><div class="t-sec-icon">🔒</div><div><div class="t-sec-title">ART. 6 — PROTECTION DES DONNÉES PERSONNELLES (RGPD)</div><div class="t-sec-sub">// conformité & transparence</div></div></div>
+      <p style="font-size:.8rem;color:var(--muted);line-height:1.8;margin-bottom:14px">DevConnect accorde une importance primordiale à la protection de vos données personnelles, conformément au <strong style="color:var(--text)">Règlement Général sur la Protection des Données (RGPD — UE 2016/679)</strong> et à la loi française Informatique et Libertés.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px">
+        <div class="priv-card" style="border-color:rgba(34,197,94,.2)">
+          <div class="priv-ttl g" style="margin-bottom:8px">✓ Données collectées</div>
+          <div class="priv-item" style="font-size:.75rem;line-height:1.7;color:var(--muted)">
+            · Identité (nom, prénom, e-mail)<br>
+            · Informations de profil (bio, skills, photo)<br>
+            · Contenus publiés (posts, projets)<br>
+            · Données de connexion (horodatage, IP)
+          </div>
+        </div>
+        <div class="priv-card" style="border-color:rgba(239,68,68,.2)">
+          <div class="priv-ttl r" style="margin-bottom:8px">✗ Ce que nous ne faisons jamais</div>
+          <div class="priv-item" style="font-size:.75rem;line-height:1.7;color:var(--muted)">
+            · Revente de données à des tiers<br>
+            · Publicité ciblée ou comportementale<br>
+            · Partage avec des annonceurs<br>
+            · Transfert hors Union Européenne
+          </div>
+        </div>
+      </div>
+
+      <div class="rule-list">
+        <div class="rule"><div class="rule-n">6.1</div><div class="rule-txt"><strong>Finalité :</strong> Les données sont collectées uniquement pour le fonctionnement de la plateforme, l'amélioration des services et la sécurité des comptes.</div></div>
+        <div class="rule"><div class="rule-n">6.2</div><div class="rule-txt"><strong>Hébergement :</strong> Les données sont hébergées par <strong>Supabase</strong> sur des serveurs situés dans l'Union Européenne, soumis aux mêmes exigences RGPD.</div></div>
+        <div class="rule"><div class="rule-n">6.3</div><div class="rule-txt"><strong>Conservation :</strong> Les données sont conservées pendant toute la durée d'activité du compte, puis supprimées dans un délai de 30 jours suivant la clôture du compte.</div></div>
+        <div class="rule"><div class="rule-n">6.4</div><div class="rule-txt"><strong>Vos droits :</strong> Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, de suppression, de portabilité, d'opposition et de limitation du traitement de vos données. Ces droits s'exercent via les Paramètres de votre compte ou par e-mail à <strong>privacy@devconnect.app</strong>.</div></div>
+        <div class="rule"><div class="rule-n">6.5</div><div class="rule-txt"><strong>Cookies :</strong> DevConnect utilise uniquement des cookies essentiels au fonctionnement de la session. Aucun cookie publicitaire ou analytique tiers n'est déposé.</div></div>
+        <div class="rule"><div class="rule-n">6.6</div><div class="rule-txt"><strong>Réclamation :</strong> En cas de litige relatif au traitement de vos données, vous pouvez saisir la <strong>CNIL</strong> (Commission Nationale de l'Informatique et des Libertés) à l'adresse www.cnil.fr.</div></div>
+      </div>
+    </div>
+
+    <!-- ART. 7 -->
+    <div class="t-section">
+      <div class="t-sec-hdr"><div class="t-sec-icon">🛡️</div><div><div class="t-sec-title">ART. 7 — MODÉRATION ET SANCTIONS</div><div class="t-sec-sub">// procédure & gradation</div></div></div>
+      <p style="font-size:.8rem;color:var(--muted);line-height:1.8;margin-bottom:14px">DevConnect dispose d'une équipe de modération active chargée de faire respecter les présentes CGU. Les sanctions sont appliquées de manière proportionnelle à la gravité des manquements constatés.</p>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+        <div style="display:flex;align-items:flex-start;gap:12px;background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:12px 14px">
+          <div style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--accent);font-size:.65rem;font-family:'JetBrains Mono',monospace;font-weight:700;padding:3px 8px;border-radius:3px;flex-shrink:0;margin-top:1px">NIVEAU 1</div>
+          <div><div style="font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:3px">Avertissement</div><div style="font-size:.74rem;color:var(--muted);line-height:1.5">Notification privée adressée à l'Utilisateur. Aucune restriction d'accès. Le contenu litigieux peut être supprimé.</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:12px 14px">
+          <div style="background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:#fbbf24;font-size:.65rem;font-family:'JetBrains Mono',monospace;font-weight:700;padding:3px 8px;border-radius:3px;flex-shrink:0;margin-top:1px">NIVEAU 2</div>
+          <div><div style="font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:3px">Mute temporaire</div><div style="font-size:.74rem;color:var(--muted);line-height:1.5">Restriction de publication pour une durée déterminée (15 min à 24h). Le compte reste accessible en lecture.</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:12px 14px">
+          <div style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.25);color:#f97316;font-size:.65rem;font-family:'JetBrains Mono',monospace;font-weight:700;padding:3px 8px;border-radius:3px;flex-shrink:0;margin-top:1px">NIVEAU 3</div>
+          <div><div style="font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:3px">Suspension temporaire</div><div style="font-size:.74rem;color:var(--muted);line-height:1.5">Suspension du compte pour une durée de 7 à 30 jours. Possibilité de contestation par e-mail dans les 72h.</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;background:var(--surface3);border:1px solid rgba(239,68,68,.25);border-radius:8px;padding:12px 14px">
+          <div style="background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);color:var(--error);font-size:.65rem;font-family:'JetBrains Mono',monospace;font-weight:700;padding:3px 8px;border-radius:3px;flex-shrink:0;margin-top:1px">NIVEAU 4</div>
+          <div><div style="font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:3px">Bannissement définitif</div><div style="font-size:.74rem;color:var(--muted);line-height:1.5">Suppression permanente du compte sans possibilité de réinscription. Réservé aux violations graves (harcèlement, malware, fraude, contenu illicite).</div></div>
+        </div>
+      </div>
+      <div class="rule-list">
+        <div class="rule"><div class="rule-n">7.1</div><div class="rule-txt"><strong>Contestation :</strong> Tout Utilisateur sanctionné peut contester la décision dans un délai de <strong>72 heures</strong> en écrivant à l'adresse moderation@devconnect.app en exposant les faits et éléments de preuve.</div></div>
+        <div class="rule"><div class="rule-n">7.2</div><div class="rule-txt"><strong>Urgence :</strong> Certaines violations (contenu à caractère pédopornographique, appels à la violence) font l'objet d'un bannissement immédiat sans avertissement préalable, et peuvent être signalées aux autorités compétentes.</div></div>
+      </div>
+    </div>
+
+    <!-- ART. 8 -->
+    <div class="t-section">
+      <div class="t-sec-hdr"><div class="t-sec-icon">⚠️</div><div><div class="t-sec-title">ART. 8 — RESPONSABILITÉ</div><div class="t-sec-sub">// limites & engagements</div></div></div>
+      <div class="rule-list">
+        <div class="rule"><div class="rule-n">8.1</div><div class="rule-txt"><strong>Responsabilité des Utilisateurs :</strong> Chaque Utilisateur est seul responsable des contenus qu'il publie et de l'usage qu'il fait des Services. DevConnect ne saurait être tenu responsable des contenus publiés par les utilisateurs.</div></div>
+        <div class="rule"><div class="rule-n">8.2</div><div class="rule-txt"><strong>Disponibilité :</strong> DevConnect s'efforce d'assurer une disponibilité maximale de la plateforme, sans pouvoir garantir une disponibilité ininterrompue. Des maintenances planifiées ou incidents techniques peuvent survenir.</div></div>
+        <div class="rule"><div class="rule-n">8.3</div><div class="rule-txt"><strong>Liens externes :</strong> DevConnect n'est pas responsable du contenu des sites tiers vers lesquels des liens peuvent être publiés par les utilisateurs.</div></div>
+        <div class="rule"><div class="rule-n">8.4</div><div class="rule-txt"><strong>Offres d'emploi :</strong> DevConnect est une plateforme de mise en relation. La vérification de la légitimité des offres publiées incombe à l'Utilisateur. DevConnect ne garantit pas la véracité des offres ni l'aboutissement des collaborations.</div></div>
+        <div class="rule"><div class="rule-n">8.5</div><div class="rule-txt"><strong>Force majeure :</strong> DevConnect ne saurait être tenu responsable en cas de défaillance due à un cas de force majeure (cyberattaque, catastrophe naturelle, panne d'infrastructure tierce, etc.).</div></div>
+      </div>
+    </div>
+
+    <!-- ART. 9 -->
+    <div class="t-section">
+      <div class="t-sec-hdr"><div class="t-sec-icon">🚪</div><div><div class="t-sec-title">ART. 9 — SUSPENSION ET RÉSILIATION</div><div class="t-sec-sub">// fin d'accès</div></div></div>
+      <div class="rule-list">
+        <div class="rule"><div class="rule-n">9.1</div><div class="rule-txt"><strong>Résiliation volontaire :</strong> L'Utilisateur peut supprimer son compte à tout moment depuis les Paramètres de son profil. La suppression entraîne l'effacement de ses données dans un délai de 30 jours.</div></div>
+        <div class="rule"><div class="rule-n">9.2</div><div class="rule-txt"><strong>Suspension par DevConnect :</strong> DevConnect se réserve le droit de suspendre ou de résilier un compte sans préavis en cas de violation des présentes CGU, d'activité frauduleuse ou de menace pour la sécurité de la plateforme.</div></div>
+        <div class="rule"><div class="rule-n">9.3</div><div class="rule-txt"><strong>Effets de la résiliation :</strong> À la clôture du compte, les contenus publiés peuvent être conservés sous forme anonymisée à des fins statistiques, sauf demande explicite de suppression totale.</div></div>
+        <div class="rule"><div class="rule-n">9.4</div><div class="rule-txt"><strong>Inactivité prolongée :</strong> Tout compte inactif depuis plus de <strong>24 mois</strong> pourra faire l'objet d'une suppression automatique, après notification par e-mail 30 jours à l'avance.</div></div>
+      </div>
+    </div>
+
+    <!-- ART. 10 -->
+    <div class="t-section">
+      <div class="t-sec-hdr"><div class="t-sec-icon">🏛️</div><div><div class="t-sec-title">ART. 10 — DROIT APPLICABLE ET LITIGES</div><div class="t-sec-sub">// cadre juridique</div></div></div>
+      <div class="rule-list">
+        <div class="rule"><div class="rule-n">10.1</div><div class="rule-txt"><strong>Droit applicable :</strong> Les présentes CGU sont soumises au <strong>droit français</strong>. En cas de litige, une solution amiable sera recherchée en priorité.</div></div>
+        <div class="rule"><div class="rule-n">10.2</div><div class="rule-txt"><strong>Compétence juridictionnelle :</strong> À défaut de résolution amiable, les tribunaux compétents du ressort du siège social de DevConnect SAS seront seuls compétents.</div></div>
+        <div class="rule"><div class="rule-n">10.3</div><div class="rule-txt"><strong>Médiation :</strong> Conformément au droit européen, l'Utilisateur consommateur peut recourir gratuitement à un service de médiation via la plateforme européenne de règlement en ligne des litiges : <strong>ec.europa.eu/consumers/odr</strong>.</div></div>
+        <div class="rule"><div class="rule-n">10.4</div><div class="rule-txt"><strong>Modifications des CGU :</strong> DevConnect se réserve le droit de modifier les présentes CGU à tout moment. Les utilisateurs seront notifiés par e-mail au moins <strong>15 jours avant l'entrée en vigueur</strong> des nouvelles dispositions. L'utilisation continue de la plateforme après ce délai vaut acceptation des nouvelles CGU.</div></div>
+        <div class="rule"><div class="rule-n">10.5</div><div class="rule-txt"><strong>Contact légal :</strong> Pour toute question juridique, contactez notre service juridique à <strong>legal@devconnect.app</strong> — DevConnect SAS, France.</div></div>
+      </div>
+    </div>
+
+    <!-- FOOTER CGU -->
+    <div class="terms-hero" style="text-align:center;padding:28px 38px">
+      <div style="font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:10px">// DevConnect SAS — Tous droits réservés © 2025</div>
+      <div style="font-size:.8rem;color:var(--muted);line-height:1.7">En cas de question relative aux présentes CGU, notre équipe est joignable à l'adresse<br><strong style="color:var(--accent)">legal@devconnect.app</strong></div>
+      <div style="display:flex;justify-content:center;gap:20px;margin-top:18px;flex-wrap:wrap">
+        <span style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace">v2.0 — 01/06/2025</span>
+        <span style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace">·</span>
+        <span style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace">Conforme RGPD & Droit Français</span>
+        <span style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace">·</span>
+        <span style="font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace">10 articles</span>
+      </div>
+    </div>
+
+    <button class="t-back-btn" onclick="goBack()" style="margin-top:24px">← Retour à l'accueil</button>
   </div>
 </div>
 
@@ -1816,78 +2031,123 @@ async function openUserProfile(userId){
   if(userId&&userId===me.id){openProfileModal();return;}
   if(!userId){showToast('Profil introuvable');return;}
   try{
-  const users=await store.getUsers();
-  let u=users.find(x=>x.id===userId);
-  if(!u){showToast('Profil introuvable');return;}
-  const posts=(await store.getPosts()).filter(p=>(p.user_id||p.uid)===userId);
-  const modal=document.getElementById('userProfileModal');
-  if(!modal)return;
-  // Banner
-  const banner=document.getElementById('upm-banner');
-  if(u.banner){
-    if(u.banner.startsWith('http'))banner.style.cssText=`height:90px;background:url('${u.banner}') center/cover;position:relative;flex-shrink:0`;
-    else banner.style.cssText=`height:90px;background:${u.banner};position:relative;flex-shrink:0`;
-  } else {
-    banner.style.cssText='height:90px;background:var(--surface2);position:relative;flex-shrink:0';
-  }
-  // Avatar
-  const av=document.getElementById('upm-av');
-  const decoC=vipDecoClass(u);
-  av.className=decoC;
-  av.style.cssText=`width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-size:1.1rem;font-weight:700;border:3px solid var(--bg);flex-shrink:0;background:${u.photo?'transparent':u.color};color:#000`;
-  av.innerHTML=u.photo?`<img src="${u.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:(u.initials||'?');
-  // Badges
-  const badgesEl=document.getElementById('upm-badges');
-  const rankB=u.rank&&u.rank!=='member'?rankBadgeHtml(u.rank):'';
-  const certB=hasCertBadge(u)?certBadgeSvg(u.rank,13):'';
-  const vipB=hasVipPerks(u)?vipBadgeHtml(14):'';
-  badgesEl.innerHTML=rankB+certB+vipB;
-  // Name & role
-  document.getElementById('upm-name').textContent=(u.firstname||'')+' '+(u.lastname||'');
-  document.getElementById('upm-role').textContent=(u.role==='dev'?'// Développeur':'// Recruteur')+(u.company?' · '+u.company:'');
-  // Bio
-  const bioEl=document.getElementById('upm-bio');
-  bioEl.textContent=u.bio||'';
-  bioEl.style.display=u.bio?'block':'none';
-  // Skills
-  const skillsEl=document.getElementById('upm-skills');
-  skillsEl.innerHTML=u.skills&&u.skills.length?u.skills.map(s=>`<span class="p-skill">${san(s)}</span>`).join(''):'';
-  // Stats
-  const totalLikes=posts.reduce((a,p)=>a+p.likes,0);
-  document.getElementById('upm-stats').innerHTML=`
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--accent)">${posts.length}</div>
-      <div style="font-size:.62rem;color:var(--muted);font-family:'JetBrains Mono',monospace">Publications</div>
-    </div>
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--accent)">${totalLikes}</div>
-      <div style="font-size:.62rem;color:var(--muted);font-family:'JetBrains Mono',monospace">Likes reçus</div>
-    </div>
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--accent)">${u.skills&&u.skills.length||0}</div>
-      <div style="font-size:.62rem;color:var(--muted);font-family:'JetBrains Mono',monospace">Compétences</div>
-    </div>`;
-  // Posts
-  const postsEl=document.getElementById('upm-posts');
-  if(posts.length){
-    const tClass={offre:'t-offre',recherche:'t-recrutement',projet:'t-projet',post:'t-post'};
-    const tLabel={offre:'OFFRE',recherche:'RECHERCHE',projet:'PROJET',post:'POST'};
-    postsEl.innerHTML='<div style="font-size:.74rem;color:var(--muted);font-family:JetBrains Mono,monospace;margin-bottom:8px">// Publications récentes</div>'
-      +posts.slice(0,3).map(p=>`<div class="post" style="margin-bottom:8px">
-        ${p.title?`<div class="post-title">${san(p.title)}</div>`:''}
-        <div class="post-body">${san(p.body)}</div>
-        <div style="display:flex;justify-content:space-between;margin-top:6px">
-          <span class="type-badge ${tClass[p.type]||'t-post'}">${tLabel[p.type]||p.type}</span>
-          <span style="font-size:.68rem;color:var(--muted)">${timeAgo(p.ts)}</span>
-        </div>
-      </div>`).join('');
-  } else {
-    postsEl.innerHTML='<div style="font-size:.74rem;color:var(--muted);font-family:JetBrains Mono,monospace">// Aucune publication</div>';
-  }
-  modal.classList.add('open');
-  }catch(err){console.error('openUserProfile error:',err);showToast('Erreur chargement profil');}
+    const modal=document.getElementById('userProfileModal');
+    if(!modal){console.error('userProfileModal not found');return;}
+    // Clear previous state
+    ['upm-name','upm-role','upm-bio','upm-skills','upm-stats','upm-posts','upm-actions','upm-badges'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='';});
+    modal.classList.add('open');
+
+    const [users,posts]=await Promise.all([store.getUsers(),store.getPosts()]);
+    const u=users.find(x=>x.id===userId);
+    if(!u){showToast('Profil introuvable');closeUserProfile();return;}
+    const userPosts=posts.filter(p=>(p.user_id||p.uid)===userId);
+
+    // Banner
+    const banner=document.getElementById('upm-banner');
+    if(banner){
+      const closeBtn=banner.querySelector('button');
+      if(u.banner){
+        const bStyle=u.banner.startsWith('http')||u.banner.startsWith('data:')?`url('${u.banner}') center/cover`:`${u.banner}`;
+        banner.style.cssText=`height:100px;background:${bStyle};position:relative;flex-shrink:0`;
+      } else {
+        banner.style.cssText='height:100px;background:linear-gradient(135deg,var(--surface2),var(--surface3));position:relative;flex-shrink:0';
+      }
+      if(closeBtn)banner.appendChild(closeBtn);
+    }
+
+    // Avatar
+    const av=document.getElementById('upm-av');
+    if(av){
+      const decoC=vipDecoClass(u)||'';
+      av.className=decoC;
+      av.style.cssText=`width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-size:1.1rem;font-weight:800;border:3px solid var(--bg);flex-shrink:0;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.5);background:${u.photo?'transparent':(u.color||'var(--accent)')};color:#000`;
+      av.innerHTML=u.photo?`<img src="${u.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:(u.initials||'?');
+    }
+
+    // Online dot
+    const dot=document.getElementById('upm-online-dot');
+    if(dot){dot.style.display=(u.status==='online')?'block':'none';}
+
+    // Badges
+    const badgesEl=document.getElementById('upm-badges');
+    if(badgesEl){
+      const rankB=u.rank&&u.rank!=='member'?rankBadgeHtml(u.rank):'';
+      const certB=hasCertBadge(u)?certBadgeSvg(u.rank,13):'';
+      const vipB=hasVipPerks(u)?vipBadgeHtml(14):'';
+      badgesEl.innerHTML=rankB+certB+vipB;
+    }
+
+    // Name & role
+    const nameEl=document.getElementById('upm-name');
+    if(nameEl)nameEl.textContent=(u.firstname||'')+' '+(u.lastname||'');
+    const roleEl=document.getElementById('upm-role');
+    if(roleEl)roleEl.textContent=(u.role==='dev'?'// Développeur':'// Recruteur')+(u.company?' · '+san(u.company):'');
+
+    // Bio
+    const bioEl=document.getElementById('upm-bio');
+    if(bioEl){
+      if(u.bio&&u.bio.trim()){bioEl.textContent=u.bio;bioEl.style.display='block';}
+      else bioEl.style.display='none';
+    }
+
+    // Skills
+    const skillsEl=document.getElementById('upm-skills');
+    if(skillsEl)skillsEl.innerHTML=u.skills&&u.skills.length?u.skills.map(s=>`<span class="p-skill">${san(s)}</span>`).join(''):'';
+
+    // Stats
+    const totalLikes=userPosts.reduce((a,p)=>a+(p.likes||0),0);
+    const statsEl=document.getElementById('upm-stats');
+    if(statsEl)statsEl.innerHTML=[
+      {val:userPosts.length,lbl:'Publications'},
+      {val:totalLikes,lbl:'Likes reçus'},
+      {val:u.skills&&u.skills.length||0,lbl:'Compétences'}
+    ].map(s=>`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--accent)">${s.val}</div><div style="font-size:.62rem;color:var(--muted);font-family:'JetBrains Mono',monospace">${s.lbl}</div></div>`).join('');
+
+    // Action buttons
+    const actEl=document.getElementById('upm-actions');
+    if(actEl){
+      const friends=await dmGetFriends();
+      const rel=dmGetRelation(friends,userId);
+      const uName=san(u.firstname+' '+u.lastname);
+      const safeName=uName.replace(/'/g,"&#39;");
+      const safeColor=u.color||'#f59e0b';
+      const safeInitials=u.initials||'?';
+
+      let frBtn='';
+      if(rel==='accepted')frBtn=`<button onclick="closeUserProfile();dmSwitchTab('friends')" style="flex:1;padding:9px 12px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#22c55e;border-radius:7px;font-size:.78rem;font-weight:700;font-family:'Cabinet Grotesk',sans-serif">✓ Ami(e)</button>`;
+      else if(rel==='pending_sent')frBtn=`<button onclick="dmCancelRequest('${userId}')" style="flex:1;padding:9px 12px;background:rgba(107,99,85,.1);border:1px solid var(--border);color:var(--muted);border-radius:7px;font-size:.78rem;font-weight:700;font-family:'Cabinet Grotesk',sans-serif">Demande envoyée</button>`;
+      else if(rel==='pending_recv')frBtn=`<button onclick="dmAcceptRequest('${userId}')" style="flex:1;padding:9px 12px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:#22c55e;border-radius:7px;font-size:.78rem;font-weight:700;font-family:'Cabinet Grotesk',sans-serif">✓ Accepter</button>`;
+      else frBtn=`<button onclick="dmSendRequest('${userId}','${safeName}')" style="flex:1;padding:9px 12px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--accent);border-radius:7px;font-size:.78rem;font-weight:700;font-family:'Cabinet Grotesk',sans-serif">+ Ajouter</button>`;
+
+      actEl.innerHTML=`
+        <button onclick="closeUserProfile();openDMs();openDMWith('${userId}','${safeName}','${safeColor}','${safeInitials}')" style="flex:1;padding:9px 12px;background:var(--grad);border:none;color:#000;border-radius:7px;font-size:.78rem;font-weight:800;font-family:'Cabinet Grotesk',sans-serif;box-shadow:0 2px 12px rgba(245,158,11,.2)">💬 Message</button>
+        ${frBtn}
+      `;
+    }
+
+    // Recent posts
+    const postsEl=document.getElementById('upm-posts');
+    if(postsEl){
+      if(userPosts.length){
+        const tClass={offre:'t-offre',recherche:'t-recrutement',projet:'t-projet',post:'t-post'};
+        const tLabel={offre:'OFFRE',recherche:'RECHERCHE',projet:'PROJET',post:'POST'};
+        postsEl.innerHTML='<div style="font-size:.7rem;color:var(--muted);font-family:JetBrains Mono,monospace;margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">// Publications récentes</div>'
+          +userPosts.sort((a,b)=>b.ts-a.ts).slice(0,3).map(p=>`<div class="post" style="margin-bottom:8px">
+            ${p.title?`<div class="post-title">${san(p.title)}</div>`:''}
+            <div class="post-body" style="font-size:.78rem">${san((p.body||'').slice(0,140))}${(p.body||'').length>140?'…':''}</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+              <span class="type-badge ${tClass[p.type]||'t-post'}">${tLabel[p.type]||p.type}</span>
+              <span style="font-size:.64rem;color:var(--muted)">${timeAgo(p.ts)} · ${p.likes||0} ❤️</span>
+            </div>
+          </div>`).join('');
+      } else {
+        postsEl.innerHTML='<div style="text-align:center;padding:18px 0;font-size:.74rem;color:var(--muted);font-family:JetBrains Mono,monospace">// Aucune publication</div>';
+      }
+    }
+
+  }catch(err){console.error('openUserProfile error:',err);showToast('Erreur chargement profil — '+err.message);}
 }
-function closeUserProfile(){document.getElementById('userProfileModal').classList.remove('open');}
+function closeUserProfile(){const m=document.getElementById('userProfileModal');if(m)m.classList.remove('open');}
 
 // ─── SUPABASE ───
 const SUPA_URL='https://ekezdtageniidwjlgyys.supabase.co';
