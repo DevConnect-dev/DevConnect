@@ -1075,6 +1075,10 @@ body.has-wallpaper .sidebar,.body.has-wallpaper .main-area{background:transparen
       <button class="nav-item" onclick="setView('activity',this)">
         <span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>Activité
       </button>
+      <button class="nav-item" onclick="openDevIA(this)" id="nav-devia">
+        <span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 8v4l3 3"/><path d="M18 2l4 4-4 4"/><path d="M22 2l-4 4"/></svg></span>Dev.IA
+        <span style="font-size:.52rem;background:linear-gradient(135deg,#f59e0b,#fb923c);color:#000;padding:1px 5px;border-radius:3px;font-weight:800;margin-left:auto">IA</span>
+      </button>
       <button class="nav-item" onclick="openProfileModal()" id="nav-settings">
         <span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>Paramètres
       </button>
@@ -2654,7 +2658,7 @@ async function renderUserList(role){
   }).join('');
 }
 
-const viewTitles={feed:'FEED',devs:'DÉVELOPPEURS',projects:'PROJETS',jobs:'OFFRES',recruiters:'RECRUTEURS',profile:'MON PROFIL'};
+const viewTitles={feed:'FEED',devs:'DÉVELOPPEURS',projects:'PROJETS',jobs:'OFFRES',recruiters:'RECRUTEURS',profile:'MON PROFIL',devia:'DEV.IA'};
 function setView(view,btn){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));if(btn)btn.classList.add('active');
   document.getElementById('page-ttl').textContent=viewTitles[view]||view;
@@ -3863,6 +3867,25 @@ async function dmRenderFriends(){
   s.textContent=`
   .dm-friends-wrap{display:none;flex-direction:column;flex:1;overflow-y:auto;padding:8px 10px;gap:6px}
   .dm-friends-wrap::-webkit-scrollbar{width:3px}
+  /* ─── DEV.IA ─── */
+  .devia-tab{display:flex;align-items:center;gap:5px;padding:0 10px;height:36px;background:var(--surface2);border:1px solid transparent;border-bottom:none;border-radius:5px 5px 0 0;font-size:.7rem;font-family:'JetBrains Mono',monospace;color:var(--muted);white-space:nowrap;cursor:pointer;transition:all .15s;flex-shrink:0}
+  .devia-tab.active{background:var(--bg);border-color:var(--border);color:var(--text)}
+  .devia-tab:hover:not(.active){background:var(--surface3)}
+  .devia-msg{display:flex;flex-direction:column}
+  .devia-bubble-ai{background:var(--surface2);border:1px solid var(--border);border-radius:4px 12px 12px 12px;padding:10px 13px;font-size:.78rem;color:var(--text);line-height:1.7;max-width:95%}
+  .devia-bubble-ai code{background:rgba(245,158,11,.1);color:var(--accent);padding:1px 5px;border-radius:3px;font-size:.72rem}
+  .devia-bubble-ai pre{background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:10px;margin:8px 0;overflow-x:auto;font-size:.7rem;line-height:1.5}
+  .devia-bubble-user{background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(251,146,60,.1));border:1px solid rgba(245,158,11,.2);border-radius:12px 4px 12px 12px;padding:10px 13px;font-size:.78rem;color:var(--text);line-height:1.6;max-width:95%;align-self:flex-end}
+  .devia-msg-user{align-items:flex-end}
+  .devia-quick{background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:4px;padding:4px 9px;font-size:.65rem;font-family:'JetBrains Mono',monospace;transition:all .15s}
+  .devia-quick:hover{border-color:rgba(245,158,11,.3);color:var(--accent);background:rgba(245,158,11,.05)}
+  .devia-typing{display:flex;gap:4px;align-items:center;padding:4px 0}
+  .devia-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:dPulse .9s ease-in-out infinite}
+  .devia-dot:nth-child(2){animation-delay:.2s}.devia-dot:nth-child(3){animation-delay:.4s}
+  @keyframes dPulse{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+  #devia-msgs::-webkit-scrollbar{width:3px}
+  #devia-msgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+  #devia-code{caret-color:var(--accent)}
   .dm-friends-wrap::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
   .dm-search-fr{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 12px;color:var(--text);font-family:'Cabinet Grotesk',sans-serif;font-size:.8rem;outline:none;width:100%;margin-bottom:8px;transition:border-color .2s}
   .dm-search-fr:focus{border-color:var(--accent)}
@@ -4203,6 +4226,386 @@ window.initDash=async function(user){
       </div>
     </div>
   </div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- ─── PAGE DEV.IA ──────────────────────────── -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="page" id="page-devia" style="flex-direction:row;overflow:hidden;height:100vh">
+
+  <!-- ─── EDITOR PANEL ─── -->
+  <div id="devia-editor-panel" style="flex:1;display:flex;flex-direction:column;min-width:0;background:var(--bg)">
+
+    <!-- Editor topbar -->
+    <div style="height:42px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:10px;flex-shrink:0">
+      <!-- File tabs -->
+      <div id="devia-tabs" style="display:flex;gap:2px;overflow-x:auto;flex:1">
+        <div class="devia-tab active" data-file="0" onclick="deviaSelectTab(0)">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+          <span id="devia-tab-name-0">main.js</span>
+          <button onclick="event.stopPropagation();deviaCloseTab(0)" style="background:none;border:none;color:var(--muted);padding:0 2px;opacity:.6;line-height:1">×</button>
+        </div>
+      </div>
+      <!-- New file btn -->
+      <button onclick="deviaNewFile()" title="Nouveau fichier" style="background:none;border:1px solid var(--border);color:var(--muted);border-radius:4px;padding:3px 8px;font-size:.7rem;font-family:'JetBrains Mono',monospace;white-space:nowrap">+ Fichier</button>
+      <!-- Language selector -->
+      <select id="devia-lang" onchange="deviaChangeLang(this.value)" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:4px;padding:3px 6px;font-size:.68rem;font-family:'JetBrains Mono',monospace">
+        <option value="javascript">JS</option>
+        <option value="python">Python</option>
+        <option value="html">HTML</option>
+        <option value="css">CSS</option>
+        <option value="typescript">TS</option>
+        <option value="json">JSON</option>
+        <option value="sql">SQL</option>
+      </select>
+    </div>
+
+    <!-- Line numbers + Editor -->
+    <div style="flex:1;display:flex;overflow:hidden;position:relative">
+      <div id="devia-lines" style="width:44px;background:var(--surface);border-right:1px solid var(--border);text-align:right;padding:12px 8px 12px 0;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:rgba(107,99,85,.5);line-height:1.6;overflow:hidden;flex-shrink:0;user-select:none">1</div>
+      <textarea id="devia-code" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"
+        style="flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.6;padding:12px 16px;resize:none;tab-size:2;white-space:pre"
+        oninput="deviaUpdateLines()" onscroll="deviaSync()" onkeydown="deviaKeydown(event)"
+        placeholder="// Commence à coder ici..."></textarea>
+    </div>
+
+    <!-- Status bar -->
+    <div style="height:24px;background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:16px;font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace;flex-shrink:0">
+      <span id="devia-cursor-pos">Ln 1, Col 1</span>
+      <span id="devia-lang-status">JavaScript</span>
+      <span style="margin-left:auto;color:rgba(245,158,11,.6)">Dev.IA — DevConnect Editor</span>
+    </div>
+  </div>
+
+  <!-- ─── RESIZER ─── -->
+  <div id="devia-resizer" style="width:4px;background:var(--border);cursor:col-resize;flex-shrink:0;transition:background .2s" onmousedown="deviaStartResize(event)" onmouseenter="this.style.background='rgba(245,158,11,.4)'" onmouseleave="this.style.background='var(--border)'"></div>
+
+  <!-- ─── AI PANEL ─── -->
+  <div id="devia-ai-panel" style="width:360px;min-width:260px;max-width:520px;display:flex;flex-direction:column;background:var(--surface);border-left:1px solid var(--border)">
+
+    <!-- AI Header -->
+    <div style="padding:14px 16px;border-bottom:1px solid var(--border);flex-shrink:0">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:4px">
+        <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#f59e0b,#fb923c);display:grid;place-items:center;flex-shrink:0;box-shadow:0 4px 14px rgba(245,158,11,.3)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round"><path d="M12 2a10 10 0 1 0 10 10"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.06em;color:var(--text)">DEV.IA</div>
+          <div style="font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace">// assistant de code DevConnect</div>
+        </div>
+        <div style="margin-left:auto;width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.6)" title="En ligne"></div>
+      </div>
+    </div>
+
+    <!-- Context toggle -->
+    <div style="padding:8px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0">
+      <label style="display:flex;align-items:center;gap:6px;font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;cursor:pointer">
+        <input type="checkbox" id="devia-use-code" checked style="accent-color:var(--accent)">
+        Envoyer mon code comme contexte
+      </label>
+      <button onclick="deviaInsertCode()" title="Insérer la suggestion dans l'éditeur" style="margin-left:auto;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);color:var(--accent);border-radius:4px;padding:3px 8px;font-size:.62rem;font-family:'JetBrains Mono',monospace">↙ Insérer</button>
+    </div>
+
+    <!-- Messages -->
+    <div id="devia-msgs" style="flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px">
+      <div class="devia-msg devia-ai">
+        <div class="devia-bubble-ai">Salut ! Je suis <strong>Dev.IA</strong>, ton assistant de code intégré à DevConnect.<br><br>Tu peux me demander d'<strong>expliquer</strong>, <strong>déboguer</strong>, <strong>optimiser</strong> ou <strong>générer</strong> du code. J'ai accès à ce que tu écris dans l'éditeur si tu actives l'option ci-dessus. 🚀</div>
+        <div style="font-size:.58rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:3px;padding-left:2px">Dev.IA · maintenant</div>
+      </div>
+    </div>
+
+    <!-- Quick actions -->
+    <div style="padding:8px 14px;border-top:1px solid var(--border);display:flex;gap:5px;flex-wrap:wrap;flex-shrink:0">
+      <button onclick="deviaQuick('Explique ce code')" class="devia-quick">Expliquer</button>
+      <button onclick="deviaQuick('Débogue ce code et donne les corrections')" class="devia-quick">Déboguer</button>
+      <button onclick="deviaQuick('Optimise ce code')" class="devia-quick">Optimiser</button>
+      <button onclick="deviaQuick('Ajoute des commentaires à ce code')" class="devia-quick">Commenter</button>
+    </div>
+
+    <!-- Input -->
+    <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end;flex-shrink:0">
+      <textarea id="devia-input" placeholder="Demande quelque chose à Dev.IA..." rows="2"
+        style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'Cabinet Grotesk',sans-serif;font-size:.8rem;resize:none;outline:none;line-height:1.5;transition:border-color .2s"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();deviaAsk()}"
+        onfocus="this.style.borderColor='rgba(245,158,11,.35)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+      <button onclick="deviaAsk()" id="devia-send-btn" style="background:var(--grad);border:none;color:#000;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 12px rgba(245,158,11,.25);transition:opacity .2s">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// ─── DEV.IA ENGINE ────────────────────────────
+// ══════════════════════════════════════════════
+
+// ── State ──
+let _deviaFiles=[{name:'main.js',lang:'javascript',code:'// Bienvenue dans Dev.IA !
+// Commence à coder ici...
+
+'}];
+let _deviaActive=0;
+let _deviaHistory=[]; // {role,content}[]
+let _deviaLastSugg=''; // dernière suggestion à insérer
+
+// ── Open ──
+function openDevIA(btn){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  document.getElementById('page-ttl').textContent='DEV.IA';
+  document.getElementById('feed-tabs').style.display='none';
+  document.getElementById('compose-area').style.display='none';
+  // Show page
+  const main=document.getElementById('main-content');
+  if(main){main.innerHTML='';} // clear if needed
+  // Switch pages
+  document.querySelectorAll('.dash-main .page, #main-content .page').forEach(p=>p.classList.remove('active'));
+  const pg=document.getElementById('page-devia');
+  if(pg){
+    // page-devia is outside dash structure — show it via fixed overlay
+    pg.style.display='flex';
+    pg.style.position='fixed';
+    pg.style.inset='0';
+    pg.style.zIndex='600';
+    pg.style.marginLeft='252px';
+  }
+  deviaLoadTab(0);
+  deviaUpdateLines();
+}
+
+function closeDevIA(){
+  const pg=document.getElementById('page-devia');
+  if(pg)pg.style.display='none';
+}
+
+// ── Tabs ──
+function deviaSelectTab(i){
+  _deviaFiles[_deviaActive].code=document.getElementById('devia-code').value;
+  _deviaActive=i;
+  deviaLoadTab(i);
+}
+function deviaLoadTab(i){
+  const f=_deviaFiles[i];
+  const code=document.getElementById('devia-code');
+  const lang=document.getElementById('devia-lang');
+  code.value=f.code;
+  lang.value=f.lang;
+  deviaUpdateLines();
+  deviaRenderTabs();
+  document.getElementById('devia-lang-status').textContent=f.lang.charAt(0).toUpperCase()+f.lang.slice(1);
+}
+function deviaRenderTabs(){
+  const ext={javascript:'js',python:'py',html:'html',css:'css',typescript:'ts',json:'json',sql:'sql'};
+  document.getElementById('devia-tabs').innerHTML=_deviaFiles.map((f,i)=>`
+    <div class="devia-tab ${i===_deviaActive?'active':''}" onclick="deviaSelectTab(${i})">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="${i===_deviaActive?'#60a5fa':'currentColor'}" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+      ${f.name}
+      <button onclick="event.stopPropagation();deviaCloseTab(${i})" style="background:none;border:none;color:var(--muted);padding:0 2px;opacity:.6;line-height:1">×</button>
+    </div>`).join('');
+}
+function deviaCloseTab(i){
+  if(_deviaFiles.length===1)return showToast('Au moins un fichier requis');
+  _deviaFiles.splice(i,1);
+  _deviaActive=Math.min(_deviaActive,_deviaFiles.length-1);
+  deviaLoadTab(_deviaActive);
+}
+function deviaNewFile(){
+  const name=prompt('Nom du fichier (ex: utils.py)','nouveau.js');
+  if(!name)return;
+  const ext=name.split('.').pop().toLowerCase();
+  const langMap={js:'javascript',py:'python',html:'html',css:'css',ts:'typescript',json:'json',sql:'sql'};
+  _deviaFiles.push({name,lang:langMap[ext]||'javascript',code:'// '+name+'
+'});
+  _deviaActive=_deviaFiles.length-1;
+  deviaLoadTab(_deviaActive);
+}
+function deviaChangeLang(v){
+  _deviaFiles[_deviaActive].lang=v;
+  document.getElementById('devia-lang-status').textContent=v.charAt(0).toUpperCase()+v.slice(1);
+}
+
+// ── Editor helpers ──
+function deviaUpdateLines(){
+  const code=document.getElementById('devia-code');
+  const lines=document.getElementById('devia-lines');
+  const count=(code.value.match(/
+/g)||[]).length+1;
+  lines.innerHTML=Array.from({length:count},(_,i)=>i+1).join('<br>');
+  // cursor pos
+  const pos=code.selectionStart;
+  const before=code.value.substring(0,pos);
+  const line=(before.match(/
+/g)||[]).length+1;
+  const col=pos-before.lastIndexOf('
+');
+  document.getElementById('devia-cursor-pos').textContent=`Ln ${line}, Col ${col}`;
+}
+function deviaSync(){
+  const code=document.getElementById('devia-code');
+  const lines=document.getElementById('devia-lines');
+  lines.scrollTop=code.scrollTop;
+}
+function deviaKeydown(e){
+  if(e.key==='Tab'){
+    e.preventDefault();
+    const t=e.target,s=t.selectionStart,end=t.selectionEnd;
+    t.value=t.value.substring(0,s)+'  '+t.value.substring(end);
+    t.selectionStart=t.selectionEnd=s+2;
+    deviaUpdateLines();
+  }
+}
+
+// ── Resize ──
+let _deviaResizing=false,_deviaResizeX=0,_deviaResizeW=0;
+function deviaStartResize(e){
+  _deviaResizing=true;
+  _deviaResizeX=e.clientX;
+  _deviaResizeW=document.getElementById('devia-ai-panel').offsetWidth;
+  document.addEventListener('mousemove',deviaDoResize);
+  document.addEventListener('mouseup',deviaStopResize);
+}
+function deviaDoResize(e){
+  if(!_deviaResizing)return;
+  const delta=_deviaResizeX-e.clientX;
+  const newW=Math.max(260,Math.min(520,_deviaResizeW+delta));
+  document.getElementById('devia-ai-panel').style.width=newW+'px';
+}
+function deviaStopResize(){_deviaResizing=false;document.removeEventListener('mousemove',deviaDoResize);document.removeEventListener('mouseup',deviaStopResize);}
+
+// ── AI ──
+async function deviaAsk(){
+  const inp=document.getElementById('devia-input');
+  const userMsg=inp.value.trim();
+  if(!userMsg)return;
+  inp.value='';
+
+  const useCode=document.getElementById('devia-use-code').checked;
+  const code=document.getElementById('devia-code').value.trim();
+  const lang=_deviaFiles[_deviaActive].lang;
+
+  // Add user message
+  deviaAddMsg('user',userMsg);
+
+  // Build prompt
+  let fullPrompt=userMsg;
+  if(useCode&&code){
+    fullPrompt=`Voici mon code (${lang}):
+\`\`\`${lang}
+${code}
+\`\`\`
+
+Ma question : ${userMsg}`;
+  }
+
+  _deviaHistory.push({role:'user',content:fullPrompt});
+
+  // Show typing
+  const typingId='devia-typing-'+Date.now();
+  deviaAddTyping(typingId);
+
+  // Disable send btn
+  const btn=document.getElementById('devia-send-btn');
+  btn.style.opacity='.4';btn.disabled=true;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:`Tu es Dev.IA, l'assistant de code officiel de DevConnect — la plateforme communautaire pour développeurs.
+Tu es expert en développement web, mobile, back-end et en tous les langages de programmation.
+Tu réponds de façon concise, technique et directe. Tu fournis du code propre avec des explications claires.
+Tu utilises des blocs de code markdown quand tu montres du code. Tu es sympathique mais efficace.
+Tu n'es pas Claude, tu es Dev.IA par DevConnect. Ne mentionne jamais Anthropic ou Claude.`,
+        messages:_deviaHistory
+      })
+    });
+
+    const data=await res.json();
+    const reply=data.content?.map(b=>b.text||'').join('')||'Erreur de réponse.';
+
+    // Remove typing
+    document.getElementById(typingId)?.remove();
+
+    // Extract code suggestions for insert
+    const codeMatch=reply.match(/```[\w]*
+([\s\S]*?)```/);
+    if(codeMatch)_deviaLastSugg=codeMatch[1].trim();
+
+    _deviaHistory.push({role:'assistant',content:reply});
+    deviaAddMsg('ai',reply);
+
+  }catch(err){
+    document.getElementById(typingId)?.remove();
+    deviaAddMsg('ai','Erreur de connexion à Dev.IA. Vérifie ta connexion et réessaie.');
+    console.error(err);
+  }
+
+  btn.style.opacity='1';btn.disabled=false;
+  inp.focus();
+}
+
+function deviaQuick(q){
+  document.getElementById('devia-input').value=q;
+  deviaAsk();
+}
+
+function deviaAddMsg(role,text){
+  const el=document.getElementById('devia-msgs');
+  const div=document.createElement('div');
+  div.className='devia-msg'+(role==='user'?' devia-msg-user':'');
+  const bubble=document.createElement('div');
+  bubble.className=role==='user'?'devia-bubble-user':'devia-bubble-ai';
+
+  if(role==='ai'){
+    // Render markdown-ish
+    bubble.innerHTML=deviaRenderMd(text);
+  } else {
+    bubble.textContent=text;
+  }
+
+  const time=document.createElement('div');
+  time.style.cssText='font-size:.58rem;color:var(--muted);font-family:JetBrains Mono,monospace;margin-top:3px;padding:'+(role==='user'?'0 2px 0 0':'0 0 0 2px');
+  time.textContent=(role==='ai'?'Dev.IA':'Vous')+' · maintenant';
+
+  div.appendChild(bubble);
+  div.appendChild(time);
+  el.appendChild(div);
+  el.scrollTop=el.scrollHeight;
+}
+
+function deviaAddTyping(id){
+  const el=document.getElementById('devia-msgs');
+  const div=document.createElement('div');
+  div.id=id;div.className='devia-msg';
+  div.innerHTML=`<div class="devia-bubble-ai"><div class="devia-typing"><div class="devia-dot"></div><div class="devia-dot"></div><div class="devia-dot"></div></div></div>`;
+  el.appendChild(div);
+  el.scrollTop=el.scrollHeight;
+}
+
+function deviaRenderMd(text){
+  return text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/```(\w*)
+?([\s\S]*?)```/g,(_,lang,code)=>`<pre><code>${code.trim()}</code></pre>`)
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/
+/g,'<br>');
+}
+
+function deviaInsertCode(){
+  if(!_deviaLastSugg){showToast('Aucun code à insérer — demande d'abord quelque chose à Dev.IA');return;}
+  const code=document.getElementById('devia-code');
+  const s=code.selectionStart;
+  code.value=code.value.substring(0,s)+_deviaLastSugg+code.value.substring(code.selectionEnd);
+  deviaUpdateLines();
+  showToast('Code inséré ✓','rgba(34,197,94,.8)');
+}
+</script>
 </body>
 
 </html>
