@@ -405,7 +405,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
     <div class="sb-logo">D<span style="color:var(--white);opacity:.3">C</span></div>
     <button class="sb-icon active" data-space="home" onclick="setSpace('home')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg><span class="tip">Accueil</span></button>
     <div class="sb-sep"></div>
-    <button class="sb-icon" data-space="communication" onclick="setSpace('communication')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="tip">Communication</span></button>
+    <button class="sb-icon" data-space="communication" onclick="setSpace('communication')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span id="notif-badge" style="display:none;position:absolute;top:4px;right:4px;background:var(--gold);color:#000;font-family:Geist Mono,monospace;font-size:.45rem;font-weight:700;min-width:16px;height:16px;border-radius:8px;align-items:center;justify-content:center;padding:0 3px"></span><span class="tip">Communication</span></button>
     <button class="sb-icon" data-space="travail" onclick="setSpace('travail')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg><span class="tip">Travail</span></button>
     <button class="sb-icon" data-space="ia" onclick="setSpace('ia')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span class="tip">Intelligence Artificielle</span></button>
     <button class="sb-icon" data-space="apprendre" onclick="setSpace('apprendre')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg><span class="tip">Apprendre</span></button>
@@ -458,16 +458,16 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
           <div class="dp-body">
             <div class="dp-section">
               <div class="dp-section-label">Salons texte</div>
-              <button class="dp-item active" id="ch-général" onclick="selectChannel(this,'général','channel')">
+              <button class="dp-item active" id="ch-général" onclick="selectChannel(this,'général')">
                 <span class="dp-item-icon">#</span><span class="dp-item-label">général</span>
               </button>
-              <button class="dp-item" id="ch-aide" onclick="selectChannel(this,'aide','channel')">
+              <button class="dp-item" id="ch-aide" onclick="selectChannel(this,'aide')">
                 <span class="dp-item-icon">#</span><span class="dp-item-label">aide</span>
               </button>
-              <button class="dp-item" id="ch-projets" onclick="selectChannel(this,'projets','channel')">
+              <button class="dp-item" id="ch-projets" onclick="selectChannel(this,'projets')">
                 <span class="dp-item-icon">#</span><span class="dp-item-label">projets</span>
               </button>
-              <button class="dp-item" id="ch-showcase" onclick="selectChannel(this,'showcase','channel')">
+              <button class="dp-item" id="ch-showcase" onclick="selectChannel(this,'showcase')">
                 <span class="dp-item-icon">#</span><span class="dp-item-label">showcase</span>
               </button>
             </div>
@@ -483,7 +483,11 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
         <div id="chat-main">
           <div id="chat-messages"></div>
           <div id="chat-input-wrap">
+            <div style="position:relative">
+              <div id="emoji-picker" style="display:none;position:absolute;bottom:calc(100% + 8px);left:0;background:var(--black3);border:1px solid var(--gold-border);border-radius:8px;padding:8px;grid-template-columns:repeat(6,1fr);gap:2px;z-index:100;box-shadow:0 8px 32px rgba(0,0,0,.5)"></div>
+            </div>
             <div id="chat-input-row">
+              <button id="emoji-btn" onclick="toggleEmojiPicker()" style="background:none;border:none;color:var(--muted);font-size:1.1rem;padding:0 6px;transition:color .2s;flex-shrink:0" title="Émojis">😊</button>
               <input id="chat-input" type="text" placeholder="Message #général..." onkeydown="if(event.key==='Enter')sendMsg()"/>
               <button class="chat-send" onclick="sendMsg()">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
@@ -700,6 +704,8 @@ function setSpace(space){
       btn.className='dp-item';
       btn.innerHTML=`<span class="dp-item-svg">${item.icon_svg||''}</span><span class="dp-item-label">${item.label}</span>`;
       if(item.action==='logout')btn.onclick=logout;
+      else if(item.label==='Amis')btn.onclick=showAmiPanel;
+      else if(item.label==='Notifications')btn.onclick=showNotifPanel;
       sec.appendChild(btn);
     });
     body.appendChild(sec);
@@ -708,46 +714,415 @@ function setSpace(space){
 
 async function logout(){await sb.auth.signOut();location.reload()}
 
-const demoUsers=[{name:'Alex',initials:'AL',color:'#3b82f6'},{name:'Sara',initials:'SA',color:'#10b981'},{name:'Tom',initials:'TM',color:'#8b5cf6'}];
-const demoMsgs=[
-  {u:0,text:'Salut tout le monde ! Quelqu\'un a déjà utilisé Bun.js en prod ?'},
-  {u:1,text:'Oui on l\'a migré y\'a 2 semaines, les perfs sont dingues !'},
-  {u:2,text:'Le startup time est vraiment impressionnant par rapport à Node'},
-  {u:1,text:'Par contre le support des libs c\'est encore un peu galère sur certains packages'},
-  {u:0,text:'Ok je vais tester sur un side project avant de passer en prod, merci !'},
-];
-function loadDemoMessages(){
-  const container=document.getElementById('chat-messages');
-  container.innerHTML='';
-  let lastU=-1;
-  demoMsgs.forEach(m=>{
-    const u=demoUsers[m.u];const isNew=m.u!==lastU;lastU=m.u;
-    const div=document.createElement('div');
-    div.className='msg'+(isNew?' new-group':' msg-cont');
-    div.innerHTML=`<div class="msg-avatar" style="background:${u.color}22;color:${u.color}">${u.initials}</div><div class="msg-right"><div class="msg-header"><span class="msg-author" style="color:${u.color}">${u.name}</span><span class="msg-time">aujourd'hui</span></div><div class="msg-text">${m.text}</div></div>`;
-    container.appendChild(div);
-  });
-  container.scrollTop=container.scrollHeight;
+// ══════════════════════════════════════════════════════
+//  COMMUNICATION — Messages · Amis · Notifications
+// ══════════════════════════════════════════════════════
+
+let currentChannel = 'général';
+let currentDMUser  = null;   // {id, name, initials, color}
+let chatMode       = 'channel'; // 'channel' | 'dm'
+let realtimeSub    = null;
+let lastMsgUserId  = null;
+let emojiPickerOpen = false;
+const EMOJIS = ['😀','😂','😍','🤔','👍','👎','🔥','💯','🎉','😎','🤯','😭','❤️','🚀','💻','⚡','🛠️','🐛','✅','❌','👀','🙏','💪','🤝','✨','🌟','💡','📌','🔗','⚙️'];
+
+// ── Emoji picker ──
+function toggleEmojiPicker(){
+  const picker = document.getElementById('emoji-picker');
+  emojiPickerOpen = !emojiPickerOpen;
+  picker.style.display = emojiPickerOpen ? 'grid' : 'none';
 }
-function sendMsg(){
-  const input=document.getElementById('chat-input');
-  const text=input.value.trim();
-  if(!text||!userProfile)return;
-  const container=document.getElementById('chat-messages');
-  const color=userProfile.color||'#C8A84B';
-  const initials=userProfile.initials||'?';
-  const div=document.createElement('div');
-  div.className='msg new-group';
-  div.innerHTML=`<div class="msg-avatar" style="background:${color}22;color:${color}">${initials}</div><div class="msg-right"><div class="msg-header"><span class="msg-author" style="color:${color}">${userProfile.firstname||'Moi'}</span><span class="msg-time">à l'instant</span></div><div class="msg-text">${text}</div></div>`;
+function insertEmoji(e){
+  const input = document.getElementById('chat-input');
+  const pos = input.selectionStart || input.value.length;
+  input.value = input.value.slice(0,pos) + e + input.value.slice(pos);
+  input.focus();
+  document.getElementById('emoji-picker').style.display='none';
+  emojiPickerOpen=false;
+}
+document.addEventListener('click', e=>{
+  if(emojiPickerOpen && !e.target.closest('#emoji-picker') && !e.target.closest('#emoji-btn')){
+    document.getElementById('emoji-picker').style.display='none';
+    emojiPickerOpen=false;
+  }
+});
+
+// ── Time format ──
+function fmtTime(ts){
+  const d=new Date(ts), now=new Date();
+  const diff=(now-d)/1000;
+  if(diff<60) return 'à l\'instant';
+  if(diff<3600) return Math.floor(diff/60)+'m';
+  if(d.toDateString()===now.toDateString()) return d.toLocaleTimeString('fr',{hour:'2-digit',minute:'2-digit'});
+  return d.toLocaleDateString('fr',{day:'numeric',month:'short'});
+}
+
+// ── Render a message bubble ──
+function renderMsg(m, forceNew=false){
+  const container = document.getElementById('chat-messages');
+  const isNew = forceNew || m.user_id !== lastMsgUserId;
+  lastMsgUserId = m.user_id;
+  const color = m.color || '#C8A84B';
+  const ini   = m.initials || '?';
+  const name  = m.firstname ? m.firstname+(m.lastname?' '+m.lastname:'') : (m.display_name||'Inconnu');
+  const div   = document.createElement('div');
+  div.className = 'msg' + (isNew ? ' new-group' : ' msg-cont');
+  div.dataset.msgId = m.id;
+  div.innerHTML = `<div class="msg-avatar" style="background:${color}22;color:${color}">${ini}</div><div class="msg-right">${isNew?`<div class="msg-header"><span class="msg-author" style="color:${color}">${escHtml(name)}</span><span class="msg-time">${fmtTime(m.created_at)}</span></div>`:''}<div class="msg-text">${escHtml(m.content)}</div></div>`;
   container.appendChild(div);
-  input.value='';
-  container.scrollTop=container.scrollHeight;
+  container.scrollTop = container.scrollHeight;
 }
-function selectChannel(btn,name){
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── Load messages (channel or DM) ──
+async function loadMessages(){
+  const container = document.getElementById('chat-messages');
+  container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.15em">Chargement…</div>';
+  lastMsgUserId = null;
+
+  let query;
+  if(chatMode === 'channel'){
+    query = sb.from('dc_messages')
+      .select('*, dc_users!dc_messages_user_id_fkey(firstname,lastname,initials,color)')
+      .eq('channel', currentChannel)
+      .is('dm_to', null)
+      .order('created_at', {ascending:true})
+      .limit(60);
+  } else {
+    const me = currentUser.id, them = currentDMUser.id;
+    query = sb.from('dc_messages')
+      .select('*, dc_users!dc_messages_user_id_fkey(firstname,lastname,initials,color)')
+      .or(`and(user_id.eq.${me},dm_to.eq.${them}),and(user_id.eq.${them},dm_to.eq.${me})`)
+      .order('created_at', {ascending:true})
+      .limit(60);
+  }
+  const {data, error} = await query;
+  container.innerHTML = '';
+  if(error){ container.innerHTML='<div style="text-align:center;padding:40px;color:#e05a5a;font-size:.8rem">Erreur de chargement</div>'; return; }
+  if(!data||!data.length){ container.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--muted);font-size:.82rem">Aucun message pour l\'instant — dis bonjour 👋</div>'; return; }
+  data.forEach(m => {
+    const u = m.dc_users || {};
+    renderMsg({...m, firstname:u.firstname, lastname:u.lastname, initials:u.initials, color:u.color});
+  });
+}
+
+// ── Subscribe realtime ──
+function subscribeRealtime(){
+  if(realtimeSub){ sb.removeChannel(realtimeSub); realtimeSub=null; }
+  const filter = chatMode==='channel'
+    ? `channel=eq.${currentChannel}`
+    : `dm_to=eq.${currentUser.id}`;
+  realtimeSub = sb.channel('chat-'+Date.now())
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'dc_messages'},async payload=>{
+      const m = payload.new;
+      // Filter: only messages relevant to current view
+      if(chatMode==='channel'){
+        if(m.channel!==currentChannel || m.dm_to) return;
+      } else {
+        const me=currentUser.id, them=currentDMUser.id;
+        const ok = (m.user_id===me&&m.dm_to===them)||(m.user_id===them&&m.dm_to===me);
+        if(!ok) return;
+      }
+      // Fetch user info
+      const {data:u} = await sb.from('dc_users').select('firstname,lastname,initials,color').eq('id',m.user_id).single();
+      renderMsg({...m, firstname:u?.firstname, lastname:u?.lastname, initials:u?.initials, color:u?.color});
+      // Notification if DM and not current view
+      if(m.dm_to===currentUser.id && m.user_id!==currentUser.id){
+        addNotification({type:'dm', from_id:m.user_id, from_name:(u?.firstname||'?'), content:m.content});
+      }
+    })
+    .subscribe();
+}
+
+// ── Send message ──
+async function sendMsg(){
+  const input = document.getElementById('chat-input');
+  const text  = input.value.trim();
+  if(!text || !userProfile) return;
+  input.value = '';
+  const payload = {
+    user_id: currentUser.id,
+    content: text,
+    channel: chatMode==='channel' ? currentChannel : null,
+    dm_to:   chatMode==='dm'      ? currentDMUser.id : null,
+    created_at: new Date().toISOString()
+  };
+  const {error} = await sb.from('dc_messages').insert(payload);
+  if(error){
+    console.error('sendMsg error',error);
+    // Show optimistically anyway
+    renderMsg({...payload, id:'tmp-'+Date.now(), firstname:userProfile.firstname, lastname:userProfile.lastname, initials:userProfile.initials, color:userProfile.color});
+  }
+}
+
+// ── Select channel ──
+function selectChannel(btn, name){
   document.querySelectorAll('#channels-list .dp-item').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('chat-channel-name').textContent='# '+name;
-  document.getElementById('chat-input').placeholder='Message #'+name+'...';
+  currentChannel = name;
+  currentDMUser  = null;
+  chatMode = 'channel';
+  document.getElementById('chat-channel-name').textContent = '# '+name;
+  document.getElementById('chat-channel-desc').textContent = 'Salon DevConnect — '+name;
+  document.getElementById('chat-input').placeholder = 'Message #'+name+'...';
+  loadMessages();
+  subscribeRealtime();
+}
+
+// ── Open DM ──
+async function openDM(userId, userName, userInitials, userColor){
+  closeDMModal();
+  document.querySelectorAll('#channels-list .dp-item').forEach(b=>b.classList.remove('active'));
+  currentDMUser = {id:userId, name:userName, initials:userInitials, color:userColor};
+  chatMode = 'dm';
+  document.getElementById('chat-channel-name').textContent = '@ '+userName;
+  document.getElementById('chat-channel-desc').textContent = 'Message privé';
+  document.getElementById('chat-input').placeholder = 'Message à '+userName+'...';
+  // Add or highlight DM in list
+  const dmList = document.getElementById('dm-list');
+  const existing = document.getElementById('dm-'+userId);
+  if(existing){ existing.classList.add('active'); }
+  else {
+    const btn = document.createElement('button');
+    btn.className='dp-item active'; btn.id='dm-'+userId;
+    btn.innerHTML=`<span class="msg-avatar" style="width:20px;height:20px;font-size:.55rem;background:${userColor}22;color:${userColor};flex-shrink:0">${userInitials}</span><span class="dp-item-label">${escHtml(userName)}</span>`;
+    btn.onclick=()=>{ document.querySelectorAll('#channels-list .dp-item').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); openDM(userId,userName,userInitials,userColor); };
+    dmList.appendChild(btn);
+  }
+  loadMessages();
+  subscribeRealtime();
+}
+
+// ── Search users for DM ──
+async function searchUsers(q){
+  const res = document.getElementById('dm-search-results');
+  if(!q||q.length<2){ res.innerHTML=''; return; }
+  const {data} = await sb.from('dc_users')
+    .select('id,firstname,lastname,initials,color,email')
+    .neq('id', currentUser.id)
+    .or(`firstname.ilike.%${q}%,lastname.ilike.%${q}%,email.ilike.%${q}%`)
+    .limit(8);
+  res.innerHTML='';
+  (data||[]).forEach(u=>{
+    const name=(u.firstname||'')+' '+(u.lastname||'');
+    const btn=document.createElement('button');
+    btn.style.cssText='display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:6px;background:none;border:none;color:var(--white);width:100%;text-align:left;transition:background .15s;font-size:.85rem';
+    btn.innerHTML=`<div style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.65rem;background:${u.color||'#C8A84B'}22;color:${u.color||'#C8A84B'};flex-shrink:0">${u.initials||'?'}</div><div><div style="font-weight:400">${escHtml(name.trim()||u.email)}</div><div style="font-size:.72rem;color:var(--muted)">${escHtml(u.email)}</div></div>`;
+    btn.addEventListener('mouseenter',()=>btn.style.background='var(--muted3)');
+    btn.addEventListener('mouseleave',()=>btn.style.background='none');
+    btn.onclick=()=>openDM(u.id, name.trim()||u.email, u.initials||'?', u.color||'#C8A84B');
+    res.appendChild(btn);
+  });
+  if(!data||!data.length) res.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted);font-size:.8rem">Aucun utilisateur trouvé</div>';
+}
+
+function openNewDM(){ document.getElementById('dm-modal').style.display='flex'; document.getElementById('dm-search').value=''; document.getElementById('dm-search-results').innerHTML=''; setTimeout(()=>document.getElementById('dm-search').focus(),100); }
+function closeDMModal(){ document.getElementById('dm-modal').style.display='none'; }
+
+// ══════════════════════════════════════════════════════
+//  AMIS
+// ══════════════════════════════════════════════════════
+
+async function initFriends(){
+  await loadFriendRequests();
+  await loadFriendsList();
+}
+
+async function loadFriendsList(){
+  const list = document.getElementById('friends-list');
+  if(!list) return;
+  const {data} = await sb.from('dc_friends')
+    .select('*, requester:dc_users!dc_friends_requester_id_fkey(id,firstname,lastname,initials,color), receiver:dc_users!dc_friends_receiver_id_fkey(id,firstname,lastname,initials,color)')
+    .or(`requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`)
+    .eq('status','accepted');
+  list.innerHTML='';
+  if(!data||!data.length){ list.innerHTML='<div style="padding:20px;text-align:center;color:var(--muted);font-size:.8rem">Aucun ami pour l\'instant</div>'; return; }
+  data.forEach(f=>{
+    const friend = f.requester_id===currentUser.id ? f.receiver : f.requester;
+    const name=(friend.firstname||'')+' '+(friend.lastname||'');
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--muted2)';
+    div.innerHTML=`<div style="width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.7rem;background:${friend.color||'#C8A84B'}22;color:${friend.color||'#C8A84B'};flex-shrink:0">${friend.initials||'?'}</div><div style="flex:1"><div style="font-size:.88rem">${escHtml(name.trim())}</div></div><button onclick="openDM('${friend.id}','${escHtml(name.trim())}','${friend.initials}','${friend.color}')" style="background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold);padding:5px 12px;font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;transition:all .2s">MP</button>`;
+    list.appendChild(div);
+  });
+}
+
+async function loadFriendRequests(){
+  const pending = document.getElementById('friend-requests');
+  if(!pending) return;
+  const {data} = await sb.from('dc_friends')
+    .select('*, requester:dc_users!dc_friends_requester_id_fkey(id,firstname,lastname,initials,color)')
+    .eq('receiver_id', currentUser.id)
+    .eq('status','pending');
+  pending.innerHTML='';
+  if(!data||!data.length){ pending.style.display='none'; return; }
+  pending.style.display='block';
+  data.forEach(f=>{
+    const u=f.requester; const name=(u.firstname||'')+' '+(u.lastname||'');
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--muted2);background:var(--gold-dim)';
+    div.innerHTML=`<div style="width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.7rem;background:${u.color||'#C8A84B'}22;color:${u.color||'#C8A84B'};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1"><div style="font-size:.82rem;color:var(--gold);font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px">Demande d'ami</div><div style="font-size:.88rem">${escHtml(name.trim())}</div></div><button onclick="respondFriend('${f.id}','accepted',this)" style="background:var(--gold);border:none;color:#000;padding:5px 10px;font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;border-radius:4px;margin-right:6px">✓</button><button onclick="respondFriend('${f.id}','rejected',this)" style="background:none;border:1px solid rgba(244,241,234,0.15);color:var(--muted);padding:5px 10px;font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;border-radius:4px">✕</button>`;
+    pending.appendChild(div);
+  });
+  // Badge on sidebar
+  updateNotifBadge();
+}
+
+async function respondFriend(friendId, status, btn){
+  btn.closest('div').style.opacity='.5';
+  await sb.from('dc_friends').update({status}).eq('id',friendId);
+  await loadFriendRequests();
+  await loadFriendsList();
+}
+
+async function sendFriendRequest(userId){
+  // Check existing
+  const {data} = await sb.from('dc_friends')
+    .select('id,status')
+    .or(`and(requester_id.eq.${currentUser.id},receiver_id.eq.${userId}),and(requester_id.eq.${userId},receiver_id.eq.${currentUser.id})`);
+  if(data&&data.length) return alert('Demande déjà envoyée ou déjà amis.');
+  await sb.from('dc_friends').insert({requester_id:currentUser.id, receiver_id:userId, status:'pending'});
+  alert('Demande d\'ami envoyée !');
+}
+
+// ── Friend search in Amis panel ──
+async function searchFriendUsers(q){
+  const res=document.getElementById('friend-search-results');
+  if(!res) return;
+  if(!q||q.length<2){res.innerHTML='';return;}
+  const {data}=await sb.from('dc_users').select('id,firstname,lastname,initials,color,email').neq('id',currentUser.id).or(`firstname.ilike.%${q}%,lastname.ilike.%${q}%,email.ilike.%${q}%`).limit(8);
+  res.innerHTML='';
+  (data||[]).forEach(u=>{
+    const name=(u.firstname||'')+' '+(u.lastname||'');
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--muted2)';
+    div.innerHTML=`<div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.65rem;background:${u.color||'#C8A84B'}22;color:${u.color||'#C8A84B'};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1"><div style="font-size:.88rem">${escHtml(name.trim()||u.email)}</div><div style="font-size:.72rem;color:var(--muted)">${escHtml(u.email)}</div></div><button onclick="sendFriendRequest('${u.id}')" style="background:none;border:1px solid var(--gold-border);color:var(--gold);padding:5px 12px;font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;border-radius:4px">+ Ami</button>`;
+    res.appendChild(div);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  NOTIFICATIONS
+// ══════════════════════════════════════════════════════
+
+let notifications=[];
+function addNotification(n){
+  n.id=Date.now(); n.read=false; n.ts=new Date().toISOString();
+  notifications.unshift(n);
+  updateNotifBadge();
+  renderNotifications();
+}
+function updateNotifBadge(){
+  const count=notifications.filter(n=>!n.read).length;
+  const badge=document.getElementById('notif-badge');
+  if(badge) badge.textContent=count>0?count:''; badge&&(badge.style.display=count>0?'flex':'none');
+}
+function renderNotifications(){
+  const list=document.getElementById('notif-list');
+  if(!list) return;
+  if(!notifications.length){ list.innerHTML='<div style="padding:40px;text-align:center;color:var(--muted);font-size:.8rem">Aucune notification</div>'; return; }
+  list.innerHTML='';
+  notifications.forEach(n=>{
+    const div=document.createElement('div');
+    div.style.cssText=`display:flex;gap:12px;padding:14px 20px;border-bottom:1px solid var(--muted2);background:${n.read?'none':'var(--gold-dim)'};transition:background .2s`;
+    const icon=n.type==='dm'?'💬':n.type==='friend'?'👤':'🔔';
+    div.innerHTML=`<div style="font-size:1.1rem;flex-shrink:0;margin-top:2px">${icon}</div><div style="flex:1"><div style="font-size:.84rem;margin-bottom:2px">${escHtml(n.type==='dm'?`Message de ${n.from_name} : ${n.content.slice(0,60)}`:n.type==='friend'?`${n.from_name} veut être votre ami`:n.content)}</div><div style="font-size:.68rem;color:var(--muted);font-family:Geist Mono,monospace">${fmtTime(n.ts)}</div></div>`;
+    div.onclick=()=>{n.read=true;div.style.background='none';updateNotifBadge()};
+    list.appendChild(div);
+  });
+}
+
+// ── Subscribe to incoming friend requests and DMs for notif badge ──
+function subscribeNotifications(){
+  sb.channel('notifs-'+currentUser.id)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'dc_friends',filter:`receiver_id=eq.${currentUser.id}`},async payload=>{
+      const {data:u}=await sb.from('dc_users').select('firstname,lastname').eq('id',payload.new.requester_id).single();
+      addNotification({type:'friend', from_id:payload.new.requester_id, from_name:(u?.firstname||'?')+' '+(u?.lastname||''), content:''});
+      // Refresh if on amis panel
+      if(document.getElementById('friend-requests')) loadFriendRequests();
+    })
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'dc_messages',filter:`dm_to=eq.${currentUser.id}`},async payload=>{
+      const m=payload.new;
+      if(chatMode==='dm' && currentDMUser?.id===m.user_id) return; // already visible
+      const {data:u}=await sb.from('dc_users').select('firstname,lastname').eq('id',m.user_id).single();
+      addNotification({type:'dm', from_id:m.user_id, from_name:(u?.firstname||'?'), content:m.content});
+    })
+    .subscribe();
+}
+
+// ══════════════════════════════════════════════════════
+//  INIT CHAT (called from initDash)
+// ══════════════════════════════════════════════════════
+function initChat(){
+  // Build emoji picker
+  const picker=document.getElementById('emoji-picker');
+  if(picker){ EMOJIS.forEach(e=>{ const btn=document.createElement('button'); btn.textContent=e; btn.style.cssText='background:none;border:none;font-size:1.2rem;cursor:none!important;padding:4px;border-radius:4px;transition:background .1s'; btn.addEventListener('mouseenter',()=>btn.style.background='var(--muted3)'); btn.addEventListener('mouseleave',()=>btn.style.background='none'); btn.onclick=()=>insertEmoji(e); picker.appendChild(btn); }); }
+  loadMessages();
+  subscribeRealtime();
+  subscribeNotifications();
+}
+
+// ── Panel content for Amis & Notifs ──
+function showAmiPanel(){
+  setSpace('communication');
+  // Toggle to amis sub-view
+  setTimeout(()=>{
+    const area=document.getElementById('area-communication');
+    if(!area) return;
+    let ami=document.getElementById('ami-subview');
+    if(!ami){
+      ami=document.createElement('div');
+      ami.id='ami-subview';
+      ami.style.cssText='position:absolute;inset:0;background:var(--black2);z-index:10;display:flex;flex-direction:column;overflow:hidden';
+      ami.innerHTML=`
+        <div class="content-header" style="position:relative">
+          <div><div class="content-header-title">Amis</div></div>
+          <div class="content-header-sub">Communauté</div>
+          <button onclick="document.getElementById('ami-subview').remove()" style="position:absolute;right:20px;background:none;border:none;color:var(--muted);font-size:1.1rem;padding:4px 8px">×</button>
+        </div>
+        <div style="padding:16px 20px;border-bottom:1px solid var(--muted2)">
+          <input type="text" placeholder="Chercher un utilisateur par nom ou email…" oninput="searchFriendUsers(this.value)" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.88rem;outline:none;border-radius:6px"/>
+          <div id="friend-search-results" style="margin-top:8px"></div>
+        </div>
+        <div id="friend-requests" style="border-bottom:1px solid var(--muted2)"></div>
+        <div id="friends-list" style="flex:1;overflow-y:auto"></div>`;
+      area.style.position='relative';
+      area.appendChild(ami);
+    }
+    initFriends();
+  },80);
+}
+
+function showNotifPanel(){
+  setSpace('communication');
+  setTimeout(()=>{
+    const area=document.getElementById('area-communication');
+    if(!area) return;
+    let nv=document.getElementById('notif-subview');
+    if(!nv){
+      nv=document.createElement('div');
+      nv.id='notif-subview';
+      nv.style.cssText='position:absolute;inset:0;background:var(--black2);z-index:10;display:flex;flex-direction:column;overflow:hidden';
+      nv.innerHTML=`
+        <div class="content-header">
+          <div><div class="content-header-title">Notifications</div></div>
+          <div class="content-header-sub">Alertes</div>
+          <button onclick="document.getElementById('notif-subview').remove()" style="position:absolute;right:20px;background:none;border:none;color:var(--muted);font-size:1.1rem;padding:4px 8px">×</button>
+        </div>
+        <div id="notif-list" style="flex:1;overflow-y:auto"></div>`;
+      area.style.position='relative';
+      area.appendChild(nv);
+    }
+    notifications.forEach(n=>n.read=true);
+    updateNotifBadge();
+    renderNotifications();
+  },80);
+}
+
+// ── Override panelContents click handlers for Amis/Notifs ──
+function handleDpItem(label){
+  if(label==='Amis'){ showAmiPanel(); return; }
+  if(label==='Notifications'){ showNotifPanel(); return; }
 }
 </script>
 </body>
