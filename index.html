@@ -502,7 +502,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
       <div style="background:var(--black3);border:1px solid var(--gold-border);width:100%;max-width:420px;padding:32px;position:relative">
         <button onclick="closeDMModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:var(--muted);font-size:1.2rem">×</button>
         <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;margin-bottom:20px">Nouveau message privé</div>
-        <input id="dm-search" type="text" placeholder="Chercher un utilisateur..." oninput="searchUsers(this.value)"
+        <input id="dm-search" type="text" placeholder="Chercher un utilisateur..."
           style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;border-radius:6px;margin-bottom:12px"/>
         <div id="dm-search-results" style="max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:4px"></div>
       </div>
@@ -568,8 +568,20 @@ let currentUser=null,userProfile=null;
   const{data:{session}}=await sb.auth.getSession();
   if(session){
     currentUser=session.user;
-    const{data}=await sb.from('dc_users').select('*').eq('id',currentUser.id).single();
-    userProfile=data;
+    const{data}=await sb.from('dc_users').select('*').eq('id',currentUser.id).maybeSingle();
+    if(!data){
+      // Profile missing — create a minimal one
+      const email=currentUser.email||'';
+      const first=currentUser.user_metadata?.firstname||email.split('@')[0]||'Dev';
+      const last=currentUser.user_metadata?.lastname||'';
+      const colors=['#f59e0b','#3b82f6','#10b981','#8b5cf6','#ef4444','#f97316'];
+      const color=colors[Math.floor(Math.random()*colors.length)];
+      const initials=(first[0]+(last[0]||first[1]||'?')).toUpperCase();
+      const{data:created}=await sb.from('dc_users').upsert({id:currentUser.id,email,firstname:first,lastname:last,initials,color,role:'dev',rank:'member',joined:Date.now()}).select().maybeSingle();
+      userProfile=created||{id:currentUser.id,email,firstname:first,lastname:last,initials,color};
+    } else {
+      userProfile=data;
+    }
     showDash();
   } else {
     showIntro();
@@ -916,7 +928,15 @@ async function searchUsers(q){
   if(!data||!data.length) res.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted);font-size:.8rem">Aucun utilisateur trouvé</div>';
 }
 
-function openNewDM(){ document.getElementById('dm-modal').style.display='flex'; document.getElementById('dm-search').value=''; document.getElementById('dm-search-results').innerHTML=''; setTimeout(()=>document.getElementById('dm-search').focus(),100); }
+function openNewDM(){
+  document.getElementById('dm-modal').style.display='flex';
+  const input=document.getElementById('dm-search');
+  input.value='';
+  document.getElementById('dm-search-results').innerHTML='';
+  // Wire the input (safe because script is loaded by now)
+  input.oninput=()=>searchUsers(input.value);
+  setTimeout(()=>input.focus(),100);
+}
 function closeDMModal(){ document.getElementById('dm-modal').style.display='none'; }
 
 // ══════════════════════════════════════════════════════
@@ -1081,7 +1101,7 @@ function showAmiPanel(){
           <button onclick="document.getElementById('ami-subview').remove()" style="position:absolute;right:20px;background:none;border:none;color:var(--muted);font-size:1.1rem;padding:4px 8px">×</button>
         </div>
         <div style="padding:16px 20px;border-bottom:1px solid var(--muted2)">
-          <input type="text" placeholder="Chercher un utilisateur par nom ou email…" oninput="searchFriendUsers(this.value)" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.88rem;outline:none;border-radius:6px"/>
+          <input id="friend-search-input" type="text" placeholder="Chercher un utilisateur par nom ou email…" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.88rem;outline:none;border-radius:6px"/>
           <div id="friend-search-results" style="margin-top:8px"></div>
         </div>
         <div id="friend-requests" style="border-bottom:1px solid var(--muted2)"></div>
@@ -1089,6 +1109,9 @@ function showAmiPanel(){
       area.style.position='relative';
       area.appendChild(ami);
     }
+    // Wire search input safely
+    const fi=document.getElementById('friend-search-input');
+    if(fi) fi.oninput=()=>searchFriendUsers(fi.value);
     initFriends();
   },80);
 }
