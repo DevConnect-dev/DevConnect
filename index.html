@@ -1,4 +1,3 @@
-cat > /home/claude/devconnect.html << 'ENDOFFILE'
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -29,6 +28,7 @@ body.hovering #cur-ring{width:54px;height:54px;border-color:rgba(200,168,75,0.25
 
 nav{position:fixed;top:0;left:0;right:0;z-index:900;padding:28px 56px;display:flex;align-items:center;justify-content:space-between;transition:all .5s}
 nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18px 56px;border-bottom:1px solid rgba(244,241,234,0.1)}
+#sidebar{position:relative!important;top:auto!important;left:auto!important;right:auto!important;padding:20px 0!important;border-bottom:none!important;backdrop-filter:none!important;background:var(--black2)!important;}
 .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:400;letter-spacing:.04em;color:var(--white);text-decoration:none}
 .nav-logo span{color:var(--gold)}
 .nav-right{display:flex;align-items:center;gap:32px}
@@ -161,8 +161,11 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .sb-bottom{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:4px}
 .avatar-mini{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.7rem;font-weight:500;border:2px solid var(--gold-border);transition:border-color .3s;background:none}
 .avatar-mini:hover{border-color:var(--gold)}
-#dpanel{width:var(--panel-w);height:100%;background:var(--black3);border-right:1px solid var(--muted2);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;transition:width .35s cubic-bezier(.4,0,.2,1)}
-#dpanel.hidden{width:0}
+#dpanel{width:var(--panel-w);height:100%;background:var(--black3);border-right:1px solid var(--muted2);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;transition:width .35s cubic-bezier(.4,0,.2,1);min-width:0}
+#dpanel.hidden{width:0;border-right:none}
+#dpanel.hidden .dp-header,#dpanel.hidden .dp-body{opacity:0}
+#panel-toggle{position:absolute;bottom:20px;right:12px;width:26px;height:26px;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--gold);z-index:10;transition:all .25s;cursor:none}
+#panel-toggle:hover{background:rgba(200,168,75,0.15);border-color:var(--gold)}
 .dp-header{padding:20px 20px 16px;border-bottom:1px solid var(--muted2);flex-shrink:0}
 .dp-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;line-height:1}
 .dp-sub{font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-top:4px}
@@ -176,7 +179,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .dp-item.active{color:var(--white);background:var(--gold-dim)}
 .dp-item-icon{font-size:.9rem;flex-shrink:0;width:18px;text-align:center}
 .dp-item-badge{margin-left:auto;background:var(--gold);color:#000;font-family:'Geist Mono',monospace;font-size:.5rem;padding:2px 6px;border-radius:10px;font-weight:500}
-#dmain{flex:1;height:100%;overflow:hidden;display:flex;flex-direction:column;position:relative}
+#dmain{flex:1;height:100%;overflow:hidden;display:flex;flex-direction:column}
 .content-area{width:100%;height:100%;display:none;flex-direction:column}
 .content-area.active{display:flex}
 .content-header{padding:20px 32px;border-bottom:1px solid var(--muted2);display:flex;align-items:center;gap:16px;flex-shrink:0}
@@ -198,7 +201,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .w-cards{display:flex;gap:16px;margin-top:48px;flex-wrap:wrap;justify-content:center}
 .wc{padding:20px 24px;border:1px solid var(--gold-border);border-radius:8px;text-align:left;min-width:160px;transition:all .3s;background:none;color:var(--white)}
 .wc:hover{border-color:rgba(200,168,75,.4);background:var(--gold-dim);transform:translateY(-3px)}
-.wc-icon{font-size:1.4rem;margin-bottom:10px}
+
 .wc-label{font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
 .wc-desc{font-size:.8rem;color:var(--muted);font-weight:300}
 .coming-soon{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px;color:var(--muted)}
@@ -253,7 +256,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .plan-btn:hover,.plan.featured .plan-btn{background:var(--gold);border-color:var(--gold);color:#000}
 /* Profile */
 .profile-wrap{max-width:700px;margin:0 auto}
-.profile-banner{height:140px;background:linear-gradient(135deg,rgba(200,168,75,0.15),rgba(200,168,75,0.03));border:1px solid var(--gold-border);border-radius:8px;position:relative}
+.profile-banner{height:140px;background:linear-gradient(135deg,rgba(200,168,75,0.15),rgba(200,168,75,0.03));border:1px solid var(--gold-border);border-radius:8px}
 .profile-avatar-lg{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:1.4rem;font-weight:500;border:3px solid var(--black3);position:absolute;bottom:-40px;left:28px}
 .profile-info{padding:52px 28px 28px;border:1px solid var(--gold-border);border-top:none;border-radius:0 0 8px 8px;margin-bottom:24px}
 .profile-name{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:400}
@@ -265,6 +268,25 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .stat-box{border:1px solid var(--gold-border);padding:20px;border-radius:8px;text-align:center;background:var(--gold-dim)}
 .stat-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:400;color:var(--gold-light)}
 .stat-label{font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+
+
+
+
+
+
+
+/* SVG Icon styles */
+.sb-icon svg{display:block;transition:stroke .25s}
+.sb-icon.active svg,.sb-icon:hover svg{stroke:currentColor}
+.wc-icon-svg{width:36px;height:36px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;color:var(--gold);opacity:.8;transition:opacity .3s}
+.wc:hover .wc-icon-svg{opacity:1}
+.dp-item-svg{width:18px;height:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:inherit}
+.dp-item-svg svg{display:block}
+.dp-item-label{flex:1}
+.ch-icon-svg{width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:var(--gold);background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:6px;flex-shrink:0}
+.ch-icon-svg svg{display:block}
+
 @keyframes wFade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
@@ -381,21 +403,21 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 <div id="view-dash">
   <nav id="sidebar">
     <div class="sb-logo">D<span style="color:var(--white);opacity:.3">C</span></div>
-    <button class="sb-icon active" data-space="home" onclick="setSpace('home')">🏠<span class="tip">Accueil</span></button>
+    <button class="sb-icon active" data-space="home" onclick="setSpace('home')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg><span class="tip">Accueil</span></button>
     <div class="sb-sep"></div>
-    <button class="sb-icon" data-space="communication" onclick="setSpace('communication')">💬<span class="tip">Communication</span></button>
-    <button class="sb-icon" data-space="travail" onclick="setSpace('travail')">💼<span class="tip">Travail</span></button>
-    <button class="sb-icon" data-space="ia" onclick="setSpace('ia')">🤖<span class="tip">Intelligence Artificielle</span></button>
-    <button class="sb-icon" data-space="apprendre" onclick="setSpace('apprendre')">🎓<span class="tip">Apprendre</span></button>
-    <button class="sb-icon" data-space="explorer" onclick="setSpace('explorer')">🌍<span class="tip">Explorer</span></button>
-    <button class="sb-icon" data-space="classement" onclick="setSpace('classement')">🏆<span class="tip">Classement</span></button>
-    <button class="sb-icon" data-space="recommandations" onclick="setSpace('recommandations')">🎯<span class="tip">Recommandations</span></button>
-    <button class="sb-icon" data-space="recrutement" onclick="setSpace('recrutement')">📋<span class="tip">Recrutement</span></button>
-    <button class="sb-icon" data-space="portfolio" onclick="setSpace('portfolio')">👨‍💻<span class="tip">Coin Développeur</span></button>
+    <button class="sb-icon" data-space="communication" onclick="setSpace('communication')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="tip">Communication</span></button>
+    <button class="sb-icon" data-space="travail" onclick="setSpace('travail')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg><span class="tip">Travail</span></button>
+    <button class="sb-icon" data-space="ia" onclick="setSpace('ia')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span class="tip">Intelligence Artificielle</span></button>
+    <button class="sb-icon" data-space="apprendre" onclick="setSpace('apprendre')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg><span class="tip">Apprendre</span></button>
+    <button class="sb-icon" data-space="explorer" onclick="setSpace('explorer')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 000 20M2 12h20"/></svg><span class="tip">Explorer</span></button>
+    <button class="sb-icon" data-space="classement" onclick="setSpace('classement')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span class="tip">Classement</span></button>
+    <button class="sb-icon" data-space="recommandations" onclick="setSpace('recommandations')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span class="tip">Recommandations</span></button>
+    <button class="sb-icon" data-space="recrutement" onclick="setSpace('recrutement')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg><span class="tip">Recrutement</span></button>
+    <button class="sb-icon" data-space="portfolio" onclick="setSpace('portfolio')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg><span class="tip">Coin Développeur</span></button>
     <div class="sb-sep"></div>
-    <button class="sb-icon" data-space="premium" onclick="setSpace('premium')">⚡<span class="tip">DevBoost Premium</span></button>
+    <button class="sb-icon" data-space="premium" onclick="setSpace('premium')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span class="tip">DevBoost Premium</span></button>
     <div class="sb-bottom">
-      <button class="sb-icon" data-space="settings" onclick="setSpace('settings')">⚙️<span class="tip">Paramètres</span></button>
+      <button class="sb-icon" data-space="settings" onclick="setSpace('settings')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span class="tip">Paramètres</span></button>
       <button class="avatar-mini" id="nav-avatar" onclick="setSpace('profil')"></button>
     </div>
   </nav>
@@ -416,30 +438,45 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
           <div class="w-title">Bienvenue,<br><em><span id="welcome-name" class="w-name">Développeur</span></em></div>
           <p class="w-sub">Ta plateforme tout-en-un pour coder, collaborer, apprendre et évoluer.</p>
           <div class="w-cards">
-            <button class="wc" onclick="setSpace('communication')"><div class="wc-icon">💬</div><span class="wc-label">Communication</span><div class="wc-desc">Messages & serveurs</div></button>
-            <button class="wc" onclick="setSpace('travail')"><div class="wc-icon">💼</div><span class="wc-label">Travail</span><div class="wc-desc">Projets & VS Code</div></button>
-            <button class="wc" onclick="setSpace('ia')"><div class="wc-icon">🤖</div><span class="wc-label">IA</span><div class="wc-desc">Assistants & outils</div></button>
-            <button class="wc" onclick="setSpace('recrutement')"><div class="wc-icon">📋</div><span class="wc-label">Recrutement</span><div class="wc-desc">Offres & matching</div></button>
+            <button class="wc" onclick="setSpace('communication')"><div class="wc-icon-svg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/></svg></div><span class="wc-label">Communication</span><div class="wc-desc">Messages & serveurs</div></button>
+            <button class="wc" onclick="setSpace('travail')"><div class="wc-icon-svg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/></svg></div><span class="wc-label">Travail</span><div class="wc-desc">Projets & VS Code</div></button>
+            <button class="wc" onclick="setSpace('ia')"><div class="wc-icon-svg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div><span class="wc-label">IA</span><div class="wc-desc">Assistants & outils</div></button>
+            <button class="wc" onclick="setSpace('recrutement')"><div class="wc-icon-svg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/></svg></div><span class="wc-label">Recrutement</span><div class="wc-desc">Offres & matching</div></button>
           </div>
         </div>
       </div>
     </div>
     <!-- COMMUNICATION -->
     <div class="content-area" id="area-communication">
-      <div class="content-header"><span style="color:var(--gold)">💬</span><div><div class="content-header-title" id="chat-channel-name"># général</div><div style="font-size:.78rem;color:var(--muted);font-weight:300">Serveur général DevConnect</div></div><div class="content-header-sub">Communication</div></div>
+      <div class="content-header">
+        <span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>
+        <div><div class="content-header-title" id="chat-channel-name"># général</div><div id="chat-channel-desc" style="font-size:.78rem;color:var(--muted);font-weight:300">Serveur général DevConnect</div></div>
+        <div class="content-header-sub">Communication</div>
+      </div>
       <div id="chat-wrap">
         <div id="channels-list">
           <div class="dp-body">
             <div class="dp-section">
               <div class="dp-section-label">Salons texte</div>
-              <button class="dp-item active" onclick="selectChannel(this,'général')"><span class="dp-item-icon">#</span> général<span class="dp-item-badge">3</span></button>
-              <button class="dp-item" onclick="selectChannel(this,'aide')"><span class="dp-item-icon">#</span> aide</button>
-              <button class="dp-item" onclick="selectChannel(this,'projets')"><span class="dp-item-icon">#</span> projets</button>
-              <button class="dp-item" onclick="selectChannel(this,'showcase')"><span class="dp-item-icon">#</span> showcase</button>
+              <button class="dp-item active" id="ch-général" onclick="selectChannel(this,'général','channel')">
+                <span class="dp-item-icon">#</span><span class="dp-item-label">général</span>
+              </button>
+              <button class="dp-item" id="ch-aide" onclick="selectChannel(this,'aide','channel')">
+                <span class="dp-item-icon">#</span><span class="dp-item-label">aide</span>
+              </button>
+              <button class="dp-item" id="ch-projets" onclick="selectChannel(this,'projets','channel')">
+                <span class="dp-item-icon">#</span><span class="dp-item-label">projets</span>
+              </button>
+              <button class="dp-item" id="ch-showcase" onclick="selectChannel(this,'showcase','channel')">
+                <span class="dp-item-icon">#</span><span class="dp-item-label">showcase</span>
+              </button>
             </div>
             <div class="dp-section">
-              <div class="dp-section-label">Messages privés</div>
-              <button class="dp-item"><span class="dp-item-icon">✉</span> Nouveau MP</button>
+              <div class="dp-section-label" style="display:flex;align-items:center;justify-content:space-between;padding-right:8px">
+                Messages privés
+                <button onclick="openNewDM()" style="background:none;border:none;color:var(--gold);font-size:1rem;line-height:1;padding:0 2px" title="Nouveau MP">+</button>
+              </div>
+              <div id="dm-list"></div>
             </div>
           </div>
         </div>
@@ -448,26 +485,38 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
           <div id="chat-input-wrap">
             <div id="chat-input-row">
               <input id="chat-input" type="text" placeholder="Message #général..." onkeydown="if(event.key==='Enter')sendMsg()"/>
-              <button class="chat-send" onclick="sendMsg()">↑</button>
+              <button class="chat-send" onclick="sendMsg()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <!-- DM MODAL -->
+    <div id="dm-modal" style="display:none;position:fixed;inset:0;z-index:8000;background:rgba(5,5,10,.85);backdrop-filter:blur(16px);align-items:center;justify-content:center" onclick="if(event.target===this)closeDMModal()">
+      <div style="background:var(--black3);border:1px solid var(--gold-border);width:100%;max-width:420px;padding:32px;position:relative">
+        <button onclick="closeDMModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:var(--muted);font-size:1.2rem">×</button>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;margin-bottom:20px">Nouveau message privé</div>
+        <input id="dm-search" type="text" placeholder="Chercher un utilisateur..." oninput="searchUsers(this.value)"
+          style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;border-radius:6px;margin-bottom:12px"/>
+        <div id="dm-search-results" style="max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:4px"></div>
+      </div>
+    </div>
     <!-- PREMIUM -->
     <div class="content-area" id="area-premium">
-      <div class="content-header"><span style="color:var(--gold)">⚡</span><div class="content-header-title">DevBoost</div><div class="content-header-sub">Premium</div></div>
+      <div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span><div class="content-header-title">DevBoost</div><div class="content-header-sub">Premium</div></div>
       <div class="content-body"><div class="premium-wrap">
-        <div class="premium-hero"><div class="premium-badge">⚡ DevBoost</div><div class="premium-title">Passe au niveau <em>supérieur</em></div><p class="premium-sub">Débloque des fonctionnalités exclusives, booste ton profil et accède aux outils IA avancés.</p></div>
+        <div class="premium-hero"><div class="premium-badge">DevBoost</div><div class="premium-title">Passe au niveau <em>supérieur</em></div><p class="premium-sub">Débloque des fonctionnalités exclusives, booste ton profil et accède aux outils IA avancés.</p></div>
         <div class="plans">
           <div class="plan"><div class="plan-name">Dev</div><div class="plan-price">0€<span>/mois</span></div><ul class="plan-features"><li>Messagerie illimitée</li><li>5 projets actifs</li><li>Portfolio basique</li><li>Accès communauté</li></ul><button class="plan-btn">Plan actuel</button></div>
-          <div class="plan featured"><div class="plan-badge">⚡ Le plus populaire</div><div class="plan-name">DevBoost</div><div class="plan-price">9€<span>/mois</span></div><ul class="plan-features"><li>Tout du plan Dev</li><li>Projets illimités</li><li>IA avancée incluse</li><li>Badge profil exclusif</li><li>Priorité recrutement</li><li>Analytics portfolio</li></ul><button class="plan-btn">Passer à DevBoost</button></div>
+          <div class="plan featured"><div class="plan-badge">Le plus populaire</div><div class="plan-name">DevBoost</div><div class="plan-price">9€<span>/mois</span></div><ul class="plan-features"><li>Tout du plan Dev</li><li>Projets illimités</li><li>IA avancée incluse</li><li>Badge profil exclusif</li><li>Priorité recrutement</li><li>Analytics portfolio</li></ul><button class="plan-btn">Passer à DevBoost</button></div>
         </div>
       </div></div>
     </div>
     <!-- PROFIL -->
     <div class="content-area" id="area-profil">
-      <div class="content-header"><span style="color:var(--gold)">👤</span><div class="content-header-title">Mon Profil</div><div class="content-header-sub">Portfolio</div></div>
+      <div class="content-header"><span class="ch-icon-svg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><div class="content-header-title">Mon Profil</div><div class="content-header-sub">Portfolio</div></div>
       <div class="content-body"><div class="profile-wrap">
         <div class="profile-banner"><div class="profile-avatar-lg" id="profile-avatar-lg"></div></div>
         <div class="profile-info"><div class="profile-name" id="profile-name">—</div><div class="profile-handle" id="profile-handle">@—</div><div class="profile-bio">Développeur passionné. Toujours en train de construire quelque chose.</div><div class="profile-tags"><span class="tag">JavaScript</span><span class="tag">React</span><span class="tag">Node.js</span></div></div>
@@ -475,15 +524,15 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
       </div></div>
     </div>
     <!-- COMING SOON -->
-    <div class="content-area" id="area-travail"><div class="content-header"><span style="color:var(--gold)">💼</span><div class="content-header-title">Travail</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-icon">💼</div><div class="cs-title">En construction</div><div class="cs-sub">VS Code intégré · Projets · Collaboration</div></div></div></div>
-    <div class="content-area" id="area-ia"><div class="content-header"><span style="color:var(--gold)">🤖</span><div class="content-header-title">Intelligence Artificielle</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-icon">🤖</div><div class="cs-title">En construction</div><div class="cs-sub">Assistants IA · Outils · Génération de code</div></div></div></div>
-    <div class="content-area" id="area-apprendre"><div class="content-header"><span style="color:var(--gold)">🎓</span><div class="content-header-title">Apprendre</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-icon">🎓</div><div class="cs-title">En construction</div><div class="cs-sub">Cours · Défis de code · Certifications</div></div></div></div>
-    <div class="content-area" id="area-explorer"><div class="content-header"><span style="color:var(--gold)">🌍</span><div class="content-header-title">Explorer</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-icon">🌍</div><div class="cs-title">En construction</div><div class="cs-sub">Découvrir projets · Devs · Communauté</div></div></div></div>
-    <div class="content-area" id="area-classement"><div class="content-header"><span style="color:var(--gold)">🏆</span><div class="content-header-title">Classement</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-icon">🏆</div><div class="cs-title">En construction</div><div class="cs-sub">Ranking · Badges · Achievements</div></div></div></div>
-    <div class="content-area" id="area-recommandations"><div class="content-header"><span style="color:var(--gold)">🎯</span><div class="content-header-title">Recommandations</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-icon">🎯</div><div class="cs-title">En construction</div><div class="cs-sub">Projets suggérés · Devs à suivre</div></div></div></div>
-    <div class="content-area" id="area-recrutement"><div class="content-header"><span style="color:var(--gold)">📋</span><div class="content-header-title">Recrutement</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-icon">📋</div><div class="cs-title">En construction</div><div class="cs-sub">Offres · Candidatures · Matching</div></div></div></div>
-    <div class="content-area" id="area-portfolio"><div class="content-header"><span style="color:var(--gold)">👨‍💻</span><div class="content-header-title">Coin Développeur</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-icon">👨‍💻</div><div class="cs-title">En construction</div><div class="cs-sub">Portfolio · Stats · Réseau social dev</div></div></div></div>
-    <div class="content-area" id="area-settings"><div class="content-header"><span style="color:var(--gold)">⚙️</span><div class="content-header-title">Paramètres</div><div class="content-header-sub">Compte</div></div><div class="content-body"><div class="coming-soon"><div class="cs-icon">⚙️</div><div class="cs-title">En construction</div><div class="cs-sub">Profil · Confidentialité · Amis · Blocages MP</div></div></div></div>
+    <div class="content-area" id="area-travail"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></span><div class="content-header-title">Travail</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">VS Code intégré · Projets · Collaboration</div></div></div></div>
+    <div class="content-area" id="area-ia"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="3"/></svg></span><div class="content-header-title">Intelligence Artificielle</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Assistants IA · Outils · Génération de code</div></div></div></div>
+    <div class="content-area" id="area-apprendre"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></span><div class="content-header-title">Apprendre</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Cours · Défis de code · Certifications</div></div></div></div>
+    <div class="content-area" id="area-explorer"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 000 20M2 12h20"/></svg></span><div class="content-header-title">Explorer</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Découvrir projets · Devs · Communauté</div></div></div></div>
+    <div class="content-area" id="area-classement"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span><div class="content-header-title">Classement</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Ranking · Badges · Achievements</div></div></div></div>
+    <div class="content-area" id="area-recommandations"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span><div class="content-header-title">Recommandations</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Projets suggérés · Devs à suivre</div></div></div></div>
+    <div class="content-area" id="area-recrutement"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span><div class="content-header-title">Recrutement</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Offres · Candidatures · Matching</div></div></div></div>
+    <div class="content-area" id="area-portfolio"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span><div class="content-header-title">Coin Développeur</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Portfolio · Stats · Réseau social dev</div></div></div></div>
+    <div class="content-area" id="area-settings"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span><div class="content-header-title">Paramètres</div><div class="content-header-sub">Compte</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Profil · Confidentialité · Amis · Blocages MP</div></div></div></div>
   </main>
 </div>
 
@@ -608,25 +657,28 @@ function initDash(){
   document.getElementById('profile-avatar-lg').style.color=color;
   document.getElementById('profile-name').textContent=(userProfile.firstname||'')+' '+(userProfile.lastname||'');
   document.getElementById('profile-handle').textContent='@'+(userProfile.firstname||name).toLowerCase();
-  loadDemoMessages();
   setSpace('home');
+  initChat();
+  document.getElementById('dpanel').classList.add('hidden');
 }
 
 const panelContents={
   home:{title:'Accueil',sub:'Dashboard',items:[]},
-  communication:{title:'Communication',sub:'Messagerie',items:[{icon:'💬',label:'Messages'},{icon:'👥',label:'Amis'},{icon:'🔔',label:'Notifications'}]},
-  travail:{title:'Travail',sub:'Workspace',items:[{icon:'📁',label:'Projets'},{icon:'🖥️',label:'VS Code'},{icon:'🤝',label:'Collaboration'}]},
-  ia:{title:'IA',sub:'Outils',items:[{icon:'🤖',label:'Assistant'},{icon:'✨',label:'Génération code'},{icon:'🔍',label:'Debug IA'}]},
-  apprendre:{title:'Apprendre',sub:'Formation',items:[{icon:'📚',label:'Cours'},{icon:'🎯',label:'Défis'},{icon:'🏅',label:'Certifications'}]},
-  explorer:{title:'Explorer',sub:'Communauté',items:[{icon:'🔥',label:'Tendances'},{icon:'👨‍💻',label:'Développeurs'},{icon:'🌟',label:'Projets phares'}]},
-  classement:{title:'Classement',sub:'Rankings',items:[{icon:'🥇',label:'Top devs'},{icon:'⭐',label:'Mes badges'},{icon:'📈',label:'Ma progression'}]},
-  recommandations:{title:'Recommandations',sub:'Pour toi',items:[{icon:'💡',label:'Projets suggérés'},{icon:'👤',label:'Devs à suivre'},{icon:'📌',label:'Ressources'}]},
-  recrutement:{title:'Recrutement',sub:'Carrière',items:[{icon:'💼',label:'Offres'},{icon:'📄',label:'Mes candidatures'},{icon:'🎯',label:'Matching'}]},
-  portfolio:{title:'Coin Dev',sub:'Portfolio',items:[{icon:'🖼️',label:'Mon portfolio'},{icon:'📊',label:'Mes stats'},{icon:'🌐',label:'Réseau'}]},
-  premium:{title:'DevBoost',sub:'Premium',items:[{icon:'⚡',label:'Mes avantages'},{icon:'💳',label:'Abonnement'}]},
-  profil:{title:'Mon Profil',sub:'Compte',items:[{icon:'👤',label:'Infos profil'},{icon:'🖼️',label:'Portfolio'},{icon:'🏷️',label:'Badges'}]},
-  settings:{title:'Paramètres',sub:'Compte',items:[{icon:'🔒',label:'Confidentialité'},{icon:'👥',label:'Amis & blocages'},{icon:'🔔',label:'Notifications'},{icon:'🚪',label:'Déconnexion',action:'logout'}]},
+  communication:{title:'Communication',sub:'Messagerie',items:[{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>`,label:'Messages'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>`,label:'Amis'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>`,label:'Notifications'}]},
+  travail:{title:'Travail',sub:'Workspace',items:[{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>`,label:'Projets'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,label:'VS Code'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`,label:'Collaboration'}]},
+  ia:{title:'IA',sub:'Outils',items:[{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>`,label:'Assistant'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,label:'Génération code'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,label:'Debug IA'}]},
+  apprendre:{title:'Apprendre',sub:'Formation',items:[{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>`,label:'Cours'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>`,label:'Défis'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>`,label:'Certifications'}]},
+  explorer:{title:'Explorer',sub:'Communauté',items:[{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`,label:'Tendances'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>`,label:'Développeurs'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`,label:'Projets phares'}]},
+  classement:{title:'Classement',sub:'Rankings',items:[{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`,label:'Top devs'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>`,label:'Mes badges'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>`,label:'Ma progression'}]},
+  recommandations:{title:'Recommandations',sub:'Pour toi',items:[{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>`,label:'Projets suggérés'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>`,label:'Devs à suivre'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>`,label:'Ressources'}]},
+  recrutement:{title:'Recrutement',sub:'Carrière',items:[{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>`,label:'Offres'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,label:'Mes candidatures'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>`,label:'Matching'}]},
+  portfolio:{title:'Coin Dev',sub:'Portfolio',items:[{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,label:'Mon portfolio'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,label:'Mes stats'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`,label:'Réseau'}]},
+  premium:{title:'DevBoost',sub:'Premium',items:[{icon:'+',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`,label:'Mes avantages'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`,label:'Abonnement'}]},
+  profil:{title:'Mon Profil',sub:'Compte',items:[{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,label:'Infos profil'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,label:'Portfolio'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>`,label:'Badges'}]},
+  settings:{title:'Paramètres',sub:'Compte',items:[{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>`,label:'Confidentialité'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="23" y1="11" x2="17" y2="11"/></svg>`,label:'Amis & blocages'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>`,label:'Notifications'},{icon:'—',icon_svg:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>`,label:'Déconnexion',action:'logout'}]},
 };
+
+
 
 function setSpace(space){
   document.querySelectorAll('.sb-icon').forEach(b=>b.classList.toggle('active',b.dataset.space===space));
@@ -638,12 +690,15 @@ function setSpace(space){
   document.getElementById('dp-sub').textContent=cfg.sub;
   const body=document.getElementById('dp-body');
   body.innerHTML='';
-  if(cfg.items.length){
+  const panel=document.getElementById('dpanel');
+  const hidePanel=space==='home';
+  panel.classList.toggle('hidden',hidePanel);
+  if(cfg.items.length&&!hidePanel){
     const sec=document.createElement('div');sec.className='dp-section';
     cfg.items.forEach(item=>{
       const btn=document.createElement('button');
       btn.className='dp-item';
-      btn.innerHTML=`<span class="dp-item-icon">${item.icon}</span>${item.label}`;
+      btn.innerHTML=`<span class="dp-item-svg">${item.icon_svg||''}</span><span class="dp-item-label">${item.label}</span>`;
       if(item.action==='logout')btn.onclick=logout;
       sec.appendChild(btn);
     });
@@ -656,7 +711,7 @@ async function logout(){await sb.auth.signOut();location.reload()}
 const demoUsers=[{name:'Alex',initials:'AL',color:'#3b82f6'},{name:'Sara',initials:'SA',color:'#10b981'},{name:'Tom',initials:'TM',color:'#8b5cf6'}];
 const demoMsgs=[
   {u:0,text:'Salut tout le monde ! Quelqu\'un a déjà utilisé Bun.js en prod ?'},
-  {u:1,text:'Oui on l\'a migré y\'a 2 semaines, les perfs sont dingues 🔥'},
+  {u:1,text:'Oui on l\'a migré y\'a 2 semaines, les perfs sont dingues !'},
   {u:2,text:'Le startup time est vraiment impressionnant par rapport à Node'},
   {u:1,text:'Par contre le support des libs c\'est encore un peu galère sur certains packages'},
   {u:0,text:'Ok je vais tester sur un side project avant de passer en prod, merci !'},
