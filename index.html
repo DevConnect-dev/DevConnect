@@ -795,7 +795,7 @@ async function loadMessages(){
   let query;
   if(chatMode === 'channel'){
     query = sb.from('dc_messages')
-      .select('*, dc_users!dc_messages_user_id_fkey(firstname,lastname,initials,color)')
+      .select('*, author:user_id(firstname,lastname,initials,color)')
       .eq('channel', currentChannel)
       .is('dm_to', null)
       .order('created_at', {ascending:true})
@@ -803,17 +803,47 @@ async function loadMessages(){
   } else {
     const me = currentUser.id, them = currentDMUser.id;
     query = sb.from('dc_messages')
-      .select('*, dc_users!dc_messages_user_id_fkey(firstname,lastname,initials,color)')
+      .select('*, author:user_id(firstname,lastname,initials,color)')
       .or(`and(user_id.eq.${me},dm_to.eq.${them}),and(user_id.eq.${them},dm_to.eq.${me})`)
       .order('created_at', {ascending:true})
       .limit(60);
   }
   const {data, error} = await query;
   container.innerHTML = '';
-  if(error){ container.innerHTML='<div style="text-align:center;padding:40px;color:#e05a5a;font-size:.8rem">Erreur de chargement</div>'; return; }
+  if(error){
+    console.error('loadMessages error', error);
+    // Fallback: load without join
+    await loadMessagesSimple();
+    return;
+  }
   if(!data||!data.length){ container.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--muted);font-size:.82rem">Aucun message pour l\'instant — dis bonjour 👋</div>'; return; }
   data.forEach(m => {
-    const u = m.dc_users || {};
+    const u = m.author || {};
+    renderMsg({...m, firstname:u.firstname, lastname:u.lastname, initials:u.initials, color:u.color});
+  });
+}
+
+// Fallback: load messages then fetch user info separately
+async function loadMessagesSimple(){
+  const container = document.getElementById('chat-messages');
+  let query;
+  if(chatMode === 'channel'){
+    query = sb.from('dc_messages').select('*').eq('channel', currentChannel).is('dm_to', null).order('created_at',{ascending:true}).limit(60);
+  } else {
+    const me=currentUser.id, them=currentDMUser.id;
+    query = sb.from('dc_messages').select('*').or(`and(user_id.eq.${me},dm_to.eq.${them}),and(user_id.eq.${them},dm_to.eq.${me})`).order('created_at',{ascending:true}).limit(60);
+  }
+  const {data, error} = await query;
+  container.innerHTML = '';
+  if(error){ container.innerHTML='<div style="text-align:center;padding:40px;color:#e05a5a;font-size:.8rem">Erreur: '+escHtml(error.message)+'</div>'; return; }
+  if(!data||!data.length){ container.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--muted);font-size:.82rem">Aucun message pour l\'instant — dis bonjour 👋</div>'; return; }
+  // Fetch all unique user profiles
+  const userIds=[...new Set(data.map(m=>m.user_id))];
+  const {data:users} = await sb.from('dc_users').select('id,firstname,lastname,initials,color').in('id', userIds);
+  const userMap={};
+  (users||[]).forEach(u=>userMap[u.id]=u);
+  data.forEach(m => {
+    const u = userMap[m.user_id] || {};
     renderMsg({...m, firstname:u.firstname, lastname:u.lastname, initials:u.initials, color:u.color});
   });
 }
@@ -821,9 +851,6 @@ async function loadMessages(){
 // ── Subscribe realtime ──
 function subscribeRealtime(){
   if(realtimeSub){ sb.removeChannel(realtimeSub); realtimeSub=null; }
-  const filter = chatMode==='channel'
-    ? `channel=eq.${currentChannel}`
-    : `dm_to=eq.${currentUser.id}`;
   realtimeSub = sb.channel('chat-'+Date.now())
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'dc_messages'},async payload=>{
       const m = payload.new;
@@ -831,12 +858,15 @@ function subscribeRealtime(){
       if(chatMode==='channel'){
         if(m.channel!==currentChannel || m.dm_to) return;
       } else {
+        if(!currentDMUser) return;
         const me=currentUser.id, them=currentDMUser.id;
         const ok = (m.user_id===me&&m.dm_to===them)||(m.user_id===them&&m.dm_to===me);
         if(!ok) return;
       }
+      // Skip own messages — already rendered optimistically on send
+      if(m.user_id === currentUser.id) return;
       // Fetch user info
-      const {data:u} = await sb.from('dc_users').select('firstname,lastname,initials,color').eq('id',m.user_id).single();
+      const {data:u} = await sb.from('dc_users').select('firstname,lastname,initials,color').eq('id',m.user_id).maybeSingle();
       renderMsg({...m, firstname:u?.firstname, lastname:u?.lastname, initials:u?.initials, color:u?.color});
       // Notification if DM and not current view
       if(m.dm_to===currentUser.id && m.user_id!==currentUser.id){
@@ -852,19 +882,27 @@ async function sendMsg(){
   const text  = input.value.trim();
   if(!text || !userProfile) return;
   input.value = '';
-  const payload = {
+  const now = new Date().toISOString();
+  // Render immediately (optimistic)
+  renderMsg({
+    id: 'tmp-'+Date.now(),
+    user_id: currentUser.id,
+    content: text,
+    created_at: now,
+    firstname: userProfile.firstname,
+    lastname: userProfile.lastname,
+    initials: userProfile.initials,
+    color: userProfile.color
+  });
+  // Save to Supabase (realtime will skip it because user_id===currentUser.id)
+  const {error} = await sb.from('dc_messages').insert({
     user_id: currentUser.id,
     content: text,
     channel: chatMode==='channel' ? currentChannel : null,
     dm_to:   chatMode==='dm'      ? currentDMUser.id : null,
-    created_at: new Date().toISOString()
-  };
-  const {error} = await sb.from('dc_messages').insert(payload);
-  if(error){
-    console.error('sendMsg error',error);
-    // Show optimistically anyway
-    renderMsg({...payload, id:'tmp-'+Date.now(), firstname:userProfile.firstname, lastname:userProfile.lastname, initials:userProfile.initials, color:userProfile.color});
-  }
+    created_at: now
+  });
+  if(error) console.error('sendMsg error', error);
 }
 
 // ── Select channel ──
