@@ -32,9 +32,9 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:400;letter-spacing:.04em;color:var(--white);text-decoration:none}
 .nav-logo span{color:var(--gold)}
 .nav-right{display:flex;align-items:center;gap:32px}
-.nav-link{font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .3s;background:none;border:none}
+.nav-link{font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .3s;background:none;border:none}
 .nav-link:hover{color:var(--white)}
-.nav-btn{font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;padding:10px 24px;border:1px solid var(--gold-border);color:var(--white);background:none;transition:all .3s;position:relative;overflow:hidden}
+.nav-btn{font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;padding:10px 24px;border:1px solid var(--gold-border);color:var(--white);background:none;transition:all .3s;position:relative;overflow:hidden}
 .nav-btn::before{content:'';position:absolute;inset:0;background:var(--gold-dim);transform:scaleX(0);transform-origin:left;transition:transform .3s}
 .nav-btn:hover::before{transform:scaleX(1)}
 #progress{position:fixed;right:36px;top:50%;transform:translateY(-50%);z-index:800;display:flex;flex-direction:column;gap:12px}
@@ -50,22 +50,22 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .vl:nth-child(1){left:14%}.vl:nth-child(2){left:28%;animation-delay:2s}.vl:nth-child(3){left:50%;animation-delay:1s}.vl:nth-child(4){left:72%;animation-delay:3s}.vl:nth-child(5){left:86%;animation-delay:1.5s}
 @keyframes vPulse{0%,100%{opacity:0}50%{opacity:1}}
 .p1-content{position:relative;z-index:2;text-align:center;max-width:880px;padding:0 32px}
-.p1-tag{font-family:'Geist Mono',monospace;font-size:.64rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:40px;display:flex;align-items:center;justify-content:center;gap:18px;animation:fUp .9s ease .1s both}
+.p1-tag{font-family:Geist Mono,monospace;font-size:.64rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:40px;display:flex;align-items:center;justify-content:center;gap:18px;animation:fUp .9s ease .1s both}
 .p1-tag::before,.p1-tag::after{content:'';flex:1;max-width:64px;height:1px;background:var(--gold-border)}
 .p1-title{font-family:'Cormorant Garamond',serif;font-size:clamp(5rem,13vw,12rem);font-weight:300;line-height:.86;letter-spacing:-.03em;animation:fUp .9s ease .3s both}
 .p1-title em{font-style:italic;color:var(--gold-light)}
 .p1-sub{font-size:1rem;font-weight:300;color:var(--muted);line-height:1.9;margin:36px auto 52px;max-width:440px;animation:fUp .9s ease .5s both}
 .p1-actions{display:flex;align-items:center;justify-content:center;gap:18px;animation:fUp .9s ease .7s both}
-.btn-prim{padding:14px 44px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#000;font-family:'Geist Mono',monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;border:none;transition:all .35s;position:relative;overflow:hidden}
+.btn-prim{padding:14px 44px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#000;font-family:Geist Mono,monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;border:none;transition:all .35s;position:relative;overflow:hidden}
 .btn-prim::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.18);opacity:0;transition:opacity .3s}
 .btn-prim:hover{transform:translateY(-2px);box-shadow:0 16px 48px rgba(200,168,75,.35)}
 .btn-prim:hover::after{opacity:1}
-.btn-sec{padding:14px 44px;border:1px solid var(--gold-border);color:var(--white);font-family:'Geist Mono',monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;background:none;transition:all .35s;position:relative;overflow:hidden}
+.btn-sec{padding:14px 44px;border:1px solid var(--gold-border);color:var(--white);font-family:Geist Mono,monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;background:none;transition:all .35s;position:relative;overflow:hidden}
 .btn-sec::before{content:'';position:absolute;inset:0;background:var(--gold-dim);transform:scaleX(0);transform-origin:left;transition:transform .35s}
 .btn-sec:hover::before{transform:scaleX(1)}
 .btn-sec:hover{border-color:rgba(200,168,75,.45)}
 .p1-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;animation:fUp .9s ease 1.1s both}
-.scr-word{font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.22em;color:var(--muted);text-transform:uppercase}
+.scr-word{font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.22em;color:var(--muted);text-transform:uppercase}
 .scr-line{width:1px;height:54px;background:rgba(200,168,75,0.12);position:relative;overflow:hidden}
 .scr-line::after{content:'';position:absolute;top:-100%;left:0;right:0;height:100%;background:var(--gold);animation:scrlA 2.2s ease-in-out infinite}
 @keyframes scrlA{0%{top:-100%}60%{top:100%}100%{top:100%}}
@@ -84,67 +84,67 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .cg2{background:radial-gradient(ellipse at 50% 120%,rgba(200,168,75,0.15) 0%,transparent 60%)}
 .cg3{background:radial-gradient(ellipse at 50% 120%,rgba(200,168,75,0.18) 0%,transparent 60%)}
 .card-content{position:absolute;bottom:0;left:0;right:0;padding:52px 44px;background:linear-gradient(to top,rgba(5,5,10,.96) 0%,rgba(5,5,10,.55) 60%,transparent 100%)}
-.card-eyebrow{font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:block;transition:letter-spacing .3s}
+.card-eyebrow{font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:block;transition:letter-spacing .3s}
 .card:hover .card-eyebrow{letter-spacing:.28em}
 .card-title{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:400;line-height:1.05;transition:transform .4s}
 .card:hover .card-title{transform:translateY(-5px)}
-.card-arrow{display:inline-flex;align-items:center;gap:8px;margin-top:22px;font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);opacity:0;transform:translateX(-8px);transition:all .4s}
+.card-arrow{display:inline-flex;align-items:center;gap:8px;margin-top:22px;font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);opacity:0;transform:translateX(-8px);transition:all .4s}
 .card:hover .card-arrow{opacity:1;transform:translateX(0)}
 #p3{background:var(--black)}
 .p3-wrap{max-width:1100px;width:100%;padding:0 80px;display:grid;grid-template-columns:160px 1fr;gap:100px;align-items:center}
-.p3-label{font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);writing-mode:vertical-rl;transform:rotate(180deg)}
+.p3-label{font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);writing-mode:vertical-rl;transform:rotate(180deg)}
 .p3-text{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,3vw,3rem);font-weight:300;line-height:1.45}
 .p3-text strong{font-weight:500;color:var(--gold-light)}
 .p3-text em{font-style:italic}
-.p3-sig{margin-top:52px;display:flex;align-items:center;gap:20px;font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.p3-sig{margin-top:52px;display:flex;align-items:center;gap:20px;font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 .p3-sig::before{content:'';width:36px;height:1px;background:var(--gold-border)}
 #p5{background:var(--black)}
 .p5-wrap{max-width:1100px;width:100%;padding:0 80px}
 .p5-top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:52px;padding-bottom:24px;border-bottom:1px solid rgba(244,241,234,0.08)}
 .p5-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.8rem);font-weight:300;line-height:1.05}
 .p5-title em{font-style:italic;color:var(--gold-light)}
-.p5-count{font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.p5-count{font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 .feat-list{display:flex;flex-direction:column}
 .feat{display:grid;grid-template-columns:64px 1fr auto;gap:32px;align-items:center;padding:22px 0;border-bottom:1px solid rgba(244,241,234,0.08);transition:all .3s;position:relative;overflow:hidden}
 .feat::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--gold-dim),transparent);transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.4,0,.2,1)}
 .feat:hover::before{transform:scaleX(1)}
-.feat-n{font-family:'Geist Mono',monospace;font-size:.6rem;color:var(--gold);letter-spacing:.12em;position:relative;z-index:1}
+.feat-n{font-family:Geist Mono,monospace;font-size:.6rem;color:var(--gold);letter-spacing:.12em;position:relative;z-index:1}
 .feat-name{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:400;position:relative;z-index:1}
 .feat-desc{font-size:.8rem;color:var(--muted);font-weight:300;line-height:1.65;max-width:320px;text-align:right;position:relative;z-index:1}
 #p6{background:var(--black);border-top:1px solid rgba(244,241,234,0.08)}
 .p6-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 60%,rgba(200,168,75,0.08) 0%,transparent 65%)}
 .p6-content{position:relative;z-index:2;text-align:center;max-width:760px;padding:0 40px}
-.p6-tag{font-family:'Geist Mono',monospace;font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:36px;display:flex;align-items:center;justify-content:center;gap:18px}
+.p6-tag{font-family:Geist Mono,monospace;font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:36px;display:flex;align-items:center;justify-content:center;gap:18px}
 .p6-tag::before,.p6-tag::after{content:'';flex:1;max-width:56px;height:1px;background:var(--gold-border)}
 .p6-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,8vw,7.5rem);font-weight:300;line-height:.88;letter-spacing:-.03em;margin-bottom:32px}
 .p6-title em{font-style:italic;color:var(--gold-light)}
 .p6-sub{font-size:.9rem;color:var(--muted);line-height:1.9;margin-bottom:52px;font-weight:300}
 .p6-actions{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:52px}
-.p6-foot{font-family:'Geist Mono',monospace;font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(244,241,234,0.18)}
+.p6-foot{font-family:Geist Mono,monospace;font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(244,241,234,0.18)}
 #auth-ov{position:fixed;inset:0;z-index:9000;background:rgba(5,5,10,.92);backdrop-filter:blur(24px);display:none;align-items:center;justify-content:center}
 #auth-ov.open{display:flex}
 .auth-box{width:100%;max-width:440px;border:1px solid var(--gold-border);background:rgba(8,8,14,.98);position:relative;padding:52px 48px 44px}
 .auth-logo{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;text-align:center;margin-bottom:8px}
 .auth-logo span{color:var(--gold)}
 .auth-tabs{display:flex;border-bottom:1px solid rgba(244,241,234,0.08);margin:28px 0 32px}
-.auth-tab{flex:1;padding:10px;font-family:'Geist Mono',monospace;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;background:none;border:none;color:var(--muted);transition:all .3s;border-bottom:2px solid transparent;margin-bottom:-1px}
+.auth-tab{flex:1;padding:10px;font-family:Geist Mono,monospace;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;background:none;border:none;color:var(--muted);transition:all .3s;border-bottom:2px solid transparent;margin-bottom:-1px}
 .auth-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
 .auth-form{display:none}.auth-form.active{display:block}
 .auth-row{margin-bottom:18px}
-.auth-label{display:block;font-family:'Geist Mono',monospace;font-size:.57rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.auth-label{display:block;font-family:Geist Mono,monospace;font-size:.57rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
 .auth-input{width:100%;background:rgba(244,241,234,0.04);border:1px solid rgba(244,241,234,0.08);padding:13px 16px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:border-color .3s}
 .auth-input:focus{border-color:var(--gold-border)}
 .auth-input::placeholder{color:rgba(244,241,234,0.2)}
-.auth-submit{width:100%;margin-top:24px;padding:15px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#000;font-family:'Geist Mono',monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;border:none;transition:all .3s;position:relative;overflow:hidden}
+.auth-submit{width:100%;margin-top:24px;padding:15px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#000;font-family:Geist Mono,monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;border:none;transition:all .3s;position:relative;overflow:hidden}
 .auth-submit:hover{box-shadow:0 12px 36px rgba(200,168,75,.3);transform:translateY(-1px)}
 .auth-close{position:absolute;top:18px;right:20px;background:none;border:none;color:var(--muted);font-size:1.3rem;transition:color .2s;padding:4px 8px;line-height:1}
 .auth-close:hover{color:var(--white)}
-.auth-err{font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.1em;color:#e05a5a;margin-top:12px;display:none;text-align:center}
+.auth-err{font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.1em;color:#e05a5a;margin-top:12px;display:none;text-align:center}
 .auth-err.show{display:block}
 .auth-loading{width:16px;height:16px;border:1.5px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;display:none;margin:0 auto}
 @keyframes spin{to{transform:rotate(360deg)}}
-.auth-switch{text-align:center;margin-top:20px;font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.1em;color:var(--muted)}
-.auth-switch button{background:none;border:none;color:var(--gold);font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-decoration:underline}
+.auth-switch{text-align:center;margin-top:20px;font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.1em;color:var(--muted)}
+.auth-switch button{background:none;border:none;color:var(--gold);font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.1em;text-decoration:underline}
 
 /* ═══════════════════════════════ DASHBOARD ═══════════════════════════════ */
 #view-dash{position:fixed;inset:0;z-index:400;display:none}
@@ -156,10 +156,10 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .sb-icon:hover{color:var(--white);background:var(--muted3)}
 .sb-icon.active{color:var(--gold);background:var(--gold-dim)}
 .sb-icon.active::before{content:'';position:absolute;left:-1px;top:50%;transform:translateY(-50%);width:3px;height:24px;background:var(--gold);border-radius:0 3px 3px 0}
-.sb-icon .tip{position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%);background:#1a1a28;border:1px solid var(--gold-border);color:var(--white);font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;border-radius:4px;z-index:999}
+.sb-icon .tip{position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%);background:#1a1a28;border:1px solid var(--gold-border);color:var(--white);font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;border-radius:4px;z-index:999}
 .sb-icon:hover .tip{opacity:1}
 .sb-bottom{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:4px}
-.avatar-mini{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.7rem;font-weight:500;border:2px solid var(--gold-border);transition:border-color .3s;background:none}
+.avatar-mini{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.7rem;font-weight:500;border:2px solid var(--gold-border);transition:border-color .3s;background:none}
 .avatar-mini:hover{border-color:var(--gold)}
 #dpanel{width:var(--panel-w);height:100%;background:var(--black3);border-right:1px solid var(--muted2);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;transition:width .35s cubic-bezier(.4,0,.2,1);min-width:0}
 #dpanel.hidden{width:0;border-right:none}
@@ -168,23 +168,23 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 #panel-toggle:hover{background:rgba(200,168,75,0.15);border-color:var(--gold)}
 .dp-header{padding:20px 20px 16px;border-bottom:1px solid var(--muted2);flex-shrink:0}
 .dp-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;line-height:1}
-.dp-sub{font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-top:4px}
+.dp-sub{font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-top:4px}
 .dp-body{flex:1;overflow-y:auto;padding:12px 8px}
 .dp-body::-webkit-scrollbar{width:4px}
 .dp-body::-webkit-scrollbar-thumb{background:var(--gold-border);border-radius:2px}
 .dp-section{margin-bottom:20px}
-.dp-section-label{font-family:'Geist Mono',monospace;font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);padding:0 12px;margin-bottom:6px}
+.dp-section-label{font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);padding:0 12px;margin-bottom:6px}
 .dp-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;color:var(--muted);font-size:.85rem;font-weight:300;transition:all .2s;background:none;border:none;width:100%;text-align:left}
 .dp-item:hover{color:var(--white);background:var(--muted3)}
 .dp-item.active{color:var(--white);background:var(--gold-dim)}
 .dp-item-icon{font-size:.9rem;flex-shrink:0;width:18px;text-align:center}
-.dp-item-badge{margin-left:auto;background:var(--gold);color:#000;font-family:'Geist Mono',monospace;font-size:.5rem;padding:2px 6px;border-radius:10px;font-weight:500}
+.dp-item-badge{margin-left:auto;background:var(--gold);color:#000;font-family:Geist Mono,monospace;font-size:.5rem;padding:2px 6px;border-radius:10px;font-weight:500}
 #dmain{flex:1;height:100%;overflow:hidden;display:flex;flex-direction:column}
 .content-area{width:100%;height:100%;display:none;flex-direction:column}
 .content-area.active{display:flex}
 .content-header{padding:20px 32px;border-bottom:1px solid var(--muted2);display:flex;align-items:center;gap:16px;flex-shrink:0}
 .content-header-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:400}
-.content-header-sub{font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-left:auto}
+.content-header-sub{font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-left:auto}
 .content-body{flex:1;overflow-y:auto;padding:32px}
 .content-body::-webkit-scrollbar{width:4px}
 .content-body::-webkit-scrollbar-thumb{background:var(--gold-border);border-radius:2px}
@@ -192,7 +192,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .w-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(200,168,75,0.07) 0%,transparent 55%)}
 .w-grid{position:absolute;inset:0;background-image:linear-gradient(var(--muted2) 1px,transparent 1px),linear-gradient(90deg,var(--muted2) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 0%,transparent 100%)}
 .w-content{position:relative;z-index:2;text-align:center;max-width:680px;padding:0 40px;animation:fUp .8s ease both}
-.w-tag{font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:32px;display:flex;align-items:center;justify-content:center;gap:16px}
+.w-tag{font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:32px;display:flex;align-items:center;justify-content:center;gap:16px}
 .w-tag::before,.w-tag::after{content:'';flex:1;max-width:48px;height:1px;background:var(--gold-border)}
 .w-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,6vw,5.5rem);font-weight:300;line-height:.95;letter-spacing:-.02em;margin-bottom:16px}
 .w-title em{font-style:italic;color:var(--gold-light)}
@@ -202,12 +202,12 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .wc{padding:20px 24px;border:1px solid var(--gold-border);border-radius:8px;text-align:left;min-width:160px;transition:all .3s;background:none;color:var(--white)}
 .wc:hover{border-color:rgba(200,168,75,.4);background:var(--gold-dim);transform:translateY(-3px)}
 
-.wc-label{font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
+.wc-label{font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
 .wc-desc{font-size:.8rem;color:var(--muted);font-weight:300}
 .coming-soon{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px;color:var(--muted)}
 .cs-icon{font-size:3rem;opacity:.3}
 .cs-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--white)}
-.cs-sub{font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.cs-sub{font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
 /* Chat */
 #chat-wrap{display:flex;flex:1;overflow:hidden}
 #channels-list{width:220px;border-right:1px solid var(--muted2);display:flex;flex-direction:column;flex-shrink:0}
@@ -219,11 +219,11 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .msg{display:flex;gap:14px;padding:4px 8px;border-radius:6px;transition:background .15s}
 .msg:hover{background:var(--muted3)}
 .msg.new-group{margin-top:16px}
-.msg-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.65rem;font-weight:500;flex-shrink:0;margin-top:2px}
+.msg-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.65rem;font-weight:500;flex-shrink:0;margin-top:2px}
 .msg-right{flex:1;min-width:0}
 .msg-header{display:flex;align-items:baseline;gap:10px;margin-bottom:2px}
-.msg-author{font-family:'Geist Mono',monospace;font-size:.72rem;font-weight:500}
-.msg-time{font-family:'Geist Mono',monospace;font-size:.55rem;color:var(--muted);letter-spacing:.06em}
+.msg-author{font-family:Geist Mono,monospace;font-size:.72rem;font-weight:500}
+.msg-time{font-family:Geist Mono,monospace;font-size:.55rem;color:var(--muted);letter-spacing:.06em}
 .msg-text{font-size:.88rem;color:rgba(244,241,234,0.85);line-height:1.6;word-break:break-word}
 .msg-cont .msg-avatar{visibility:hidden}
 .msg-cont .msg-header{display:none}
@@ -237,7 +237,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 /* Premium */
 .premium-wrap{max-width:800px;margin:0 auto}
 .premium-hero{text-align:center;padding:40px 0 52px;border-bottom:1px solid var(--muted2);margin-bottom:40px}
-.premium-badge{display:inline-flex;align-items:center;gap:8px;font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-border);padding:6px 18px;border-radius:20px;margin-bottom:28px}
+.premium-badge{display:inline-flex;align-items:center;gap:8px;font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-border);padding:6px 18px;border-radius:20px;margin-bottom:28px}
 .premium-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:300;line-height:1;margin-bottom:16px}
 .premium-title em{font-style:italic;color:var(--gold-light)}
 .premium-sub{color:var(--muted);font-size:.9rem;font-weight:300;line-height:1.8;max-width:460px;margin:0 auto 36px}
@@ -245,29 +245,29 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .plan{border:1px solid var(--gold-border);padding:32px 28px;border-radius:8px;position:relative;transition:all .3s;background:none}
 .plan:hover{border-color:rgba(200,168,75,.4);background:var(--gold-dim)}
 .plan.featured{border-color:var(--gold);background:var(--gold-dim)}
-.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;font-family:'Geist Mono',monospace;font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;padding:4px 14px;border-radius:10px;white-space:nowrap}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;padding:4px 14px;border-radius:10px;white-space:nowrap}
 .plan-name{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:400;margin-bottom:6px}
-.plan-price{font-family:'Geist Mono',monospace;font-size:2rem;color:var(--gold);margin-bottom:20px}
+.plan-price{font-family:Geist Mono,monospace;font-size:2rem;color:var(--gold);margin-bottom:20px}
 .plan-price span{font-size:.8rem;color:var(--muted)}
 .plan-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
 .plan-features li{display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--muted);font-weight:300}
 .plan-features li::before{content:'◆';color:var(--gold);font-size:.4rem;flex-shrink:0}
-.plan-btn{width:100%;padding:12px;border:1px solid var(--gold-border);background:none;color:var(--white);font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;transition:all .3s}
+.plan-btn{width:100%;padding:12px;border:1px solid var(--gold-border);background:none;color:var(--white);font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;transition:all .3s}
 .plan-btn:hover,.plan.featured .plan-btn{background:var(--gold);border-color:var(--gold);color:#000}
 /* Profile */
 .profile-wrap{max-width:700px;margin:0 auto}
 .profile-banner{height:140px;background:linear-gradient(135deg,rgba(200,168,75,0.15),rgba(200,168,75,0.03));border:1px solid var(--gold-border);border-radius:8px}
-.profile-avatar-lg{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:1.4rem;font-weight:500;border:3px solid var(--black3);position:absolute;bottom:-40px;left:28px}
+.profile-avatar-lg{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:1.4rem;font-weight:500;border:3px solid var(--black3);position:absolute;bottom:-40px;left:28px}
 .profile-info{padding:52px 28px 28px;border:1px solid var(--gold-border);border-top:none;border-radius:0 0 8px 8px;margin-bottom:24px}
 .profile-name{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:400}
-.profile-handle{font-family:'Geist Mono',monospace;font-size:.65rem;letter-spacing:.12em;color:var(--muted);margin-top:2px}
+.profile-handle{font-family:Geist Mono,monospace;font-size:.65rem;letter-spacing:.12em;color:var(--muted);margin-top:2px}
 .profile-bio{font-size:.88rem;color:var(--muted);font-weight:300;line-height:1.7;margin-top:14px;max-width:480px}
 .profile-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.tag{font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;padding:4px 12px;border:1px solid var(--gold-border);color:var(--gold);border-radius:4px}
+.tag{font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;padding:4px 12px;border:1px solid var(--gold-border);color:var(--gold);border-radius:4px}
 .profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
 .stat-box{border:1px solid var(--gold-border);padding:20px;border-radius:8px;text-align:center;background:var(--gold-dim)}
 .stat-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:400;color:var(--gold-light)}
-.stat-label{font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.stat-label{font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:4px}
 
 
 
@@ -292,19 +292,19 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .dev-card{background:var(--black3);border:1px solid var(--muted2);border-radius:8px;overflow:hidden;transition:all .3s;position:relative}
 .dev-card:hover{border-color:var(--gold-border);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.4)}
 .dev-card-banner{height:72px;position:relative;flex-shrink:0}
-.dev-card-avatar{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.85rem;font-weight:500;border:3px solid var(--black3);position:absolute;bottom:-26px;left:20px;overflow:hidden;flex-shrink:0}
+.dev-card-avatar{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.85rem;font-weight:500;border:3px solid var(--black3);position:absolute;bottom:-26px;left:20px;overflow:hidden;flex-shrink:0}
 .dev-card-body{padding:34px 20px 20px}
 .dev-card-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:2px}
-.dev-card-handle{font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.1em;color:var(--muted);margin-bottom:10px}
+.dev-card-handle{font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.1em;color:var(--muted);margin-bottom:10px}
 .dev-card-bio{font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .dev-card-skills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
-.dev-skill-tag{font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--gold-border);color:var(--gold);border-radius:3px}
+.dev-skill-tag{font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--gold-border);color:var(--gold);border-radius:3px}
 .dev-card-actions{display:flex;gap:8px;border-top:1px solid var(--muted2);padding-top:14px}
-.dev-card-btn{flex:1;padding:8px;font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border-radius:5px;transition:all .2s;border:1px solid var(--muted2);background:none;color:var(--muted)}
+.dev-card-btn{flex:1;padding:8px;font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border-radius:5px;transition:all .2s;border:1px solid var(--muted2);background:none;color:var(--muted)}
 .dev-card-btn:hover{border-color:var(--gold-border);color:var(--white);background:var(--gold-dim)}
 .dev-card-btn.primary{border-color:var(--gold-border);color:var(--gold);background:var(--gold-dim)}
 .dev-card-btn.primary:hover{background:rgba(200,168,75,.18)}
-.skill-filter-btn{font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border:1px solid var(--muted2);background:none;color:var(--muted);border-radius:20px;transition:all .2s}
+.skill-filter-btn{font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border:1px solid var(--muted2);background:none;color:var(--muted);border-radius:20px;transition:all .2s}
 .skill-filter-btn:hover,.skill-filter-btn.active{border-color:var(--gold-border);color:var(--gold);background:var(--gold-dim)}
 
 @keyframes wFade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -340,15 +340,15 @@ button{cursor:pointer}
 #admin-sidebar{width:240px;flex-shrink:0;background:var(--black2);border-right:1px solid var(--gold-border);display:flex;flex-direction:column;height:100vh;overflow:hidden}
 #admin-view .sidebar-logo{padding:28px 24px 20px;border-bottom:1px solid var(--muted2)}
 #admin-view .sidebar-logo-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;color:var(--gold);letter-spacing:.04em}
-#admin-view .sidebar-logo-sub{font-family:'Geist Mono',monospace;font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:2px}
-#admin-view .sidebar-section{padding:16px 12px 8px;font-family:'Geist Mono',monospace;font-size:.48rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+#admin-view .sidebar-logo-sub{font-family:Geist Mono,monospace;font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+#admin-view .sidebar-section{padding:16px 12px 8px;font-family:Geist Mono,monospace;font-size:.48rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 #admin-view .nav-btn{display:flex;align-items:center;gap:10px;width:100%;padding:9px 14px;border-radius:6px;background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.88rem;transition:all .2s;text-align:left}
 #admin-view .nav-btn:hover{background:var(--muted3);color:var(--white)}
 #admin-view .nav-btn.active{background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-border)}
 #admin-view .nav-btn svg{flex-shrink:0;opacity:.7}
 #admin-view .nav-btn.active svg{opacity:1}
 #admin-view .sidebar-footer{margin-top:auto;padding:16px 12px;border-top:1px solid var(--muted2)}
-#admin-view .admin-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:4px;font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+#admin-view .admin-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:4px;font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
 
 /* ── MAIN ── */
 #admin-main{flex:1;overflow-y:auto;background:var(--black)}
@@ -357,7 +357,7 @@ button{cursor:pointer}
 #admin-view .page{display:none;padding:32px 36px}
 #admin-view .page.active{display:block}
 #admin-view .page-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:400;color:var(--white);margin-bottom:4px}
-#admin-view .page-sub{font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:28px}
+#admin-view .page-sub{font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:28px}
 #admin-view .page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px}
 
 /* ── STAT CARDS ── */
@@ -365,7 +365,7 @@ button{cursor:pointer}
 #admin-view .stat-card{background:var(--black2);border:1px solid var(--gold-border);border-radius:8px;padding:20px 22px;position:relative;overflow:hidden}
 #admin-view .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5}
 #admin-view .stat-card-val{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:400;color:var(--white);margin-bottom:4px}
-#admin-view .stat-card-label{font-family:'Geist Mono',monospace;font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+#admin-view .stat-card-label{font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 #admin-view .stat-card-icon{position:absolute;top:18px;right:18px;opacity:.15;font-size:1.8rem}
 
 /* ── TABLE ── */
@@ -373,22 +373,22 @@ button{cursor:pointer}
 #admin-view .table-toolbar{padding:16px 20px;border-bottom:1px solid var(--muted2);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 #admin-view .search-input{background:var(--muted3);border:1px solid var(--muted2);padding:8px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.84rem;border-radius:4px;outline:none;min-width:220px;transition:border .2s}
 #admin-view .search-input:focus{border-color:var(--gold-border)}
-#admin-view .filter-btn{background:none;border:1px solid var(--muted2);color:var(--muted);padding:7px 14px;font-family:'Geist Mono',monospace;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;border-radius:4px;transition:all .2s}
+#admin-view .filter-btn{background:none;border:1px solid var(--muted2);color:var(--muted);padding:7px 14px;font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;border-radius:4px;transition:all .2s}
 #admin-view .filter-btn:hover,.filter-btn.active{border-color:var(--gold-border);color:var(--gold);background:var(--gold-dim)}
 table{width:100%;border-collapse:collapse}
-thead th{padding:12px 16px;text-align:left;font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--muted2);white-space:nowrap}
+thead th{padding:12px 16px;text-align:left;font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--muted2);white-space:nowrap}
 tbody tr{border-bottom:1px solid var(--muted2);transition:background .15s}
 tbody tr:last-child{border-bottom:none}
 tbody tr:hover{background:var(--muted3)}
 tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
 #admin-view .user-cell{display:flex;align-items:center;gap:10px}
-#admin-view .user-ini{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.62rem;flex-shrink:0;overflow:hidden}
+#admin-view .user-ini{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.62rem;flex-shrink:0;overflow:hidden}
 #admin-view .user-ini img{width:100%;height:100%;object-fit:cover}
 #admin-view .user-name{font-size:.88rem;font-weight:400}
 .user-email{font-size:.7rem;color:var(--muted)}
 
 /* ── BADGES PILLS ── */
-.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
 .pill-gold{background:rgba(200,168,75,.12);border:1px solid rgba(200,168,75,.3);color:var(--gold)}
 .pill-blue{background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);color:#60a5fa}
 .pill-green{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);color:#34d399}
@@ -407,13 +407,13 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
 .role-banned{color:#7f1d1d}
 
 /* ── ACTION BTNS ── */
-#admin-view .action-btn{background:none;border:1px solid var(--muted2);color:var(--muted);padding:5px 10px;font-family:'Geist Mono',monospace;font-size:.48rem;letter-spacing:.1em;text-transform:uppercase;border-radius:4px;transition:all .2s}
+#admin-view .action-btn{background:none;border:1px solid var(--muted2);color:var(--muted);padding:5px 10px;font-family:Geist Mono,monospace;font-size:.48rem;letter-spacing:.1em;text-transform:uppercase;border-radius:4px;transition:all .2s}
 #admin-view .action-btn:hover{border-color:var(--gold-border);color:var(--gold)}
 #admin-view .action-btn.danger:hover{border-color:var(--red);color:var(--red)}
 #admin-view .action-btn.success:hover{border-color:var(--green);color:var(--green)}
-#admin-view .btn-primary{background:var(--gold);border:none;color:#000;padding:9px 20px;font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;transition:opacity .2s}
+#admin-view .btn-primary{background:var(--gold);border:none;color:#000;padding:9px 20px;font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;transition:opacity .2s}
 #admin-view .btn-primary:hover{opacity:.85}
-#admin-view .btn-outline{background:none;border:1px solid var(--gold-border);color:var(--gold);padding:8px 18px;font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;transition:all .2s}
+#admin-view .btn-outline{background:none;border:1px solid var(--gold-border);color:var(--gold);padding:8px 18px;font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;transition:all .2s}
 #admin-view .btn-outline:hover{background:var(--gold-dim)}
 
 /* ── MODAL ── */
@@ -428,8 +428,8 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
 #admin-view .modal-close:hover{color:var(--white)}
 #admin-view .modal-body{padding:24px 28px}
 #admin-view .modal-section{margin-bottom:22px}
-#admin-view .modal-section-title{font-family:'Geist Mono',monospace;font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
-.field-label{font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+#admin-view .modal-section-title{font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.field-label{font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
 .field-input{width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;border-radius:4px;outline:none;transition:border .2s}
 .field-input:focus{border-color:var(--gold-border)}
 .field-select{width:100%;background:var(--black3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;border-radius:4px;outline:none}
@@ -442,26 +442,26 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
 #admin-view .badge-card.owned{border-color:var(--gold-border);background:var(--gold-dim)}
 #admin-view .badge-card.owned::after{content:'✓';position:absolute;top:6px;right:8px;font-size:.65rem;color:var(--gold)}
 #admin-view .badge-icon{font-size:1.6rem;margin-bottom:6px}
-#admin-view .badge-name{font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);line-height:1.4}
+#admin-view .badge-name{font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);line-height:1.4}
 #admin-view .badge-card.owned .badge-name{color:var(--gold)}
-#admin-view .badge-section-title{font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--gold-border)}
+#admin-view .badge-section-title{font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--gold-border)}
 
 /* ── MESSAGES TABLE ── */
 #admin-view .msg-content{max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.84rem}
-#admin-view .channel-tag{display:inline-flex;padding:2px 8px;background:var(--muted3);border:1px solid var(--muted2);border-radius:3px;font-family:'Geist Mono',monospace;font-size:.48rem;letter-spacing:.1em;color:var(--muted)}
+#admin-view .channel-tag{display:inline-flex;padding:2px 8px;background:var(--muted3);border:1px solid var(--muted2);border-radius:3px;font-family:Geist Mono,monospace;font-size:.48rem;letter-spacing:.1em;color:var(--muted)}
 
 /* ── LOG ── */
 #admin-view .log-item{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--muted2);align-items:flex-start}
 #admin-view .log-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
 #admin-view .log-text{font-size:.84rem;line-height:1.5}
-#admin-view .log-time{font-family:'Geist Mono',monospace;font-size:.58rem;color:var(--muted);white-space:nowrap;margin-top:2px}
+#admin-view .log-time{font-family:Geist Mono,monospace;font-size:.58rem;color:var(--muted);white-space:nowrap;margin-top:2px}
 
 /* ── EMPTY ── */
 #admin-view .empty{padding:48px;text-align:center;color:var(--muted);font-size:.84rem}
 #admin-view .empty-icon{font-size:2rem;margin-bottom:12px;opacity:.4}
 
 /* ── TOAST ── */
-#admin-toast{position:fixed;bottom:28px;right:28px;background:var(--black2);border:1px solid var(--gold-border);padding:12px 20px;border-radius:6px;font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.1em;color:var(--gold);z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s}
+#admin-toast{position:fixed;bottom:28px;right:28px;background:var(--black2);border:1px solid var(--gold-border);padding:12px 20px;border-radius:6px;font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.1em;color:var(--gold);z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s}
 #toast.show{transform:translateY(0);opacity:1}
 
 </style>
@@ -705,7 +705,7 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
           <!-- Banner image ou gradient -->
           <img id="profile-banner-img" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0"/>
           <!-- Bouton upload bannière -->
-          <label for="upload-banner" style="position:absolute;bottom:8px;right:10px;background:rgba(0,0,0,.55);border:1px solid rgba(200,168,75,.3);color:rgba(200,168,75,.8);font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;border-radius:4px;cursor:pointer;transition:all .2s;z-index:2" onmouseenter="this.style.background='rgba(0,0,0,.8)'" onmouseleave="this.style.background='rgba(0,0,0,.55)'">📷 Bannière</label>
+          <label for="upload-banner" style="position:absolute;bottom:8px;right:10px;background:rgba(0,0,0,.55);border:1px solid rgba(200,168,75,.3);color:rgba(200,168,75,.8);font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;border-radius:4px;cursor:pointer;transition:all .2s;z-index:2" onmouseenter="this.style.background='rgba(0,0,0,.8)'" onmouseleave="this.style.background='rgba(0,0,0,.55)'">📷 Bannière</label>
           <input type="file" id="upload-banner" accept="image/*" style="display:none" onchange="uploadBanner(this)"/>
           <!-- Avatar -->
           <div class="profile-avatar-lg" id="profile-avatar-lg" style="position:relative;overflow:hidden;cursor:pointer" onclick="document.getElementById('upload-avatar').click()">
@@ -723,47 +723,47 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
               <div class="profile-name" id="profile-name">—</div>
               <div class="profile-handle" id="profile-handle">@—</div>
             </div>
-            <button onclick="showProfileEdit()" style="background:none;border:1px solid var(--gold-border);color:var(--gold);padding:6px 14px;font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;white-space:nowrap;transition:all .2s;flex-shrink:0">✏ Modifier</button>
+            <button onclick="showProfileEdit()" style="background:none;border:1px solid var(--gold-border);color:var(--gold);padding:6px 14px;font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;white-space:nowrap;transition:all .2s;flex-shrink:0">✏ Modifier</button>
           </div>
           <div class="profile-bio" id="profile-bio-view" style="margin-top:12px;font-size:.88rem;color:var(--muted);line-height:1.7"></div>
           <div class="profile-tags" id="profile-tags-view" style="margin-top:12px"></div>
-          <div style="margin-top:14px;font-size:.75rem;color:var(--muted);font-family:'Geist Mono',monospace" id="profile-company-view"></div>
+          <div style="margin-top:14px;font-size:.75rem;color:var(--muted);font-family:Geist Mono,monospace" id="profile-company-view"></div>
         </div>
 
         <!-- EDIT FORM (masqué par défaut) -->
         <div id="profile-edit-form" style="display:none;border:1px solid var(--gold-border);border-top:none;border-radius:0 0 8px 8px;padding:24px 28px;margin-bottom:24px;background:var(--black3)">
-          <div style="font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:18px">Modifier le profil</div>
+          <div style="font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:18px">Modifier le profil</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
             <div>
-              <label style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Prénom</label>
+              <label style="font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Prénom</label>
               <input id="edit-firstname" type="text" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;border-radius:4px"/>
             </div>
             <div>
-              <label style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Nom</label>
+              <label style="font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Nom</label>
               <input id="edit-lastname" type="text" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;border-radius:4px"/>
             </div>
           </div>
           <div style="margin-bottom:14px">
-            <label style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Bio</label>
+            <label style="font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Bio</label>
             <textarea id="edit-bio" rows="3" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;border-radius:4px;resize:vertical;line-height:1.6"></textarea>
           </div>
           <div style="margin-bottom:14px">
-            <label style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Entreprise / Statut</label>
+            <label style="font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Entreprise / Statut</label>
             <input id="edit-company" type="text" placeholder="Ex: Freelance, Google, Étudiant…" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;border-radius:4px"/>
           </div>
           <div style="margin-bottom:18px">
-            <label style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Compétences <span style="color:var(--muted);font-size:.5rem">(séparées par des virgules)</span></label>
+            <label style="font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Compétences <span style="color:var(--muted);font-size:.5rem">(séparées par des virgules)</span></label>
             <input id="edit-skills" type="text" placeholder="JavaScript, React, Node.js, Python…" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;border-radius:4px"/>
           </div>
           <div style="margin-bottom:18px">
-            <label style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px">Couleur du profil</label>
+            <label style="font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px">Couleur du profil</label>
             <div id="color-picker" style="display:flex;gap:8px;flex-wrap:wrap"></div>
           </div>
           <div style="display:flex;gap:10px">
-            <button onclick="saveProfile()" style="background:var(--gold);border:none;color:#000;padding:9px 20px;font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;transition:opacity .2s" id="save-profile-btn">Enregistrer</button>
-            <button onclick="hideProfileEdit()" style="background:none;border:1px solid var(--muted2);color:var(--muted);padding:9px 20px;font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;border-radius:4px">Annuler</button>
+            <button onclick="saveProfile()" style="background:var(--gold);border:none;color:#000;padding:9px 20px;font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;transition:opacity .2s" id="save-profile-btn">Enregistrer</button>
+            <button onclick="hideProfileEdit()" style="background:none;border:1px solid var(--muted2);color:var(--muted);padding:9px 20px;font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;border-radius:4px">Annuler</button>
           </div>
-          <div id="profile-save-msg" style="margin-top:10px;font-family:'Geist Mono',monospace;font-size:.62rem;display:none"></div>
+          <div id="profile-save-msg" style="margin-top:10px;font-family:Geist Mono,monospace;font-size:.62rem;display:none"></div>
         </div>
 
         <!-- STATS -->
@@ -792,7 +792,7 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
           <input id="explorer-search" type="text" placeholder="Chercher par nom, skill, entreprise..." style="background:none;border:none;outline:none;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;flex:1" oninput="explorerSearch(this.value)"/>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap" id="skill-filters"></div>
-        <button onclick="explorerLoad()" style="background:none;border:1px solid var(--gold-border);color:var(--gold);padding:8px 14px;font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border-radius:6px;transition:all .2s" onmouseenter="this.style.background='var(--gold-dim)'" onmouseleave="this.style.background='none'">
+        <button onclick="explorerLoad()" style="background:none;border:1px solid var(--gold-border);color:var(--gold);padding:8px 14px;font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border-radius:6px;transition:all .2s" onmouseenter="this.style.background='var(--gold-dim)'" onmouseleave="this.style.background='none'">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;margin-right:4px"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
           Actualiser
         </button>
@@ -802,7 +802,7 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
         <div id="explorer-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px"></div>
         <div id="explorer-empty" style="display:none;text-align:center;padding:80px 20px">
           <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--white);margin-bottom:8px">Aucun développeur trouvé</div>
-          <div style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)">Essaie d'autres filtres</div>
+          <div style="font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)">Essaie d'autres filtres</div>
         </div>
       </div>
       <!-- Dev Profile Modal -->
@@ -2164,7 +2164,7 @@ async function explorerLoad(){
   const grid = document.getElementById('explorer-grid');
   const empty = document.getElementById('explorer-empty');
   if(!grid) return;
-  grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--muted);font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.18em">Chargement...</div>';
+  grid.innerHTML = "<div style='grid-column:1/-1;text-align:center;padding:60px;color:var(--muted);font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.18em'>Chargement...</div>";
   empty.style.display = 'none';
 
   const {data, error} = await sb.from('dc_users')
@@ -2259,7 +2259,7 @@ function renderExplorerGrid(){
         <div class="dev-card-avatar" style="background:${color}22;color:${color}">
           ${u.photo?`<img src="${u.photo}" style="width:100%;height:100%;object-fit:cover"/>` : ini}
         </div>
-        ${roleLabel?`<div style="position:absolute;top:10px;right:12px;font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:${color};border:1px solid ${color}44;padding:3px 8px;border-radius:10px;background:${color}11">${roleLabel}</div>`:''}
+        ${roleLabel?`<div style="position:absolute;top:10px;right:12px;font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:${color};border:1px solid ${color}44;padding:3px 8px;border-radius:10px;background:${color}11">${roleLabel}</div>`:''}
       </div>
       <div class="dev-card-body">
         <div class="dev-card-name">${escHtml(name)}</div>
@@ -2304,7 +2304,7 @@ async function openDevModal(userId){
   const modal = document.getElementById('dev-modal');
   const box = document.getElementById('dev-modal-content');
   modal.style.display = 'flex';
-  box.innerHTML = '<div style="padding:60px;text-align:center;color:var(--muted);font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.18em">Chargement...</div>';
+  box.innerHTML = '<div style="padding:60px;text-align:center;color:var(--muted);font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.18em">Chargement...</div>';
 
   const {data:u} = await sb.from('dc_users').select('*').eq('id',userId).single();
   if(!u){ box.innerHTML='<div style="padding:40px;text-align:center;color:#e05a5a">Erreur</div>'; return; }
@@ -2329,7 +2329,7 @@ async function openDevModal(userId){
     </div>
     <!-- Avatar -->
     <div style="padding:0 28px;position:relative;margin-top:-32px;margin-bottom:8px">
-      <div style="width:64px;height:64px;border-radius:50%;background:${color}22;color:${color};display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:1.1rem;border:3px solid var(--black3);overflow:hidden">
+      <div style="width:64px;height:64px;border-radius:50%;background:${color}22;color:${color};display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:1.1rem;border:3px solid var(--black3);overflow:hidden">
         ${u.photo?`<img src="${u.photo}" style="width:100%;height:100%;object-fit:cover"/>`:ini}
       </div>
     </div>
@@ -2338,11 +2338,11 @@ async function openDevModal(userId){
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px">
         <div>
           <div style="font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:400">${escHtml(name)}</div>
-          <div style="font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.1em;color:var(--muted)">${escHtml(handle)}${u.company?' · '+escHtml(u.company):''}</div>
+          <div style="font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.1em;color:var(--muted)">${escHtml(handle)}${u.company?' · '+escHtml(u.company):''}</div>
         </div>
         <div style="display:flex;gap:8px;flex-shrink:0">
-          <button onclick="explorerAddFriend('${u.id}',this)" class="dev-card-btn" style="padding:8px 14px;border-radius:5px;border:1px solid var(--gold-border);color:var(--gold);background:var(--gold-dim);font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase">+ Ami</button>
-          <button onclick="explorerSendMP('${u.id}');closeDevModal()" class="dev-card-btn" style="padding:8px 14px;border-radius:5px;border:1px solid var(--muted2);color:var(--muted);background:none;font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase">MP</button>
+          <button onclick="explorerAddFriend('${u.id}',this)" class="dev-card-btn" style="padding:8px 14px;border-radius:5px;border:1px solid var(--gold-border);color:var(--gold);background:var(--gold-dim);font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase">+ Ami</button>
+          <button onclick="explorerSendMP('${u.id}');closeDevModal()" class="dev-card-btn" style="padding:8px 14px;border-radius:5px;border:1px solid var(--muted2);color:var(--muted);background:none;font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase">MP</button>
         </div>
       </div>
       ${u.bio?`<p style="font-size:.88rem;color:rgba(244,241,234,.75);line-height:1.75;margin-bottom:18px">${escHtml(u.bio)}</p>`:''}
@@ -2350,20 +2350,20 @@ async function openDevModal(userId){
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
         <div style="border:1px solid var(--gold-border);padding:14px;border-radius:6px;text-align:center;background:var(--gold-dim)">
           <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold-light)">${msgs.count||0}</div>
-          <div style="font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:3px">Messages</div>
+          <div style="font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:3px">Messages</div>
         </div>
         <div style="border:1px solid var(--gold-border);padding:14px;border-radius:6px;text-align:center;background:var(--gold-dim)">
           <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold-light)">${friends.count||0}</div>
-          <div style="font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:3px">Amis</div>
+          <div style="font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:3px">Amis</div>
         </div>
         <div style="border:1px solid var(--gold-border);padding:14px;border-radius:6px;text-align:center;background:var(--gold-dim)">
           <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold-light)">${u.joined?Math.floor((Date.now()-u.joined)/(1000*60*60*24)):0}</div>
-          <div style="font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:3px">Jours</div>
+          <div style="font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:3px">Jours</div>
         </div>
       </div>
       <!-- Skills -->
       ${skills.length?`
-      <div style="margin-bottom:8px;font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)">Compétences</div>
+      <div style="margin-bottom:8px;font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)">Compétences</div>
       <div style="display:flex;flex-wrap:wrap;gap:6px">${skills.map(s=>`<span class="dev-skill-tag">${escHtml(s)}</span>`).join('')}</div>`:''}
     </div>`;
 }
@@ -2379,246 +2379,8 @@ setSpace = function(space){
   if(space==='explorer') explorerLoad();
 };
 
-</script>
 
-<!-- ═══ ADMIN VIEW ═══ -->
-<div id="admin-view">
-  <div id="admin-app">
-    <div id="admin-loading-screen">
-      <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold)">Administration</div>
-      <div style="font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.2em;color:var(--muted)">Vérification des droits...</div>
-    </div>
-    <div id="admin-access-denied">
-      <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold)">Accès refusé</div>
-      <div style="color:var(--muted);font-size:.9rem">Cette zone est réservée aux administrateurs.</div>
-      <button onclick="showAdminPanel(false)" style="margin-top:16px;padding:10px 28px;border:1px solid var(--gold-border);background:none;color:var(--white);font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase">Retour</button>
-    </div>
-    <div id="admin-sidebar">
-    <div class="sidebar-logo">
-      <div class="sidebar-logo-title">DevConnect</div>
-      <div class="sidebar-logo-sub">Panel Administration</div>
-    </div>
 
-    <div style="padding:12px;flex:1;overflow-y:auto">
-      <div class="sidebar-section">Tableau de bord</div>
-      <button class="nav-btn active" onclick="showPage('dashboard',this)">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-        Vue d'ensemble
-      </button>
-
-      <div class="sidebar-section">Membres</div>
-      <button class="nav-btn" onclick="showPage('users',this)">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-        Utilisateurs
-      </button>
-      <button class="nav-btn" onclick="showPage('roles',this)">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        Rôles & Badges
-      </button>
-
-      <div class="sidebar-section">Contenu</div>
-      <button class="nav-btn" onclick="showPage('messages',this)">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-        Messages
-      </button>
-      <button class="nav-btn" onclick="showPage('posts',this)">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Posts
-      </button>
-
-      <div class="sidebar-section">Système</div>
-      <button class="nav-btn" onclick="showPage('logs',this)">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        Logs Admin
-      </button>
-    </div>
-
-    <div class="sidebar-footer">
-      <div class="admin-badge" id="admin-role-badge-el">👑 Founder</div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <div id="admin-sidebar-avatar" style="width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.65rem;background:rgba(200,168,75,.15);color:var(--gold);flex-shrink:0"></div>
-        <div style="flex:1;min-width:0">
-          <div id="admin-sidebar-name" style="font-size:.86rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
-          <div style="font-family:'Geist Mono',monospace;font-size:.5rem;color:var(--muted)">Admin</div>
-        </div>
-        <a onclick="showAdminPanel(false)" href="#" style="color:var(--muted);font-size:.75rem;text-decoration:none;transition:color .2s" title="Retour au site" onmouseenter="this.style.color='var(--white)'" onmouseleave="this.style.color='var(--muted)'">←</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Main
-    <div id="admin-main">
-      
-
-    <!-- ══ DASHBOARD ══ -->
-    <div class="page active" id="page-dashboard">
-      <div style="margin-bottom:8px">
-        <div class="page-title">Vue d'ensemble</div>
-        <div class="page-sub" id="dash-date">—</div>
-      </div>
-      <div class="stats-grid" id="stats-grid">
-        <div class="stat-card"><div class="stat-card-icon">👥</div><div class="stat-card-val" id="stat-total-users">—</div><div class="stat-card-label">Membres total</div></div>
-        <div class="stat-card"><div class="stat-card-icon">💬</div><div class="stat-card-val" id="stat-total-msgs">—</div><div class="stat-card-label">Messages envoyés</div></div>
-        <div class="stat-card"><div class="stat-card-icon">📝</div><div class="stat-card-val" id="stat-total-posts">—</div><div class="stat-card-label">Posts publiés</div></div>
-        <div class="stat-card"><div class="stat-card-icon">🤝</div><div class="stat-card-val" id="stat-total-friends">—</div><div class="stat-card-label">Connexions amis</div></div>
-      </div>
-
-      <!-- Recent users -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-        <div class="table-wrap">
-          <div class="table-toolbar" style="justify-content:space-between">
-            <span style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Derniers inscrits</span>
-          </div>
-          <div id="recent-users-list" style="padding:0 4px"></div>
-        </div>
-        <div class="table-wrap">
-          <div class="table-toolbar" style="justify-content:space-between">
-            <span style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Derniers messages</span>
-          </div>
-          <div id="recent-msgs-list" style="padding:0 4px"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ USERS ══ -->
-    <div class="page" id="page-users">
-      <div class="page-header">
-        <div><div class="page-title">Utilisateurs</div><div class="page-sub">Gestion des membres</div></div>
-        <button class="btn-outline" onclick="loadUsers()">↺ Actualiser</button>
-      </div>
-      <div class="table-wrap">
-        <div class="table-toolbar">
-          <input class="search-input" type="text" placeholder="Rechercher par nom, email…" id="user-search" oninput="filterUsers(this.value)"/>
-          <button class="filter-btn active" onclick="setRoleFilter('all',this)">Tous</button>
-          <button class="filter-btn" onclick="setRoleFilter('founder',this)">Founder</button>
-          <button class="filter-btn" onclick="setRoleFilter('admin',this)">Admin</button>
-          <button class="filter-btn" onclick="setRoleFilter('mod',this)">Mod</button>
-          <button class="filter-btn" onclick="setRoleFilter('banned',this)">Bannis</button>
-        </div>
-        <div id="users-table-wrap" style="overflow-x:auto">
-          <table>
-            <thead><tr>
-              <th>Membre</th><th>Rôle</th><th>Badges</th><th>Inscrit</th><th>Actions</th>
-            </tr></thead>
-            <tbody id="users-tbody"></tbody>
-          </table>
-        </div>
-        <div id="users-empty" class="empty" style="display:none"><div class="empty-icon">👤</div>Aucun utilisateur trouvé</div>
-      </div>
-    </div>
-
-    <!-- ══ ROLES & BADGES ══ -->
-    <div class="page" id="page-roles">
-      <div class="page-header">
-        <div><div class="page-title">Rôles & Badges</div><div class="page-sub">Attribution manuelle</div></div>
-      </div>
-      <!-- Role Reference -->
-      <div class="table-wrap" style="margin-bottom:20px">
-        <div class="table-toolbar"><span style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Hiérarchie des rôles</span></div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0">
-          <div id="roles-reference"></div>
-        </div>
-        <div id="roles-ref-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));padding:16px 20px;gap:10px"></div>
-      </div>
-      <!-- Badge attribution -->
-      <div class="table-wrap">
-        <div class="table-toolbar" style="justify-content:space-between">
-          <span style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Attribuer des badges</span>
-          <div style="display:flex;gap:10px;align-items:center">
-            <input class="search-input" type="text" placeholder="Chercher un membre…" id="badge-user-search" oninput="searchBadgeUser(this.value)" style="min-width:180px"/>
-          </div>
-        </div>
-        <div id="badge-user-results" style="padding:12px 20px;display:none"></div>
-        <div id="badge-attribution-area" style="padding:20px;display:none">
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--muted2)">
-            <div id="badge-target-avatar" style="width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.8rem"></div>
-            <div><div id="badge-target-name" style="font-size:.95rem"></div><div id="badge-target-role" style="font-family:'Geist Mono',monospace;font-size:.55rem;color:var(--muted);margin-top:2px"></div></div>
-            <button onclick="closeBadgeAttribution()" style="margin-left:auto;background:none;border:none;color:var(--muted);font-size:1rem">×</button>
-          </div>
-          <div id="badge-grid-container"></div>
-          <div style="margin-top:16px;display:flex;gap:10px">
-            <button class="btn-primary" onclick="saveBadges()">Enregistrer les badges</button>
-          </div>
-        </div>
-        <div id="badge-empty" class="empty">
-          <div class="empty-icon">🏅</div>
-          Recherche un membre pour lui attribuer des badges
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ MESSAGES ══ -->
-    <div class="page" id="page-messages">
-      <div class="page-header">
-        <div><div class="page-title">Messages</div><div class="page-sub">Modération des salons</div></div>
-        <button class="btn-outline" onclick="loadMessages()">↺ Actualiser</button>
-      </div>
-      <div class="table-wrap">
-        <div class="table-toolbar">
-          <input class="search-input" type="text" placeholder="Rechercher dans les messages…" id="msg-search" oninput="filterMessages(this.value)"/>
-          <button class="filter-btn active" onclick="setChannelFilter('all',this)">Tous</button>
-          <button class="filter-btn" onclick="setChannelFilter('général',this)">#général</button>
-          <button class="filter-btn" onclick="setChannelFilter('aide',this)">#aide</button>
-          <button class="filter-btn" onclick="setChannelFilter('projets',this)">#projets</button>
-          <button class="filter-btn" onclick="setChannelFilter('showcase',this)">#showcase</button>
-        </div>
-        <div style="overflow-x:auto">
-          <table>
-            <thead><tr><th>Auteur</th><th>Message</th><th>Salon</th><th>Date</th><th>Action</th></tr></thead>
-            <tbody id="msgs-tbody"></tbody>
-          </table>
-        </div>
-        <div id="msgs-empty" class="empty" style="display:none"><div class="empty-icon">💬</div>Aucun message</div>
-      </div>
-    </div>
-
-    <!-- ══ POSTS ══ -->
-    <div class="page" id="page-posts">
-      <div class="page-header">
-        <div><div class="page-title">Posts</div><div class="page-sub">Modération des publications</div></div>
-        <button class="btn-outline" onclick="loadPosts()">↺ Actualiser</button>
-      </div>
-      <div class="table-wrap">
-        <div class="table-toolbar">
-          <input class="search-input" type="text" placeholder="Rechercher dans les posts…" id="post-search" oninput="filterPosts(this.value)"/>
-        </div>
-        <div style="overflow-x:auto">
-          <table>
-            <thead><tr><th>Auteur</th><th>Contenu</th><th>Likes</th><th>Date</th><th>Action</th></tr></thead>
-            <tbody id="posts-tbody"></tbody>
-          </table>
-        </div>
-        <div id="posts-empty" class="empty" style="display:none"><div class="empty-icon">📝</div>Aucun post</div>
-      </div>
-    </div>
-
-    <!-- ══ LOGS ══ -->
-    <div class="page" id="page-logs">
-      <div class="page-header">
-        <div><div class="page-title">Logs Admin</div><div class="page-sub">Historique des actions</div></div>
-        <button class="btn-outline" onclick="loadLogs()">↺ Actualiser</button>
-      </div>
-      <div class="table-wrap">
-        <div id="logs-list" style="padding:0 20px;max-height:70vh;overflow-y:auto"></div>
-        <div id="logs-empty" class="empty" style="display:none"><div class="empty-icon">📋</div>Aucun log enregistré</div>
-      </div>
-    </div>
-
-  
-    </div>
-  </div>
-  
-  <div id="admin-modal-overlay" onclick="if(event.target===this)closeModal()">
-    <div id="admin-modal">
-      <div class="modal-header"><div class="modal-title" id="modal-title">Utilisateur</div><button class="modal-close" onclick="closeModal()">×</button></div>
-      <div class="modal-body" id="modal-body"></div>
-      <div class="modal-footer" id="modal-footer"></div>
-    </div>
-  </div>
-  <div id="admin-toast"></div>
-</div>
-
-<script>
 
 // ═══════════════════════════════════════
 //  ADMIN PANEL
@@ -2723,13 +2485,13 @@ const ROLES = [
   {id:'accountverif',label:'Compte vérifié',          emoji:'🔐', color:'#34d399', group:'Automatique'},
 ];
 
-var ADMIN_ROLES = ['founder','cofounder','admin','mod','helper'];
+// ADMIN_ROLES already declared above
 
 function getRoleInfo(id){ return ROLES.find(r=>r.id===id) || {id,label:id,emoji:'👤',color:'var(--muted)'}; }
 
 function rolePill(roleId){
   const r = getRoleInfo(roleId);
-  return `<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-family:'Geist Mono',monospace;font-size:.48rem;letter-spacing:.08em;text-transform:uppercase;background:${r.color}18;border:1px solid ${r.color}44;color:${r.color};white-space:nowrap">${r.emoji} ${r.label}</span>`;
+  return `<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-family:Geist Mono,monospace;font-size:.48rem;letter-spacing:.08em;text-transform:uppercase;background:${r.color}18;border:1px solid ${r.color}44;color:${r.color};white-space:nowrap">${r.emoji} ${r.label}</span>`;
 }
 
 // ══════════════════════════════════════════════════════
@@ -2819,7 +2581,7 @@ async function loadDashboard(){
     const c=u.color||'#C8A84B';
     const div=document.createElement('div');
     div.style.cssText='display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--muted2)';
-    div.innerHTML=`<div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.58rem;background:${c}18;color:${c};flex-shrink:0${u.photo?`;background-image:url(${u.photo});background-size:cover`:''}">${u.photo?'':u.initials||'?'}</div><div style="flex:1;min-width:0"><div style="font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(name)}</div><div style="font-size:.68rem;color:var(--muted)">${rolePill(u.role||'member')}</div></div>`;
+    div.innerHTML=`<div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.58rem;background:${c}18;color:${c};flex-shrink:0${u.photo?`;background-image:url(${u.photo});background-size:cover`:''}">${u.photo?'':u.initials||'?'}</div><div style="flex:1;min-width:0"><div style="font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(name)}</div><div style="font-size:.68rem;color:var(--muted)">${rolePill(u.role||'member')}</div></div>`;
     ruList.appendChild(div);
   });
 
@@ -2833,7 +2595,7 @@ async function loadDashboard(){
     const u=rmProfiles[m.user_id]||{}; const c=u.color||'#C8A84B';
     const div=document.createElement('div');
     div.style.cssText='display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--muted2)';
-    div.innerHTML=`<div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.58rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1;min-width:0"><div style="font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)">#${m.channel}</div><div style="font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(m.content)}</div></div>`;
+    div.innerHTML=`<div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.58rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1;min-width:0"><div style="font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)">#${m.channel}</div><div style="font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(m.content)}</div></div>`;
     rmList.appendChild(div);
   });
 }
@@ -2866,7 +2628,7 @@ function renderUsers(users){
       </div></td>
       <td>${rolePill(u.role||'member')}</td>
       <td><div style="display:flex;flex-wrap:wrap;gap:4px;max-width:200px">${badges.slice(0,3).map(b=>{ const r=getRoleInfo(b); return `<span title="${r.label}" style="font-size:.9rem">${r.emoji}</span>`; }).join('')}${badges.length>3?`<span style="font-size:.7rem;color:var(--muted)">+${badges.length-3}</span>`:''}</div></td>
-      <td style="font-family:'Geist Mono',monospace;font-size:.68rem;color:var(--muted)">${joinDate}</td>
+      <td style="font-family:Geist Mono,monospace;font-size:.68rem;color:var(--muted)">${joinDate}</td>
       <td><div style="display:flex;gap:6px">
         <button class="action-btn" onclick="openUserModal('${u.id}')">Gérer</button>
         ${u.role==='banned'
@@ -2919,7 +2681,7 @@ async function openUserModal(uid){
   document.getElementById('modal-body').innerHTML = `
     <!-- Avatar + infos -->
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--muted2)">
-      <div style="width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:1rem;background:${c}18;color:${c};flex-shrink:0;overflow:hidden${u.photo?`;background-image:url(${u.photo});background-size:cover`:''}">${u.photo?'':u.initials||'?'}</div>
+      <div style="width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:1rem;background:${c}18;color:${c};flex-shrink:0;overflow:hidden${u.photo?`;background-image:url(${u.photo});background-size:cover`:''}">${u.photo?'':u.initials||'?'}</div>
       <div><div style="font-size:1rem">${escH(name)}</div><div style="font-size:.76rem;color:var(--muted)">${escH(u.email||'')}</div><div style="margin-top:6px">${rolePill(u.role||'member')}</div></div>
     </div>
 
@@ -2946,7 +2708,7 @@ async function openUserModal(uid){
     <div class="modal-section">
       <div class="modal-section-title">Badges (${badges.length})</div>
       <div style="display:flex;flex-wrap:wrap;gap:6px">
-        ${badges.length ? badges.map(b=>{const r=getRoleInfo(b);return `<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-family:'Geist Mono',monospace;font-size:.5rem;background:${r.color}18;border:1px solid ${r.color}44;color:${r.color}">${r.emoji} ${r.label}</span>`;}).join('') : '<span style="color:var(--muted);font-size:.82rem">Aucun badge</span>'}
+        ${badges.length ? badges.map(b=>{const r=getRoleInfo(b);return `<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-family:Geist Mono,monospace;font-size:.5rem;background:${r.color}18;border:1px solid ${r.color}44;color:${r.color}">${r.emoji} ${r.label}</span>`;}).join('') : '<span style="color:var(--muted);font-size:.82rem">Aucun badge</span>'}
       </div>
     </div>
 
@@ -2998,8 +2760,8 @@ function renderRolesReference(){
   Object.entries(groups).forEach(([group, roles])=>{
     const section = document.createElement('div');
     section.style.cssText = 'margin-bottom:16px';
-    section.innerHTML = `<div style="font-family:'Geist Mono',monospace;font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--gold-border)">${group}</div>
-    <div style="display:flex;flex-wrap:wrap;gap:6px">${roles.map(r=>`<span style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.06em;background:${r.color}15;border:1px solid ${r.color}35;color:${r.color}">${r.emoji} ${r.label}</span>`).join('')}</div>`;
+    section.innerHTML = `<div style="font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--gold-border)">${group}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">${roles.map(r=>`<span style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.06em;background:${r.color}15;border:1px solid ${r.color}35;color:${r.color}">${r.emoji} ${r.label}</span>`).join('')}</div>`;
     grid.appendChild(section);
   });
 }
@@ -3018,7 +2780,7 @@ async function searchBadgeUser(q){
     const c=u.color||'#C8A84B';
     const btn=document.createElement('button');
     btn.style.cssText='display:flex;align-items:center;gap:10px;padding:10px 12px;width:100%;background:none;border:none;border-bottom:1px solid var(--muted2);color:var(--white);text-align:left;transition:background .15s';
-    btn.innerHTML=`<div style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.6rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div><div style="font-size:.86rem">${escH(name)}</div><div style="font-size:.7rem;color:var(--muted)">${rolePill(u.role||'member')}</div></div>`;
+    btn.innerHTML=`<div style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.6rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div><div style="font-size:.86rem">${escH(name)}</div><div style="font-size:.7rem;color:var(--muted)">${rolePill(u.role||'member')}</div></div>`;
     btn.addEventListener('mouseenter',()=>btn.style.background='var(--muted3)');
     btn.addEventListener('mouseleave',()=>btn.style.background='none');
     btn.onclick=()=>openBadgeAttribution(u);
@@ -3127,7 +2889,7 @@ function renderMessages(msgs, profiles){
       <td><div class="user-cell"><div class="user-ini" style="background:${c}18;color:${c}">${u.initials||'?'}</div><div class="user-name">${escH(name)}</div></div></td>
       <td><div class="msg-content" title="${escH(m.content)}">${escH(m.content)}</div></td>
       <td><span class="channel-tag">#${m.channel||'?'}</span></td>
-      <td style="font-family:'Geist Mono',monospace;font-size:.66rem;color:var(--muted)">${date}</td>
+      <td style="font-family:Geist Mono,monospace;font-size:.66rem;color:var(--muted)">${date}</td>
       <td><button class="action-btn danger" onclick="deleteMessage('${m.id}',this.closest('tr'))">Supprimer</button></td>`;
     tbody.appendChild(tr);
   });
@@ -3184,8 +2946,8 @@ function renderPosts(posts,profiles){
     tr.innerHTML=`
       <td><div class="user-cell"><div class="user-ini" style="background:${c}18;color:${c}">${u.initials||'?'}</div><div class="user-name">${escH(name)}</div></div></td>
       <td><div class="msg-content" title="${escH(p.body||'')}"><span style="color:var(--gold);font-size:.8rem">${escH(p.title||'')}</span>${p.title&&p.body?' — ':''}<span style="color:var(--muted)">${escH((p.body||'').slice(0,60))}</span></div></td>
-      <td style="font-family:'Geist Mono',monospace;font-size:.75rem">❤️ ${p.likes||0}</td>
-      <td style="font-family:'Geist Mono',monospace;font-size:.66rem;color:var(--muted)">${date}</td>
+      <td style="font-family:Geist Mono,monospace;font-size:.75rem">❤️ ${p.likes||0}</td>
+      <td style="font-family:Geist Mono,monospace;font-size:.66rem;color:var(--muted)">${date}</td>
       <td><button class="action-btn danger" onclick="deletePost('${p.id}',this.closest('tr'))">Supprimer</button></td>`;
     tbody.appendChild(tr);
   });
@@ -3285,7 +3047,7 @@ async function loadDashboard(){
     rul.innerHTML=(ru||[]).map(u=>{
       const c=u.color||'#C8A84B';
       const n=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email||'?';
-      return `<div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--muted2)"><div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.6rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1;font-size:.84rem">${escH(n)}</div><div style="font-family:'Geist Mono',monospace;font-size:.55rem;color:var(--muted)">${u.joined?new Date(u.joined).toLocaleDateString('fr'):'—'}</div></div>`;
+      return `<div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--muted2)"><div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.6rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1;font-size:.84rem">${escH(n)}</div><div style="font-family:Geist Mono,monospace;font-size:.55rem;color:var(--muted)">${u.joined?new Date(u.joined).toLocaleDateString('fr'):'—'}</div></div>`;
     }).join('');
   }
 
@@ -3297,7 +3059,932 @@ async function loadDashboard(){
   if(rml&&rm){
     rml.innerHTML=(rm||[]).map(m=>{
       const u=profiles[m.user_id]||{};const c=u.color||'#C8A84B';
-      return `<div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--muted2)"><div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.6rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1;font-size:.82rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH((m.content||'').slice(0,50))}</div><div style="font-family:'Geist Mono',monospace;font-size:.52rem;color:var(--gold);margin-left:4px">#${m.channel||'?'}</div></div>`;
+      return `<div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--muted2)"><div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.6rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1;font-size:.82rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH((m.content||'').slice(0,50))}</div><div style="font-family:Geist Mono,monospace;font-size:.52rem;color:var(--gold);margin-left:4px">#${m.channel||'?'}</div></div>`;
+    }).join('');
+  }
+}
+
+
+</script>
+
+<!-- ═══ ADMIN VIEW ═══ -->
+<div id="admin-view">
+  <div id="admin-app">
+    <div id="admin-loading-screen">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold)">Administration</div>
+      <div style="font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.2em;color:var(--muted)">Vérification des droits...</div>
+    </div>
+    <div id="admin-access-denied">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold)">Accès refusé</div>
+      <div style="color:var(--muted);font-size:.9rem">Cette zone est réservée aux administrateurs.</div>
+      <button onclick="showAdminPanel(false)" style="margin-top:16px;padding:10px 28px;border:1px solid var(--gold-border);background:none;color:var(--white);font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase">Retour</button>
+    </div>
+    <div id="admin-sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-title">DevConnect</div>
+      <div class="sidebar-logo-sub">Panel Administration</div>
+    </div>
+
+    <div style="padding:12px;flex:1;overflow-y:auto">
+      <div class="sidebar-section">Tableau de bord</div>
+      <button class="nav-btn active" onclick="showPage('dashboard',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Vue d'ensemble
+      </button>
+
+      <div class="sidebar-section">Membres</div>
+      <button class="nav-btn" onclick="showPage('users',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        Utilisateurs
+      </button>
+      <button class="nav-btn" onclick="showPage('roles',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Rôles & Badges
+      </button>
+
+      <div class="sidebar-section">Contenu</div>
+      <button class="nav-btn" onclick="showPage('messages',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Messages
+      </button>
+      <button class="nav-btn" onclick="showPage('posts',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Posts
+      </button>
+
+      <div class="sidebar-section">Système</div>
+      <button class="nav-btn" onclick="showPage('logs',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Logs Admin
+      </button>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="admin-badge" id="admin-role-badge-el">👑 Founder</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div id="admin-sidebar-avatar" style="width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.65rem;background:rgba(200,168,75,.15);color:var(--gold);flex-shrink:0"></div>
+        <div style="flex:1;min-width:0">
+          <div id="admin-sidebar-name" style="font-size:.86rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
+          <div style="font-family:Geist Mono,monospace;font-size:.5rem;color:var(--muted)">Admin</div>
+        </div>
+        <a onclick="showAdminPanel(false)" href="#" style="color:var(--muted);font-size:.75rem;text-decoration:none;transition:color .2s" title="Retour au site" onmouseenter="this.style.color='var(--white)'" onmouseleave="this.style.color='var(--muted)'">←</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main
+    <div id="admin-main">
+      
+
+    <!-- ══ DASHBOARD ══ -->
+    <div class="page active" id="page-dashboard">
+      <div style="margin-bottom:8px">
+        <div class="page-title">Vue d'ensemble</div>
+        <div class="page-sub" id="dash-date">—</div>
+      </div>
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card"><div class="stat-card-icon">👥</div><div class="stat-card-val" id="stat-total-users">—</div><div class="stat-card-label">Membres total</div></div>
+        <div class="stat-card"><div class="stat-card-icon">💬</div><div class="stat-card-val" id="stat-total-msgs">—</div><div class="stat-card-label">Messages envoyés</div></div>
+        <div class="stat-card"><div class="stat-card-icon">📝</div><div class="stat-card-val" id="stat-total-posts">—</div><div class="stat-card-label">Posts publiés</div></div>
+        <div class="stat-card"><div class="stat-card-icon">🤝</div><div class="stat-card-val" id="stat-total-friends">—</div><div class="stat-card-label">Connexions amis</div></div>
+      </div>
+
+      <!-- Recent users -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="table-wrap">
+          <div class="table-toolbar" style="justify-content:space-between">
+            <span style="font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Derniers inscrits</span>
+          </div>
+          <div id="recent-users-list" style="padding:0 4px"></div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-toolbar" style="justify-content:space-between">
+            <span style="font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Derniers messages</span>
+          </div>
+          <div id="recent-msgs-list" style="padding:0 4px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ USERS ══ -->
+    <div class="page" id="page-users">
+      <div class="page-header">
+        <div><div class="page-title">Utilisateurs</div><div class="page-sub">Gestion des membres</div></div>
+        <button class="btn-outline" onclick="loadUsers()">↺ Actualiser</button>
+      </div>
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <input class="search-input" type="text" placeholder="Rechercher par nom, email…" id="user-search" oninput="filterUsers(this.value)"/>
+          <button class="filter-btn active" onclick="setRoleFilter('all',this)">Tous</button>
+          <button class="filter-btn" onclick="setRoleFilter('founder',this)">Founder</button>
+          <button class="filter-btn" onclick="setRoleFilter('admin',this)">Admin</button>
+          <button class="filter-btn" onclick="setRoleFilter('mod',this)">Mod</button>
+          <button class="filter-btn" onclick="setRoleFilter('banned',this)">Bannis</button>
+        </div>
+        <div id="users-table-wrap" style="overflow-x:auto">
+          <table>
+            <thead><tr>
+              <th>Membre</th><th>Rôle</th><th>Badges</th><th>Inscrit</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="users-tbody"></tbody>
+          </table>
+        </div>
+        <div id="users-empty" class="empty" style="display:none"><div class="empty-icon">👤</div>Aucun utilisateur trouvé</div>
+      </div>
+    </div>
+
+    <!-- ══ ROLES & BADGES ══ -->
+    <div class="page" id="page-roles">
+      <div class="page-header">
+        <div><div class="page-title">Rôles & Badges</div><div class="page-sub">Attribution manuelle</div></div>
+      </div>
+      <!-- Role Reference -->
+      <div class="table-wrap" style="margin-bottom:20px">
+        <div class="table-toolbar"><span style="font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Hiérarchie des rôles</span></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0">
+          <div id="roles-reference"></div>
+        </div>
+        <div id="roles-ref-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));padding:16px 20px;gap:10px"></div>
+      </div>
+      <!-- Badge attribution -->
+      <div class="table-wrap">
+        <div class="table-toolbar" style="justify-content:space-between">
+          <span style="font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Attribuer des badges</span>
+          <div style="display:flex;gap:10px;align-items:center">
+            <input class="search-input" type="text" placeholder="Chercher un membre…" id="badge-user-search" oninput="searchBadgeUser(this.value)" style="min-width:180px"/>
+          </div>
+        </div>
+        <div id="badge-user-results" style="padding:12px 20px;display:none"></div>
+        <div id="badge-attribution-area" style="padding:20px;display:none">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--muted2)">
+            <div id="badge-target-avatar" style="width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.8rem"></div>
+            <div><div id="badge-target-name" style="font-size:.95rem"></div><div id="badge-target-role" style="font-family:Geist Mono,monospace;font-size:.55rem;color:var(--muted);margin-top:2px"></div></div>
+            <button onclick="closeBadgeAttribution()" style="margin-left:auto;background:none;border:none;color:var(--muted);font-size:1rem">×</button>
+          </div>
+          <div id="badge-grid-container"></div>
+          <div style="margin-top:16px;display:flex;gap:10px">
+            <button class="btn-primary" onclick="saveBadges()">Enregistrer les badges</button>
+          </div>
+        </div>
+        <div id="badge-empty" class="empty">
+          <div class="empty-icon">🏅</div>
+          Recherche un membre pour lui attribuer des badges
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ MESSAGES ══ -->
+    <div class="page" id="page-messages">
+      <div class="page-header">
+        <div><div class="page-title">Messages</div><div class="page-sub">Modération des salons</div></div>
+        <button class="btn-outline" onclick="loadMessages()">↺ Actualiser</button>
+      </div>
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <input class="search-input" type="text" placeholder="Rechercher dans les messages…" id="msg-search" oninput="filterMessages(this.value)"/>
+          <button class="filter-btn active" onclick="setChannelFilter('all',this)">Tous</button>
+          <button class="filter-btn" onclick="setChannelFilter('général',this)">#général</button>
+          <button class="filter-btn" onclick="setChannelFilter('aide',this)">#aide</button>
+          <button class="filter-btn" onclick="setChannelFilter('projets',this)">#projets</button>
+          <button class="filter-btn" onclick="setChannelFilter('showcase',this)">#showcase</button>
+        </div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead><tr><th>Auteur</th><th>Message</th><th>Salon</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody id="msgs-tbody"></tbody>
+          </table>
+        </div>
+        <div id="msgs-empty" class="empty" style="display:none"><div class="empty-icon">💬</div>Aucun message</div>
+      </div>
+    </div>
+
+    <!-- ══ POSTS ══ -->
+    <div class="page" id="page-posts">
+      <div class="page-header">
+        <div><div class="page-title">Posts</div><div class="page-sub">Modération des publications</div></div>
+        <button class="btn-outline" onclick="loadPosts()">↺ Actualiser</button>
+      </div>
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <input class="search-input" type="text" placeholder="Rechercher dans les posts…" id="post-search" oninput="filterPosts(this.value)"/>
+        </div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead><tr><th>Auteur</th><th>Contenu</th><th>Likes</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody id="posts-tbody"></tbody>
+          </table>
+        </div>
+        <div id="posts-empty" class="empty" style="display:none"><div class="empty-icon">📝</div>Aucun post</div>
+      </div>
+    </div>
+
+    <!-- ══ LOGS ══ -->
+    <div class="page" id="page-logs">
+      <div class="page-header">
+        <div><div class="page-title">Logs Admin</div><div class="page-sub">Historique des actions</div></div>
+        <button class="btn-outline" onclick="loadLogs()">↺ Actualiser</button>
+      </div>
+      <div class="table-wrap">
+        <div id="logs-list" style="padding:0 20px;max-height:70vh;overflow-y:auto"></div>
+        <div id="logs-empty" class="empty" style="display:none"><div class="empty-icon">📋</div>Aucun log enregistré</div>
+      </div>
+    </div>
+
+  
+    </div>
+  </div>
+  
+  <div id="admin-modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div id="admin-modal">
+      <div class="modal-header"><div class="modal-title" id="modal-title">Utilisateur</div><button class="modal-close" onclick="closeModal()">×</button></div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer" id="modal-footer"></div>
+    </div>
+  </div>
+  <div id="admin-toast"></div>
+</div>
+
+<script>
+
+// ═══════════════════════════════════════
+//  ADMIN PANEL
+// ═══════════════════════════════════════
+const sb = window._sb;
+const ADMIN_ROLES = ['founder','cofounder','admin','mod'];
+
+function showAdminPanel(show){
+  const v = document.getElementById('admin-view');
+  if(show){
+    v.classList.add('show');
+    initAdmin();
+  } else {
+    v.classList.remove('show');
+  }
+}
+
+async function initAdmin(){
+  const ls = document.getElementById('admin-loading-screen');
+  const denied = document.getElementById('admin-access-denied');
+  ls.classList.remove('hide');
+  denied.classList.remove('show');
+
+  // Check role
+  const {data} = await sb.from('dc_users').select('role').eq('id', currentUser.id).single();
+  const role = data?.role || 'member';
+  if(!ADMIN_ROLES.includes(role)){
+    ls.classList.add('hide');
+    denied.classList.add('show');
+    return;
+  }
+  ls.classList.add('hide');
+
+  // Set admin info
+  const name = (userProfile?.firstname||'') + ' ' + (userProfile?.lastname||'');
+  const av = document.getElementById('admin-sidebar-avatar');
+  if(av){ av.textContent = userProfile?.initials||'?'; av.style.background=(userProfile?.color||'#C8A84B')+'18'; av.style.color=userProfile?.color||'#C8A84B'; }
+  const sn = document.getElementById('admin-sidebar-name');
+  if(sn) sn.textContent = name.trim() || userProfile?.email || '';
+  const rb = document.getElementById('admin-role-badge-el');
+  if(rb){ const r = getRoleInfo(role); rb.textContent = r.emoji+' '+r.label; }
+
+  // Show active nav button
+  const firstBtn = document.querySelector('#admin-view .nav-btn');
+  if(firstBtn) showPage('dashboard', firstBtn);
+  loadDashboard();
+}
+
+// Show admin btn if admin role
+async function checkAdminAccess(){
+  if(!currentUser) return;
+  const {data} = await sb.from('dc_users').select('role').eq('id', currentUser.id).single();
+  if(data && ADMIN_ROLES.includes(data.role)){
+    const btn = document.getElementById('admin-btn');
+    if(btn) btn.style.display='flex';
+  }
+}
+
+
+
+// ══════════════════════════════════════════════════════
+//  ROLES & BADGES
+// ══════════════════════════════════════════════════════
+
+const ROLES = [
+  // Administration
+  {id:'founder',     label:'Fondateur',             emoji:'👑', color:'#C8A84B', group:'Administration'},
+  {id:'cofounder',   label:'Co-Fondateur',           emoji:'🤴', color:'#d4a054', group:'Administration'},
+  {id:'admin',       label:'Administrateur',          emoji:'🛡️', color:'#ef4444', group:'Administration'},
+  {id:'mod',         label:'Modérateur',              emoji:'⚔️', color:'#3b82f6', group:'Administration'},
+  {id:'helper',      label:'Helper',                  emoji:'🙋', color:'#10b981', group:'Administration'},
+  // Développement
+  {id:'fullstack',   label:'Développeur Full Stack',  emoji:'💻', color:'#8b5cf6', group:'Développement'},
+  {id:'frontend',    label:'Développeur Front-End',   emoji:'🎨', color:'#ec4899', group:'Développement'},
+  {id:'backend',     label:'Développeur Back-End',    emoji:'⚙️', color:'#f97316', group:'Développement'},
+  {id:'mobile',      label:'Développeur Mobile',      emoji:'📱', color:'#06b6d4', group:'Développement'},
+  {id:'webdev',      label:'Développeur Web',         emoji:'🌐', color:'#3b82f6', group:'Développement'},
+  {id:'aidev',       label:'Développeur IA',          emoji:'🤖', color:'#a855f7', group:'Développement'},
+  {id:'gamedev',     label:'Développeur Jeux Vidéo',  emoji:'🎮', color:'#ef4444', group:'Développement'},
+  {id:'beginner',    label:'Débutant',                emoji:'🌱', color:'#84cc16', group:'Développement'},
+  {id:'student',     label:'Étudiant en développement',emoji:'📚',color:'#60a5fa', group:'Développement'},
+  // Création
+  {id:'uiux',        label:'UI/UX Designer',          emoji:'✏️', color:'#f43f5e', group:'Création'},
+  {id:'designer',    label:'Graphiste',               emoji:'🖌️', color:'#fb923c', group:'Création'},
+  {id:'videoeditor', label:'Monteur Vidéo',           emoji:'🎬', color:'#facc15', group:'Création'},
+  {id:'creator',     label:'Créateur de contenu',     emoji:'📸', color:'#4ade80', group:'Création'},
+  // Communauté
+  {id:'member',      label:'Développeur',             emoji:'👤', color:'rgba(244,241,234,.5)', group:'Communauté'},
+  {id:'verified',    label:'Développeur Vérifié',     emoji:'✅', color:'#34d399', group:'Communauté'},
+  {id:'active',      label:'Développeur Actif',       emoji:'⚡', color:'#fbbf24', group:'Communauté'},
+  {id:'recruiter',   label:'Recruteur',               emoji:'🎯', color:'#38bdf8', group:'Communauté'},
+  {id:'booster',     label:'Booster',                 emoji:'🚀', color:'#c084fc', group:'Communauté'},
+  {id:'partner',     label:'Partenaire',              emoji:'🤝', color:'#67e8f9', group:'Communauté'},
+  // Distinctions
+  {id:'early',       label:'Early Member',            emoji:'🏅', color:'#fcd34d', group:'Distinctions'},
+  {id:'beta',        label:'Bêta Testeur',            emoji:'🔬', color:'#a3e635', group:'Distinctions'},
+  {id:'contributor', label:'Contributeur',            emoji:'🌟', color:'#fbbf24', group:'Distinctions'},
+  {id:'mentor',      label:'Mentor',                  emoji:'🧠', color:'#e879f9', group:'Distinctions'},
+  {id:'legend',      label:'Légende DevConnect',      emoji:'🏆', color:'#C8A84B', group:'Distinctions'},
+  // Automatique
+  {id:'online',      label:'En ligne',                emoji:'🟢', color:'#10b981', group:'Automatique'},
+  {id:'newmember',   label:'Nouveau membre',          emoji:'✨', color:'#60a5fa', group:'Automatique'},
+  {id:'accountverif',label:'Compte vérifié',          emoji:'🔐', color:'#34d399', group:'Automatique'},
+];
+
+// ADMIN_ROLES already declared above
+
+function getRoleInfo(id){ return ROLES.find(r=>r.id===id) || {id,label:id,emoji:'👤',color:'var(--muted)'}; }
+
+function rolePill(roleId){
+  const r = getRoleInfo(roleId);
+  return `<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-family:Geist Mono,monospace;font-size:.48rem;letter-spacing:.08em;text-transform:uppercase;background:${r.color}18;border:1px solid ${r.color}44;color:${r.color};white-space:nowrap">${r.emoji} ${r.label}</span>`;
+}
+
+// ══════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════
+let currentAdmin = null;
+let allUsers = [];
+let allMessages = [];
+let allPosts = [];
+let roleFilter = 'all';
+let channelFilter = 'all';
+let badgeTargetUser = null;
+let badgeTargetCurrentBadges = [];
+
+// ══════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { showAccessDenied(); return; }
+
+  const { data: profile } = await sb.from('dc_users').select('*').eq('id', session.user.id).maybeSingle();
+  if (!profile || !ADMIN_ROLES.includes(profile.role)) { showAccessDenied(); return; }
+
+  currentAdmin = profile;
+  document.getElementById('admin-loading-screen').classList.add('hide');
+  document.getElementById('app').style.display = 'flex';
+
+  // Sidebar info
+  const name = ((profile.firstname||'')+(profile.lastname?' '+profile.lastname:'')).trim()||profile.email;
+  document.getElementById('admin-sidebar-name').textContent = name;
+  const av = document.getElementById('admin-sidebar-avatar');
+  if(profile.photo){ av.style.backgroundImage=`url(${profile.photo})`; av.style.backgroundSize='cover'; }
+  else { av.textContent = profile.initials||'?'; }
+  const role = getRoleInfo(profile.role);
+  document.getElementById('admin-role-badge-el').textContent = role.emoji+' '+role.label;
+  document.getElementById('admin-role-badge-el').style.color = role.color;
+
+  // Date
+  document.getElementById('dash-date').textContent = new Date().toLocaleDateString('fr',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  loadDashboard();
+  renderRolesReference();
+})();
+
+function showAccessDenied(){
+  document.getElementById('admin-loading-screen').classList.add('hide');
+  document.getElementById('admin-access-denied').classList.add('show');
+}
+
+// ══════════════════════════════════════════════════════
+//  NAV
+// ══════════════════════════════════════════════════════
+function showPage(id, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  // Load data
+  if(id==='users') loadUsers();
+  if(id==='messages') loadMessages();
+  if(id==='posts') loadPosts();
+  if(id==='logs') loadLogs();
+}
+
+// ══════════════════════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════════════════════
+async function loadDashboard(){
+  const [users, msgs, posts, friends] = await Promise.all([
+    sb.from('dc_users').select('id',{count:'exact',head:true}),
+    sb.from('dc_messages').select('id',{count:'exact',head:true}),
+    sb.from('dc_posts').select('id',{count:'exact',head:true}),
+    sb.from('dc_friends').select('id',{count:'exact',head:true}).eq('status','accepted'),
+  ]);
+  document.getElementById('stat-total-users').textContent = users.count||0;
+  document.getElementById('stat-total-msgs').textContent = msgs.count||0;
+  document.getElementById('stat-total-posts').textContent = posts.count||0;
+  document.getElementById('stat-total-friends').textContent = friends.count||0;
+
+  // Recent users
+  const { data: recentUsers } = await sb.from('dc_users').select('*').order('joined',{ascending:false}).limit(6);
+  const ruList = document.getElementById('recent-users-list');
+  ruList.innerHTML = '';
+  (recentUsers||[]).forEach(u=>{
+    const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email;
+    const c=u.color||'#C8A84B';
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--muted2)';
+    div.innerHTML=`<div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.58rem;background:${c}18;color:${c};flex-shrink:0${u.photo?`;background-image:url(${u.photo});background-size:cover`:''}">${u.photo?'':u.initials||'?'}</div><div style="flex:1;min-width:0"><div style="font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(name)}</div><div style="font-size:.68rem;color:var(--muted)">${rolePill(u.role||'member')}</div></div>`;
+    ruList.appendChild(div);
+  });
+
+  // Recent messages
+  const { data: recentMsgs } = await sb.from('dc_messages').select('*').order('created_at',{ascending:false}).limit(6);
+  const rmIds = [...new Set((recentMsgs||[]).map(m=>m.user_id))];
+  const rmProfiles = await fetchProfiles(rmIds);
+  const rmList = document.getElementById('recent-msgs-list');
+  rmList.innerHTML='';
+  (recentMsgs||[]).forEach(m=>{
+    const u=rmProfiles[m.user_id]||{}; const c=u.color||'#C8A84B';
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--muted2)';
+    div.innerHTML=`<div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.58rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1;min-width:0"><div style="font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)">#${m.channel}</div><div style="font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(m.content)}</div></div>`;
+    rmList.appendChild(div);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  USERS
+// ══════════════════════════════════════════════════════
+async function loadUsers(){
+  const { data } = await sb.from('dc_users').select('*').order('joined',{ascending:false});
+  allUsers = data || [];
+  renderUsers(allUsers);
+}
+
+function renderUsers(users){
+  const tbody = document.getElementById('users-tbody');
+  tbody.innerHTML = '';
+  const empty = document.getElementById('users-empty');
+  if(!users.length){ empty.style.display='block'; return; }
+  empty.style.display='none';
+  users.forEach(u=>{
+    const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email;
+    const c=u.color||'#C8A84B';
+    const badges = Array.isArray(u.badges) ? u.badges : [];
+    const joinDate = u.joined ? new Date(u.joined).toLocaleDateString('fr',{day:'numeric',month:'short',year:'numeric'}) : '—';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><div class="user-cell">
+        <div class="user-ini" style="background:${c}18;color:${c}${u.photo?`;background-image:url(${u.photo});background-size:cover`:''}">${u.photo?'':u.initials||'?'}</div>
+        <div><div class="user-name">${escH(name)}</div><div class="user-email">${escH(u.email||'')}</div></div>
+      </div></td>
+      <td>${rolePill(u.role||'member')}</td>
+      <td><div style="display:flex;flex-wrap:wrap;gap:4px;max-width:200px">${badges.slice(0,3).map(b=>{ const r=getRoleInfo(b); return `<span title="${r.label}" style="font-size:.9rem">${r.emoji}</span>`; }).join('')}${badges.length>3?`<span style="font-size:.7rem;color:var(--muted)">+${badges.length-3}</span>`:''}</div></td>
+      <td style="font-family:Geist Mono,monospace;font-size:.68rem;color:var(--muted)">${joinDate}</td>
+      <td><div style="display:flex;gap:6px">
+        <button class="action-btn" onclick="openUserModal('${u.id}')">Gérer</button>
+        ${u.role==='banned'
+          ? `<button class="action-btn success" onclick="setUserRole('${u.id}','member')">Débannir</button>`
+          : `<button class="action-btn danger" onclick="banUser('${u.id}')">Bannir</button>`
+        }
+      </div></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function filterUsers(q){
+  const lower = q.toLowerCase();
+  let filtered = allUsers.filter(u=>{
+    const name=((u.firstname||'')+(u.lastname||'')+u.email).toLowerCase();
+    return name.includes(lower);
+  });
+  if(roleFilter!=='all') filtered=filtered.filter(u=>u.role===roleFilter);
+  renderUsers(filtered);
+}
+
+function setRoleFilter(role, btn){
+  roleFilter=role;
+  document.querySelectorAll('#page-users .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  filterUsers(document.getElementById('user-search').value);
+}
+
+async function banUser(uid){
+  if(!confirm('Bannir cet utilisateur ?')) return;
+  await setUserRole(uid,'banned');
+}
+
+async function setUserRole(uid, role){
+  await sb.from('dc_users').update({role}).eq('id',uid);
+  await addLog('role', `Rôle changé → ${role} pour user ${uid}`);
+  toast('Rôle mis à jour');
+  loadUsers();
+}
+
+// ── User Modal ──
+async function openUserModal(uid){
+  const u = allUsers.find(x=>x.id===uid);
+  if(!u) return;
+  const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email;
+  const c=u.color||'#C8A84B';
+  const badges=Array.isArray(u.badges)?u.badges:[];
+
+  document.getElementById('modal-title').textContent = name;
+  document.getElementById('modal-body').innerHTML = `
+    <!-- Avatar + infos -->
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--muted2)">
+      <div style="width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:1rem;background:${c}18;color:${c};flex-shrink:0;overflow:hidden${u.photo?`;background-image:url(${u.photo});background-size:cover`:''}">${u.photo?'':u.initials||'?'}</div>
+      <div><div style="font-size:1rem">${escH(name)}</div><div style="font-size:.76rem;color:var(--muted)">${escH(u.email||'')}</div><div style="margin-top:6px">${rolePill(u.role||'member')}</div></div>
+    </div>
+
+    <!-- Infos -->
+    <div class="modal-section">
+      <div class="modal-section-title">Informations</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.82rem;color:var(--muted)">
+        <div>Bio : <span style="color:var(--white)">${escH(u.bio||'—')}</span></div>
+        <div>Entreprise : <span style="color:var(--white)">${escH(u.company||'—')}</span></div>
+        <div>Skills : <span style="color:var(--white)">${Array.isArray(u.skills)?u.skills.join(', '):(u.skills||'—')}</span></div>
+        <div>Inscrit : <span style="color:var(--white)">${u.joined?new Date(u.joined).toLocaleDateString('fr'):'—'}</span></div>
+      </div>
+    </div>
+
+    <!-- Changer rôle -->
+    <div class="modal-section">
+      <div class="modal-section-title">Changer le rôle</div>
+      <select id="modal-role-select" class="field-select">
+        ${ROLES.map(r=>`<option value="${r.id}"${u.role===r.id?' selected':''}>${r.emoji} ${r.label}</option>`).join('')}
+      </select>
+    </div>
+
+    <!-- Badges actuels -->
+    <div class="modal-section">
+      <div class="modal-section-title">Badges (${badges.length})</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        ${badges.length ? badges.map(b=>{const r=getRoleInfo(b);return `<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-family:Geist Mono,monospace;font-size:.5rem;background:${r.color}18;border:1px solid ${r.color}44;color:${r.color}">${r.emoji} ${r.label}</span>`;}).join('') : '<span style="color:var(--muted);font-size:.82rem">Aucun badge</span>'}
+      </div>
+    </div>
+
+    <!-- Actions rapides -->
+    <div class="modal-section">
+      <div class="modal-section-title">Actions</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="action-btn success" onclick="muteUser('${uid}')">🔇 Muter</button>
+        <button class="action-btn danger" onclick="banUser('${uid}');closeModal()">🚫 Bannir</button>
+        <button class="btn-outline" onclick="openBadgeFromModal('${uid}');closeModal()">🏅 Gérer badges</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('modal-footer').innerHTML = `
+    <button class="btn-outline" onclick="closeModal()">Annuler</button>
+    <button class="btn-primary" onclick="saveUserRole('${uid}')">Enregistrer le rôle</button>
+  `;
+  document.getElementById('admin-modal-overlay').classList.add('open');
+}
+
+async function saveUserRole(uid){
+  const role = document.getElementById('modal-role-select').value;
+  await sb.from('dc_users').update({role}).eq('id',uid);
+  await addLog('role', `Rôle changé → ${role} pour user ${uid}`);
+  toast('Rôle mis à jour');
+  closeModal();
+  loadUsers();
+}
+
+async function muteUser(uid){
+  await sb.from('dc_users').update({role:'muted'}).eq('id',uid);
+  await addLog('mute', `User ${uid} muté`);
+  toast('Utilisateur muté');
+  closeModal();
+  loadUsers();
+}
+
+function closeModal(){ document.getElementById('admin-modal-overlay').classList.remove('open'); }
+
+// ══════════════════════════════════════════════════════
+//  ROLES REFERENCE
+// ══════════════════════════════════════════════════════
+function renderRolesReference(){
+  const grid = document.getElementById('roles-ref-grid');
+  const groups = {};
+  ROLES.forEach(r=>{ if(!groups[r.group]) groups[r.group]=[]; groups[r.group].push(r); });
+  grid.innerHTML = '';
+  grid.style.gridTemplateColumns = '1fr';
+  Object.entries(groups).forEach(([group, roles])=>{
+    const section = document.createElement('div');
+    section.style.cssText = 'margin-bottom:16px';
+    section.innerHTML = `<div style="font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--gold-border)">${group}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">${roles.map(r=>`<span style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.06em;background:${r.color}15;border:1px solid ${r.color}35;color:${r.color}">${r.emoji} ${r.label}</span>`).join('')}</div>`;
+    grid.appendChild(section);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  BADGES ATTRIBUTION
+// ══════════════════════════════════════════════════════
+async function searchBadgeUser(q){
+  const res = document.getElementById('badge-user-results');
+  if(!q||q.length<2){ res.style.display='none'; return; }
+  const {data} = await sb.from('dc_users').select('*').or(`firstname.ilike.%${q}%,lastname.ilike.%${q}%,email.ilike.%${q}%`).limit(6);
+  res.style.display='block';
+  res.innerHTML='';
+  (data||[]).forEach(u=>{
+    const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email;
+    const c=u.color||'#C8A84B';
+    const btn=document.createElement('button');
+    btn.style.cssText='display:flex;align-items:center;gap:10px;padding:10px 12px;width:100%;background:none;border:none;border-bottom:1px solid var(--muted2);color:var(--white);text-align:left;transition:background .15s';
+    btn.innerHTML=`<div style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.6rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div><div style="font-size:.86rem">${escH(name)}</div><div style="font-size:.7rem;color:var(--muted)">${rolePill(u.role||'member')}</div></div>`;
+    btn.addEventListener('mouseenter',()=>btn.style.background='var(--muted3)');
+    btn.addEventListener('mouseleave',()=>btn.style.background='none');
+    btn.onclick=()=>openBadgeAttribution(u);
+    res.appendChild(btn);
+  });
+  if(!data||!data.length) res.innerHTML='<div style="padding:14px 16px;color:var(--muted);font-size:.82rem">Aucun résultat</div>';
+}
+
+function openBadgeAttribution(u){
+  badgeTargetUser = u;
+  badgeTargetCurrentBadges = Array.isArray(u.badges) ? [...u.badges] : [];
+  document.getElementById('badge-user-results').style.display='none';
+  document.getElementById('badge-empty').style.display='none';
+  document.getElementById('badge-attribution-area').style.display='block';
+
+  const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email;
+  const c=u.color||'#C8A84B';
+  const av=document.getElementById('badge-target-avatar');
+  av.textContent=u.initials||'?'; av.style.background=c+'18'; av.style.color=c;
+  document.getElementById('badge-target-name').textContent=name;
+  document.getElementById('badge-target-role').textContent=getRoleInfo(u.role||'member').emoji+' '+getRoleInfo(u.role||'member').label;
+
+  renderBadgeGrid();
+}
+
+function openBadgeFromModal(uid){
+  showPage('roles', document.querySelector('.nav-btn:nth-child(2)'));
+  setTimeout(async()=>{
+    const {data} = await sb.from('dc_users').select('*').eq('id',uid).maybeSingle();
+    if(data){ document.getElementById('badge-user-search').value=((data.firstname||'')+(data.lastname?' '+data.lastname:'')).trim()||data.email; openBadgeAttribution(data); }
+  },100);
+}
+
+function renderBadgeGrid(){
+  const container = document.getElementById('badge-grid-container');
+  container.innerHTML = '';
+  const groups = {};
+  ROLES.forEach(r=>{ if(!groups[r.group]) groups[r.group]=[]; groups[r.group].push(r); });
+  Object.entries(groups).forEach(([group, roles])=>{
+    const title = document.createElement('div');
+    title.className='badge-section-title'; title.textContent=group;
+    container.appendChild(title);
+    const grid = document.createElement('div');
+    grid.className='badges-grid';
+    roles.forEach(r=>{
+      const owned = badgeTargetCurrentBadges.includes(r.id);
+      const card = document.createElement('div');
+      card.className='badge-card'+(owned?' owned':'');
+      card.dataset.badgeId=r.id;
+      card.style.setProperty('--badge-color', r.color);
+      card.innerHTML=`<div class="badge-icon">${r.emoji}</div><div class="badge-name">${r.label}</div>`;
+      card.onclick=()=>toggleBadge(r.id, card);
+      grid.appendChild(card);
+    });
+    container.appendChild(grid);
+  });
+}
+
+function toggleBadge(id, card){
+  const idx = badgeTargetCurrentBadges.indexOf(id);
+  if(idx>=0){ badgeTargetCurrentBadges.splice(idx,1); card.classList.remove('owned'); }
+  else { badgeTargetCurrentBadges.push(id); card.classList.add('owned'); }
+}
+
+async function saveBadges(){
+  if(!badgeTargetUser) return;
+  await sb.from('dc_users').update({badges:badgeTargetCurrentBadges}).eq('id',badgeTargetUser.id);
+  await addLog('badge', `Badges mis à jour pour ${badgeTargetUser.email} : [${badgeTargetCurrentBadges.join(', ')}]`);
+  toast('Badges enregistrés ✓');
+  // Refresh user in allUsers
+  const idx=allUsers.findIndex(u=>u.id===badgeTargetUser.id);
+  if(idx>=0) allUsers[idx].badges=badgeTargetCurrentBadges;
+}
+
+function closeBadgeAttribution(){
+  document.getElementById('badge-attribution-area').style.display='none';
+  document.getElementById('badge-empty').style.display='block';
+  document.getElementById('badge-user-search').value='';
+  badgeTargetUser=null;
+}
+
+// ══════════════════════════════════════════════════════
+//  MESSAGES
+// ══════════════════════════════════════════════════════
+async function loadMessages(){
+  const {data} = await sb.from('dc_messages').select('*').order('created_at',{ascending:false}).limit(200);
+  allMessages = data||[];
+  const ids=[...new Set(allMessages.map(m=>m.user_id))];
+  const profiles = await fetchProfiles(ids);
+  renderMessages(allMessages, profiles);
+}
+
+function renderMessages(msgs, profiles){
+  const tbody=document.getElementById('msgs-tbody');
+  tbody.innerHTML='';
+  const empty=document.getElementById('msgs-empty');
+  if(!msgs.length){empty.style.display='block';return;}
+  empty.style.display='none';
+  msgs.forEach(m=>{
+    const u=profiles?.[m.user_id]||{}; const c=u.color||'#C8A84B';
+    const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email||'Inconnu';
+    const date=new Date(m.created_at).toLocaleString('fr',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    const tr=document.createElement('tr');
+    tr.dataset.msgId=m.id;
+    tr.innerHTML=`
+      <td><div class="user-cell"><div class="user-ini" style="background:${c}18;color:${c}">${u.initials||'?'}</div><div class="user-name">${escH(name)}</div></div></td>
+      <td><div class="msg-content" title="${escH(m.content)}">${escH(m.content)}</div></td>
+      <td><span class="channel-tag">#${m.channel||'?'}</span></td>
+      <td style="font-family:Geist Mono,monospace;font-size:.66rem;color:var(--muted)">${date}</td>
+      <td><button class="action-btn danger" onclick="deleteMessage('${m.id}',this.closest('tr'))">Supprimer</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+let _msgProfiles = {};
+async function filterMessages(q){
+  if(!_msgProfiles) return;
+  const lower=q.toLowerCase();
+  const filtered=allMessages.filter(m=>m.content?.toLowerCase().includes(lower)||(channelFilter==='all'||m.channel===channelFilter));
+  const ids=[...new Set(filtered.map(m=>m.user_id))];
+  _msgProfiles = await fetchProfiles(ids);
+  renderMessages(filtered.filter(m=>channelFilter==='all'||m.channel===channelFilter), _msgProfiles);
+}
+
+function setChannelFilter(ch, btn){
+  channelFilter=ch;
+  document.querySelectorAll('#page-messages .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  filterMessages(document.getElementById('msg-search').value);
+}
+
+async function deleteMessage(id, row){
+  if(!confirm('Supprimer ce message ?')) return;
+  await sb.from('dc_messages').delete().eq('id',id);
+  await addLog('delete_msg', `Message ${id} supprimé`);
+  row.style.opacity='.3'; setTimeout(()=>row.remove(),400);
+  toast('Message supprimé');
+}
+
+// ══════════════════════════════════════════════════════
+//  POSTS
+// ══════════════════════════════════════════════════════
+async function loadPosts(){
+  const {data}=await sb.from('dc_posts').select('*').order('ts',{ascending:false}).limit(100);
+  allPosts=data||[];
+  const ids=[...new Set(allPosts.map(p=>p.user_id))];
+  const profiles=await fetchProfiles(ids);
+  renderPosts(allPosts,profiles);
+}
+
+function renderPosts(posts,profiles){
+  const tbody=document.getElementById('posts-tbody');
+  tbody.innerHTML='';
+  const empty=document.getElementById('posts-empty');
+  if(!posts.length){empty.style.display='block';return;}
+  empty.style.display='none';
+  posts.forEach(p=>{
+    const u=profiles?.[p.user_id]||{}; const c=u.color||'#C8A84B';
+    const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email||'Inconnu';
+    const date=p.ts?new Date(p.ts).toLocaleDateString('fr',{day:'numeric',month:'short',year:'numeric'}):'—';
+    const content=(p.title||p.body||'').slice(0,80);
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><div class="user-cell"><div class="user-ini" style="background:${c}18;color:${c}">${u.initials||'?'}</div><div class="user-name">${escH(name)}</div></div></td>
+      <td><div class="msg-content" title="${escH(p.body||'')}"><span style="color:var(--gold);font-size:.8rem">${escH(p.title||'')}</span>${p.title&&p.body?' — ':''}<span style="color:var(--muted)">${escH((p.body||'').slice(0,60))}</span></div></td>
+      <td style="font-family:Geist Mono,monospace;font-size:.75rem">❤️ ${p.likes||0}</td>
+      <td style="font-family:Geist Mono,monospace;font-size:.66rem;color:var(--muted)">${date}</td>
+      <td><button class="action-btn danger" onclick="deletePost('${p.id}',this.closest('tr'))">Supprimer</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function filterPosts(q){
+  const lower=q.toLowerCase();
+  const filtered=allPosts.filter(p=>(p.title||p.body||'').toLowerCase().includes(lower));
+  const ids=[...new Set(filtered.map(p=>p.user_id))];
+  fetchProfiles(ids).then(profiles=>renderPosts(filtered,profiles));
+}
+
+async function deletePost(id,row){
+  if(!confirm('Supprimer ce post ?')) return;
+  await sb.from('dc_posts').delete().eq('id',id);
+  await addLog('delete_post',`Post ${id} supprimé`);
+  row.style.opacity='.3'; setTimeout(()=>row.remove(),400);
+  toast('Post supprimé');
+}
+
+// ══════════════════════════════════════════════════════
+//  LOGS
+// ══════════════════════════════════════════════════════
+async function loadLogs(){
+  const {data}=await sb.from('dc_logs').select('*').order('ts',{ascending:false}).limit(100);
+  const list=document.getElementById('logs-list');
+  const empty=document.getElementById('logs-empty');
+  list.innerHTML='';
+  if(!data||!data.length){empty.style.display='block';return;}
+  empty.style.display='none';
+  data.forEach(log=>{
+    const icons={role:'🎭',badge:'🏅',mute:'🔇',ban:'🚫',delete_msg:'🗑️',delete_post:'📄'};
+    const div=document.createElement('div');
+    div.className='log-item';
+    div.innerHTML=`<div class="log-icon">${icons[log.type]||'📋'}</div><div style="flex:1"><div class="log-text">${escH(log.msg||'')}</div></div><div class="log-time">${log.ts?new Date(log.ts).toLocaleString('fr',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'—'}</div>`;
+    list.appendChild(div);
+  });
+}
+
+async function addLog(type, msg){
+  const id=Date.now().toString(36)+Math.random().toString(36).slice(2);
+  await sb.from('dc_logs').insert({id, type, msg, ts:Date.now()});
+}
+
+// ══════════════════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════════════════
+async function fetchProfiles(ids){
+  if(!ids||!ids.length) return {};
+  const {data}=await sb.from('dc_users').select('id,firstname,lastname,initials,color,email,role,photo').in('id',ids);
+  const map={};
+  (data||[]).forEach(u=>map[u.id]=u);
+  return map;
+}
+
+function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function toast(msg, duration=2500){
+  const el=document.getElementById('admin-toast');
+  el.textContent=msg; el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), duration);
+}
+
+
+function showPage(page, btn){
+  document.querySelectorAll('#admin-view .page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('#admin-view .nav-btn').forEach(b=>b.classList.remove('active'));
+  const p = document.getElementById('page-'+page);
+  if(p) p.classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(page==='users') loadUsers();
+  else if(page==='messages') loadMessages();
+  else if(page==='posts') loadPosts();
+  else if(page==='logs') loadLogs();
+  else if(page==='roles') renderRolesReference();
+}
+
+async function loadDashboard(){
+  const [users,msgs,posts,friends] = await Promise.all([
+    sb.from('dc_users').select('id',{count:'exact',head:true}),
+    sb.from('dc_messages').select('id',{count:'exact',head:true}),
+    sb.from('dc_posts').select('id',{count:'exact',head:true}),
+    sb.from('dc_friends').select('id',{count:'exact',head:true}).eq('status','accepted'),
+  ]);
+  const el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v??'0';};
+  el('stat-total-users',users.count);
+  el('stat-total-msgs',msgs.count);
+  el('stat-total-posts',posts.count);
+  el('stat-total-friends',friends.count);
+  const dd=document.getElementById('dash-date');
+  if(dd) dd.textContent=new Date().toLocaleDateString('fr',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  // Recent users
+  const {data:ru}=await sb.from('dc_users').select('*').order('joined',{ascending:false}).limit(5);
+  const rul=document.getElementById('recent-users-list');
+  if(rul&&ru){
+    rul.innerHTML=(ru||[]).map(u=>{
+      const c=u.color||'#C8A84B';
+      const n=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email||'?';
+      return `<div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--muted2)"><div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.6rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1;font-size:.84rem">${escH(n)}</div><div style="font-family:Geist Mono,monospace;font-size:.55rem;color:var(--muted)">${u.joined?new Date(u.joined).toLocaleDateString('fr'):'—'}</div></div>`;
+    }).join('');
+  }
+
+  // Recent messages
+  const {data:rm}=await sb.from('dc_messages').select('*').order('created_at',{ascending:false}).limit(5);
+  const ids=[...new Set((rm||[]).map(m=>m.user_id))];
+  const profiles = await fetchProfiles(ids);
+  const rml=document.getElementById('recent-msgs-list');
+  if(rml&&rm){
+    rml.innerHTML=(rm||[]).map(m=>{
+      const u=profiles[m.user_id]||{};const c=u.color||'#C8A84B';
+      return `<div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--muted2)"><div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.6rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1;font-size:.82rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH((m.content||'').slice(0,50))}</div><div style="font-family:Geist Mono,monospace;font-size:.52rem;color:var(--gold);margin-left:4px">#${m.channel||'?'}</div></div>`;
     }).join('');
   }
 }
