@@ -287,7 +287,183 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .ch-icon-svg{width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:var(--gold);background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:6px;flex-shrink:0}
 .ch-icon-svg svg{display:block}
 
+
+/* ── EXPLORER ── */
+.dev-card{background:var(--black3);border:1px solid var(--muted2);border-radius:8px;overflow:hidden;transition:all .3s;position:relative}
+.dev-card:hover{border-color:var(--gold-border);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.4)}
+.dev-card-banner{height:72px;position:relative;flex-shrink:0}
+.dev-card-avatar{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.85rem;font-weight:500;border:3px solid var(--black3);position:absolute;bottom:-26px;left:20px;overflow:hidden;flex-shrink:0}
+.dev-card-body{padding:34px 20px 20px}
+.dev-card-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:2px}
+.dev-card-handle{font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.1em;color:var(--muted);margin-bottom:10px}
+.dev-card-bio{font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dev-card-skills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.dev-skill-tag{font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--gold-border);color:var(--gold);border-radius:3px}
+.dev-card-actions{display:flex;gap:8px;border-top:1px solid var(--muted2);padding-top:14px}
+.dev-card-btn{flex:1;padding:8px;font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border-radius:5px;transition:all .2s;border:1px solid var(--muted2);background:none;color:var(--muted)}
+.dev-card-btn:hover{border-color:var(--gold-border);color:var(--white);background:var(--gold-dim)}
+.dev-card-btn.primary{border-color:var(--gold-border);color:var(--gold);background:var(--gold-dim)}
+.dev-card-btn.primary:hover{background:rgba(200,168,75,.18)}
+.skill-filter-btn{font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border:1px solid var(--muted2);background:none;color:var(--muted);border-radius:20px;transition:all .2s}
+.skill-filter-btn:hover,.skill-filter-btn.active{border-color:var(--gold-border);color:var(--gold);background:var(--gold-dim)}
+
 @keyframes wFade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══ ADMIN ═══ */
+#admin-view{display:none;position:fixed;inset:0;z-index:600;background:var(--black)}
+#admin-view.show{display:flex}
+#admin-app{display:flex;width:100%;height:100vh;overflow:hidden}
+#admin-loading-screen{position:fixed;inset:0;background:var(--black);z-index:9998;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;transition:opacity .5s}
+#admin-loading-screen.hide{opacity:0;pointer-events:none}
+#admin-access-denied{display:none;position:fixed;inset:0;background:var(--black);z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+#admin-access-denied.show{display:flex}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#05050A;--black2:#09090F;--black3:#0D0D16;--black4:#111118;
+  --gold:#C8A84B;--gold-light:#E2C97E;--gold-dim:rgba(200,168,75,0.08);--gold-border:rgba(200,168,75,0.18);
+  --white:#F4F1EA;--muted:rgba(244,241,234,0.4);--muted2:rgba(244,241,234,0.08);--muted3:rgba(244,241,234,0.04);
+  --red:#e05a5a;--green:#10b981;--blue:#3b82f6;--purple:#8b5cf6;
+}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--black);font-family:'DM Sans',sans-serif;color:var(--white);-webkit-font-smoothing:antialiased}
+*{cursor:default}
+button{cursor:pointer}
+
+/* ── LAYOUT ── */
+#admin-app{display:flex;width:100%;height:100vh;overflow:hidden}
+#admin-access-denied{display:none;position:fixed;inset:0;background:var(--black);z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+#access-denied.show{display:flex}
+#admin-loading-screen{position:fixed;inset:0;background:var(--black);z-index:9998;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;transition:opacity .5s}
+#admin-loading-screen.hide{opacity:0;pointer-events:none}
+
+/* ── SIDEBAR ── */
+#admin-sidebar{width:240px;flex-shrink:0;background:var(--black2);border-right:1px solid var(--gold-border);display:flex;flex-direction:column;height:100vh;overflow:hidden}
+#admin-view .sidebar-logo{padding:28px 24px 20px;border-bottom:1px solid var(--muted2)}
+#admin-view .sidebar-logo-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;color:var(--gold);letter-spacing:.04em}
+#admin-view .sidebar-logo-sub{font-family:'Geist Mono',monospace;font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+#admin-view .sidebar-section{padding:16px 12px 8px;font-family:'Geist Mono',monospace;font-size:.48rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+#admin-view .nav-btn{display:flex;align-items:center;gap:10px;width:100%;padding:9px 14px;border-radius:6px;background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.88rem;transition:all .2s;text-align:left}
+#admin-view .nav-btn:hover{background:var(--muted3);color:var(--white)}
+#admin-view .nav-btn.active{background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-border)}
+#admin-view .nav-btn svg{flex-shrink:0;opacity:.7}
+#admin-view .nav-btn.active svg{opacity:1}
+#admin-view .sidebar-footer{margin-top:auto;padding:16px 12px;border-top:1px solid var(--muted2)}
+#admin-view .admin-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:4px;font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+
+/* ── MAIN ── */
+#admin-main{flex:1;overflow-y:auto;background:var(--black)}
+#admin-main::-webkit-scrollbar{width:4px}
+#admin-main::-webkit-scrollbar-thumb{background:var(--gold-border);border-radius:2px}
+#admin-view .page{display:none;padding:32px 36px}
+#admin-view .page.active{display:block}
+#admin-view .page-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:400;color:var(--white);margin-bottom:4px}
+#admin-view .page-sub{font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:28px}
+#admin-view .page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px}
+
+/* ── STAT CARDS ── */
+#admin-view .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+#admin-view .stat-card{background:var(--black2);border:1px solid var(--gold-border);border-radius:8px;padding:20px 22px;position:relative;overflow:hidden}
+#admin-view .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5}
+#admin-view .stat-card-val{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:400;color:var(--white);margin-bottom:4px}
+#admin-view .stat-card-label{font-family:'Geist Mono',monospace;font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+#admin-view .stat-card-icon{position:absolute;top:18px;right:18px;opacity:.15;font-size:1.8rem}
+
+/* ── TABLE ── */
+#admin-view .table-wrap{background:var(--black2);border:1px solid var(--gold-border);border-radius:8px;overflow:hidden}
+#admin-view .table-toolbar{padding:16px 20px;border-bottom:1px solid var(--muted2);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#admin-view .search-input{background:var(--muted3);border:1px solid var(--muted2);padding:8px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.84rem;border-radius:4px;outline:none;min-width:220px;transition:border .2s}
+#admin-view .search-input:focus{border-color:var(--gold-border)}
+#admin-view .filter-btn{background:none;border:1px solid var(--muted2);color:var(--muted);padding:7px 14px;font-family:'Geist Mono',monospace;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;border-radius:4px;transition:all .2s}
+#admin-view .filter-btn:hover,.filter-btn.active{border-color:var(--gold-border);color:var(--gold);background:var(--gold-dim)}
+table{width:100%;border-collapse:collapse}
+thead th{padding:12px 16px;text-align:left;font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--muted2);white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--muted2);transition:background .15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--muted3)}
+tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
+#admin-view .user-cell{display:flex;align-items:center;gap:10px}
+#admin-view .user-ini{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.62rem;flex-shrink:0;overflow:hidden}
+#admin-view .user-ini img{width:100%;height:100%;object-fit:cover}
+#admin-view .user-name{font-size:.88rem;font-weight:400}
+.user-email{font-size:.7rem;color:var(--muted)}
+
+/* ── BADGES PILLS ── */
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.pill-gold{background:rgba(200,168,75,.12);border:1px solid rgba(200,168,75,.3);color:var(--gold)}
+.pill-blue{background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);color:#60a5fa}
+.pill-green{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);color:#34d399}
+.pill-purple{background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.3);color:#a78bfa}
+.pill-red{background:rgba(224,90,90,.12);border:1px solid rgba(224,90,90,.3);color:#f87171}
+.pill-gray{background:rgba(244,241,234,.06);border:1px solid rgba(244,241,234,.1);color:var(--muted)}
+
+/* ── ROLE COLORS ── */
+.role-founder{color:#C8A84B}
+.role-cofounder{color:#d4a054}
+.role-admin{color:#ef4444}
+.role-mod{color:#3b82f6}
+.role-helper{color:#10b981}
+.role-member{color:rgba(244,241,234,.5)}
+.role-muted{color:#6b7280}
+.role-banned{color:#7f1d1d}
+
+/* ── ACTION BTNS ── */
+#admin-view .action-btn{background:none;border:1px solid var(--muted2);color:var(--muted);padding:5px 10px;font-family:'Geist Mono',monospace;font-size:.48rem;letter-spacing:.1em;text-transform:uppercase;border-radius:4px;transition:all .2s}
+#admin-view .action-btn:hover{border-color:var(--gold-border);color:var(--gold)}
+#admin-view .action-btn.danger:hover{border-color:var(--red);color:var(--red)}
+#admin-view .action-btn.success:hover{border-color:var(--green);color:var(--green)}
+#admin-view .btn-primary{background:var(--gold);border:none;color:#000;padding:9px 20px;font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;transition:opacity .2s}
+#admin-view .btn-primary:hover{opacity:.85}
+#admin-view .btn-outline{background:none;border:1px solid var(--gold-border);color:var(--gold);padding:8px 18px;font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;transition:all .2s}
+#admin-view .btn-outline:hover{background:var(--gold-dim)}
+
+/* ── MODAL ── */
+#admin-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+#modal-overlay.open{display:flex}
+#admin-modal{background:var(--black2);border:1px solid var(--gold-border);border-radius:10px;width:560px;max-height:85vh;overflow-y:auto;position:relative}
+#modal::-webkit-scrollbar{width:3px}
+#modal::-webkit-scrollbar-thumb{background:var(--gold-border)}
+#admin-view .modal-header{padding:24px 28px 16px;border-bottom:1px solid var(--muted2);display:flex;align-items:center;justify-content:space-between}
+#admin-view .modal-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400}
+#admin-view .modal-close{background:none;border:none;color:var(--muted);font-size:1.2rem;transition:color .2s}
+#admin-view .modal-close:hover{color:var(--white)}
+#admin-view .modal-body{padding:24px 28px}
+#admin-view .modal-section{margin-bottom:22px}
+#admin-view .modal-section-title{font-family:'Geist Mono',monospace;font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.field-label{font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+.field-input{width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;border-radius:4px;outline:none;transition:border .2s}
+.field-input:focus{border-color:var(--gold-border)}
+.field-select{width:100%;background:var(--black3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;border-radius:4px;outline:none}
+#admin-view .modal-footer{padding:16px 28px 24px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--muted2)}
+
+/* ── BADGES GRID ── */
+#admin-view .badges-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+#admin-view .badge-card{background:var(--black3);border:1px solid var(--muted2);border-radius:6px;padding:12px;text-align:center;transition:all .2s;position:relative}
+#admin-view .badge-card:hover{border-color:var(--gold-border);background:var(--gold-dim)}
+#admin-view .badge-card.owned{border-color:var(--gold-border);background:var(--gold-dim)}
+#admin-view .badge-card.owned::after{content:'✓';position:absolute;top:6px;right:8px;font-size:.65rem;color:var(--gold)}
+#admin-view .badge-icon{font-size:1.6rem;margin-bottom:6px}
+#admin-view .badge-name{font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);line-height:1.4}
+#admin-view .badge-card.owned .badge-name{color:var(--gold)}
+#admin-view .badge-section-title{font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--gold-border)}
+
+/* ── MESSAGES TABLE ── */
+#admin-view .msg-content{max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.84rem}
+#admin-view .channel-tag{display:inline-flex;padding:2px 8px;background:var(--muted3);border:1px solid var(--muted2);border-radius:3px;font-family:'Geist Mono',monospace;font-size:.48rem;letter-spacing:.1em;color:var(--muted)}
+
+/* ── LOG ── */
+#admin-view .log-item{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--muted2);align-items:flex-start}
+#admin-view .log-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
+#admin-view .log-text{font-size:.84rem;line-height:1.5}
+#admin-view .log-time{font-family:'Geist Mono',monospace;font-size:.58rem;color:var(--muted);white-space:nowrap;margin-top:2px}
+
+/* ── EMPTY ── */
+#admin-view .empty{padding:48px;text-align:center;color:var(--muted);font-size:.84rem}
+#admin-view .empty-icon{font-size:2rem;margin-bottom:12px;opacity:.4}
+
+/* ── TOAST ── */
+#admin-toast{position:fixed;bottom:28px;right:28px;background:var(--black2);border:1px solid var(--gold-border);padding:12px 20px;border-radius:6px;font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.1em;color:var(--gold);z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s}
+#toast.show{transform:translateY(0);opacity:1}
+
 </style>
 </head>
 <body>
@@ -417,6 +593,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
     <div class="sb-sep"></div>
     <button class="sb-icon" data-space="premium" onclick="setSpace('premium')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span class="tip">DevBoost Premium</span></button>
     <div class="sb-bottom">
+      <button class="sb-icon" id="admin-btn" onclick="showAdminPanel(true)" style="display:none" title="Admin"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="tip">Administration</span></button>
       <button class="sb-icon" data-space="settings" onclick="setSpace('settings')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span class="tip">Paramètres</span></button>
       <button class="avatar-mini" id="nav-avatar" onclick="setSpace('profil')"></button>
     </div>
@@ -520,18 +697,121 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
     </div>
     <!-- PROFIL -->
     <div class="content-area" id="area-profil">
-      <div class="content-header"><span class="ch-icon-svg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><div class="content-header-title">Mon Profil</div><div class="content-header-sub">Portfolio</div></div>
+      <div class="content-header"><span class="ch-icon-svg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><div class="content-header-title">Mon Profil</div><div class="content-header-sub">Compte</div></div>
       <div class="content-body"><div class="profile-wrap">
-        <div class="profile-banner"><div class="profile-avatar-lg" id="profile-avatar-lg"></div></div>
-        <div class="profile-info"><div class="profile-name" id="profile-name">—</div><div class="profile-handle" id="profile-handle">@—</div><div class="profile-bio">Développeur passionné. Toujours en train de construire quelque chose.</div><div class="profile-tags"><span class="tag">JavaScript</span><span class="tag">React</span><span class="tag">Node.js</span></div></div>
-        <div class="profile-stats"><div class="stat-box"><div class="stat-val">0</div><div class="stat-label">Projets</div></div><div class="stat-box"><div class="stat-val">0</div><div class="stat-label">Connexions</div></div><div class="stat-box"><div class="stat-val">0</div><div class="stat-label">Contributions</div></div></div>
+
+        <!-- BANNER + AVATAR -->
+        <div class="profile-banner" id="profile-banner" style="position:relative;overflow:hidden">
+          <!-- Banner image ou gradient -->
+          <img id="profile-banner-img" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0"/>
+          <!-- Bouton upload bannière -->
+          <label for="upload-banner" style="position:absolute;bottom:8px;right:10px;background:rgba(0,0,0,.55);border:1px solid rgba(200,168,75,.3);color:rgba(200,168,75,.8);font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;border-radius:4px;cursor:pointer;transition:all .2s;z-index:2" onmouseenter="this.style.background='rgba(0,0,0,.8)'" onmouseleave="this.style.background='rgba(0,0,0,.55)'">📷 Bannière</label>
+          <input type="file" id="upload-banner" accept="image/*" style="display:none" onchange="uploadBanner(this)"/>
+          <!-- Avatar -->
+          <div class="profile-avatar-lg" id="profile-avatar-lg" style="position:relative;overflow:hidden;cursor:pointer" onclick="document.getElementById('upload-avatar').click()">
+            <img id="profile-avatar-img" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:50%"/>
+            <span id="profile-avatar-ini"></span>
+            <div style="position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;font-size:.55rem;color:transparent;transition:all .2s" id="avatar-hover" onmouseenter="this.style.background='rgba(0,0,0,.5)';this.style.color='#fff'" onmouseleave="this.style.background='rgba(0,0,0,0)';this.style.color='transparent'">📷</div>
+          </div>
+          <input type="file" id="upload-avatar" accept="image/*" style="display:none" onchange="uploadAvatar(this)"/>
+        </div>
+
+        <!-- INFOS -->
+        <div class="profile-info" id="profile-info-view">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+            <div>
+              <div class="profile-name" id="profile-name">—</div>
+              <div class="profile-handle" id="profile-handle">@—</div>
+            </div>
+            <button onclick="showProfileEdit()" style="background:none;border:1px solid var(--gold-border);color:var(--gold);padding:6px 14px;font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;white-space:nowrap;transition:all .2s;flex-shrink:0">✏ Modifier</button>
+          </div>
+          <div class="profile-bio" id="profile-bio-view" style="margin-top:12px;font-size:.88rem;color:var(--muted);line-height:1.7"></div>
+          <div class="profile-tags" id="profile-tags-view" style="margin-top:12px"></div>
+          <div style="margin-top:14px;font-size:.75rem;color:var(--muted);font-family:'Geist Mono',monospace" id="profile-company-view"></div>
+        </div>
+
+        <!-- EDIT FORM (masqué par défaut) -->
+        <div id="profile-edit-form" style="display:none;border:1px solid var(--gold-border);border-top:none;border-radius:0 0 8px 8px;padding:24px 28px;margin-bottom:24px;background:var(--black3)">
+          <div style="font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:18px">Modifier le profil</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+            <div>
+              <label style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Prénom</label>
+              <input id="edit-firstname" type="text" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;border-radius:4px"/>
+            </div>
+            <div>
+              <label style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Nom</label>
+              <input id="edit-lastname" type="text" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;border-radius:4px"/>
+            </div>
+          </div>
+          <div style="margin-bottom:14px">
+            <label style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Bio</label>
+            <textarea id="edit-bio" rows="3" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;border-radius:4px;resize:vertical;line-height:1.6"></textarea>
+          </div>
+          <div style="margin-bottom:14px">
+            <label style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Entreprise / Statut</label>
+            <input id="edit-company" type="text" placeholder="Ex: Freelance, Google, Étudiant…" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;border-radius:4px"/>
+          </div>
+          <div style="margin-bottom:18px">
+            <label style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Compétences <span style="color:var(--muted);font-size:.5rem">(séparées par des virgules)</span></label>
+            <input id="edit-skills" type="text" placeholder="JavaScript, React, Node.js, Python…" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;border-radius:4px"/>
+          </div>
+          <div style="margin-bottom:18px">
+            <label style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px">Couleur du profil</label>
+            <div id="color-picker" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+          </div>
+          <div style="display:flex;gap:10px">
+            <button onclick="saveProfile()" style="background:var(--gold);border:none;color:#000;padding:9px 20px;font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;transition:opacity .2s" id="save-profile-btn">Enregistrer</button>
+            <button onclick="hideProfileEdit()" style="background:none;border:1px solid var(--muted2);color:var(--muted);padding:9px 20px;font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;border-radius:4px">Annuler</button>
+          </div>
+          <div id="profile-save-msg" style="margin-top:10px;font-family:'Geist Mono',monospace;font-size:.62rem;display:none"></div>
+        </div>
+
+        <!-- STATS -->
+        <div class="profile-stats">
+          <div class="stat-box"><div class="stat-val" id="stat-posts">0</div><div class="stat-label">Posts</div></div>
+          <div class="stat-box"><div class="stat-val" id="stat-amis">0</div><div class="stat-label">Amis</div></div>
+          <div class="stat-box"><div class="stat-val" id="stat-messages">0</div><div class="stat-label">Messages</div></div>
+        </div>
+
       </div></div>
     </div>
     <!-- COMING SOON -->
     <div class="content-area" id="area-travail"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></span><div class="content-header-title">Travail</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">VS Code intégré · Projets · Collaboration</div></div></div></div>
     <div class="content-area" id="area-ia"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="3"/></svg></span><div class="content-header-title">Intelligence Artificielle</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Assistants IA · Outils · Génération de code</div></div></div></div>
     <div class="content-area" id="area-apprendre"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></span><div class="content-header-title">Apprendre</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Cours · Défis de code · Certifications</div></div></div></div>
-    <div class="content-area" id="area-explorer"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 000 20M2 12h20"/></svg></span><div class="content-header-title">Explorer</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Découvrir projets · Devs · Communauté</div></div></div></div>
+    <div class="content-area" id="area-explorer">
+      <div class="content-header">
+        <span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 000 20M2 12h20"/></svg></span>
+        <div><div class="content-header-title">Explorer</div><div style="font-size:.78rem;color:var(--muted);font-weight:300" id="explorer-count">Chargement...</div></div>
+        <div class="content-header-sub">Communauté</div>
+      </div>
+      <!-- Search + Filters -->
+      <div id="explorer-toolbar" style="padding:16px 28px;border-bottom:1px solid var(--muted2);display:flex;align-items:center;gap:12px;flex-wrap:wrap;flex-shrink:0">
+        <div style="flex:1;min-width:200px;display:flex;align-items:center;gap:10px;background:var(--muted3);border:1px solid var(--muted2);border-radius:8px;padding:9px 14px;transition:border-color .2s" id="explorer-search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--muted);flex-shrink:0"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input id="explorer-search" type="text" placeholder="Chercher par nom, skill, entreprise..." style="background:none;border:none;outline:none;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;flex:1" oninput="explorerSearch(this.value)"/>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap" id="skill-filters"></div>
+        <button onclick="explorerLoad()" style="background:none;border:1px solid var(--gold-border);color:var(--gold);padding:8px 14px;font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border-radius:6px;transition:all .2s" onmouseenter="this.style.background='var(--gold-dim)'" onmouseleave="this.style.background='none'">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;margin-right:4px"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Actualiser
+        </button>
+      </div>
+      <!-- Grid -->
+      <div style="flex:1;overflow-y:auto;padding:28px" id="explorer-grid-wrap">
+        <div id="explorer-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px"></div>
+        <div id="explorer-empty" style="display:none;text-align:center;padding:80px 20px">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--white);margin-bottom:8px">Aucun développeur trouvé</div>
+          <div style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)">Essaie d'autres filtres</div>
+        </div>
+      </div>
+      <!-- Dev Profile Modal -->
+      <div id="dev-modal" style="display:none;position:fixed;inset:0;z-index:8000;background:rgba(5,5,10,.9);backdrop-filter:blur(20px);align-items:center;justify-content:center" onclick="if(event.target===this)closeDevModal()">
+        <div id="dev-modal-box" style="width:100%;max-width:560px;background:var(--black3);border:1px solid var(--gold-border);position:relative;max-height:85vh;overflow-y:auto">
+          <div id="dev-modal-content"></div>
+        </div>
+      </div>
+    </div>
     <div class="content-area" id="area-classement"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span><div class="content-header-title">Classement</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Ranking · Badges · Achievements</div></div></div></div>
     <div class="content-area" id="area-recommandations"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span><div class="content-header-title">Recommandations</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Projets suggérés · Devs à suivre</div></div></div></div>
     <div class="content-area" id="area-recrutement"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span><div class="content-header-title">Recrutement</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Offres · Candidatures · Matching</div></div></div></div>
@@ -664,17 +944,11 @@ function initDash(){
   const name=userProfile.firstname||userProfile.email.split('@')[0];
   const initials=userProfile.initials||(name[0]||'D').toUpperCase();
   const color=userProfile.color||'#C8A84B';
-  document.getElementById('welcome-name').textContent=userProfile.firstname||name;
-  document.getElementById('nav-avatar').textContent=initials;
-  document.getElementById('nav-avatar').style.color=color;
-  document.getElementById('nav-avatar').style.borderColor=color+'44';
-  document.getElementById('profile-avatar-lg').textContent=initials;
-  document.getElementById('profile-avatar-lg').style.background=color+'22';
-  document.getElementById('profile-avatar-lg').style.color=color;
-  document.getElementById('profile-name').textContent=(userProfile.firstname||'')+' '+(userProfile.lastname||'');
-  document.getElementById('profile-handle').textContent='@'+(userProfile.firstname||name).toLowerCase();
+  document.getElementById('welcome-name').textContent=userProfile.firstname||userProfile.email?.split('@')[0]||'Dev';
   setSpace('home');
   initChat();
+  checkAdminAccess();
+  initProfile();
   document.getElementById('dpanel').classList.add('hidden');
 }
 
@@ -718,6 +992,8 @@ function setSpace(space){
       if(item.action==='logout')btn.onclick=logout;
       else if(item.label==='Amis')btn.onclick=showAmiPanel;
       else if(item.label==='Notifications')btn.onclick=showNotifPanel;
+      else if(item.label==='Infos profil')btn.onclick=()=>{ setSpace('profil'); setTimeout(showProfileEdit,100); };
+      else if(item.label==='Badges')btn.onclick=()=>setSpace('profil');
       sec.appendChild(btn);
     });
     body.appendChild(sec);
@@ -727,37 +1003,487 @@ function setSpace(space){
 async function logout(){await sb.auth.signOut();location.reload()}
 
 // ══════════════════════════════════════════════════════
-//  COMMUNICATION — Messages · Amis · Notifications
+//  COMMUNICATION
+//  dc_messages        : id, channel, user_id(text), content, created_at
+//  dc_direct_messages : id, from_id(text), to_id(text), content, created_at
+//  dc_friends         : id, from_id(text), to_id(text), status, t
+//  dc_notifs          : id, user_id(text), icon, color, msg, read, ts
 // ══════════════════════════════════════════════════════
 
-let currentChannel = 'général';
-let currentDMUser  = null;   // {id, name, initials, color}
-let chatMode       = 'channel'; // 'channel' | 'dm'
-let realtimeSub    = null;
-let lastMsgUserId  = null;
+// ─── STATE ───────────────────────────────────────────
+let currentChannel  = 'général';
+let currentDMUser   = null;   // {id, firstname, lastname, initials, color}
+let chatMode        = 'channel'; // 'channel' | 'dm'
+let realtimeChan    = null;
+let realtimeDM      = null;
+let realtimeNotif   = null;
+let lastMsgUserId   = null;
 let emojiPickerOpen = false;
 const EMOJIS = ['😀','😂','😍','🤔','👍','👎','🔥','💯','🎉','😎','🤯','😭','❤️','🚀','💻','⚡','🛠️','🐛','✅','❌','👀','🙏','💪','🤝','✨','🌟','💡','📌','🔗','⚙️'];
 
-// ── Emoji picker ──
+// ─── UTILS ───────────────────────────────────────────
+function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2); }
+function fmtTime(ts){
+  const d=new Date(ts), now=new Date(), diff=(now-d)/1000;
+  if(diff<60) return 'à l\'instant';
+  if(diff<3600) return Math.floor(diff/60)+'m';
+  if(d.toDateString()===now.toDateString()) return d.toLocaleTimeString('fr',{hour:'2-digit',minute:'2-digit'});
+  return d.toLocaleDateString('fr',{day:'numeric',month:'short'});
+}
+function userName(u){ return ((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim() || u.email || 'Inconnu'; }
+
+// ─── EMOJI ───────────────────────────────────────────
 function toggleEmojiPicker(){
-  const picker = document.getElementById('emoji-picker');
-  emojiPickerOpen = !emojiPickerOpen;
-  picker.style.display = emojiPickerOpen ? 'grid' : 'none';
+  const p=document.getElementById('emoji-picker');
+  emojiPickerOpen=!emojiPickerOpen;
+  p.style.display=emojiPickerOpen?'grid':'none';
 }
 function insertEmoji(e){
-  const input = document.getElementById('chat-input');
-  const pos = input.selectionStart || input.value.length;
-  input.value = input.value.slice(0,pos) + e + input.value.slice(pos);
+  const input=document.getElementById('chat-input');
+  const pos=input.selectionStart||input.value.length;
+  input.value=input.value.slice(0,pos)+e+input.value.slice(pos);
   input.focus();
   document.getElementById('emoji-picker').style.display='none';
   emojiPickerOpen=false;
 }
-document.addEventListener('click', e=>{
-  if(emojiPickerOpen && !e.target.closest('#emoji-picker') && !e.target.closest('#emoji-btn')){
+document.addEventListener('click',e=>{
+  if(emojiPickerOpen&&!e.target.closest('#emoji-picker')&&!e.target.closest('#emoji-btn')){
     document.getElementById('emoji-picker').style.display='none';
     emojiPickerOpen=false;
   }
 });
+
+// ─── RENDER MESSAGE ──────────────────────────────────
+function renderMsg(m, authorProfile){
+  const container=document.getElementById('chat-messages');
+  const u = authorProfile || {};
+  const isNew = m.user_id !== lastMsgUserId;
+  lastMsgUserId = m.user_id;
+  const color = u.color||'#C8A84B';
+  const ini   = u.initials||'?';
+  const name  = userName(u);
+  const div   = document.createElement('div');
+  div.className='msg'+(isNew?' new-group':' msg-cont');
+  div.innerHTML=`<div class="msg-avatar" style="background:${color}22;color:${color}">${escHtml(ini)}</div><div class="msg-right">${isNew?`<div class="msg-header"><span class="msg-author" style="color:${color}">${escHtml(name)}</span><span class="msg-time">${fmtTime(m.created_at)}</span></div>`:''}<div class="msg-text">${escHtml(m.content)}</div></div>`;
+  container.appendChild(div);
+  container.scrollTop=container.scrollHeight;
+}
+
+// ─── LOAD USER PROFILES ──────────────────────────────
+async function fetchProfiles(ids){
+  if(!ids.length) return {};
+  const {data}=await sb.from('dc_users').select('id,firstname,lastname,initials,color,email').in('id',ids);
+  const map={};
+  (data||[]).forEach(u=>map[u.id]=u);
+  return map;
+}
+
+// ─── LOAD MESSAGES ───────────────────────────────────
+async function loadMessages(){
+  const container=document.getElementById('chat-messages');
+  container.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.15em">Chargement…</div>';
+  lastMsgUserId=null;
+
+  if(chatMode==='channel'){
+    // ── Salons : table dc_messages ──
+    const {data,error}=await sb.from('dc_messages')
+      .select('*')
+      .eq('channel',currentChannel)
+      .order('created_at',{ascending:true})
+      .limit(80);
+    container.innerHTML='';
+    if(error){ container.innerHTML=`<div style="text-align:center;padding:40px;color:#e05a5a;font-size:.8rem">Erreur: ${escHtml(error.message)}</div>`; return; }
+    if(!data||!data.length){ container.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--muted);font-size:.82rem">Aucun message — dis bonjour 👋</div>'; return; }
+    const profiles=await fetchProfiles([...new Set(data.map(m=>m.user_id))]);
+    data.forEach(m=>renderMsg(m, profiles[m.user_id]||{}));
+
+  } else {
+    // ── Messages privés : table dc_direct_messages ──
+    const me=currentUser.id, them=currentDMUser.id;
+    const {data,error}=await sb.from('dc_direct_messages')
+      .select('*')
+      .or(`and(from_id.eq.${me},to_id.eq.${them}),and(from_id.eq.${them},to_id.eq.${me})`)
+      .order('created_at',{ascending:true})
+      .limit(80);
+    container.innerHTML='';
+    if(error){ container.innerHTML=`<div style="text-align:center;padding:40px;color:#e05a5a;font-size:.8rem">Erreur: ${escHtml(error.message)}</div>`; return; }
+    if(!data||!data.length){ container.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--muted);font-size:.82rem">Aucun message — envoie le premier 👋</div>'; return; }
+    const profiles=await fetchProfiles([...new Set(data.map(m=>m.from_id))]);
+    // Normalize field names (from_id → user_id for renderMsg)
+    data.forEach(m=>renderMsg({...m, user_id:m.from_id}, profiles[m.from_id]||{}));
+  }
+}
+
+// ─── REALTIME ────────────────────────────────────────
+function subscribeRealtime(){
+  // Unsubscribe previous
+  if(realtimeChan){ sb.removeChannel(realtimeChan); realtimeChan=null; }
+  if(realtimeDM){   sb.removeChannel(realtimeDM);   realtimeDM=null;   }
+
+  if(chatMode==='channel'){
+    realtimeChan=sb.channel('chan-'+currentChannel)
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'dc_messages',filter:`channel=eq.${currentChannel}`},async p=>{
+        const m=p.new;
+        if(m.user_id===currentUser.id) return; // already rendered optimistically
+        const profiles=await fetchProfiles([m.user_id]);
+        renderMsg(m, profiles[m.user_id]||{});
+      })
+      .subscribe();
+  } else {
+    const me=currentUser.id, them=currentDMUser.id;
+    realtimeDM=sb.channel('dm-'+me+'-'+them)
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'dc_direct_messages'},async p=>{
+        const m=p.new;
+        // Only show if relevant to this conversation
+        const ok=(m.from_id===me&&m.to_id===them)||(m.from_id===them&&m.to_id===me);
+        if(!ok) return;
+        if(m.from_id===me) return; // already rendered optimistically
+        const profiles=await fetchProfiles([m.from_id]);
+        renderMsg({...m, user_id:m.from_id}, profiles[m.from_id]||{});
+      })
+      .subscribe();
+  }
+}
+
+// ─── SEND MESSAGE ────────────────────────────────────
+async function sendMsg(){
+  const input=document.getElementById('chat-input');
+  const text=input.value.trim();
+  if(!text||!userProfile) return;
+  input.value='';
+  const now=new Date().toISOString();
+
+  // Render optimistically
+  renderMsg({user_id:currentUser.id, content:text, created_at:now}, userProfile);
+
+  if(chatMode==='channel'){
+    const {error}=await sb.from('dc_messages').insert({
+      id: uid(),
+      channel: currentChannel,
+      user_id: currentUser.id,
+      content: text,
+      created_at: now
+    });
+    if(error) console.error('sendMsg channel error:', error.message);
+  } else {
+    const {error}=await sb.from('dc_direct_messages').insert({
+      id: uid(),
+      from_id: currentUser.id,
+      to_id: currentDMUser.id,
+      content: text,
+      created_at: now
+    });
+    if(error) console.error('sendMsg dm error:', error.message);
+    // Save notif for recipient
+    saveNotif(currentDMUser.id, '💬', userProfile.color||'#C8A84B',
+      `${userName(userProfile)} : ${text.slice(0,80)}`);
+  }
+}
+
+// ─── SELECT CHANNEL ──────────────────────────────────
+function selectChannel(btn, name){
+  document.querySelectorAll('#channels-list .dp-item').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentChannel=name;
+  currentDMUser=null;
+  chatMode='channel';
+  document.getElementById('chat-channel-name').textContent='# '+name;
+  document.getElementById('chat-channel-desc').textContent='Salon DevConnect — '+name;
+  document.getElementById('chat-input').placeholder='Message #'+name+'...';
+  loadMessages();
+  subscribeRealtime();
+}
+
+// ─── OPEN DM ─────────────────────────────────────────
+async function openDM(userId, displayName, userInitials, userColor){
+  closeDMModal();
+  // Remove subviews
+  document.getElementById('ami-subview')?.remove();
+  document.getElementById('notif-subview')?.remove();
+
+  const {data:u}=await sb.from('dc_users').select('*').eq('id',userId).maybeSingle();
+  currentDMUser={id:userId, firstname:u?.firstname||displayName, lastname:u?.lastname||'', initials:u?.initials||userInitials, color:u?.color||userColor, email:u?.email||''};
+  chatMode='dm';
+
+  document.querySelectorAll('#channels-list .dp-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('chat-channel-name').textContent='@ '+userName(currentDMUser);
+  document.getElementById('chat-channel-desc').textContent='Message privé';
+  document.getElementById('chat-input').placeholder='Message à '+userName(currentDMUser)+'...';
+
+  // Add to DM list
+  const dmList=document.getElementById('dm-list');
+  let btn=document.getElementById('dm-btn-'+userId);
+  if(!btn){
+    btn=document.createElement('button');
+    btn.id='dm-btn-'+userId;
+    btn.className='dp-item';
+    const c=currentDMUser.color||'#C8A84B';
+    btn.innerHTML=`<span style="width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.5rem;background:${c}22;color:${c};flex-shrink:0">${escHtml(currentDMUser.initials||'?')}</span><span class="dp-item-label">${escHtml(userName(currentDMUser))}</span>`;
+    btn.onclick=()=>openDM(userId, displayName, userInitials, userColor);
+    dmList.appendChild(btn);
+  }
+  document.querySelectorAll('#channels-list .dp-item').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+
+  loadMessages();
+  subscribeRealtime();
+}
+
+// ─── DM MODAL ────────────────────────────────────────
+function openNewDM(){
+  document.getElementById('dm-modal').style.display='flex';
+  const input=document.getElementById('dm-search');
+  input.value=''; document.getElementById('dm-search-results').innerHTML='';
+  input.oninput=()=>searchUsers(input.value);
+  setTimeout(()=>input.focus(),100);
+}
+function closeDMModal(){ document.getElementById('dm-modal').style.display='none'; }
+
+async function searchUsers(q){
+  const res=document.getElementById('dm-search-results');
+  if(!q||q.length<2){ res.innerHTML=''; return; }
+  const {data}=await sb.from('dc_users')
+    .select('id,firstname,lastname,initials,color,email')
+    .neq('id',currentUser.id)
+    .or(`firstname.ilike.%${q}%,lastname.ilike.%${q}%,email.ilike.%${q}%`)
+    .limit(8);
+  res.innerHTML='';
+  if(!data||!data.length){ res.innerHTML='<div style="text-align:center;padding:16px;color:var(--muted);font-size:.8rem">Aucun résultat</div>'; return; }
+  data.forEach(u=>{
+    const name=userName(u);
+    const c=u.color||'#C8A84B';
+    const btn=document.createElement('button');
+    btn.style.cssText='display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:6px;background:none;border:none;color:var(--white);width:100%;text-align:left;transition:background .15s';
+    btn.innerHTML=`<div style="width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.62rem;background:${c}22;color:${c};flex-shrink:0">${escHtml(u.initials||'?')}</div><div><div style="font-size:.86rem">${escHtml(name)}</div><div style="font-size:.7rem;color:var(--muted)">${escHtml(u.email||'')}</div></div>`;
+    btn.addEventListener('mouseenter',()=>btn.style.background='var(--muted3)');
+    btn.addEventListener('mouseleave',()=>btn.style.background='none');
+    btn.onclick=()=>openDM(u.id, name, u.initials||'?', u.color||'#C8A84B');
+    res.appendChild(btn);
+  });
+}
+
+// ─── AMIS ─────────────────────────────────────────────
+// dc_friends : from_id, to_id, status ('pending'|'accepted'|'rejected'), t
+async function initFriends(){
+  await loadFriendRequests();
+  await loadFriendsList();
+}
+
+async function loadFriendsList(){
+  const list=document.getElementById('friends-list');
+  if(!list) return;
+  const me=currentUser.id;
+  const {data}=await sb.from('dc_friends')
+    .select('*')
+    .or(`from_id.eq.${me},to_id.eq.${me}`)
+    .eq('status','accepted');
+  list.innerHTML='';
+  if(!data||!data.length){ list.innerHTML='<div style="padding:24px;text-align:center;color:var(--muted);font-size:.82rem">Aucun ami pour l\'instant</div>'; return; }
+  const friendIds=data.map(f=>f.from_id===me?f.to_id:f.from_id);
+  const profiles=await fetchProfiles(friendIds);
+  data.forEach(f=>{
+    const fid=f.from_id===me?f.to_id:f.from_id;
+    const u=profiles[fid]||{id:fid};
+    const name=userName(u); const c=u.color||'#C8A84B';
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--muted2)';
+    div.innerHTML=`<div style="width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.68rem;background:${c}22;color:${c};flex-shrink:0">${escHtml(u.initials||'?')}</div><div style="flex:1"><div style="font-size:.88rem">${escHtml(name)}</div><div style="font-size:.7rem;color:var(--muted)">${escHtml(u.email||'')}</div></div><button onclick="openDM('${fid}','${escHtml(name)}','${escHtml(u.initials||'?')}','${escHtml(c)}')" style="background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold);padding:5px 12px;font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;border-radius:4px">MP</button>`;
+    list.appendChild(div);
+  });
+}
+
+async function loadFriendRequests(){
+  const el=document.getElementById('friend-requests');
+  if(!el) return;
+  const {data}=await sb.from('dc_friends')
+    .select('*')
+    .eq('to_id',currentUser.id)
+    .eq('status','pending');
+  el.innerHTML='';
+  if(!data||!data.length){ el.style.display='none'; return; }
+  el.style.display='block';
+  const profiles=await fetchProfiles(data.map(f=>f.from_id));
+  data.forEach(f=>{
+    const u=profiles[f.from_id]||{id:f.from_id}; const name=userName(u); const c=u.color||'#C8A84B';
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--muted2);background:var(--gold-dim)';
+    div.innerHTML=`<div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.65rem;background:${c}22;color:${c};flex-shrink:0">${escHtml(u.initials||'?')}</div><div style="flex:1"><div style="font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:2px">Demande d'ami</div><div style="font-size:.86rem">${escHtml(name)}</div></div><button onclick="respondFriend('${f.id}','accepted',this.closest('div'))" style="background:var(--gold);border:none;color:#000;padding:5px 10px;font-family:Geist Mono,monospace;font-size:.55rem;border-radius:4px;margin-right:6px">✓</button><button onclick="respondFriend('${f.id}','rejected',this.closest('div'))" style="background:none;border:1px solid rgba(244,241,234,.15);color:var(--muted);padding:5px 10px;font-family:Geist Mono,monospace;font-size:.55rem;border-radius:4px">✕</button>`;
+    el.appendChild(div);
+  });
+  updateNotifBadge();
+}
+
+async function respondFriend(fid, status, row){
+  if(row) row.style.opacity='.4';
+  await sb.from('dc_friends').update({status}).eq('id',fid);
+  await loadFriendRequests();
+  await loadFriendsList();
+}
+
+async function sendFriendRequest(toId){
+  const me=currentUser.id;
+  const {data}=await sb.from('dc_friends').select('id').or(`and(from_id.eq.${me},to_id.eq.${toId}),and(from_id.eq.${toId},to_id.eq.${me})`);
+  if(data&&data.length){ alert('Demande déjà envoyée ou déjà amis.'); return; }
+  await sb.from('dc_friends').insert({id:uid(), from_id:me, to_id:toId, status:'pending', t:Date.now()});
+  // Notify
+  saveNotif(toId,'👤',userProfile.color||'#C8A84B',`${userName(userProfile)} veut être votre ami`);
+  alert('Demande envoyée !');
+}
+
+async function searchFriendUsers(q){
+  const res=document.getElementById('friend-search-results');
+  if(!res) return;
+  if(!q||q.length<2){ res.innerHTML=''; return; }
+  const {data}=await sb.from('dc_users').select('id,firstname,lastname,initials,color,email').neq('id',currentUser.id).or(`firstname.ilike.%${q}%,lastname.ilike.%${q}%,email.ilike.%${q}%`).limit(8);
+  res.innerHTML='';
+  (data||[]).forEach(u=>{
+    const name=userName(u); const c=u.color||'#C8A84B';
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--muted2)';
+    div.innerHTML=`<div style="width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.62rem;background:${c}22;color:${c};flex-shrink:0">${escHtml(u.initials||'?')}</div><div style="flex:1"><div style="font-size:.86rem">${escHtml(name)}</div><div style="font-size:.7rem;color:var(--muted)">${escHtml(u.email||'')}</div></div><button onclick="sendFriendRequest('${u.id}')" style="background:none;border:1px solid var(--gold-border);color:var(--gold);padding:5px 10px;font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;border-radius:4px">+ Ami</button>`;
+    res.appendChild(div);
+  });
+  if(!data||!data.length) res.innerHTML='<div style="padding:14px 0;color:var(--muted);font-size:.8rem">Aucun résultat</div>';
+}
+
+// ─── NOTIFICATIONS ───────────────────────────────────
+// Sauvegarder une notif en base
+async function saveNotif(toUserId, icon, color, msg){
+  await sb.from('dc_notifs').insert({id:uid(), user_id:toUserId, icon, color, msg, read:false, ts:Date.now()});
+}
+
+// Charger les notifs depuis la base
+async function loadNotifs(){
+  const {data}=await sb.from('dc_notifs').select('*').eq('user_id',currentUser.id).order('ts',{ascending:false}).limit(30);
+  return data||[];
+}
+
+// Badge
+async function updateNotifBadge(){
+  const {data}=await sb.from('dc_notifs').select('id').eq('user_id',currentUser.id).eq('read',false);
+  const count=(data||[]).length;
+  const badge=document.getElementById('notif-badge');
+  if(!badge) return;
+  badge.textContent=count>0?count:'';
+  badge.style.display=count>0?'flex':'none';
+}
+
+// Realtime notifs
+function subscribeNotifRealtime(){
+  if(realtimeNotif){ sb.removeChannel(realtimeNotif); realtimeNotif=null; }
+  realtimeNotif=sb.channel('notifs-me')
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'dc_notifs',filter:`user_id=eq.${currentUser.id}`},()=>{
+      updateNotifBadge();
+      // Refresh panel if open
+      const list=document.getElementById('notif-list');
+      if(list) renderNotifPanel(list);
+    })
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'dc_friends',filter:`to_id=eq.${currentUser.id}`},()=>{
+      updateNotifBadge();
+      const el=document.getElementById('friend-requests');
+      if(el) loadFriendRequests();
+    })
+    .subscribe();
+}
+
+async function renderNotifPanel(list){
+  const notifs=await loadNotifs();
+  list.innerHTML='';
+  if(!notifs.length){ list.innerHTML='<div style="padding:40px;text-align:center;color:var(--muted);font-size:.8rem">Aucune notification</div>'; return; }
+  notifs.forEach(n=>{
+    const div=document.createElement('div');
+    div.style.cssText=`display:flex;gap:14px;padding:14px 20px;border-bottom:1px solid var(--muted2);background:${n.read?'none':'var(--gold-dim)'};transition:background .3s;cursor:none!important`;
+    div.innerHTML=`<div style="font-size:1.1rem;flex-shrink:0;margin-top:2px">${n.icon||'🔔'}</div><div style="flex:1"><div style="font-size:.84rem;line-height:1.5;margin-bottom:3px">${escHtml(n.msg||'')}</div><div style="font-size:.66rem;color:var(--muted);font-family:Geist Mono,monospace">${fmtTime(n.ts)}</div></div>`;
+    if(!n.read) div.onclick=async()=>{ await sb.from('dc_notifs').update({read:true}).eq('id',n.id); div.style.background='none'; updateNotifBadge(); };
+    list.appendChild(div);
+  });
+}
+
+// ─── PANELS AMIS / NOTIFS ────────────────────────────
+function showAmiPanel(){
+  setSpace('communication');
+  setTimeout(()=>{
+    document.getElementById('notif-subview')?.remove();
+    const area=document.getElementById('area-communication');
+    if(!area) return;
+    area.style.position='relative';
+    let ami=document.getElementById('ami-subview');
+    if(!ami){
+      ami=document.createElement('div');
+      ami.id='ami-subview';
+      ami.style.cssText='position:absolute;inset:0;background:var(--black2);z-index:10;display:flex;flex-direction:column;overflow:hidden';
+      ami.innerHTML=`
+        <div class="content-header">
+          <div><div class="content-header-title">Amis</div></div>
+          <div class="content-header-sub">Communauté</div>
+          <button onclick="document.getElementById('ami-subview').remove()" style="position:absolute;right:20px;background:none;border:none;color:var(--muted);font-size:1.2rem;padding:4px 8px">×</button>
+        </div>
+        <div style="padding:14px 20px;border-bottom:1px solid var(--muted2)">
+          <input id="friend-search-input" type="text" placeholder="Chercher par nom ou email…" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 13px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.86rem;outline:none;border-radius:6px"/>
+          <div id="friend-search-results" style="margin-top:8px"></div>
+        </div>
+        <div id="friend-requests"></div>
+        <div id="friends-list" style="flex:1;overflow-y:auto"></div>`;
+      area.appendChild(ami);
+    }
+    const fi=document.getElementById('friend-search-input');
+    if(fi) fi.oninput=()=>searchFriendUsers(fi.value);
+    initFriends();
+  },80);
+}
+
+function showNotifPanel(){
+  setSpace('communication');
+  setTimeout(async()=>{
+    document.getElementById('ami-subview')?.remove();
+    const area=document.getElementById('area-communication');
+    if(!area) return;
+    area.style.position='relative';
+    let nv=document.getElementById('notif-subview');
+    if(!nv){
+      nv=document.createElement('div');
+      nv.id='notif-subview';
+      nv.style.cssText='position:absolute;inset:0;background:var(--black2);z-index:10;display:flex;flex-direction:column;overflow:hidden';
+      nv.innerHTML=`
+        <div class="content-header">
+          <div><div class="content-header-title">Notifications</div></div>
+          <div class="content-header-sub">Alertes</div>
+          <button onclick="document.getElementById('notif-subview').remove()" style="position:absolute;right:20px;background:none;border:none;color:var(--muted);font-size:1.2rem;padding:4px 8px">×</button>
+        </div>
+        <div id="notif-list" style="flex:1;overflow-y:auto"></div>`;
+      area.appendChild(nv);
+    }
+    // Mark all read
+    await sb.from('dc_notifs').update({read:true}).eq('user_id',currentUser.id).eq('read',false);
+    updateNotifBadge();
+    const list=document.getElementById('notif-list');
+    if(list) renderNotifPanel(list);
+  },80);
+}
+
+// ─── INIT CHAT ───────────────────────────────────────
+function initChat(){
+  // Build emoji picker
+  const picker=document.getElementById('emoji-picker');
+  if(picker){
+    EMOJIS.forEach(e=>{
+      const btn=document.createElement('button');
+      btn.textContent=e;
+      btn.title=e;
+      btn.style.cssText='background:none;border:none;font-size:1.18rem;padding:5px;border-radius:4px;transition:background .1s;cursor:none!important';
+      btn.addEventListener('mouseenter',()=>btn.style.background='var(--muted3)');
+      btn.addEventListener('mouseleave',()=>btn.style.background='none');
+      btn.onclick=()=>insertEmoji(e);
+      picker.appendChild(btn);
+    });
+  }
+  loadMessages();
+  subscribeRealtime();
+  subscribeNotifRealtime();
+  updateNotifBadge();
+}
+
 
 // ── Time format ──
 function fmtTime(ts){
@@ -1185,6 +1911,1397 @@ function handleDpItem(label){
   if(label==='Amis'){ showAmiPanel(); return; }
   if(label==='Notifications'){ showNotifPanel(); return; }
 }
+
+// ══════════════════════════════════════════════════════
+//  PROFIL
+// ══════════════════════════════════════════════════════
+
+const PROFILE_COLORS = ['#C8A84B','#3b82f6','#10b981','#8b5cf6','#ef4444','#f97316','#ec4899','#06b6d4','#84cc16','#f59e0b'];
+const BANNER_COLORS  = [
+  'linear-gradient(135deg,rgba(200,168,75,.18),rgba(200,168,75,.04))',
+  'linear-gradient(135deg,rgba(59,130,246,.18),rgba(59,130,246,.04))',
+  'linear-gradient(135deg,rgba(16,185,129,.18),rgba(16,185,129,.04))',
+  'linear-gradient(135deg,rgba(139,92,246,.18),rgba(139,92,246,.04))',
+  'linear-gradient(135deg,rgba(239,68,68,.18),rgba(239,68,68,.04))',
+];
+let bannerIdx = 0;
+
+function cycleBannerColor(){
+  bannerIdx = (bannerIdx + 1) % BANNER_COLORS.length;
+  document.getElementById('profile-banner').style.background = BANNER_COLORS[bannerIdx];
+}
+
+// Render profile from userProfile data
+function renderProfile(){
+  if(!userProfile) return;
+  const u = userProfile;
+  const name = ((u.firstname||'') + ' ' + (u.lastname||'')).trim() || u.email || '—';
+  const handle = '@' + (u.firstname||u.email?.split('@')[0]||'user').toLowerCase().replace(/\s+/g,'.');
+  const color  = u.color || '#C8A84B';
+  const ini    = u.initials || (name[0]||'?').toUpperCase();
+
+  // Avatar initiales
+  const iniEl = document.getElementById('profile-avatar-ini');
+  if(iniEl) iniEl.textContent = ini;
+  const av = document.getElementById('profile-avatar-lg');
+  if(av){ av.style.background=color+'22'; av.style.color=color; }
+
+  // Avatar image
+  if(u.photo){
+    const img = document.getElementById('profile-avatar-img');
+    if(img){ img.src=u.photo; img.style.display='block'; if(iniEl) iniEl.style.display='none'; }
+  }
+
+  // Banner image ou couleur
+  const banner = document.getElementById('profile-banner');
+  if(u.banner){
+    const bimg = document.getElementById('profile-banner-img');
+    if(bimg){ bimg.src=u.banner; bimg.style.display='block'; }
+    if(banner) banner.style.background='none';
+  } else {
+    if(banner) banner.style.background=`linear-gradient(135deg,${color}22,${color}06)`;
+  }
+
+  // Nav avatar
+  const nav = document.getElementById('nav-avatar');
+  if(nav){
+    if(u.photo){ nav.style.backgroundImage=`url(${u.photo})`; nav.style.backgroundSize='cover'; nav.textContent=''; }
+    else { nav.textContent=ini; nav.style.background=color+'22'; nav.style.color=color; nav.style.backgroundImage='none'; }
+  }
+
+  // Name / handle
+  const pname = document.getElementById('profile-name');
+  if(pname) pname.textContent = name;
+  const phandle = document.getElementById('profile-handle');
+  if(phandle) phandle.textContent = handle;
+
+  // Welcome
+  const wn = document.getElementById('welcome-name');
+  if(wn) wn.textContent = u.firstname || name;
+
+  // Bio
+  const bioEl = document.getElementById('profile-bio-view');
+  if(bioEl) bioEl.textContent = u.bio || 'Aucune bio renseignée.';
+
+  // Skills
+  const tagsEl = document.getElementById('profile-tags-view');
+  if(tagsEl){
+    tagsEl.innerHTML = '';
+    const skills = Array.isArray(u.skills) ? u.skills : (u.skills||'').split(',').map(s=>s.trim()).filter(Boolean);
+    skills.slice(0,8).forEach(s=>{
+      const span=document.createElement('span'); span.className='tag'; span.textContent=s; tagsEl.appendChild(span);
+    });
+  }
+
+  // Company
+  const compEl = document.getElementById('profile-company-view');
+  if(compEl) compEl.textContent = u.company ? '🏢 ' + u.company : '';
+
+  loadProfileStats();
+}
+
+// ─── UPLOAD AVATAR ───────────────────────────────────
+async function uploadAvatar(input){
+  const file = input.files[0];
+  if(!file) return;
+  if(file.size > 2*1024*1024){ alert('Image trop lourde (max 2Mo)'); return; }
+  const ext = file.name.split('.').pop();
+  const path = `${currentUser.id}/avatar.${ext}`;
+  showUploadProgress('avatar');
+  const { error } = await sb.storage.from('avatars').upload(path, file, { upsert: true, contentType: file.type });
+  if(error){ hideUploadProgress('avatar'); alert('Erreur upload : '+error.message); return; }
+  const { data } = sb.storage.from('avatars').getPublicUrl(path);
+  const url = data.publicUrl + '?t=' + Date.now();
+  await sb.from('dc_users').update({ photo: url }).eq('id', currentUser.id);
+  userProfile.photo = url;
+  hideUploadProgress('avatar');
+  // Afficher
+  const img = document.getElementById('profile-avatar-img');
+  if(img){ img.src=url; img.style.display='block'; }
+  const ini = document.getElementById('profile-avatar-ini');
+  if(ini) ini.style.display='none';
+  const nav = document.getElementById('nav-avatar');
+  if(nav){ nav.style.backgroundImage=`url(${url})`; nav.style.backgroundSize='cover'; nav.textContent=''; }
+  input.value='';
+}
+
+// ─── UPLOAD BANNIÈRE ─────────────────────────────────
+async function uploadBanner(input){
+  const file = input.files[0];
+  if(!file) return;
+  if(file.size > 4*1024*1024){ alert('Image trop lourde (max 4Mo)'); return; }
+  const ext = file.name.split('.').pop();
+  const path = `${currentUser.id}/banner.${ext}`;
+  showUploadProgress('banner');
+  const { error } = await sb.storage.from('avatars').upload(path, file, { upsert: true, contentType: file.type });
+  if(error){ hideUploadProgress('banner'); alert('Erreur upload : '+error.message); return; }
+  const { data } = sb.storage.from('avatars').getPublicUrl(path);
+  const url = data.publicUrl + '?t=' + Date.now();
+  await sb.from('dc_users').update({ banner: url }).eq('id', currentUser.id);
+  userProfile.banner = url;
+  hideUploadProgress('banner');
+  const bimg = document.getElementById('profile-banner-img');
+  if(bimg){ bimg.src=url; bimg.style.display='block'; }
+  const banner = document.getElementById('profile-banner');
+  if(banner) banner.style.background='none';
+  input.value='';
+}
+
+function showUploadProgress(type){
+  const target = type==='avatar' ? document.getElementById('profile-avatar-lg') : document.getElementById('profile-banner');
+  if(target){ target.style.opacity='.5'; target.style.pointerEvents='none'; }
+}
+function hideUploadProgress(type){
+  const target = type==='avatar' ? document.getElementById('profile-avatar-lg') : document.getElementById('profile-banner');
+  if(target){ target.style.opacity='1'; target.style.pointerEvents='auto'; }
+}
+
+// Load real stats from Supabase
+async function loadProfileStats(){
+  const me = currentUser.id;
+  const [posts, amis, msgs] = await Promise.all([
+    sb.from('dc_posts').select('id',{count:'exact',head:true}).eq('user_id', me),
+    sb.from('dc_friends').select('id',{count:'exact',head:true}).or(`from_id.eq.${me},to_id.eq.${me}`).eq('status','accepted'),
+    sb.from('dc_messages').select('id',{count:'exact',head:true}).eq('user_id', me),
+  ]);
+  const el = (id, val) => { const e=document.getElementById(id); if(e) e.textContent=val||0; };
+  el('stat-posts',   posts.count);
+  el('stat-amis',    amis.count);
+  el('stat-messages',msgs.count);
+}
+
+// Show edit form
+function showProfileEdit(){
+  const u = userProfile || {};
+  document.getElementById('edit-firstname').value = u.firstname || '';
+  document.getElementById('edit-lastname').value  = u.lastname  || '';
+  document.getElementById('edit-bio').value       = u.bio       || '';
+  document.getElementById('edit-company').value   = u.company   || '';
+  const skills = Array.isArray(u.skills) ? u.skills.join(', ') : (u.skills||'');
+  document.getElementById('edit-skills').value = skills;
+
+  // Color picker
+  const cp = document.getElementById('color-picker');
+  cp.innerHTML = '';
+  PROFILE_COLORS.forEach(c=>{
+    const btn = document.createElement('button');
+    btn.style.cssText=`width:28px;height:28px;border-radius:50%;background:${c};border:${(u.color||'#C8A84B')===c?'3px solid #fff':'3px solid transparent'};transition:border .15s`;
+    btn.title = c;
+    btn.onclick=()=>{ document.querySelectorAll('#color-picker button').forEach(b=>b.style.border='3px solid transparent'); btn.style.border='3px solid #fff'; };
+    cp.appendChild(btn);
+  });
+
+  document.getElementById('profile-info-view').style.borderRadius = '0';
+  document.getElementById('profile-edit-form').style.display = 'block';
+  document.getElementById('profile-save-msg').style.display = 'none';
+}
+
+function hideProfileEdit(){
+  document.getElementById('profile-edit-form').style.display = 'none';
+  document.getElementById('profile-info-view').style.borderRadius = '';
+}
+
+// Save profile to Supabase
+async function saveProfile(){
+  const btn = document.getElementById('save-profile-btn');
+  const msg = document.getElementById('profile-save-msg');
+  btn.textContent = 'Enregistrement…'; btn.style.opacity='.6';
+
+  const firstname = document.getElementById('edit-firstname').value.trim();
+  const lastname  = document.getElementById('edit-lastname').value.trim();
+  const bio       = document.getElementById('edit-bio').value.trim();
+  const company   = document.getElementById('edit-company').value.trim();
+  const skillsRaw = document.getElementById('edit-skills').value;
+  const skills    = skillsRaw.split(',').map(s=>s.trim()).filter(Boolean);
+
+  // Get selected color
+  let color = userProfile?.color || '#C8A84B';
+  const selectedBtn = document.querySelector('#color-picker button[style*="3px solid #fff"]');
+  if(selectedBtn) color = selectedBtn.title;
+
+  // Recompute initials
+  const initials = ((firstname[0]||'')+(lastname[0]||firstname[1]||'')).toUpperCase() || userProfile?.initials || '?';
+
+  const updates = { firstname, lastname, bio, company, skills, color, initials };
+
+  const { error } = await sb.from('dc_users').update(updates).eq('id', currentUser.id);
+
+  btn.textContent = 'Enregistrer'; btn.style.opacity='1';
+
+  if(error){
+    msg.style.display='block'; msg.style.color='#e05a5a';
+    msg.textContent = 'Erreur : ' + error.message;
+    return;
+  }
+
+  // Update local profile
+  userProfile = { ...userProfile, ...updates };
+
+  msg.style.display='block'; msg.style.color='var(--gold)';
+  msg.textContent = '✓ Profil mis à jour';
+  setTimeout(()=>{ msg.style.display='none'; hideProfileEdit(); },1200);
+
+  renderProfile();
+}
+
+// Init profile when entering profil space
+function initProfile(){
+  renderProfile();
+}
+
+// ══════════════════════════════════════════════════════
+//  EXPLORER
+// ══════════════════════════════════════════════════════
+
+let explorerAllDevs = [];
+let explorerFiltered = [];
+let explorerActiveSkill = null;
+let explorerSearchTerm = '';
+
+const POPULAR_SKILLS = ['JavaScript','TypeScript','React','Vue','Python','Node.js','Rust','Go','Swift','Flutter','Docker','AWS'];
+
+async function explorerLoad(){
+  const grid = document.getElementById('explorer-grid');
+  const empty = document.getElementById('explorer-empty');
+  if(!grid) return;
+  grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--muted);font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.18em">Chargement...</div>';
+  empty.style.display = 'none';
+
+  const {data, error} = await sb.from('dc_users')
+    .select('id,firstname,lastname,initials,color,photo,bio,skills,company,role,rank,joined')
+    .neq('id', currentUser.id)
+    .order('joined', {ascending:false});
+
+  if(error || !data){ grid.innerHTML=''; return; }
+  explorerAllDevs = data;
+
+  // Build skill filters
+  const allSkills = new Set();
+  data.forEach(u => (Array.isArray(u.skills)?u.skills:(u.skills||'').split(',').map(s=>s.trim()).filter(Boolean)).forEach(s=>allSkills.add(s)));
+  const topSkills = POPULAR_SKILLS.filter(s=>allSkills.has(s)).concat([...allSkills].filter(s=>!POPULAR_SKILLS.includes(s))).slice(0,10);
+  const filterWrap = document.getElementById('skill-filters');
+  if(filterWrap){
+    filterWrap.innerHTML = '';
+    topSkills.forEach(skill=>{
+      const btn = document.createElement('button');
+      btn.className = 'skill-filter-btn' + (explorerActiveSkill===skill?' active':'');
+      btn.textContent = skill;
+      btn.onclick = () => explorerFilterSkill(skill, btn);
+      filterWrap.appendChild(btn);
+    });
+  }
+
+  explorerApplyFilters();
+}
+
+function explorerSearch(q){
+  explorerSearchTerm = q.toLowerCase().trim();
+  explorerApplyFilters();
+}
+
+function explorerFilterSkill(skill, btn){
+  if(explorerActiveSkill === skill){
+    explorerActiveSkill = null;
+    btn.classList.remove('active');
+  } else {
+    explorerActiveSkill = skill;
+    document.querySelectorAll('.skill-filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  explorerApplyFilters();
+}
+
+function explorerApplyFilters(){
+  explorerFiltered = explorerAllDevs.filter(u=>{
+    const name = ((u.firstname||'')+' '+(u.lastname||'')).toLowerCase();
+    const skills = Array.isArray(u.skills)?u.skills:(u.skills||'').split(',').map(s=>s.trim()).filter(Boolean);
+    const company = (u.company||'').toLowerCase();
+    const skillsStr = skills.join(' ').toLowerCase();
+
+    const matchSearch = !explorerSearchTerm ||
+      name.includes(explorerSearchTerm) ||
+      skillsStr.includes(explorerSearchTerm) ||
+      company.includes(explorerSearchTerm);
+
+    const matchSkill = !explorerActiveSkill || skills.some(s=>s.toLowerCase()===explorerActiveSkill.toLowerCase());
+
+    return matchSearch && matchSkill;
+  });
+
+  const count = document.getElementById('explorer-count');
+  if(count) count.textContent = explorerFiltered.length + ' développeur' + (explorerFiltered.length!==1?'s':'') + ' trouvé' + (explorerFiltered.length!==1?'s':'');
+
+  renderExplorerGrid();
+}
+
+function renderExplorerGrid(){
+  const grid = document.getElementById('explorer-grid');
+  const empty = document.getElementById('explorer-empty');
+  grid.innerHTML = '';
+
+  if(!explorerFiltered.length){ empty.style.display='block'; return; }
+  empty.style.display = 'none';
+
+  explorerFiltered.forEach(u => {
+    const color = u.color || '#C8A84B';
+    const name = ((u.firstname||'')+' '+(u.lastname||'')).trim() || u.email || '—';
+    const handle = '@'+(u.firstname||'dev').toLowerCase().replace(/\s+/g,'.');
+    const skills = Array.isArray(u.skills)?u.skills:(u.skills||'').split(',').map(s=>s.trim()).filter(Boolean);
+    const bio = u.bio || 'Développeur passionné sur DevConnect.';
+    const ini = u.initials || (name[0]||'?').toUpperCase();
+    const roleLabel = u.role==='founder'?'Fondateur':u.role==='admin'?'Admin':u.role==='mod'?'Mod':null;
+
+    const card = document.createElement('div');
+    card.className = 'dev-card';
+    card.innerHTML = `
+      <div class="dev-card-banner" style="background:linear-gradient(135deg,${color}22,${color}06)">
+        ${u.photo?`<img src="${u.photo}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.3"/>` : ''}
+        <div class="dev-card-avatar" style="background:${color}22;color:${color}">
+          ${u.photo?`<img src="${u.photo}" style="width:100%;height:100%;object-fit:cover"/>` : ini}
+        </div>
+        ${roleLabel?`<div style="position:absolute;top:10px;right:12px;font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:${color};border:1px solid ${color}44;padding:3px 8px;border-radius:10px;background:${color}11">${roleLabel}</div>`:''}
+      </div>
+      <div class="dev-card-body">
+        <div class="dev-card-name">${escHtml(name)}</div>
+        <div class="dev-card-handle">${escHtml(handle)}${u.company?` · <span style="color:var(--muted)">${escHtml(u.company)}</span>`:''}</div>
+        <div class="dev-card-bio">${escHtml(bio)}</div>
+        <div class="dev-card-skills">${skills.slice(0,5).map(s=>`<span class="dev-skill-tag">${escHtml(s)}</span>`).join('')}${skills.length>5?`<span class="dev-skill-tag" style="color:var(--muted);border-color:var(--muted2)">+${skills.length-5}</span>`:''}</div>
+        <div class="dev-card-actions">
+          <button class="dev-card-btn primary" onclick="openDevModal('${u.id}')">Voir profil</button>
+          <button class="dev-card-btn" onclick="explorerAddFriend('${u.id}',this)">+ Ami</button>
+          <button class="dev-card-btn" onclick="explorerSendMP('${u.id}')">MP</button>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+async function explorerAddFriend(userId, btn){
+  btn.textContent = '...'; btn.style.opacity = '.6';
+  const {data} = await sb.from('dc_friends')
+    .select('id,status')
+    .or(`and(from_id.eq.${currentUser.id},to_id.eq.${userId}),and(from_id.eq.${userId},to_id.eq.${currentUser.id})`);
+  if(data && data.length){
+    const s = data[0].status;
+    btn.textContent = s==='accepted'?'Amis':s==='pending'?'En attente':'Envoyé';
+    btn.style.opacity = '1'; return;
+  }
+  await sb.from('dc_friends').insert({from_id:currentUser.id, to_id:userId, status:'pending', t:Date.now()});
+  btn.textContent = 'Envoyé'; btn.style.opacity = '1';
+  btn.style.borderColor = 'var(--gold-border)'; btn.style.color = 'var(--gold)';
+}
+
+async function explorerSendMP(userId){
+  const u = explorerAllDevs.find(d=>d.id===userId);
+  if(!u) return;
+  setSpace('communication');
+  setTimeout(async()=>{
+    if(typeof startDM === 'function') await startDM(u);
+  }, 200);
+}
+
+async function openDevModal(userId){
+  const modal = document.getElementById('dev-modal');
+  const box = document.getElementById('dev-modal-content');
+  modal.style.display = 'flex';
+  box.innerHTML = '<div style="padding:60px;text-align:center;color:var(--muted);font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.18em">Chargement...</div>';
+
+  const {data:u} = await sb.from('dc_users').select('*').eq('id',userId).single();
+  if(!u){ box.innerHTML='<div style="padding:40px;text-align:center;color:#e05a5a">Erreur</div>'; return; }
+
+  const color = u.color||'#C8A84B';
+  const name = ((u.firstname||'')+' '+(u.lastname||'')).trim()||'—';
+  const handle = '@'+(u.firstname||'dev').toLowerCase().replace(/\s+/g,'.');
+  const skills = Array.isArray(u.skills)?u.skills:(u.skills||'').split(',').map(s=>s.trim()).filter(Boolean);
+  const ini = u.initials||(name[0]||'?').toUpperCase();
+
+  // Load stats
+  const [msgs, friends] = await Promise.all([
+    sb.from('dc_messages').select('id',{count:'exact',head:true}).eq('user_id',userId),
+    sb.from('dc_friends').select('id',{count:'exact',head:true}).or(`from_id.eq.${userId},to_id.eq.${userId}`).eq('status','accepted'),
+  ]);
+
+  box.innerHTML = `
+    <!-- Banner -->
+    <div style="height:100px;background:linear-gradient(135deg,${color}28,${color}06);position:relative">
+      ${u.banner?`<img src="${u.banner}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.4"/>`:''}
+      <button onclick="closeDevModal()" style="position:absolute;top:14px;right:14px;background:rgba(5,5,10,.6);border:1px solid var(--muted2);color:var(--white);width:28px;height:28px;border-radius:50%;font-size:1rem;display:flex;align-items:center;justify-content:center">×</button>
+    </div>
+    <!-- Avatar -->
+    <div style="padding:0 28px;position:relative;margin-top:-32px;margin-bottom:8px">
+      <div style="width:64px;height:64px;border-radius:50%;background:${color}22;color:${color};display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:1.1rem;border:3px solid var(--black3);overflow:hidden">
+        ${u.photo?`<img src="${u.photo}" style="width:100%;height:100%;object-fit:cover"/>`:ini}
+      </div>
+    </div>
+    <!-- Info -->
+    <div style="padding:0 28px 28px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px">
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:400">${escHtml(name)}</div>
+          <div style="font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.1em;color:var(--muted)">${escHtml(handle)}${u.company?' · '+escHtml(u.company):''}</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-shrink:0">
+          <button onclick="explorerAddFriend('${u.id}',this)" class="dev-card-btn" style="padding:8px 14px;border-radius:5px;border:1px solid var(--gold-border);color:var(--gold);background:var(--gold-dim);font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase">+ Ami</button>
+          <button onclick="explorerSendMP('${u.id}');closeDevModal()" class="dev-card-btn" style="padding:8px 14px;border-radius:5px;border:1px solid var(--muted2);color:var(--muted);background:none;font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase">MP</button>
+        </div>
+      </div>
+      ${u.bio?`<p style="font-size:.88rem;color:rgba(244,241,234,.75);line-height:1.75;margin-bottom:18px">${escHtml(u.bio)}</p>`:''}
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+        <div style="border:1px solid var(--gold-border);padding:14px;border-radius:6px;text-align:center;background:var(--gold-dim)">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold-light)">${msgs.count||0}</div>
+          <div style="font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:3px">Messages</div>
+        </div>
+        <div style="border:1px solid var(--gold-border);padding:14px;border-radius:6px;text-align:center;background:var(--gold-dim)">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold-light)">${friends.count||0}</div>
+          <div style="font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:3px">Amis</div>
+        </div>
+        <div style="border:1px solid var(--gold-border);padding:14px;border-radius:6px;text-align:center;background:var(--gold-dim)">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold-light)">${u.joined?Math.floor((Date.now()-u.joined)/(1000*60*60*24)):0}</div>
+          <div style="font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:3px">Jours</div>
+        </div>
+      </div>
+      <!-- Skills -->
+      ${skills.length?`
+      <div style="margin-bottom:8px;font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)">Compétences</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">${skills.map(s=>`<span class="dev-skill-tag">${escHtml(s)}</span>`).join('')}</div>`:''}
+    </div>`;
+}
+
+function closeDevModal(){
+  document.getElementById('dev-modal').style.display = 'none';
+}
+
+// Auto-load explorer when entering space
+const _origSetSpace = setSpace;
+setSpace = function(space){
+  _origSetSpace(space);
+  if(space==='explorer') explorerLoad();
+};
+
+</script>
+
+<!-- ═══ ADMIN VIEW ═══ -->
+<div id="admin-view">
+  <div id="admin-app">
+    <div id="admin-loading-screen">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold)">Administration</div>
+      <div style="font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.2em;color:var(--muted)">Vérification des droits...</div>
+    </div>
+    <div id="admin-access-denied">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold)">Accès refusé</div>
+      <div style="color:var(--muted);font-size:.9rem">Cette zone est réservée aux administrateurs.</div>
+      <button onclick="showAdminPanel(false)" style="margin-top:16px;padding:10px 28px;border:1px solid var(--gold-border);background:none;color:var(--white);font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase">Retour</button>
+    </div>
+    <div id="admin-sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-title">DevConnect</div>
+      <div class="sidebar-logo-sub">Panel Administration</div>
+    </div>
+
+    <div style="padding:12px;flex:1;overflow-y:auto">
+      <div class="sidebar-section">Tableau de bord</div>
+      <button class="nav-btn active" onclick="showPage('dashboard',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Vue d'ensemble
+      </button>
+
+      <div class="sidebar-section">Membres</div>
+      <button class="nav-btn" onclick="showPage('users',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        Utilisateurs
+      </button>
+      <button class="nav-btn" onclick="showPage('roles',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Rôles & Badges
+      </button>
+
+      <div class="sidebar-section">Contenu</div>
+      <button class="nav-btn" onclick="showPage('messages',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Messages
+      </button>
+      <button class="nav-btn" onclick="showPage('posts',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Posts
+      </button>
+
+      <div class="sidebar-section">Système</div>
+      <button class="nav-btn" onclick="showPage('logs',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Logs Admin
+      </button>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="admin-badge" id="admin-role-badge-el">👑 Founder</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div id="admin-sidebar-avatar" style="width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.65rem;background:rgba(200,168,75,.15);color:var(--gold);flex-shrink:0"></div>
+        <div style="flex:1;min-width:0">
+          <div id="admin-sidebar-name" style="font-size:.86rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
+          <div style="font-family:'Geist Mono',monospace;font-size:.5rem;color:var(--muted)">Admin</div>
+        </div>
+        <a onclick="showAdminPanel(false)" href="#" style="color:var(--muted);font-size:.75rem;text-decoration:none;transition:color .2s" title="Retour au site" onmouseenter="this.style.color='var(--white)'" onmouseleave="this.style.color='var(--muted)'">←</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main
+    <div id="admin-main">
+      
+
+    <!-- ══ DASHBOARD ══ -->
+    <div class="page active" id="page-dashboard">
+      <div style="margin-bottom:8px">
+        <div class="page-title">Vue d'ensemble</div>
+        <div class="page-sub" id="dash-date">—</div>
+      </div>
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card"><div class="stat-card-icon">👥</div><div class="stat-card-val" id="stat-total-users">—</div><div class="stat-card-label">Membres total</div></div>
+        <div class="stat-card"><div class="stat-card-icon">💬</div><div class="stat-card-val" id="stat-total-msgs">—</div><div class="stat-card-label">Messages envoyés</div></div>
+        <div class="stat-card"><div class="stat-card-icon">📝</div><div class="stat-card-val" id="stat-total-posts">—</div><div class="stat-card-label">Posts publiés</div></div>
+        <div class="stat-card"><div class="stat-card-icon">🤝</div><div class="stat-card-val" id="stat-total-friends">—</div><div class="stat-card-label">Connexions amis</div></div>
+      </div>
+
+      <!-- Recent users -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="table-wrap">
+          <div class="table-toolbar" style="justify-content:space-between">
+            <span style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Derniers inscrits</span>
+          </div>
+          <div id="recent-users-list" style="padding:0 4px"></div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-toolbar" style="justify-content:space-between">
+            <span style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Derniers messages</span>
+          </div>
+          <div id="recent-msgs-list" style="padding:0 4px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ USERS ══ -->
+    <div class="page" id="page-users">
+      <div class="page-header">
+        <div><div class="page-title">Utilisateurs</div><div class="page-sub">Gestion des membres</div></div>
+        <button class="btn-outline" onclick="loadUsers()">↺ Actualiser</button>
+      </div>
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <input class="search-input" type="text" placeholder="Rechercher par nom, email…" id="user-search" oninput="filterUsers(this.value)"/>
+          <button class="filter-btn active" onclick="setRoleFilter('all',this)">Tous</button>
+          <button class="filter-btn" onclick="setRoleFilter('founder',this)">Founder</button>
+          <button class="filter-btn" onclick="setRoleFilter('admin',this)">Admin</button>
+          <button class="filter-btn" onclick="setRoleFilter('mod',this)">Mod</button>
+          <button class="filter-btn" onclick="setRoleFilter('banned',this)">Bannis</button>
+        </div>
+        <div id="users-table-wrap" style="overflow-x:auto">
+          <table>
+            <thead><tr>
+              <th>Membre</th><th>Rôle</th><th>Badges</th><th>Inscrit</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="users-tbody"></tbody>
+          </table>
+        </div>
+        <div id="users-empty" class="empty" style="display:none"><div class="empty-icon">👤</div>Aucun utilisateur trouvé</div>
+      </div>
+    </div>
+
+    <!-- ══ ROLES & BADGES ══ -->
+    <div class="page" id="page-roles">
+      <div class="page-header">
+        <div><div class="page-title">Rôles & Badges</div><div class="page-sub">Attribution manuelle</div></div>
+      </div>
+      <!-- Role Reference -->
+      <div class="table-wrap" style="margin-bottom:20px">
+        <div class="table-toolbar"><span style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Hiérarchie des rôles</span></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0">
+          <div id="roles-reference"></div>
+        </div>
+        <div id="roles-ref-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));padding:16px 20px;gap:10px"></div>
+      </div>
+      <!-- Badge attribution -->
+      <div class="table-wrap">
+        <div class="table-toolbar" style="justify-content:space-between">
+          <span style="font-family:'Geist Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Attribuer des badges</span>
+          <div style="display:flex;gap:10px;align-items:center">
+            <input class="search-input" type="text" placeholder="Chercher un membre…" id="badge-user-search" oninput="searchBadgeUser(this.value)" style="min-width:180px"/>
+          </div>
+        </div>
+        <div id="badge-user-results" style="padding:12px 20px;display:none"></div>
+        <div id="badge-attribution-area" style="padding:20px;display:none">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--muted2)">
+            <div id="badge-target-avatar" style="width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.8rem"></div>
+            <div><div id="badge-target-name" style="font-size:.95rem"></div><div id="badge-target-role" style="font-family:'Geist Mono',monospace;font-size:.55rem;color:var(--muted);margin-top:2px"></div></div>
+            <button onclick="closeBadgeAttribution()" style="margin-left:auto;background:none;border:none;color:var(--muted);font-size:1rem">×</button>
+          </div>
+          <div id="badge-grid-container"></div>
+          <div style="margin-top:16px;display:flex;gap:10px">
+            <button class="btn-primary" onclick="saveBadges()">Enregistrer les badges</button>
+          </div>
+        </div>
+        <div id="badge-empty" class="empty">
+          <div class="empty-icon">🏅</div>
+          Recherche un membre pour lui attribuer des badges
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ MESSAGES ══ -->
+    <div class="page" id="page-messages">
+      <div class="page-header">
+        <div><div class="page-title">Messages</div><div class="page-sub">Modération des salons</div></div>
+        <button class="btn-outline" onclick="loadMessages()">↺ Actualiser</button>
+      </div>
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <input class="search-input" type="text" placeholder="Rechercher dans les messages…" id="msg-search" oninput="filterMessages(this.value)"/>
+          <button class="filter-btn active" onclick="setChannelFilter('all',this)">Tous</button>
+          <button class="filter-btn" onclick="setChannelFilter('général',this)">#général</button>
+          <button class="filter-btn" onclick="setChannelFilter('aide',this)">#aide</button>
+          <button class="filter-btn" onclick="setChannelFilter('projets',this)">#projets</button>
+          <button class="filter-btn" onclick="setChannelFilter('showcase',this)">#showcase</button>
+        </div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead><tr><th>Auteur</th><th>Message</th><th>Salon</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody id="msgs-tbody"></tbody>
+          </table>
+        </div>
+        <div id="msgs-empty" class="empty" style="display:none"><div class="empty-icon">💬</div>Aucun message</div>
+      </div>
+    </div>
+
+    <!-- ══ POSTS ══ -->
+    <div class="page" id="page-posts">
+      <div class="page-header">
+        <div><div class="page-title">Posts</div><div class="page-sub">Modération des publications</div></div>
+        <button class="btn-outline" onclick="loadPosts()">↺ Actualiser</button>
+      </div>
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <input class="search-input" type="text" placeholder="Rechercher dans les posts…" id="post-search" oninput="filterPosts(this.value)"/>
+        </div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead><tr><th>Auteur</th><th>Contenu</th><th>Likes</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody id="posts-tbody"></tbody>
+          </table>
+        </div>
+        <div id="posts-empty" class="empty" style="display:none"><div class="empty-icon">📝</div>Aucun post</div>
+      </div>
+    </div>
+
+    <!-- ══ LOGS ══ -->
+    <div class="page" id="page-logs">
+      <div class="page-header">
+        <div><div class="page-title">Logs Admin</div><div class="page-sub">Historique des actions</div></div>
+        <button class="btn-outline" onclick="loadLogs()">↺ Actualiser</button>
+      </div>
+      <div class="table-wrap">
+        <div id="logs-list" style="padding:0 20px;max-height:70vh;overflow-y:auto"></div>
+        <div id="logs-empty" class="empty" style="display:none"><div class="empty-icon">📋</div>Aucun log enregistré</div>
+      </div>
+    </div>
+
+  
+    </div>
+  </div>
+  
+  <div id="admin-modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div id="admin-modal">
+      <div class="modal-header"><div class="modal-title" id="modal-title">Utilisateur</div><button class="modal-close" onclick="closeModal()">×</button></div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer" id="modal-footer"></div>
+    </div>
+  </div>
+  <div id="admin-toast"></div>
+</div>
+
+<script>
+
+// ═══════════════════════════════════════
+//  ADMIN PANEL
+// ═══════════════════════════════════════
+const ADMIN_ROLES = ['founder','cofounder','admin','mod'];
+
+function showAdminPanel(show){
+  const v = document.getElementById('admin-view');
+  if(show){
+    v.classList.add('show');
+    initAdmin();
+  } else {
+    v.classList.remove('show');
+  }
+}
+
+async function initAdmin(){
+  const ls = document.getElementById('admin-loading-screen');
+  const denied = document.getElementById('admin-access-denied');
+  ls.classList.remove('hide');
+  denied.classList.remove('show');
+
+  // Check role
+  const {data} = await sb.from('dc_users').select('role').eq('id', currentUser.id).single();
+  const role = data?.role || 'member';
+  if(!ADMIN_ROLES.includes(role)){
+    ls.classList.add('hide');
+    denied.classList.add('show');
+    return;
+  }
+  ls.classList.add('hide');
+
+  // Set admin info
+  const name = (userProfile?.firstname||'') + ' ' + (userProfile?.lastname||'');
+  const av = document.getElementById('admin-sidebar-avatar');
+  if(av){ av.textContent = userProfile?.initials||'?'; av.style.background=(userProfile?.color||'#C8A84B')+'18'; av.style.color=userProfile?.color||'#C8A84B'; }
+  const sn = document.getElementById('admin-sidebar-name');
+  if(sn) sn.textContent = name.trim() || userProfile?.email || '';
+  const rb = document.getElementById('admin-role-badge-el');
+  if(rb){ const r = getRoleInfo(role); rb.textContent = r.emoji+' '+r.label; }
+
+  // Show active nav button
+  const firstBtn = document.querySelector('#admin-view .nav-btn');
+  if(firstBtn) showPage('dashboard', firstBtn);
+  loadDashboard();
+}
+
+// Show admin btn if admin role
+async function checkAdminAccess(){
+  if(!currentUser) return;
+  const {data} = await sb.from('dc_users').select('role').eq('id', currentUser.id).single();
+  if(data && ADMIN_ROLES.includes(data.role)){
+    const btn = document.getElementById('admin-btn');
+    if(btn) btn.style.display='flex';
+  }
+}
+
+
+
+// ══════════════════════════════════════════════════════
+//  ROLES & BADGES
+// ══════════════════════════════════════════════════════
+
+const ROLES = [
+  // Administration
+  {id:'founder',     label:'Fondateur',             emoji:'👑', color:'#C8A84B', group:'Administration'},
+  {id:'cofounder',   label:'Co-Fondateur',           emoji:'🤴', color:'#d4a054', group:'Administration'},
+  {id:'admin',       label:'Administrateur',          emoji:'🛡️', color:'#ef4444', group:'Administration'},
+  {id:'mod',         label:'Modérateur',              emoji:'⚔️', color:'#3b82f6', group:'Administration'},
+  {id:'helper',      label:'Helper',                  emoji:'🙋', color:'#10b981', group:'Administration'},
+  // Développement
+  {id:'fullstack',   label:'Développeur Full Stack',  emoji:'💻', color:'#8b5cf6', group:'Développement'},
+  {id:'frontend',    label:'Développeur Front-End',   emoji:'🎨', color:'#ec4899', group:'Développement'},
+  {id:'backend',     label:'Développeur Back-End',    emoji:'⚙️', color:'#f97316', group:'Développement'},
+  {id:'mobile',      label:'Développeur Mobile',      emoji:'📱', color:'#06b6d4', group:'Développement'},
+  {id:'webdev',      label:'Développeur Web',         emoji:'🌐', color:'#3b82f6', group:'Développement'},
+  {id:'aidev',       label:'Développeur IA',          emoji:'🤖', color:'#a855f7', group:'Développement'},
+  {id:'gamedev',     label:'Développeur Jeux Vidéo',  emoji:'🎮', color:'#ef4444', group:'Développement'},
+  {id:'beginner',    label:'Débutant',                emoji:'🌱', color:'#84cc16', group:'Développement'},
+  {id:'student',     label:'Étudiant en développement',emoji:'📚',color:'#60a5fa', group:'Développement'},
+  // Création
+  {id:'uiux',        label:'UI/UX Designer',          emoji:'✏️', color:'#f43f5e', group:'Création'},
+  {id:'designer',    label:'Graphiste',               emoji:'🖌️', color:'#fb923c', group:'Création'},
+  {id:'videoeditor', label:'Monteur Vidéo',           emoji:'🎬', color:'#facc15', group:'Création'},
+  {id:'creator',     label:'Créateur de contenu',     emoji:'📸', color:'#4ade80', group:'Création'},
+  // Communauté
+  {id:'member',      label:'Développeur',             emoji:'👤', color:'rgba(244,241,234,.5)', group:'Communauté'},
+  {id:'verified',    label:'Développeur Vérifié',     emoji:'✅', color:'#34d399', group:'Communauté'},
+  {id:'active',      label:'Développeur Actif',       emoji:'⚡', color:'#fbbf24', group:'Communauté'},
+  {id:'recruiter',   label:'Recruteur',               emoji:'🎯', color:'#38bdf8', group:'Communauté'},
+  {id:'booster',     label:'Booster',                 emoji:'🚀', color:'#c084fc', group:'Communauté'},
+  {id:'partner',     label:'Partenaire',              emoji:'🤝', color:'#67e8f9', group:'Communauté'},
+  // Distinctions
+  {id:'early',       label:'Early Member',            emoji:'🏅', color:'#fcd34d', group:'Distinctions'},
+  {id:'beta',        label:'Bêta Testeur',            emoji:'🔬', color:'#a3e635', group:'Distinctions'},
+  {id:'contributor', label:'Contributeur',            emoji:'🌟', color:'#fbbf24', group:'Distinctions'},
+  {id:'mentor',      label:'Mentor',                  emoji:'🧠', color:'#e879f9', group:'Distinctions'},
+  {id:'legend',      label:'Légende DevConnect',      emoji:'🏆', color:'#C8A84B', group:'Distinctions'},
+  // Automatique
+  {id:'online',      label:'En ligne',                emoji:'🟢', color:'#10b981', group:'Automatique'},
+  {id:'newmember',   label:'Nouveau membre',          emoji:'✨', color:'#60a5fa', group:'Automatique'},
+  {id:'accountverif',label:'Compte vérifié',          emoji:'🔐', color:'#34d399', group:'Automatique'},
+];
+
+var ADMIN_ROLES = ['founder','cofounder','admin','mod','helper'];
+
+function getRoleInfo(id){ return ROLES.find(r=>r.id===id) || {id,label:id,emoji:'👤',color:'var(--muted)'}; }
+
+function rolePill(roleId){
+  const r = getRoleInfo(roleId);
+  return `<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-family:'Geist Mono',monospace;font-size:.48rem;letter-spacing:.08em;text-transform:uppercase;background:${r.color}18;border:1px solid ${r.color}44;color:${r.color};white-space:nowrap">${r.emoji} ${r.label}</span>`;
+}
+
+// ══════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════
+let currentAdmin = null;
+let allUsers = [];
+let allMessages = [];
+let allPosts = [];
+let roleFilter = 'all';
+let channelFilter = 'all';
+let badgeTargetUser = null;
+let badgeTargetCurrentBadges = [];
+
+// ══════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { showAccessDenied(); return; }
+
+  const { data: profile } = await sb.from('dc_users').select('*').eq('id', session.user.id).maybeSingle();
+  if (!profile || !ADMIN_ROLES.includes(profile.role)) { showAccessDenied(); return; }
+
+  currentAdmin = profile;
+  document.getElementById('admin-loading-screen').classList.add('hide');
+  document.getElementById('app').style.display = 'flex';
+
+  // Sidebar info
+  const name = ((profile.firstname||'')+(profile.lastname?' '+profile.lastname:'')).trim()||profile.email;
+  document.getElementById('admin-sidebar-name').textContent = name;
+  const av = document.getElementById('admin-sidebar-avatar');
+  if(profile.photo){ av.style.backgroundImage=`url(${profile.photo})`; av.style.backgroundSize='cover'; }
+  else { av.textContent = profile.initials||'?'; }
+  const role = getRoleInfo(profile.role);
+  document.getElementById('admin-role-badge-el').textContent = role.emoji+' '+role.label;
+  document.getElementById('admin-role-badge-el').style.color = role.color;
+
+  // Date
+  document.getElementById('dash-date').textContent = new Date().toLocaleDateString('fr',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  loadDashboard();
+  renderRolesReference();
+})();
+
+function showAccessDenied(){
+  document.getElementById('admin-loading-screen').classList.add('hide');
+  document.getElementById('admin-access-denied').classList.add('show');
+}
+
+// ══════════════════════════════════════════════════════
+//  NAV
+// ══════════════════════════════════════════════════════
+function showPage(id, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  // Load data
+  if(id==='users') loadUsers();
+  if(id==='messages') loadMessages();
+  if(id==='posts') loadPosts();
+  if(id==='logs') loadLogs();
+}
+
+// ══════════════════════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════════════════════
+async function loadDashboard(){
+  const [users, msgs, posts, friends] = await Promise.all([
+    sb.from('dc_users').select('id',{count:'exact',head:true}),
+    sb.from('dc_messages').select('id',{count:'exact',head:true}),
+    sb.from('dc_posts').select('id',{count:'exact',head:true}),
+    sb.from('dc_friends').select('id',{count:'exact',head:true}).eq('status','accepted'),
+  ]);
+  document.getElementById('stat-total-users').textContent = users.count||0;
+  document.getElementById('stat-total-msgs').textContent = msgs.count||0;
+  document.getElementById('stat-total-posts').textContent = posts.count||0;
+  document.getElementById('stat-total-friends').textContent = friends.count||0;
+
+  // Recent users
+  const { data: recentUsers } = await sb.from('dc_users').select('*').order('joined',{ascending:false}).limit(6);
+  const ruList = document.getElementById('recent-users-list');
+  ruList.innerHTML = '';
+  (recentUsers||[]).forEach(u=>{
+    const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email;
+    const c=u.color||'#C8A84B';
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--muted2)';
+    div.innerHTML=`<div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.58rem;background:${c}18;color:${c};flex-shrink:0${u.photo?`;background-image:url(${u.photo});background-size:cover`:''}">${u.photo?'':u.initials||'?'}</div><div style="flex:1;min-width:0"><div style="font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(name)}</div><div style="font-size:.68rem;color:var(--muted)">${rolePill(u.role||'member')}</div></div>`;
+    ruList.appendChild(div);
+  });
+
+  // Recent messages
+  const { data: recentMsgs } = await sb.from('dc_messages').select('*').order('created_at',{ascending:false}).limit(6);
+  const rmIds = [...new Set((recentMsgs||[]).map(m=>m.user_id))];
+  const rmProfiles = await fetchProfiles(rmIds);
+  const rmList = document.getElementById('recent-msgs-list');
+  rmList.innerHTML='';
+  (recentMsgs||[]).forEach(m=>{
+    const u=rmProfiles[m.user_id]||{}; const c=u.color||'#C8A84B';
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--muted2)';
+    div.innerHTML=`<div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.58rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1;min-width:0"><div style="font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)">#${m.channel}</div><div style="font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(m.content)}</div></div>`;
+    rmList.appendChild(div);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  USERS
+// ══════════════════════════════════════════════════════
+async function loadUsers(){
+  const { data } = await sb.from('dc_users').select('*').order('joined',{ascending:false});
+  allUsers = data || [];
+  renderUsers(allUsers);
+}
+
+function renderUsers(users){
+  const tbody = document.getElementById('users-tbody');
+  tbody.innerHTML = '';
+  const empty = document.getElementById('users-empty');
+  if(!users.length){ empty.style.display='block'; return; }
+  empty.style.display='none';
+  users.forEach(u=>{
+    const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email;
+    const c=u.color||'#C8A84B';
+    const badges = Array.isArray(u.badges) ? u.badges : [];
+    const joinDate = u.joined ? new Date(u.joined).toLocaleDateString('fr',{day:'numeric',month:'short',year:'numeric'}) : '—';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><div class="user-cell">
+        <div class="user-ini" style="background:${c}18;color:${c}${u.photo?`;background-image:url(${u.photo});background-size:cover`:''}">${u.photo?'':u.initials||'?'}</div>
+        <div><div class="user-name">${escH(name)}</div><div class="user-email">${escH(u.email||'')}</div></div>
+      </div></td>
+      <td>${rolePill(u.role||'member')}</td>
+      <td><div style="display:flex;flex-wrap:wrap;gap:4px;max-width:200px">${badges.slice(0,3).map(b=>{ const r=getRoleInfo(b); return `<span title="${r.label}" style="font-size:.9rem">${r.emoji}</span>`; }).join('')}${badges.length>3?`<span style="font-size:.7rem;color:var(--muted)">+${badges.length-3}</span>`:''}</div></td>
+      <td style="font-family:'Geist Mono',monospace;font-size:.68rem;color:var(--muted)">${joinDate}</td>
+      <td><div style="display:flex;gap:6px">
+        <button class="action-btn" onclick="openUserModal('${u.id}')">Gérer</button>
+        ${u.role==='banned'
+          ? `<button class="action-btn success" onclick="setUserRole('${u.id}','member')">Débannir</button>`
+          : `<button class="action-btn danger" onclick="banUser('${u.id}')">Bannir</button>`
+        }
+      </div></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function filterUsers(q){
+  const lower = q.toLowerCase();
+  let filtered = allUsers.filter(u=>{
+    const name=((u.firstname||'')+(u.lastname||'')+u.email).toLowerCase();
+    return name.includes(lower);
+  });
+  if(roleFilter!=='all') filtered=filtered.filter(u=>u.role===roleFilter);
+  renderUsers(filtered);
+}
+
+function setRoleFilter(role, btn){
+  roleFilter=role;
+  document.querySelectorAll('#page-users .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  filterUsers(document.getElementById('user-search').value);
+}
+
+async function banUser(uid){
+  if(!confirm('Bannir cet utilisateur ?')) return;
+  await setUserRole(uid,'banned');
+}
+
+async function setUserRole(uid, role){
+  await sb.from('dc_users').update({role}).eq('id',uid);
+  await addLog('role', `Rôle changé → ${role} pour user ${uid}`);
+  toast('Rôle mis à jour');
+  loadUsers();
+}
+
+// ── User Modal ──
+async function openUserModal(uid){
+  const u = allUsers.find(x=>x.id===uid);
+  if(!u) return;
+  const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email;
+  const c=u.color||'#C8A84B';
+  const badges=Array.isArray(u.badges)?u.badges:[];
+
+  document.getElementById('modal-title').textContent = name;
+  document.getElementById('modal-body').innerHTML = `
+    <!-- Avatar + infos -->
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--muted2)">
+      <div style="width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:1rem;background:${c}18;color:${c};flex-shrink:0;overflow:hidden${u.photo?`;background-image:url(${u.photo});background-size:cover`:''}">${u.photo?'':u.initials||'?'}</div>
+      <div><div style="font-size:1rem">${escH(name)}</div><div style="font-size:.76rem;color:var(--muted)">${escH(u.email||'')}</div><div style="margin-top:6px">${rolePill(u.role||'member')}</div></div>
+    </div>
+
+    <!-- Infos -->
+    <div class="modal-section">
+      <div class="modal-section-title">Informations</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.82rem;color:var(--muted)">
+        <div>Bio : <span style="color:var(--white)">${escH(u.bio||'—')}</span></div>
+        <div>Entreprise : <span style="color:var(--white)">${escH(u.company||'—')}</span></div>
+        <div>Skills : <span style="color:var(--white)">${Array.isArray(u.skills)?u.skills.join(', '):(u.skills||'—')}</span></div>
+        <div>Inscrit : <span style="color:var(--white)">${u.joined?new Date(u.joined).toLocaleDateString('fr'):'—'}</span></div>
+      </div>
+    </div>
+
+    <!-- Changer rôle -->
+    <div class="modal-section">
+      <div class="modal-section-title">Changer le rôle</div>
+      <select id="modal-role-select" class="field-select">
+        ${ROLES.map(r=>`<option value="${r.id}"${u.role===r.id?' selected':''}>${r.emoji} ${r.label}</option>`).join('')}
+      </select>
+    </div>
+
+    <!-- Badges actuels -->
+    <div class="modal-section">
+      <div class="modal-section-title">Badges (${badges.length})</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        ${badges.length ? badges.map(b=>{const r=getRoleInfo(b);return `<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-family:'Geist Mono',monospace;font-size:.5rem;background:${r.color}18;border:1px solid ${r.color}44;color:${r.color}">${r.emoji} ${r.label}</span>`;}).join('') : '<span style="color:var(--muted);font-size:.82rem">Aucun badge</span>'}
+      </div>
+    </div>
+
+    <!-- Actions rapides -->
+    <div class="modal-section">
+      <div class="modal-section-title">Actions</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="action-btn success" onclick="muteUser('${uid}')">🔇 Muter</button>
+        <button class="action-btn danger" onclick="banUser('${uid}');closeModal()">🚫 Bannir</button>
+        <button class="btn-outline" onclick="openBadgeFromModal('${uid}');closeModal()">🏅 Gérer badges</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('modal-footer').innerHTML = `
+    <button class="btn-outline" onclick="closeModal()">Annuler</button>
+    <button class="btn-primary" onclick="saveUserRole('${uid}')">Enregistrer le rôle</button>
+  `;
+  document.getElementById('admin-modal-overlay').classList.add('open');
+}
+
+async function saveUserRole(uid){
+  const role = document.getElementById('modal-role-select').value;
+  await sb.from('dc_users').update({role}).eq('id',uid);
+  await addLog('role', `Rôle changé → ${role} pour user ${uid}`);
+  toast('Rôle mis à jour');
+  closeModal();
+  loadUsers();
+}
+
+async function muteUser(uid){
+  await sb.from('dc_users').update({role:'muted'}).eq('id',uid);
+  await addLog('mute', `User ${uid} muté`);
+  toast('Utilisateur muté');
+  closeModal();
+  loadUsers();
+}
+
+function closeModal(){ document.getElementById('admin-modal-overlay').classList.remove('open'); }
+
+// ══════════════════════════════════════════════════════
+//  ROLES REFERENCE
+// ══════════════════════════════════════════════════════
+function renderRolesReference(){
+  const grid = document.getElementById('roles-ref-grid');
+  const groups = {};
+  ROLES.forEach(r=>{ if(!groups[r.group]) groups[r.group]=[]; groups[r.group].push(r); });
+  grid.innerHTML = '';
+  grid.style.gridTemplateColumns = '1fr';
+  Object.entries(groups).forEach(([group, roles])=>{
+    const section = document.createElement('div');
+    section.style.cssText = 'margin-bottom:16px';
+    section.innerHTML = `<div style="font-family:'Geist Mono',monospace;font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--gold-border)">${group}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">${roles.map(r=>`<span style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-family:'Geist Mono',monospace;font-size:.5rem;letter-spacing:.06em;background:${r.color}15;border:1px solid ${r.color}35;color:${r.color}">${r.emoji} ${r.label}</span>`).join('')}</div>`;
+    grid.appendChild(section);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  BADGES ATTRIBUTION
+// ══════════════════════════════════════════════════════
+async function searchBadgeUser(q){
+  const res = document.getElementById('badge-user-results');
+  if(!q||q.length<2){ res.style.display='none'; return; }
+  const {data} = await sb.from('dc_users').select('*').or(`firstname.ilike.%${q}%,lastname.ilike.%${q}%,email.ilike.%${q}%`).limit(6);
+  res.style.display='block';
+  res.innerHTML='';
+  (data||[]).forEach(u=>{
+    const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email;
+    const c=u.color||'#C8A84B';
+    const btn=document.createElement('button');
+    btn.style.cssText='display:flex;align-items:center;gap:10px;padding:10px 12px;width:100%;background:none;border:none;border-bottom:1px solid var(--muted2);color:var(--white);text-align:left;transition:background .15s';
+    btn.innerHTML=`<div style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.6rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div><div style="font-size:.86rem">${escH(name)}</div><div style="font-size:.7rem;color:var(--muted)">${rolePill(u.role||'member')}</div></div>`;
+    btn.addEventListener('mouseenter',()=>btn.style.background='var(--muted3)');
+    btn.addEventListener('mouseleave',()=>btn.style.background='none');
+    btn.onclick=()=>openBadgeAttribution(u);
+    res.appendChild(btn);
+  });
+  if(!data||!data.length) res.innerHTML='<div style="padding:14px 16px;color:var(--muted);font-size:.82rem">Aucun résultat</div>';
+}
+
+function openBadgeAttribution(u){
+  badgeTargetUser = u;
+  badgeTargetCurrentBadges = Array.isArray(u.badges) ? [...u.badges] : [];
+  document.getElementById('badge-user-results').style.display='none';
+  document.getElementById('badge-empty').style.display='none';
+  document.getElementById('badge-attribution-area').style.display='block';
+
+  const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email;
+  const c=u.color||'#C8A84B';
+  const av=document.getElementById('badge-target-avatar');
+  av.textContent=u.initials||'?'; av.style.background=c+'18'; av.style.color=c;
+  document.getElementById('badge-target-name').textContent=name;
+  document.getElementById('badge-target-role').textContent=getRoleInfo(u.role||'member').emoji+' '+getRoleInfo(u.role||'member').label;
+
+  renderBadgeGrid();
+}
+
+function openBadgeFromModal(uid){
+  showPage('roles', document.querySelector('.nav-btn:nth-child(2)'));
+  setTimeout(async()=>{
+    const {data} = await sb.from('dc_users').select('*').eq('id',uid).maybeSingle();
+    if(data){ document.getElementById('badge-user-search').value=((data.firstname||'')+(data.lastname?' '+data.lastname:'')).trim()||data.email; openBadgeAttribution(data); }
+  },100);
+}
+
+function renderBadgeGrid(){
+  const container = document.getElementById('badge-grid-container');
+  container.innerHTML = '';
+  const groups = {};
+  ROLES.forEach(r=>{ if(!groups[r.group]) groups[r.group]=[]; groups[r.group].push(r); });
+  Object.entries(groups).forEach(([group, roles])=>{
+    const title = document.createElement('div');
+    title.className='badge-section-title'; title.textContent=group;
+    container.appendChild(title);
+    const grid = document.createElement('div');
+    grid.className='badges-grid';
+    roles.forEach(r=>{
+      const owned = badgeTargetCurrentBadges.includes(r.id);
+      const card = document.createElement('div');
+      card.className='badge-card'+(owned?' owned':'');
+      card.dataset.badgeId=r.id;
+      card.style.setProperty('--badge-color', r.color);
+      card.innerHTML=`<div class="badge-icon">${r.emoji}</div><div class="badge-name">${r.label}</div>`;
+      card.onclick=()=>toggleBadge(r.id, card);
+      grid.appendChild(card);
+    });
+    container.appendChild(grid);
+  });
+}
+
+function toggleBadge(id, card){
+  const idx = badgeTargetCurrentBadges.indexOf(id);
+  if(idx>=0){ badgeTargetCurrentBadges.splice(idx,1); card.classList.remove('owned'); }
+  else { badgeTargetCurrentBadges.push(id); card.classList.add('owned'); }
+}
+
+async function saveBadges(){
+  if(!badgeTargetUser) return;
+  await sb.from('dc_users').update({badges:badgeTargetCurrentBadges}).eq('id',badgeTargetUser.id);
+  await addLog('badge', `Badges mis à jour pour ${badgeTargetUser.email} : [${badgeTargetCurrentBadges.join(', ')}]`);
+  toast('Badges enregistrés ✓');
+  // Refresh user in allUsers
+  const idx=allUsers.findIndex(u=>u.id===badgeTargetUser.id);
+  if(idx>=0) allUsers[idx].badges=badgeTargetCurrentBadges;
+}
+
+function closeBadgeAttribution(){
+  document.getElementById('badge-attribution-area').style.display='none';
+  document.getElementById('badge-empty').style.display='block';
+  document.getElementById('badge-user-search').value='';
+  badgeTargetUser=null;
+}
+
+// ══════════════════════════════════════════════════════
+//  MESSAGES
+// ══════════════════════════════════════════════════════
+async function loadMessages(){
+  const {data} = await sb.from('dc_messages').select('*').order('created_at',{ascending:false}).limit(200);
+  allMessages = data||[];
+  const ids=[...new Set(allMessages.map(m=>m.user_id))];
+  const profiles = await fetchProfiles(ids);
+  renderMessages(allMessages, profiles);
+}
+
+function renderMessages(msgs, profiles){
+  const tbody=document.getElementById('msgs-tbody');
+  tbody.innerHTML='';
+  const empty=document.getElementById('msgs-empty');
+  if(!msgs.length){empty.style.display='block';return;}
+  empty.style.display='none';
+  msgs.forEach(m=>{
+    const u=profiles?.[m.user_id]||{}; const c=u.color||'#C8A84B';
+    const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email||'Inconnu';
+    const date=new Date(m.created_at).toLocaleString('fr',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    const tr=document.createElement('tr');
+    tr.dataset.msgId=m.id;
+    tr.innerHTML=`
+      <td><div class="user-cell"><div class="user-ini" style="background:${c}18;color:${c}">${u.initials||'?'}</div><div class="user-name">${escH(name)}</div></div></td>
+      <td><div class="msg-content" title="${escH(m.content)}">${escH(m.content)}</div></td>
+      <td><span class="channel-tag">#${m.channel||'?'}</span></td>
+      <td style="font-family:'Geist Mono',monospace;font-size:.66rem;color:var(--muted)">${date}</td>
+      <td><button class="action-btn danger" onclick="deleteMessage('${m.id}',this.closest('tr'))">Supprimer</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+let _msgProfiles = {};
+async function filterMessages(q){
+  if(!_msgProfiles) return;
+  const lower=q.toLowerCase();
+  const filtered=allMessages.filter(m=>m.content?.toLowerCase().includes(lower)||(channelFilter==='all'||m.channel===channelFilter));
+  const ids=[...new Set(filtered.map(m=>m.user_id))];
+  _msgProfiles = await fetchProfiles(ids);
+  renderMessages(filtered.filter(m=>channelFilter==='all'||m.channel===channelFilter), _msgProfiles);
+}
+
+function setChannelFilter(ch, btn){
+  channelFilter=ch;
+  document.querySelectorAll('#page-messages .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  filterMessages(document.getElementById('msg-search').value);
+}
+
+async function deleteMessage(id, row){
+  if(!confirm('Supprimer ce message ?')) return;
+  await sb.from('dc_messages').delete().eq('id',id);
+  await addLog('delete_msg', `Message ${id} supprimé`);
+  row.style.opacity='.3'; setTimeout(()=>row.remove(),400);
+  toast('Message supprimé');
+}
+
+// ══════════════════════════════════════════════════════
+//  POSTS
+// ══════════════════════════════════════════════════════
+async function loadPosts(){
+  const {data}=await sb.from('dc_posts').select('*').order('ts',{ascending:false}).limit(100);
+  allPosts=data||[];
+  const ids=[...new Set(allPosts.map(p=>p.user_id))];
+  const profiles=await fetchProfiles(ids);
+  renderPosts(allPosts,profiles);
+}
+
+function renderPosts(posts,profiles){
+  const tbody=document.getElementById('posts-tbody');
+  tbody.innerHTML='';
+  const empty=document.getElementById('posts-empty');
+  if(!posts.length){empty.style.display='block';return;}
+  empty.style.display='none';
+  posts.forEach(p=>{
+    const u=profiles?.[p.user_id]||{}; const c=u.color||'#C8A84B';
+    const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email||'Inconnu';
+    const date=p.ts?new Date(p.ts).toLocaleDateString('fr',{day:'numeric',month:'short',year:'numeric'}):'—';
+    const content=(p.title||p.body||'').slice(0,80);
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><div class="user-cell"><div class="user-ini" style="background:${c}18;color:${c}">${u.initials||'?'}</div><div class="user-name">${escH(name)}</div></div></td>
+      <td><div class="msg-content" title="${escH(p.body||'')}"><span style="color:var(--gold);font-size:.8rem">${escH(p.title||'')}</span>${p.title&&p.body?' — ':''}<span style="color:var(--muted)">${escH((p.body||'').slice(0,60))}</span></div></td>
+      <td style="font-family:'Geist Mono',monospace;font-size:.75rem">❤️ ${p.likes||0}</td>
+      <td style="font-family:'Geist Mono',monospace;font-size:.66rem;color:var(--muted)">${date}</td>
+      <td><button class="action-btn danger" onclick="deletePost('${p.id}',this.closest('tr'))">Supprimer</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function filterPosts(q){
+  const lower=q.toLowerCase();
+  const filtered=allPosts.filter(p=>(p.title||p.body||'').toLowerCase().includes(lower));
+  const ids=[...new Set(filtered.map(p=>p.user_id))];
+  fetchProfiles(ids).then(profiles=>renderPosts(filtered,profiles));
+}
+
+async function deletePost(id,row){
+  if(!confirm('Supprimer ce post ?')) return;
+  await sb.from('dc_posts').delete().eq('id',id);
+  await addLog('delete_post',`Post ${id} supprimé`);
+  row.style.opacity='.3'; setTimeout(()=>row.remove(),400);
+  toast('Post supprimé');
+}
+
+// ══════════════════════════════════════════════════════
+//  LOGS
+// ══════════════════════════════════════════════════════
+async function loadLogs(){
+  const {data}=await sb.from('dc_logs').select('*').order('ts',{ascending:false}).limit(100);
+  const list=document.getElementById('logs-list');
+  const empty=document.getElementById('logs-empty');
+  list.innerHTML='';
+  if(!data||!data.length){empty.style.display='block';return;}
+  empty.style.display='none';
+  data.forEach(log=>{
+    const icons={role:'🎭',badge:'🏅',mute:'🔇',ban:'🚫',delete_msg:'🗑️',delete_post:'📄'};
+    const div=document.createElement('div');
+    div.className='log-item';
+    div.innerHTML=`<div class="log-icon">${icons[log.type]||'📋'}</div><div style="flex:1"><div class="log-text">${escH(log.msg||'')}</div></div><div class="log-time">${log.ts?new Date(log.ts).toLocaleString('fr',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'—'}</div>`;
+    list.appendChild(div);
+  });
+}
+
+async function addLog(type, msg){
+  const id=Date.now().toString(36)+Math.random().toString(36).slice(2);
+  await sb.from('dc_logs').insert({id, type, msg, ts:Date.now()});
+}
+
+// ══════════════════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════════════════
+async function fetchProfiles(ids){
+  if(!ids||!ids.length) return {};
+  const {data}=await sb.from('dc_users').select('id,firstname,lastname,initials,color,email,role,photo').in('id',ids);
+  const map={};
+  (data||[]).forEach(u=>map[u.id]=u);
+  return map;
+}
+
+function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function toast(msg, duration=2500){
+  const el=document.getElementById('admin-toast');
+  el.textContent=msg; el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), duration);
+}
+
+
+function showPage(page, btn){
+  document.querySelectorAll('#admin-view .page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('#admin-view .nav-btn').forEach(b=>b.classList.remove('active'));
+  const p = document.getElementById('page-'+page);
+  if(p) p.classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(page==='users') loadUsers();
+  else if(page==='messages') loadMessages();
+  else if(page==='posts') loadPosts();
+  else if(page==='logs') loadLogs();
+  else if(page==='roles') renderRolesReference();
+}
+
+async function loadDashboard(){
+  const [users,msgs,posts,friends] = await Promise.all([
+    sb.from('dc_users').select('id',{count:'exact',head:true}),
+    sb.from('dc_messages').select('id',{count:'exact',head:true}),
+    sb.from('dc_posts').select('id',{count:'exact',head:true}),
+    sb.from('dc_friends').select('id',{count:'exact',head:true}).eq('status','accepted'),
+  ]);
+  const el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v??'0';};
+  el('stat-total-users',users.count);
+  el('stat-total-msgs',msgs.count);
+  el('stat-total-posts',posts.count);
+  el('stat-total-friends',friends.count);
+  const dd=document.getElementById('dash-date');
+  if(dd) dd.textContent=new Date().toLocaleDateString('fr',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  // Recent users
+  const {data:ru}=await sb.from('dc_users').select('*').order('joined',{ascending:false}).limit(5);
+  const rul=document.getElementById('recent-users-list');
+  if(rul&&ru){
+    rul.innerHTML=(ru||[]).map(u=>{
+      const c=u.color||'#C8A84B';
+      const n=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email||'?';
+      return `<div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--muted2)"><div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.6rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1;font-size:.84rem">${escH(n)}</div><div style="font-family:'Geist Mono',monospace;font-size:.55rem;color:var(--muted)">${u.joined?new Date(u.joined).toLocaleDateString('fr'):'—'}</div></div>`;
+    }).join('');
+  }
+
+  // Recent messages
+  const {data:rm}=await sb.from('dc_messages').select('*').order('created_at',{ascending:false}).limit(5);
+  const ids=[...new Set((rm||[]).map(m=>m.user_id))];
+  const profiles = await fetchProfiles(ids);
+  const rml=document.getElementById('recent-msgs-list');
+  if(rml&&rm){
+    rml.innerHTML=(rm||[]).map(m=>{
+      const u=profiles[m.user_id]||{};const c=u.color||'#C8A84B';
+      return `<div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--muted2)"><div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:.6rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1;font-size:.82rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH((m.content||'').slice(0,50))}</div><div style="font-family:'Geist Mono',monospace;font-size:.52rem;color:var(--gold);margin-left:4px">#${m.channel||'?'}</div></div>`;
+    }).join('');
+  }
+}
+
 </script>
 </body>
 </html>
