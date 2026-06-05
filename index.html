@@ -1022,15 +1022,6 @@ let emojiPickerOpen = false;
 const EMOJIS = ['😀','😂','😍','🤔','👍','👎','🔥','💯','🎉','😎','🤯','😭','❤️','🚀','💻','⚡','🛠️','🐛','✅','❌','👀','🙏','💪','🤝','✨','🌟','💡','📌','🔗','⚙️'];
 
 // ─── UTILS ───────────────────────────────────────────
-function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2); }
-function fmtTime(ts){
-  const d=new Date(ts), now=new Date(), diff=(now-d)/1000;
-  if(diff<60) return 'à l\'instant';
-  if(diff<3600) return Math.floor(diff/60)+'m';
-  if(d.toDateString()===now.toDateString()) return d.toLocaleTimeString('fr',{hour:'2-digit',minute:'2-digit'});
-  return d.toLocaleDateString('fr',{day:'numeric',month:'short'});
-}
 function userName(u){ return ((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim() || u.email || 'Inconnu'; }
 
 // ─── EMOJI ───────────────────────────────────────────
@@ -1055,297 +1046,28 @@ document.addEventListener('click',e=>{
 });
 
 // ─── RENDER MESSAGE ──────────────────────────────────
-function renderMsg(m, authorProfile){
-  const container=document.getElementById('chat-messages');
-  const u = authorProfile || {};
-  const isNew = m.user_id !== lastMsgUserId;
-  lastMsgUserId = m.user_id;
-  const color = u.color||'#C8A84B';
-  const ini   = u.initials||'?';
-  const name  = userName(u);
-  const div   = document.createElement('div');
-  div.className='msg'+(isNew?' new-group':' msg-cont');
-  div.innerHTML=`<div class="msg-avatar" style="background:${color}22;color:${color}">${escHtml(ini)}</div><div class="msg-right">${isNew?`<div class="msg-header"><span class="msg-author" style="color:${color}">${escHtml(name)}</span><span class="msg-time">${fmtTime(m.created_at)}</span></div>`:''}<div class="msg-text">${escHtml(m.content)}</div></div>`;
-  container.appendChild(div);
-  container.scrollTop=container.scrollHeight;
-}
 
 // ─── LOAD USER PROFILES ──────────────────────────────
-async function fetchProfiles(ids){
-  if(!ids.length) return {};
-  const {data}=await sb.from('dc_users').select('id,firstname,lastname,initials,color,email').in('id',ids);
-  const map={};
-  (data||[]).forEach(u=>map[u.id]=u);
-  return map;
-}
 
 // ─── LOAD MESSAGES ───────────────────────────────────
-async function loadMessages(){
-  const container=document.getElementById('chat-messages');
-  container.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.15em">Chargement…</div>';
-  lastMsgUserId=null;
-
-  if(chatMode==='channel'){
-    // ── Salons : table dc_messages ──
-    const {data,error}=await sb.from('dc_messages')
-      .select('*')
-      .eq('channel',currentChannel)
-      .order('created_at',{ascending:true})
-      .limit(80);
-    container.innerHTML='';
-    if(error){ container.innerHTML=`<div style="text-align:center;padding:40px;color:#e05a5a;font-size:.8rem">Erreur: ${escHtml(error.message)}</div>`; return; }
-    if(!data||!data.length){ container.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--muted);font-size:.82rem">Aucun message — dis bonjour 👋</div>'; return; }
-    const profiles=await fetchProfiles([...new Set(data.map(m=>m.user_id))]);
-    data.forEach(m=>renderMsg(m, profiles[m.user_id]||{}));
-
-  } else {
-    // ── Messages privés : table dc_direct_messages ──
-    const me=currentUser.id, them=currentDMUser.id;
-    const {data,error}=await sb.from('dc_direct_messages')
-      .select('*')
-      .or(`and(from_id.eq.${me},to_id.eq.${them}),and(from_id.eq.${them},to_id.eq.${me})`)
-      .order('created_at',{ascending:true})
-      .limit(80);
-    container.innerHTML='';
-    if(error){ container.innerHTML=`<div style="text-align:center;padding:40px;color:#e05a5a;font-size:.8rem">Erreur: ${escHtml(error.message)}</div>`; return; }
-    if(!data||!data.length){ container.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--muted);font-size:.82rem">Aucun message — envoie le premier 👋</div>'; return; }
-    const profiles=await fetchProfiles([...new Set(data.map(m=>m.from_id))]);
-    // Normalize field names (from_id → user_id for renderMsg)
-    data.forEach(m=>renderMsg({...m, user_id:m.from_id}, profiles[m.from_id]||{}));
-  }
-}
 
 // ─── REALTIME ────────────────────────────────────────
-function subscribeRealtime(){
-  // Unsubscribe previous
-  if(realtimeChan){ sb.removeChannel(realtimeChan); realtimeChan=null; }
-  if(realtimeDM){   sb.removeChannel(realtimeDM);   realtimeDM=null;   }
-
-  if(chatMode==='channel'){
-    realtimeChan=sb.channel('chan-'+currentChannel)
-      .on('postgres_changes',{event:'INSERT',schema:'public',table:'dc_messages',filter:`channel=eq.${currentChannel}`},async p=>{
-        const m=p.new;
-        if(m.user_id===currentUser.id) return; // already rendered optimistically
-        const profiles=await fetchProfiles([m.user_id]);
-        renderMsg(m, profiles[m.user_id]||{});
-      })
-      .subscribe();
-  } else {
-    const me=currentUser.id, them=currentDMUser.id;
-    realtimeDM=sb.channel('dm-'+me+'-'+them)
-      .on('postgres_changes',{event:'INSERT',schema:'public',table:'dc_direct_messages'},async p=>{
-        const m=p.new;
-        // Only show if relevant to this conversation
-        const ok=(m.from_id===me&&m.to_id===them)||(m.from_id===them&&m.to_id===me);
-        if(!ok) return;
-        if(m.from_id===me) return; // already rendered optimistically
-        const profiles=await fetchProfiles([m.from_id]);
-        renderMsg({...m, user_id:m.from_id}, profiles[m.from_id]||{});
-      })
-      .subscribe();
-  }
-}
 
 // ─── SEND MESSAGE ────────────────────────────────────
-async function sendMsg(){
-  const input=document.getElementById('chat-input');
-  const text=input.value.trim();
-  if(!text||!userProfile) return;
-  input.value='';
-  const now=new Date().toISOString();
-
-  // Render optimistically
-  renderMsg({user_id:currentUser.id, content:text, created_at:now}, userProfile);
-
-  if(chatMode==='channel'){
-    const {error}=await sb.from('dc_messages').insert({
-      id: uid(),
-      channel: currentChannel,
-      user_id: currentUser.id,
-      content: text,
-      created_at: now
-    });
-    if(error) console.error('sendMsg channel error:', error.message);
-  } else {
-    const {error}=await sb.from('dc_direct_messages').insert({
-      id: uid(),
-      from_id: currentUser.id,
-      to_id: currentDMUser.id,
-      content: text,
-      created_at: now
-    });
-    if(error) console.error('sendMsg dm error:', error.message);
-    // Save notif for recipient
-    saveNotif(currentDMUser.id, '💬', userProfile.color||'#C8A84B',
-      `${userName(userProfile)} : ${text.slice(0,80)}`);
-  }
-}
 
 // ─── SELECT CHANNEL ──────────────────────────────────
-function selectChannel(btn, name){
-  document.querySelectorAll('#channels-list .dp-item').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  currentChannel=name;
-  currentDMUser=null;
-  chatMode='channel';
-  document.getElementById('chat-channel-name').textContent='# '+name;
-  document.getElementById('chat-channel-desc').textContent='Salon DevConnect — '+name;
-  document.getElementById('chat-input').placeholder='Message #'+name+'...';
-  loadMessages();
-  subscribeRealtime();
-}
 
 // ─── OPEN DM ─────────────────────────────────────────
-async function openDM(userId, displayName, userInitials, userColor){
-  closeDMModal();
-  // Remove subviews
-  document.getElementById('ami-subview')?.remove();
-  document.getElementById('notif-subview')?.remove();
-
-  const {data:u}=await sb.from('dc_users').select('*').eq('id',userId).maybeSingle();
-  currentDMUser={id:userId, firstname:u?.firstname||displayName, lastname:u?.lastname||'', initials:u?.initials||userInitials, color:u?.color||userColor, email:u?.email||''};
-  chatMode='dm';
-
-  document.querySelectorAll('#channels-list .dp-item').forEach(b=>b.classList.remove('active'));
-  document.getElementById('chat-channel-name').textContent='@ '+userName(currentDMUser);
-  document.getElementById('chat-channel-desc').textContent='Message privé';
-  document.getElementById('chat-input').placeholder='Message à '+userName(currentDMUser)+'...';
-
-  // Add to DM list
-  const dmList=document.getElementById('dm-list');
-  let btn=document.getElementById('dm-btn-'+userId);
-  if(!btn){
-    btn=document.createElement('button');
-    btn.id='dm-btn-'+userId;
-    btn.className='dp-item';
-    const c=currentDMUser.color||'#C8A84B';
-    btn.innerHTML=`<span style="width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.5rem;background:${c}22;color:${c};flex-shrink:0">${escHtml(currentDMUser.initials||'?')}</span><span class="dp-item-label">${escHtml(userName(currentDMUser))}</span>`;
-    btn.onclick=()=>openDM(userId, displayName, userInitials, userColor);
-    dmList.appendChild(btn);
-  }
-  document.querySelectorAll('#channels-list .dp-item').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-
-  loadMessages();
-  subscribeRealtime();
-}
 
 // ─── DM MODAL ────────────────────────────────────────
-function openNewDM(){
-  document.getElementById('dm-modal').style.display='flex';
-  const input=document.getElementById('dm-search');
-  input.value=''; document.getElementById('dm-search-results').innerHTML='';
-  input.oninput=()=>searchUsers(input.value);
-  setTimeout(()=>input.focus(),100);
-}
-function closeDMModal(){ document.getElementById('dm-modal').style.display='none'; }
-
-async function searchUsers(q){
-  const res=document.getElementById('dm-search-results');
-  if(!q||q.length<2){ res.innerHTML=''; return; }
-  const {data}=await sb.from('dc_users')
-    .select('id,firstname,lastname,initials,color,email')
-    .neq('id',currentUser.id)
-    .or(`firstname.ilike.%${q}%,lastname.ilike.%${q}%,email.ilike.%${q}%`)
-    .limit(8);
-  res.innerHTML='';
-  if(!data||!data.length){ res.innerHTML='<div style="text-align:center;padding:16px;color:var(--muted);font-size:.8rem">Aucun résultat</div>'; return; }
-  data.forEach(u=>{
-    const name=userName(u);
-    const c=u.color||'#C8A84B';
-    const btn=document.createElement('button');
-    btn.style.cssText='display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:6px;background:none;border:none;color:var(--white);width:100%;text-align:left;transition:background .15s';
-    btn.innerHTML=`<div style="width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.62rem;background:${c}22;color:${c};flex-shrink:0">${escHtml(u.initials||'?')}</div><div><div style="font-size:.86rem">${escHtml(name)}</div><div style="font-size:.7rem;color:var(--muted)">${escHtml(u.email||'')}</div></div>`;
-    btn.addEventListener('mouseenter',()=>btn.style.background='var(--muted3)');
-    btn.addEventListener('mouseleave',()=>btn.style.background='none');
-    btn.onclick=()=>openDM(u.id, name, u.initials||'?', u.color||'#C8A84B');
-    res.appendChild(btn);
-  });
-}
 
 // ─── AMIS ─────────────────────────────────────────────
 // dc_friends : from_id, to_id, status ('pending'|'accepted'|'rejected'), t
-async function initFriends(){
-  await loadFriendRequests();
-  await loadFriendsList();
-}
 
-async function loadFriendsList(){
-  const list=document.getElementById('friends-list');
-  if(!list) return;
-  const me=currentUser.id;
-  const {data}=await sb.from('dc_friends')
-    .select('*')
-    .or(`from_id.eq.${me},to_id.eq.${me}`)
-    .eq('status','accepted');
-  list.innerHTML='';
-  if(!data||!data.length){ list.innerHTML='<div style="padding:24px;text-align:center;color:var(--muted);font-size:.82rem">Aucun ami pour l\'instant</div>'; return; }
-  const friendIds=data.map(f=>f.from_id===me?f.to_id:f.from_id);
-  const profiles=await fetchProfiles(friendIds);
-  data.forEach(f=>{
-    const fid=f.from_id===me?f.to_id:f.from_id;
-    const u=profiles[fid]||{id:fid};
-    const name=userName(u); const c=u.color||'#C8A84B';
-    const div=document.createElement('div');
-    div.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--muted2)';
-    div.innerHTML=`<div style="width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.68rem;background:${c}22;color:${c};flex-shrink:0">${escHtml(u.initials||'?')}</div><div style="flex:1"><div style="font-size:.88rem">${escHtml(name)}</div><div style="font-size:.7rem;color:var(--muted)">${escHtml(u.email||'')}</div></div><button onclick="openDM('${fid}','${escHtml(name)}','${escHtml(u.initials||'?')}','${escHtml(c)}')" style="background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold);padding:5px 12px;font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;border-radius:4px">MP</button>`;
-    list.appendChild(div);
-  });
-}
 
-async function loadFriendRequests(){
-  const el=document.getElementById('friend-requests');
-  if(!el) return;
-  const {data}=await sb.from('dc_friends')
-    .select('*')
-    .eq('to_id',currentUser.id)
-    .eq('status','pending');
-  el.innerHTML='';
-  if(!data||!data.length){ el.style.display='none'; return; }
-  el.style.display='block';
-  const profiles=await fetchProfiles(data.map(f=>f.from_id));
-  data.forEach(f=>{
-    const u=profiles[f.from_id]||{id:f.from_id}; const name=userName(u); const c=u.color||'#C8A84B';
-    const div=document.createElement('div');
-    div.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--muted2);background:var(--gold-dim)';
-    div.innerHTML=`<div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.65rem;background:${c}22;color:${c};flex-shrink:0">${escHtml(u.initials||'?')}</div><div style="flex:1"><div style="font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:2px">Demande d'ami</div><div style="font-size:.86rem">${escHtml(name)}</div></div><button onclick="respondFriend('${f.id}','accepted',this.closest('div'))" style="background:var(--gold);border:none;color:#000;padding:5px 10px;font-family:Geist Mono,monospace;font-size:.55rem;border-radius:4px;margin-right:6px">✓</button><button onclick="respondFriend('${f.id}','rejected',this.closest('div'))" style="background:none;border:1px solid rgba(244,241,234,.15);color:var(--muted);padding:5px 10px;font-family:Geist Mono,monospace;font-size:.55rem;border-radius:4px">✕</button>`;
-    el.appendChild(div);
-  });
-  updateNotifBadge();
-}
 
-async function respondFriend(fid, status, row){
-  if(row) row.style.opacity='.4';
-  await sb.from('dc_friends').update({status}).eq('id',fid);
-  await loadFriendRequests();
-  await loadFriendsList();
-}
 
-async function sendFriendRequest(toId){
-  const me=currentUser.id;
-  const {data}=await sb.from('dc_friends').select('id').or(`and(from_id.eq.${me},to_id.eq.${toId}),and(from_id.eq.${toId},to_id.eq.${me})`);
-  if(data&&data.length){ alert('Demande déjà envoyée ou déjà amis.'); return; }
-  await sb.from('dc_friends').insert({id:uid(), from_id:me, to_id:toId, status:'pending', t:Date.now()});
-  // Notify
-  saveNotif(toId,'👤',userProfile.color||'#C8A84B',`${userName(userProfile)} veut être votre ami`);
-  alert('Demande envoyée !');
-}
 
-async function searchFriendUsers(q){
-  const res=document.getElementById('friend-search-results');
-  if(!res) return;
-  if(!q||q.length<2){ res.innerHTML=''; return; }
-  const {data}=await sb.from('dc_users').select('id,firstname,lastname,initials,color,email').neq('id',currentUser.id).or(`firstname.ilike.%${q}%,lastname.ilike.%${q}%,email.ilike.%${q}%`).limit(8);
-  res.innerHTML='';
-  (data||[]).forEach(u=>{
-    const name=userName(u); const c=u.color||'#C8A84B';
-    const div=document.createElement('div');
-    div.style.cssText='display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--muted2)';
-    div.innerHTML=`<div style="width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.62rem;background:${c}22;color:${c};flex-shrink:0">${escHtml(u.initials||'?')}</div><div style="flex:1"><div style="font-size:.86rem">${escHtml(name)}</div><div style="font-size:.7rem;color:var(--muted)">${escHtml(u.email||'')}</div></div><button onclick="sendFriendRequest('${u.id}')" style="background:none;border:1px solid var(--gold-border);color:var(--gold);padding:5px 10px;font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;border-radius:4px">+ Ami</button>`;
-    res.appendChild(div);
-  });
-  if(!data||!data.length) res.innerHTML='<div style="padding:14px 0;color:var(--muted);font-size:.8rem">Aucun résultat</div>';
-}
 
 // ─── NOTIFICATIONS ───────────────────────────────────
 // Sauvegarder une notif en base
@@ -1360,14 +1082,6 @@ async function loadNotifs(){
 }
 
 // Badge
-async function updateNotifBadge(){
-  const {data}=await sb.from('dc_notifs').select('id').eq('user_id',currentUser.id).eq('read',false);
-  const count=(data||[]).length;
-  const badge=document.getElementById('notif-badge');
-  if(!badge) return;
-  badge.textContent=count>0?count:'';
-  badge.style.display=count>0?'flex':'none';
-}
 
 // Realtime notifs
 function subscribeNotifRealtime(){
@@ -1401,88 +1115,9 @@ async function renderNotifPanel(list){
 }
 
 // ─── PANELS AMIS / NOTIFS ────────────────────────────
-function showAmiPanel(){
-  setSpace('communication');
-  setTimeout(()=>{
-    document.getElementById('notif-subview')?.remove();
-    const area=document.getElementById('area-communication');
-    if(!area) return;
-    area.style.position='relative';
-    let ami=document.getElementById('ami-subview');
-    if(!ami){
-      ami=document.createElement('div');
-      ami.id='ami-subview';
-      ami.style.cssText='position:absolute;inset:0;background:var(--black2);z-index:10;display:flex;flex-direction:column;overflow:hidden';
-      ami.innerHTML=`
-        <div class="content-header">
-          <div><div class="content-header-title">Amis</div></div>
-          <div class="content-header-sub">Communauté</div>
-          <button onclick="document.getElementById('ami-subview').remove()" style="position:absolute;right:20px;background:none;border:none;color:var(--muted);font-size:1.2rem;padding:4px 8px">×</button>
-        </div>
-        <div style="padding:14px 20px;border-bottom:1px solid var(--muted2)">
-          <input id="friend-search-input" type="text" placeholder="Chercher par nom ou email…" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 13px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.86rem;outline:none;border-radius:6px"/>
-          <div id="friend-search-results" style="margin-top:8px"></div>
-        </div>
-        <div id="friend-requests"></div>
-        <div id="friends-list" style="flex:1;overflow-y:auto"></div>`;
-      area.appendChild(ami);
-    }
-    const fi=document.getElementById('friend-search-input');
-    if(fi) fi.oninput=()=>searchFriendUsers(fi.value);
-    initFriends();
-  },80);
-}
 
-function showNotifPanel(){
-  setSpace('communication');
-  setTimeout(async()=>{
-    document.getElementById('ami-subview')?.remove();
-    const area=document.getElementById('area-communication');
-    if(!area) return;
-    area.style.position='relative';
-    let nv=document.getElementById('notif-subview');
-    if(!nv){
-      nv=document.createElement('div');
-      nv.id='notif-subview';
-      nv.style.cssText='position:absolute;inset:0;background:var(--black2);z-index:10;display:flex;flex-direction:column;overflow:hidden';
-      nv.innerHTML=`
-        <div class="content-header">
-          <div><div class="content-header-title">Notifications</div></div>
-          <div class="content-header-sub">Alertes</div>
-          <button onclick="document.getElementById('notif-subview').remove()" style="position:absolute;right:20px;background:none;border:none;color:var(--muted);font-size:1.2rem;padding:4px 8px">×</button>
-        </div>
-        <div id="notif-list" style="flex:1;overflow-y:auto"></div>`;
-      area.appendChild(nv);
-    }
-    // Mark all read
-    await sb.from('dc_notifs').update({read:true}).eq('user_id',currentUser.id).eq('read',false);
-    updateNotifBadge();
-    const list=document.getElementById('notif-list');
-    if(list) renderNotifPanel(list);
-  },80);
-}
 
 // ─── INIT CHAT ───────────────────────────────────────
-function initChat(){
-  // Build emoji picker
-  const picker=document.getElementById('emoji-picker');
-  if(picker){
-    EMOJIS.forEach(e=>{
-      const btn=document.createElement('button');
-      btn.textContent=e;
-      btn.title=e;
-      btn.style.cssText='background:none;border:none;font-size:1.18rem;padding:5px;border-radius:4px;transition:background .1s;cursor:none!important';
-      btn.addEventListener('mouseenter',()=>btn.style.background='var(--muted3)');
-      btn.addEventListener('mouseleave',()=>btn.style.background='none');
-      btn.onclick=()=>insertEmoji(e);
-      picker.appendChild(btn);
-    });
-  }
-  loadMessages();
-  subscribeRealtime();
-  subscribeNotifRealtime();
-  updateNotifBadge();
-}
 
 
 // ── Time format ──
@@ -1513,41 +1148,6 @@ function renderMsg(m, forceNew=false){
 function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 // ── Load messages (channel or DM) ──
-async function loadMessages(){
-  const container = document.getElementById('chat-messages');
-  container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.15em">Chargement…</div>';
-  lastMsgUserId = null;
-
-  let query;
-  if(chatMode === 'channel'){
-    query = sb.from('dc_messages')
-      .select('*, author:user_id(firstname,lastname,initials,color)')
-      .eq('channel', currentChannel)
-      .is('dm_to', null)
-      .order('created_at', {ascending:true})
-      .limit(60);
-  } else {
-    const me = currentUser.id, them = currentDMUser.id;
-    query = sb.from('dc_messages')
-      .select('*, author:user_id(firstname,lastname,initials,color)')
-      .or(`and(user_id.eq.${me},dm_to.eq.${them}),and(user_id.eq.${them},dm_to.eq.${me})`)
-      .order('created_at', {ascending:true})
-      .limit(60);
-  }
-  const {data, error} = await query;
-  container.innerHTML = '';
-  if(error){
-    console.error('loadMessages error', error);
-    // Fallback: load without join
-    await loadMessagesSimple();
-    return;
-  }
-  if(!data||!data.length){ container.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--muted);font-size:.82rem">Aucun message pour l\'instant — dis bonjour 👋</div>'; return; }
-  data.forEach(m => {
-    const u = m.author || {};
-    renderMsg({...m, firstname:u.firstname, lastname:u.lastname, initials:u.initials, color:u.color});
-  });
-}
 
 // Fallback: load messages then fetch user info separately
 async function loadMessagesSimple(){
@@ -2521,12 +2121,9 @@ let badgeTargetCurrentBadges = [];
   document.getElementById('app').style.display = 'flex';
 
   // Sidebar info
-  const name = ((profile.firstname||'')+(profile.lastname?' '+profile.lastname:'')).trim()||profile.email;
   document.getElementById('admin-sidebar-name').textContent = name;
-  const av = document.getElementById('admin-sidebar-avatar');
   if(profile.photo){ av.style.backgroundImage=`url(${profile.photo})`; av.style.backgroundSize='cover'; }
   else { av.textContent = profile.initials||'?'; }
-  const role = getRoleInfo(profile.role);
   document.getElementById('admin-role-badge-el').textContent = role.emoji+' '+role.label;
   document.getElementById('admin-role-badge-el').style.color = role.color;
 
@@ -2545,60 +2142,10 @@ function showAccessDenied(){
 // ══════════════════════════════════════════════════════
 //  NAV
 // ══════════════════════════════════════════════════════
-function showPage(id, btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  if(btn) btn.classList.add('active');
-  // Load data
-  if(id==='users') loadUsers();
-  if(id==='messages') loadMessages();
-  if(id==='posts') loadPosts();
-  if(id==='logs') loadLogs();
-}
 
 // ══════════════════════════════════════════════════════
 //  DASHBOARD
 // ══════════════════════════════════════════════════════
-async function loadDashboard(){
-  const [users, msgs, posts, friends] = await Promise.all([
-    sb.from('dc_users').select('id',{count:'exact',head:true}),
-    sb.from('dc_messages').select('id',{count:'exact',head:true}),
-    sb.from('dc_posts').select('id',{count:'exact',head:true}),
-    sb.from('dc_friends').select('id',{count:'exact',head:true}).eq('status','accepted'),
-  ]);
-  document.getElementById('stat-total-users').textContent = users.count||0;
-  document.getElementById('stat-total-msgs').textContent = msgs.count||0;
-  document.getElementById('stat-total-posts').textContent = posts.count||0;
-  document.getElementById('stat-total-friends').textContent = friends.count||0;
-
-  // Recent users
-  const { data: recentUsers } = await sb.from('dc_users').select('*').order('joined',{ascending:false}).limit(6);
-  const ruList = document.getElementById('recent-users-list');
-  ruList.innerHTML = '';
-  (recentUsers||[]).forEach(u=>{
-    const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email;
-    const c=u.color||'#C8A84B';
-    const div=document.createElement('div');
-    div.style.cssText='display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--muted2)';
-    div.innerHTML=`<div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.58rem;background:${c}18;color:${c};flex-shrink:0${u.photo?`;background-image:url(${u.photo});background-size:cover`:''}">${u.photo?'':u.initials||'?'}</div><div style="flex:1;min-width:0"><div style="font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(name)}</div><div style="font-size:.68rem;color:var(--muted)">${rolePill(u.role||'member')}</div></div>`;
-    ruList.appendChild(div);
-  });
-
-  // Recent messages
-  const { data: recentMsgs } = await sb.from('dc_messages').select('*').order('created_at',{ascending:false}).limit(6);
-  const rmIds = [...new Set((recentMsgs||[]).map(m=>m.user_id))];
-  const rmProfiles = await fetchProfiles(rmIds);
-  const rmList = document.getElementById('recent-msgs-list');
-  rmList.innerHTML='';
-  (recentMsgs||[]).forEach(m=>{
-    const u=rmProfiles[m.user_id]||{}; const c=u.color||'#C8A84B';
-    const div=document.createElement('div');
-    div.style.cssText='display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--muted2)';
-    div.innerHTML=`<div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.58rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1;min-width:0"><div style="font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)">#${m.channel}</div><div style="font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(m.content)}</div></div>`;
-    rmList.appendChild(div);
-  });
-}
 
 // ══════════════════════════════════════════════════════
 //  USERS
@@ -3065,7 +2612,84 @@ async function loadDashboard(){
 }
 
 
-</script>
+
+
+// ═══ ADMIN (merged) ═══
+
+
+// ═══════════════════════════════════════
+//  ADMIN PANEL
+// ═══════════════════════════════════════
+
+// Show admin btn if admin role
+// ══════════════════════════════════════════════════════
+//  ROLES & BADGES
+
+// ADMIN_ROLES already declared above
+
+// ══════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════
+
+// ══════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { showAccessDenied(); return; }
+
+  const { data: profile } = await sb.from('dc_users').select('*').eq('id', session.user.id).maybeSingle();
+  if (!profile || !ADMIN_ROLES.includes(profile.role)) { showAccessDenied(); return; }
+
+  currentAdmin = profile;
+  document.getElementById('admin-loading-screen').classList.add('hide');
+  document.getElementById('app').style.display = 'flex';
+
+  // Sidebar info
+  const name = ((profile.firstname||'')+(profile.lastname?' '+profile.lastname:'')).trim()||profile.email;
+  document.getElementById('admin-sidebar-name').textContent = name;
+  const av = document.getElementById('admin-sidebar-avatar');
+  if(profile.photo){ av.style.backgroundImage=`url(${profile.photo})`; av.style.backgroundSize='cover'; }
+  else { av.textContent = profile.initials||'?'; }
+  const role = getRoleInfo(profile.role);
+  document.getElementById('admin-role-badge-el').textContent = role.emoji+' '+role.label;
+  document.getElementById('admin-role-badge-el').style.color = role.color;
+
+  // Date
+  document.getElementById('dash-date').textContent = new Date().toLocaleDateString('fr',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  loadDashboard();
+  renderRolesReference();
+})();
+
+// ══════════════════════════════════════════════════════
+//  NAV
+// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+//  USERS
+// ══════════════════════════════════════════════════════
+// ── User Modal ──
+// ══════════════════════════════════════════════════════
+//  ROLES REFERENCE
+// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+//  BADGES ATTRIBUTION
+// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+//  MESSAGES
+// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+//  POSTS
+// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+//  LOGS
+// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════════════════</script>
 
 <!-- ═══ ADMIN VIEW ═══ -->
 <div id="admin-view">
@@ -3304,691 +2928,6 @@ async function loadDashboard(){
   <div id="admin-toast"></div>
 </div>
 
-<script>
 
-// ═══════════════════════════════════════
-//  ADMIN PANEL
-// ═══════════════════════════════════════
-const sb = window._sb;
-const ADMIN_ROLES = ['founder','cofounder','admin','mod'];
-
-function showAdminPanel(show){
-  const v = document.getElementById('admin-view');
-  if(show){
-    v.classList.add('show');
-    initAdmin();
-  } else {
-    v.classList.remove('show');
-  }
-}
-
-async function initAdmin(){
-  const ls = document.getElementById('admin-loading-screen');
-  const denied = document.getElementById('admin-access-denied');
-  ls.classList.remove('hide');
-  denied.classList.remove('show');
-
-  // Check role
-  const {data} = await sb.from('dc_users').select('role').eq('id', currentUser.id).single();
-  const role = data?.role || 'member';
-  if(!ADMIN_ROLES.includes(role)){
-    ls.classList.add('hide');
-    denied.classList.add('show');
-    return;
-  }
-  ls.classList.add('hide');
-
-  // Set admin info
-  const name = (userProfile?.firstname||'') + ' ' + (userProfile?.lastname||'');
-  const av = document.getElementById('admin-sidebar-avatar');
-  if(av){ av.textContent = userProfile?.initials||'?'; av.style.background=(userProfile?.color||'#C8A84B')+'18'; av.style.color=userProfile?.color||'#C8A84B'; }
-  const sn = document.getElementById('admin-sidebar-name');
-  if(sn) sn.textContent = name.trim() || userProfile?.email || '';
-  const rb = document.getElementById('admin-role-badge-el');
-  if(rb){ const r = getRoleInfo(role); rb.textContent = r.emoji+' '+r.label; }
-
-  // Show active nav button
-  const firstBtn = document.querySelector('#admin-view .nav-btn');
-  if(firstBtn) showPage('dashboard', firstBtn);
-  loadDashboard();
-}
-
-// Show admin btn if admin role
-async function checkAdminAccess(){
-  if(!currentUser) return;
-  const {data} = await sb.from('dc_users').select('role').eq('id', currentUser.id).single();
-  if(data && ADMIN_ROLES.includes(data.role)){
-    const btn = document.getElementById('admin-btn');
-    if(btn) btn.style.display='flex';
-  }
-}
-
-
-
-// ══════════════════════════════════════════════════════
-//  ROLES & BADGES
-// ══════════════════════════════════════════════════════
-
-const ROLES = [
-  // Administration
-  {id:'founder',     label:'Fondateur',             emoji:'👑', color:'#C8A84B', group:'Administration'},
-  {id:'cofounder',   label:'Co-Fondateur',           emoji:'🤴', color:'#d4a054', group:'Administration'},
-  {id:'admin',       label:'Administrateur',          emoji:'🛡️', color:'#ef4444', group:'Administration'},
-  {id:'mod',         label:'Modérateur',              emoji:'⚔️', color:'#3b82f6', group:'Administration'},
-  {id:'helper',      label:'Helper',                  emoji:'🙋', color:'#10b981', group:'Administration'},
-  // Développement
-  {id:'fullstack',   label:'Développeur Full Stack',  emoji:'💻', color:'#8b5cf6', group:'Développement'},
-  {id:'frontend',    label:'Développeur Front-End',   emoji:'🎨', color:'#ec4899', group:'Développement'},
-  {id:'backend',     label:'Développeur Back-End',    emoji:'⚙️', color:'#f97316', group:'Développement'},
-  {id:'mobile',      label:'Développeur Mobile',      emoji:'📱', color:'#06b6d4', group:'Développement'},
-  {id:'webdev',      label:'Développeur Web',         emoji:'🌐', color:'#3b82f6', group:'Développement'},
-  {id:'aidev',       label:'Développeur IA',          emoji:'🤖', color:'#a855f7', group:'Développement'},
-  {id:'gamedev',     label:'Développeur Jeux Vidéo',  emoji:'🎮', color:'#ef4444', group:'Développement'},
-  {id:'beginner',    label:'Débutant',                emoji:'🌱', color:'#84cc16', group:'Développement'},
-  {id:'student',     label:'Étudiant en développement',emoji:'📚',color:'#60a5fa', group:'Développement'},
-  // Création
-  {id:'uiux',        label:'UI/UX Designer',          emoji:'✏️', color:'#f43f5e', group:'Création'},
-  {id:'designer',    label:'Graphiste',               emoji:'🖌️', color:'#fb923c', group:'Création'},
-  {id:'videoeditor', label:'Monteur Vidéo',           emoji:'🎬', color:'#facc15', group:'Création'},
-  {id:'creator',     label:'Créateur de contenu',     emoji:'📸', color:'#4ade80', group:'Création'},
-  // Communauté
-  {id:'member',      label:'Développeur',             emoji:'👤', color:'rgba(244,241,234,.5)', group:'Communauté'},
-  {id:'verified',    label:'Développeur Vérifié',     emoji:'✅', color:'#34d399', group:'Communauté'},
-  {id:'active',      label:'Développeur Actif',       emoji:'⚡', color:'#fbbf24', group:'Communauté'},
-  {id:'recruiter',   label:'Recruteur',               emoji:'🎯', color:'#38bdf8', group:'Communauté'},
-  {id:'booster',     label:'Booster',                 emoji:'🚀', color:'#c084fc', group:'Communauté'},
-  {id:'partner',     label:'Partenaire',              emoji:'🤝', color:'#67e8f9', group:'Communauté'},
-  // Distinctions
-  {id:'early',       label:'Early Member',            emoji:'🏅', color:'#fcd34d', group:'Distinctions'},
-  {id:'beta',        label:'Bêta Testeur',            emoji:'🔬', color:'#a3e635', group:'Distinctions'},
-  {id:'contributor', label:'Contributeur',            emoji:'🌟', color:'#fbbf24', group:'Distinctions'},
-  {id:'mentor',      label:'Mentor',                  emoji:'🧠', color:'#e879f9', group:'Distinctions'},
-  {id:'legend',      label:'Légende DevConnect',      emoji:'🏆', color:'#C8A84B', group:'Distinctions'},
-  // Automatique
-  {id:'online',      label:'En ligne',                emoji:'🟢', color:'#10b981', group:'Automatique'},
-  {id:'newmember',   label:'Nouveau membre',          emoji:'✨', color:'#60a5fa', group:'Automatique'},
-  {id:'accountverif',label:'Compte vérifié',          emoji:'🔐', color:'#34d399', group:'Automatique'},
-];
-
-// ADMIN_ROLES already declared above
-
-function getRoleInfo(id){ return ROLES.find(r=>r.id===id) || {id,label:id,emoji:'👤',color:'var(--muted)'}; }
-
-function rolePill(roleId){
-  const r = getRoleInfo(roleId);
-  return `<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-family:Geist Mono,monospace;font-size:.48rem;letter-spacing:.08em;text-transform:uppercase;background:${r.color}18;border:1px solid ${r.color}44;color:${r.color};white-space:nowrap">${r.emoji} ${r.label}</span>`;
-}
-
-// ══════════════════════════════════════════════════════
-//  STATE
-// ══════════════════════════════════════════════════════
-let currentAdmin = null;
-let allUsers = [];
-let allMessages = [];
-let allPosts = [];
-let roleFilter = 'all';
-let channelFilter = 'all';
-let badgeTargetUser = null;
-let badgeTargetCurrentBadges = [];
-
-// ══════════════════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════════════════
-(async () => {
-  const { data: { session } } = await sb.auth.getSession();
-  if (!session) { showAccessDenied(); return; }
-
-  const { data: profile } = await sb.from('dc_users').select('*').eq('id', session.user.id).maybeSingle();
-  if (!profile || !ADMIN_ROLES.includes(profile.role)) { showAccessDenied(); return; }
-
-  currentAdmin = profile;
-  document.getElementById('admin-loading-screen').classList.add('hide');
-  document.getElementById('app').style.display = 'flex';
-
-  // Sidebar info
-  const name = ((profile.firstname||'')+(profile.lastname?' '+profile.lastname:'')).trim()||profile.email;
-  document.getElementById('admin-sidebar-name').textContent = name;
-  const av = document.getElementById('admin-sidebar-avatar');
-  if(profile.photo){ av.style.backgroundImage=`url(${profile.photo})`; av.style.backgroundSize='cover'; }
-  else { av.textContent = profile.initials||'?'; }
-  const role = getRoleInfo(profile.role);
-  document.getElementById('admin-role-badge-el').textContent = role.emoji+' '+role.label;
-  document.getElementById('admin-role-badge-el').style.color = role.color;
-
-  // Date
-  document.getElementById('dash-date').textContent = new Date().toLocaleDateString('fr',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-
-  loadDashboard();
-  renderRolesReference();
-})();
-
-function showAccessDenied(){
-  document.getElementById('admin-loading-screen').classList.add('hide');
-  document.getElementById('admin-access-denied').classList.add('show');
-}
-
-// ══════════════════════════════════════════════════════
-//  NAV
-// ══════════════════════════════════════════════════════
-function showPage(id, btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  if(btn) btn.classList.add('active');
-  // Load data
-  if(id==='users') loadUsers();
-  if(id==='messages') loadMessages();
-  if(id==='posts') loadPosts();
-  if(id==='logs') loadLogs();
-}
-
-// ══════════════════════════════════════════════════════
-//  DASHBOARD
-// ══════════════════════════════════════════════════════
-async function loadDashboard(){
-  const [users, msgs, posts, friends] = await Promise.all([
-    sb.from('dc_users').select('id',{count:'exact',head:true}),
-    sb.from('dc_messages').select('id',{count:'exact',head:true}),
-    sb.from('dc_posts').select('id',{count:'exact',head:true}),
-    sb.from('dc_friends').select('id',{count:'exact',head:true}).eq('status','accepted'),
-  ]);
-  document.getElementById('stat-total-users').textContent = users.count||0;
-  document.getElementById('stat-total-msgs').textContent = msgs.count||0;
-  document.getElementById('stat-total-posts').textContent = posts.count||0;
-  document.getElementById('stat-total-friends').textContent = friends.count||0;
-
-  // Recent users
-  const { data: recentUsers } = await sb.from('dc_users').select('*').order('joined',{ascending:false}).limit(6);
-  const ruList = document.getElementById('recent-users-list');
-  ruList.innerHTML = '';
-  (recentUsers||[]).forEach(u=>{
-    const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email;
-    const c=u.color||'#C8A84B';
-    const div=document.createElement('div');
-    div.style.cssText='display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--muted2)';
-    div.innerHTML=`<div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.58rem;background:${c}18;color:${c};flex-shrink:0${u.photo?`;background-image:url(${u.photo});background-size:cover`:''}">${u.photo?'':u.initials||'?'}</div><div style="flex:1;min-width:0"><div style="font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(name)}</div><div style="font-size:.68rem;color:var(--muted)">${rolePill(u.role||'member')}</div></div>`;
-    ruList.appendChild(div);
-  });
-
-  // Recent messages
-  const { data: recentMsgs } = await sb.from('dc_messages').select('*').order('created_at',{ascending:false}).limit(6);
-  const rmIds = [...new Set((recentMsgs||[]).map(m=>m.user_id))];
-  const rmProfiles = await fetchProfiles(rmIds);
-  const rmList = document.getElementById('recent-msgs-list');
-  rmList.innerHTML='';
-  (recentMsgs||[]).forEach(m=>{
-    const u=rmProfiles[m.user_id]||{}; const c=u.color||'#C8A84B';
-    const div=document.createElement('div');
-    div.style.cssText='display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--muted2)';
-    div.innerHTML=`<div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.58rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1;min-width:0"><div style="font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)">#${m.channel}</div><div style="font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(m.content)}</div></div>`;
-    rmList.appendChild(div);
-  });
-}
-
-// ══════════════════════════════════════════════════════
-//  USERS
-// ══════════════════════════════════════════════════════
-async function loadUsers(){
-  const { data } = await sb.from('dc_users').select('*').order('joined',{ascending:false});
-  allUsers = data || [];
-  renderUsers(allUsers);
-}
-
-function renderUsers(users){
-  const tbody = document.getElementById('users-tbody');
-  tbody.innerHTML = '';
-  const empty = document.getElementById('users-empty');
-  if(!users.length){ empty.style.display='block'; return; }
-  empty.style.display='none';
-  users.forEach(u=>{
-    const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email;
-    const c=u.color||'#C8A84B';
-    const badges = Array.isArray(u.badges) ? u.badges : [];
-    const joinDate = u.joined ? new Date(u.joined).toLocaleDateString('fr',{day:'numeric',month:'short',year:'numeric'}) : '—';
-    const tr=document.createElement('tr');
-    tr.innerHTML=`
-      <td><div class="user-cell">
-        <div class="user-ini" style="background:${c}18;color:${c}${u.photo?`;background-image:url(${u.photo});background-size:cover`:''}">${u.photo?'':u.initials||'?'}</div>
-        <div><div class="user-name">${escH(name)}</div><div class="user-email">${escH(u.email||'')}</div></div>
-      </div></td>
-      <td>${rolePill(u.role||'member')}</td>
-      <td><div style="display:flex;flex-wrap:wrap;gap:4px;max-width:200px">${badges.slice(0,3).map(b=>{ const r=getRoleInfo(b); return `<span title="${r.label}" style="font-size:.9rem">${r.emoji}</span>`; }).join('')}${badges.length>3?`<span style="font-size:.7rem;color:var(--muted)">+${badges.length-3}</span>`:''}</div></td>
-      <td style="font-family:Geist Mono,monospace;font-size:.68rem;color:var(--muted)">${joinDate}</td>
-      <td><div style="display:flex;gap:6px">
-        <button class="action-btn" onclick="openUserModal('${u.id}')">Gérer</button>
-        ${u.role==='banned'
-          ? `<button class="action-btn success" onclick="setUserRole('${u.id}','member')">Débannir</button>`
-          : `<button class="action-btn danger" onclick="banUser('${u.id}')">Bannir</button>`
-        }
-      </div></td>`;
-    tbody.appendChild(tr);
-  });
-}
-
-function filterUsers(q){
-  const lower = q.toLowerCase();
-  let filtered = allUsers.filter(u=>{
-    const name=((u.firstname||'')+(u.lastname||'')+u.email).toLowerCase();
-    return name.includes(lower);
-  });
-  if(roleFilter!=='all') filtered=filtered.filter(u=>u.role===roleFilter);
-  renderUsers(filtered);
-}
-
-function setRoleFilter(role, btn){
-  roleFilter=role;
-  document.querySelectorAll('#page-users .filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  filterUsers(document.getElementById('user-search').value);
-}
-
-async function banUser(uid){
-  if(!confirm('Bannir cet utilisateur ?')) return;
-  await setUserRole(uid,'banned');
-}
-
-async function setUserRole(uid, role){
-  await sb.from('dc_users').update({role}).eq('id',uid);
-  await addLog('role', `Rôle changé → ${role} pour user ${uid}`);
-  toast('Rôle mis à jour');
-  loadUsers();
-}
-
-// ── User Modal ──
-async function openUserModal(uid){
-  const u = allUsers.find(x=>x.id===uid);
-  if(!u) return;
-  const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email;
-  const c=u.color||'#C8A84B';
-  const badges=Array.isArray(u.badges)?u.badges:[];
-
-  document.getElementById('modal-title').textContent = name;
-  document.getElementById('modal-body').innerHTML = `
-    <!-- Avatar + infos -->
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--muted2)">
-      <div style="width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:1rem;background:${c}18;color:${c};flex-shrink:0;overflow:hidden${u.photo?`;background-image:url(${u.photo});background-size:cover`:''}">${u.photo?'':u.initials||'?'}</div>
-      <div><div style="font-size:1rem">${escH(name)}</div><div style="font-size:.76rem;color:var(--muted)">${escH(u.email||'')}</div><div style="margin-top:6px">${rolePill(u.role||'member')}</div></div>
-    </div>
-
-    <!-- Infos -->
-    <div class="modal-section">
-      <div class="modal-section-title">Informations</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.82rem;color:var(--muted)">
-        <div>Bio : <span style="color:var(--white)">${escH(u.bio||'—')}</span></div>
-        <div>Entreprise : <span style="color:var(--white)">${escH(u.company||'—')}</span></div>
-        <div>Skills : <span style="color:var(--white)">${Array.isArray(u.skills)?u.skills.join(', '):(u.skills||'—')}</span></div>
-        <div>Inscrit : <span style="color:var(--white)">${u.joined?new Date(u.joined).toLocaleDateString('fr'):'—'}</span></div>
-      </div>
-    </div>
-
-    <!-- Changer rôle -->
-    <div class="modal-section">
-      <div class="modal-section-title">Changer le rôle</div>
-      <select id="modal-role-select" class="field-select">
-        ${ROLES.map(r=>`<option value="${r.id}"${u.role===r.id?' selected':''}>${r.emoji} ${r.label}</option>`).join('')}
-      </select>
-    </div>
-
-    <!-- Badges actuels -->
-    <div class="modal-section">
-      <div class="modal-section-title">Badges (${badges.length})</div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px">
-        ${badges.length ? badges.map(b=>{const r=getRoleInfo(b);return `<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-family:Geist Mono,monospace;font-size:.5rem;background:${r.color}18;border:1px solid ${r.color}44;color:${r.color}">${r.emoji} ${r.label}</span>`;}).join('') : '<span style="color:var(--muted);font-size:.82rem">Aucun badge</span>'}
-      </div>
-    </div>
-
-    <!-- Actions rapides -->
-    <div class="modal-section">
-      <div class="modal-section-title">Actions</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="action-btn success" onclick="muteUser('${uid}')">🔇 Muter</button>
-        <button class="action-btn danger" onclick="banUser('${uid}');closeModal()">🚫 Bannir</button>
-        <button class="btn-outline" onclick="openBadgeFromModal('${uid}');closeModal()">🏅 Gérer badges</button>
-      </div>
-    </div>
-  `;
-  document.getElementById('modal-footer').innerHTML = `
-    <button class="btn-outline" onclick="closeModal()">Annuler</button>
-    <button class="btn-primary" onclick="saveUserRole('${uid}')">Enregistrer le rôle</button>
-  `;
-  document.getElementById('admin-modal-overlay').classList.add('open');
-}
-
-async function saveUserRole(uid){
-  const role = document.getElementById('modal-role-select').value;
-  await sb.from('dc_users').update({role}).eq('id',uid);
-  await addLog('role', `Rôle changé → ${role} pour user ${uid}`);
-  toast('Rôle mis à jour');
-  closeModal();
-  loadUsers();
-}
-
-async function muteUser(uid){
-  await sb.from('dc_users').update({role:'muted'}).eq('id',uid);
-  await addLog('mute', `User ${uid} muté`);
-  toast('Utilisateur muté');
-  closeModal();
-  loadUsers();
-}
-
-function closeModal(){ document.getElementById('admin-modal-overlay').classList.remove('open'); }
-
-// ══════════════════════════════════════════════════════
-//  ROLES REFERENCE
-// ══════════════════════════════════════════════════════
-function renderRolesReference(){
-  const grid = document.getElementById('roles-ref-grid');
-  const groups = {};
-  ROLES.forEach(r=>{ if(!groups[r.group]) groups[r.group]=[]; groups[r.group].push(r); });
-  grid.innerHTML = '';
-  grid.style.gridTemplateColumns = '1fr';
-  Object.entries(groups).forEach(([group, roles])=>{
-    const section = document.createElement('div');
-    section.style.cssText = 'margin-bottom:16px';
-    section.innerHTML = `<div style="font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--gold-border)">${group}</div>
-    <div style="display:flex;flex-wrap:wrap;gap:6px">${roles.map(r=>`<span style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.06em;background:${r.color}15;border:1px solid ${r.color}35;color:${r.color}">${r.emoji} ${r.label}</span>`).join('')}</div>`;
-    grid.appendChild(section);
-  });
-}
-
-// ══════════════════════════════════════════════════════
-//  BADGES ATTRIBUTION
-// ══════════════════════════════════════════════════════
-async function searchBadgeUser(q){
-  const res = document.getElementById('badge-user-results');
-  if(!q||q.length<2){ res.style.display='none'; return; }
-  const {data} = await sb.from('dc_users').select('*').or(`firstname.ilike.%${q}%,lastname.ilike.%${q}%,email.ilike.%${q}%`).limit(6);
-  res.style.display='block';
-  res.innerHTML='';
-  (data||[]).forEach(u=>{
-    const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email;
-    const c=u.color||'#C8A84B';
-    const btn=document.createElement('button');
-    btn.style.cssText='display:flex;align-items:center;gap:10px;padding:10px 12px;width:100%;background:none;border:none;border-bottom:1px solid var(--muted2);color:var(--white);text-align:left;transition:background .15s';
-    btn.innerHTML=`<div style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.6rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div><div style="font-size:.86rem">${escH(name)}</div><div style="font-size:.7rem;color:var(--muted)">${rolePill(u.role||'member')}</div></div>`;
-    btn.addEventListener('mouseenter',()=>btn.style.background='var(--muted3)');
-    btn.addEventListener('mouseleave',()=>btn.style.background='none');
-    btn.onclick=()=>openBadgeAttribution(u);
-    res.appendChild(btn);
-  });
-  if(!data||!data.length) res.innerHTML='<div style="padding:14px 16px;color:var(--muted);font-size:.82rem">Aucun résultat</div>';
-}
-
-function openBadgeAttribution(u){
-  badgeTargetUser = u;
-  badgeTargetCurrentBadges = Array.isArray(u.badges) ? [...u.badges] : [];
-  document.getElementById('badge-user-results').style.display='none';
-  document.getElementById('badge-empty').style.display='none';
-  document.getElementById('badge-attribution-area').style.display='block';
-
-  const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email;
-  const c=u.color||'#C8A84B';
-  const av=document.getElementById('badge-target-avatar');
-  av.textContent=u.initials||'?'; av.style.background=c+'18'; av.style.color=c;
-  document.getElementById('badge-target-name').textContent=name;
-  document.getElementById('badge-target-role').textContent=getRoleInfo(u.role||'member').emoji+' '+getRoleInfo(u.role||'member').label;
-
-  renderBadgeGrid();
-}
-
-function openBadgeFromModal(uid){
-  showPage('roles', document.querySelector('.nav-btn:nth-child(2)'));
-  setTimeout(async()=>{
-    const {data} = await sb.from('dc_users').select('*').eq('id',uid).maybeSingle();
-    if(data){ document.getElementById('badge-user-search').value=((data.firstname||'')+(data.lastname?' '+data.lastname:'')).trim()||data.email; openBadgeAttribution(data); }
-  },100);
-}
-
-function renderBadgeGrid(){
-  const container = document.getElementById('badge-grid-container');
-  container.innerHTML = '';
-  const groups = {};
-  ROLES.forEach(r=>{ if(!groups[r.group]) groups[r.group]=[]; groups[r.group].push(r); });
-  Object.entries(groups).forEach(([group, roles])=>{
-    const title = document.createElement('div');
-    title.className='badge-section-title'; title.textContent=group;
-    container.appendChild(title);
-    const grid = document.createElement('div');
-    grid.className='badges-grid';
-    roles.forEach(r=>{
-      const owned = badgeTargetCurrentBadges.includes(r.id);
-      const card = document.createElement('div');
-      card.className='badge-card'+(owned?' owned':'');
-      card.dataset.badgeId=r.id;
-      card.style.setProperty('--badge-color', r.color);
-      card.innerHTML=`<div class="badge-icon">${r.emoji}</div><div class="badge-name">${r.label}</div>`;
-      card.onclick=()=>toggleBadge(r.id, card);
-      grid.appendChild(card);
-    });
-    container.appendChild(grid);
-  });
-}
-
-function toggleBadge(id, card){
-  const idx = badgeTargetCurrentBadges.indexOf(id);
-  if(idx>=0){ badgeTargetCurrentBadges.splice(idx,1); card.classList.remove('owned'); }
-  else { badgeTargetCurrentBadges.push(id); card.classList.add('owned'); }
-}
-
-async function saveBadges(){
-  if(!badgeTargetUser) return;
-  await sb.from('dc_users').update({badges:badgeTargetCurrentBadges}).eq('id',badgeTargetUser.id);
-  await addLog('badge', `Badges mis à jour pour ${badgeTargetUser.email} : [${badgeTargetCurrentBadges.join(', ')}]`);
-  toast('Badges enregistrés ✓');
-  // Refresh user in allUsers
-  const idx=allUsers.findIndex(u=>u.id===badgeTargetUser.id);
-  if(idx>=0) allUsers[idx].badges=badgeTargetCurrentBadges;
-}
-
-function closeBadgeAttribution(){
-  document.getElementById('badge-attribution-area').style.display='none';
-  document.getElementById('badge-empty').style.display='block';
-  document.getElementById('badge-user-search').value='';
-  badgeTargetUser=null;
-}
-
-// ══════════════════════════════════════════════════════
-//  MESSAGES
-// ══════════════════════════════════════════════════════
-async function loadMessages(){
-  const {data} = await sb.from('dc_messages').select('*').order('created_at',{ascending:false}).limit(200);
-  allMessages = data||[];
-  const ids=[...new Set(allMessages.map(m=>m.user_id))];
-  const profiles = await fetchProfiles(ids);
-  renderMessages(allMessages, profiles);
-}
-
-function renderMessages(msgs, profiles){
-  const tbody=document.getElementById('msgs-tbody');
-  tbody.innerHTML='';
-  const empty=document.getElementById('msgs-empty');
-  if(!msgs.length){empty.style.display='block';return;}
-  empty.style.display='none';
-  msgs.forEach(m=>{
-    const u=profiles?.[m.user_id]||{}; const c=u.color||'#C8A84B';
-    const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email||'Inconnu';
-    const date=new Date(m.created_at).toLocaleString('fr',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
-    const tr=document.createElement('tr');
-    tr.dataset.msgId=m.id;
-    tr.innerHTML=`
-      <td><div class="user-cell"><div class="user-ini" style="background:${c}18;color:${c}">${u.initials||'?'}</div><div class="user-name">${escH(name)}</div></div></td>
-      <td><div class="msg-content" title="${escH(m.content)}">${escH(m.content)}</div></td>
-      <td><span class="channel-tag">#${m.channel||'?'}</span></td>
-      <td style="font-family:Geist Mono,monospace;font-size:.66rem;color:var(--muted)">${date}</td>
-      <td><button class="action-btn danger" onclick="deleteMessage('${m.id}',this.closest('tr'))">Supprimer</button></td>`;
-    tbody.appendChild(tr);
-  });
-}
-
-let _msgProfiles = {};
-async function filterMessages(q){
-  if(!_msgProfiles) return;
-  const lower=q.toLowerCase();
-  const filtered=allMessages.filter(m=>m.content?.toLowerCase().includes(lower)||(channelFilter==='all'||m.channel===channelFilter));
-  const ids=[...new Set(filtered.map(m=>m.user_id))];
-  _msgProfiles = await fetchProfiles(ids);
-  renderMessages(filtered.filter(m=>channelFilter==='all'||m.channel===channelFilter), _msgProfiles);
-}
-
-function setChannelFilter(ch, btn){
-  channelFilter=ch;
-  document.querySelectorAll('#page-messages .filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  filterMessages(document.getElementById('msg-search').value);
-}
-
-async function deleteMessage(id, row){
-  if(!confirm('Supprimer ce message ?')) return;
-  await sb.from('dc_messages').delete().eq('id',id);
-  await addLog('delete_msg', `Message ${id} supprimé`);
-  row.style.opacity='.3'; setTimeout(()=>row.remove(),400);
-  toast('Message supprimé');
-}
-
-// ══════════════════════════════════════════════════════
-//  POSTS
-// ══════════════════════════════════════════════════════
-async function loadPosts(){
-  const {data}=await sb.from('dc_posts').select('*').order('ts',{ascending:false}).limit(100);
-  allPosts=data||[];
-  const ids=[...new Set(allPosts.map(p=>p.user_id))];
-  const profiles=await fetchProfiles(ids);
-  renderPosts(allPosts,profiles);
-}
-
-function renderPosts(posts,profiles){
-  const tbody=document.getElementById('posts-tbody');
-  tbody.innerHTML='';
-  const empty=document.getElementById('posts-empty');
-  if(!posts.length){empty.style.display='block';return;}
-  empty.style.display='none';
-  posts.forEach(p=>{
-    const u=profiles?.[p.user_id]||{}; const c=u.color||'#C8A84B';
-    const name=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email||'Inconnu';
-    const date=p.ts?new Date(p.ts).toLocaleDateString('fr',{day:'numeric',month:'short',year:'numeric'}):'—';
-    const content=(p.title||p.body||'').slice(0,80);
-    const tr=document.createElement('tr');
-    tr.innerHTML=`
-      <td><div class="user-cell"><div class="user-ini" style="background:${c}18;color:${c}">${u.initials||'?'}</div><div class="user-name">${escH(name)}</div></div></td>
-      <td><div class="msg-content" title="${escH(p.body||'')}"><span style="color:var(--gold);font-size:.8rem">${escH(p.title||'')}</span>${p.title&&p.body?' — ':''}<span style="color:var(--muted)">${escH((p.body||'').slice(0,60))}</span></div></td>
-      <td style="font-family:Geist Mono,monospace;font-size:.75rem">❤️ ${p.likes||0}</td>
-      <td style="font-family:Geist Mono,monospace;font-size:.66rem;color:var(--muted)">${date}</td>
-      <td><button class="action-btn danger" onclick="deletePost('${p.id}',this.closest('tr'))">Supprimer</button></td>`;
-    tbody.appendChild(tr);
-  });
-}
-
-function filterPosts(q){
-  const lower=q.toLowerCase();
-  const filtered=allPosts.filter(p=>(p.title||p.body||'').toLowerCase().includes(lower));
-  const ids=[...new Set(filtered.map(p=>p.user_id))];
-  fetchProfiles(ids).then(profiles=>renderPosts(filtered,profiles));
-}
-
-async function deletePost(id,row){
-  if(!confirm('Supprimer ce post ?')) return;
-  await sb.from('dc_posts').delete().eq('id',id);
-  await addLog('delete_post',`Post ${id} supprimé`);
-  row.style.opacity='.3'; setTimeout(()=>row.remove(),400);
-  toast('Post supprimé');
-}
-
-// ══════════════════════════════════════════════════════
-//  LOGS
-// ══════════════════════════════════════════════════════
-async function loadLogs(){
-  const {data}=await sb.from('dc_logs').select('*').order('ts',{ascending:false}).limit(100);
-  const list=document.getElementById('logs-list');
-  const empty=document.getElementById('logs-empty');
-  list.innerHTML='';
-  if(!data||!data.length){empty.style.display='block';return;}
-  empty.style.display='none';
-  data.forEach(log=>{
-    const icons={role:'🎭',badge:'🏅',mute:'🔇',ban:'🚫',delete_msg:'🗑️',delete_post:'📄'};
-    const div=document.createElement('div');
-    div.className='log-item';
-    div.innerHTML=`<div class="log-icon">${icons[log.type]||'📋'}</div><div style="flex:1"><div class="log-text">${escH(log.msg||'')}</div></div><div class="log-time">${log.ts?new Date(log.ts).toLocaleString('fr',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'—'}</div>`;
-    list.appendChild(div);
-  });
-}
-
-async function addLog(type, msg){
-  const id=Date.now().toString(36)+Math.random().toString(36).slice(2);
-  await sb.from('dc_logs').insert({id, type, msg, ts:Date.now()});
-}
-
-// ══════════════════════════════════════════════════════
-//  UTILS
-// ══════════════════════════════════════════════════════
-async function fetchProfiles(ids){
-  if(!ids||!ids.length) return {};
-  const {data}=await sb.from('dc_users').select('id,firstname,lastname,initials,color,email,role,photo').in('id',ids);
-  const map={};
-  (data||[]).forEach(u=>map[u.id]=u);
-  return map;
-}
-
-function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-function toast(msg, duration=2500){
-  const el=document.getElementById('admin-toast');
-  el.textContent=msg; el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'), duration);
-}
-
-
-function showPage(page, btn){
-  document.querySelectorAll('#admin-view .page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('#admin-view .nav-btn').forEach(b=>b.classList.remove('active'));
-  const p = document.getElementById('page-'+page);
-  if(p) p.classList.add('active');
-  if(btn) btn.classList.add('active');
-  if(page==='users') loadUsers();
-  else if(page==='messages') loadMessages();
-  else if(page==='posts') loadPosts();
-  else if(page==='logs') loadLogs();
-  else if(page==='roles') renderRolesReference();
-}
-
-async function loadDashboard(){
-  const [users,msgs,posts,friends] = await Promise.all([
-    sb.from('dc_users').select('id',{count:'exact',head:true}),
-    sb.from('dc_messages').select('id',{count:'exact',head:true}),
-    sb.from('dc_posts').select('id',{count:'exact',head:true}),
-    sb.from('dc_friends').select('id',{count:'exact',head:true}).eq('status','accepted'),
-  ]);
-  const el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v??'0';};
-  el('stat-total-users',users.count);
-  el('stat-total-msgs',msgs.count);
-  el('stat-total-posts',posts.count);
-  el('stat-total-friends',friends.count);
-  const dd=document.getElementById('dash-date');
-  if(dd) dd.textContent=new Date().toLocaleDateString('fr',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-
-  // Recent users
-  const {data:ru}=await sb.from('dc_users').select('*').order('joined',{ascending:false}).limit(5);
-  const rul=document.getElementById('recent-users-list');
-  if(rul&&ru){
-    rul.innerHTML=(ru||[]).map(u=>{
-      const c=u.color||'#C8A84B';
-      const n=((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email||'?';
-      return `<div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--muted2)"><div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.6rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1;font-size:.84rem">${escH(n)}</div><div style="font-family:Geist Mono,monospace;font-size:.55rem;color:var(--muted)">${u.joined?new Date(u.joined).toLocaleDateString('fr'):'—'}</div></div>`;
-    }).join('');
-  }
-
-  // Recent messages
-  const {data:rm}=await sb.from('dc_messages').select('*').order('created_at',{ascending:false}).limit(5);
-  const ids=[...new Set((rm||[]).map(m=>m.user_id))];
-  const profiles = await fetchProfiles(ids);
-  const rml=document.getElementById('recent-msgs-list');
-  if(rml&&rm){
-    rml.innerHTML=(rm||[]).map(m=>{
-      const u=profiles[m.user_id]||{};const c=u.color||'#C8A84B';
-      return `<div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--muted2)"><div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.6rem;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1;font-size:.82rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH((m.content||'').slice(0,50))}</div><div style="font-family:Geist Mono,monospace;font-size:.52rem;color:var(--gold);margin-left:4px">#${m.channel||'?'}</div></div>`;
-    }).join('');
-  }
-}
-
-</script>
 </body>
 </html>
