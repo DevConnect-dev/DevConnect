@@ -15,7 +15,7 @@
   --sidebar-w:72px;--panel-w:260px;
 }
 html,body{width:100%;height:100%;overflow:hidden;background:var(--black)}
-body{font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;color:var(--white)}
+body{font-family:DM Sans,sans-serif;-webkit-font-smoothing:antialiased;color:var(--white)}
 *{cursor:none!important}
 #cur-ring{position:fixed;z-index:999999;pointer-events:none;width:36px;height:36px;border:1px solid rgba(200,168,75,0.6);border-radius:50%;transform:translate(-50%,-50%);transition:width .35s,height .35s,border-color .35s,opacity .3s;top:0;left:0;opacity:0}
 #cur-dot{position:fixed;z-index:999999;pointer-events:none;width:4px;height:4px;background:var(--gold);border-radius:50%;transform:translate(-50%,-50%);top:0;left:0;opacity:0;transition:opacity .3s}
@@ -29,7 +29,7 @@ body.hovering #cur-ring{width:54px;height:54px;border-color:rgba(200,168,75,0.25
 nav{position:fixed;top:0;left:0;right:0;z-index:900;padding:28px 56px;display:flex;align-items:center;justify-content:space-between;transition:all .5s}
 nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18px 56px;border-bottom:1px solid rgba(244,241,234,0.1)}
 #sidebar{position:relative!important;top:auto!important;left:auto!important;right:auto!important;padding:20px 0!important;border-bottom:none!important;backdrop-filter:none!important;background:var(--black2)!important;}
-.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:400;letter-spacing:.04em;color:var(--white);text-decoration:none}
+.nav-logo{font-family:Cormorant Garamond,serif;font-size:1.35rem;font-weight:400;letter-spacing:.04em;color:var(--white);text-decoration:none}
 .nav-logo span{color:var(--gold)}
 .nav-right{display:flex;align-items:center;gap:32px}
 .nav-link{font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .3s;background:none;border:none}
@@ -52,7 +52,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .p1-content{position:relative;z-index:2;text-align:center;max-width:880px;padding:0 32px}
 .p1-tag{font-family:Geist Mono,monospace;font-size:.64rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:40px;display:flex;align-items:center;justify-content:center;gap:18px;animation:fUp .9s ease .1s both}
 .p1-tag::before,.p1-tag::after{content:'';flex:1;max-width:64px;height:1px;background:var(--gold-border)}
-.p1-title{font-family:'Cormorant Garamond',serif;font-size:clamp(5rem,13vw,12rem);font-weight:300;line-height:.86;letter-spacing:-.03em;animation:fUp .9s ease .3s both}
+.p1-title{font-family:Cormorant Garamond,serif;font-size:clamp(5rem,13vw,12rem);font-weight:300;line-height:.86;letter-spacing:-.03em;animation:fUp .9s ease .3s both}
 .p1-title em{font-style:italic;color:var(--gold-light)}
 .p1-sub{font-size:1rem;font-weight:300;color:var(--muted);line-height:1.9;margin:36px auto 52px;max-width:440px;animation:fUp .9s ease .5s both}
 .p1-actions{display:flex;align-items:center;justify-content:center;gap:18px;animation:fUp .9s ease .7s both}
@@ -86,14 +86,14 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .card-content{position:absolute;bottom:0;left:0;right:0;padding:52px 44px;background:linear-gradient(to top,rgba(5,5,10,.96) 0%,rgba(5,5,10,.55) 60%,transparent 100%)}
 .card-eyebrow{font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:block;transition:letter-spacing .3s}
 .card:hover .card-eyebrow{letter-spacing:.28em}
-.card-title{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:400;line-height:1.05;transition:transform .4s}
+.card-title{font-family:Cormorant Garamond,serif;font-size:2.6rem;font-weight:400;line-height:1.05;transition:transform .4s}
 .card:hover .card-title{transform:translateY(-5px)}
 .card-arrow{display:inline-flex;align-items:center;gap:8px;margin-top:22px;font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);opacity:0;transform:translateX(-8px);transition:all .4s}
 .card:hover .card-arrow{opacity:1;transform:translateX(0)}
 #p3{background:var(--black)}
 .p3-wrap{max-width:1100px;width:100%;padding:0 80px;display:grid;grid-template-columns:160px 1fr;gap:100px;align-items:center}
 .p3-label{font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);writing-mode:vertical-rl;transform:rotate(180deg)}
-.p3-text{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,3vw,3rem);font-weight:300;line-height:1.45}
+.p3-text{font-family:Cormorant Garamond,serif;font-size:clamp(1.9rem,3vw,3rem);font-weight:300;line-height:1.45}
 .p3-text strong{font-weight:500;color:var(--gold-light)}
 .p3-text em{font-style:italic}
 .p3-sig{margin-top:52px;display:flex;align-items:center;gap:20px;font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
@@ -101,7 +101,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 #p5{background:var(--black)}
 .p5-wrap{max-width:1100px;width:100%;padding:0 80px}
 .p5-top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:52px;padding-bottom:24px;border-bottom:1px solid rgba(244,241,234,0.08)}
-.p5-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.8rem);font-weight:300;line-height:1.05}
+.p5-title{font-family:Cormorant Garamond,serif;font-size:clamp(2.2rem,4vw,3.8rem);font-weight:300;line-height:1.05}
 .p5-title em{font-style:italic;color:var(--gold-light)}
 .p5-count{font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 .feat-list{display:flex;flex-direction:column}
@@ -109,14 +109,14 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .feat::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--gold-dim),transparent);transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.4,0,.2,1)}
 .feat:hover::before{transform:scaleX(1)}
 .feat-n{font-family:Geist Mono,monospace;font-size:.6rem;color:var(--gold);letter-spacing:.12em;position:relative;z-index:1}
-.feat-name{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:400;position:relative;z-index:1}
+.feat-name{font-family:Cormorant Garamond,serif;font-size:1.55rem;font-weight:400;position:relative;z-index:1}
 .feat-desc{font-size:.8rem;color:var(--muted);font-weight:300;line-height:1.65;max-width:320px;text-align:right;position:relative;z-index:1}
 #p6{background:var(--black);border-top:1px solid rgba(244,241,234,0.08)}
 .p6-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 60%,rgba(200,168,75,0.08) 0%,transparent 65%)}
 .p6-content{position:relative;z-index:2;text-align:center;max-width:760px;padding:0 40px}
 .p6-tag{font-family:Geist Mono,monospace;font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:36px;display:flex;align-items:center;justify-content:center;gap:18px}
 .p6-tag::before,.p6-tag::after{content:'';flex:1;max-width:56px;height:1px;background:var(--gold-border)}
-.p6-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,8vw,7.5rem);font-weight:300;line-height:.88;letter-spacing:-.03em;margin-bottom:32px}
+.p6-title{font-family:Cormorant Garamond,serif;font-size:clamp(3rem,8vw,7.5rem);font-weight:300;line-height:.88;letter-spacing:-.03em;margin-bottom:32px}
 .p6-title em{font-style:italic;color:var(--gold-light)}
 .p6-sub{font-size:.9rem;color:var(--muted);line-height:1.9;margin-bottom:52px;font-weight:300}
 .p6-actions{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:52px}
@@ -124,7 +124,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 #auth-ov{position:fixed;inset:0;z-index:9000;background:rgba(5,5,10,.92);backdrop-filter:blur(24px);display:none;align-items:center;justify-content:center}
 #auth-ov.open{display:flex}
 .auth-box{width:100%;max-width:440px;border:1px solid var(--gold-border);background:rgba(8,8,14,.98);position:relative;padding:52px 48px 44px}
-.auth-logo{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;text-align:center;margin-bottom:8px}
+.auth-logo{font-family:Cormorant Garamond,serif;font-size:1.5rem;font-weight:400;text-align:center;margin-bottom:8px}
 .auth-logo span{color:var(--gold)}
 .auth-tabs{display:flex;border-bottom:1px solid rgba(244,241,234,0.08);margin:28px 0 32px}
 .auth-tab{flex:1;padding:10px;font-family:Geist Mono,monospace;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;background:none;border:none;color:var(--muted);transition:all .3s;border-bottom:2px solid transparent;margin-bottom:-1px}
@@ -132,7 +132,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .auth-form{display:none}.auth-form.active{display:block}
 .auth-row{margin-bottom:18px}
 .auth-label{display:block;font-family:Geist Mono,monospace;font-size:.57rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-.auth-input{width:100%;background:rgba(244,241,234,0.04);border:1px solid rgba(244,241,234,0.08);padding:13px 16px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:border-color .3s}
+.auth-input{width:100%;background:rgba(244,241,234,0.04);border:1px solid rgba(244,241,234,0.08);padding:13px 16px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.88rem;outline:none;transition:border-color .3s}
 .auth-input:focus{border-color:var(--gold-border)}
 .auth-input::placeholder{color:rgba(244,241,234,0.2)}
 .auth-submit{width:100%;margin-top:24px;padding:15px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#000;font-family:Geist Mono,monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;border:none;transition:all .3s;position:relative;overflow:hidden}
@@ -150,7 +150,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 #view-dash{position:fixed;inset:0;z-index:400;display:none}
 #view-dash.show{display:flex}
 #sidebar{width:var(--sidebar-w);height:100%;background:var(--black2);border-right:1px solid var(--muted2);display:flex;flex-direction:column;align-items:center;padding:20px 0;gap:4px;flex-shrink:0;z-index:100}
-.sb-logo{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;color:var(--gold);margin-bottom:24px;letter-spacing:.04em}
+.sb-logo{font-family:Cormorant Garamond,serif;font-size:1.3rem;font-weight:400;color:var(--gold);margin-bottom:24px;letter-spacing:.04em}
 .sb-sep{width:32px;height:1px;background:var(--gold-border);margin:8px 0}
 .sb-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .25s;position:relative;background:none;border:none;font-size:1.1rem;flex-shrink:0}
 .sb-icon:hover{color:var(--white);background:var(--muted3)}
@@ -167,7 +167,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 #panel-toggle{position:absolute;bottom:20px;right:12px;width:26px;height:26px;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--gold);z-index:10;transition:all .25s;cursor:none}
 #panel-toggle:hover{background:rgba(200,168,75,0.15);border-color:var(--gold)}
 .dp-header{padding:20px 20px 16px;border-bottom:1px solid var(--muted2);flex-shrink:0}
-.dp-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;line-height:1}
+.dp-title{font-family:Cormorant Garamond,serif;font-size:1.4rem;font-weight:400;line-height:1}
 .dp-sub{font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-top:4px}
 .dp-body{flex:1;overflow-y:auto;padding:12px 8px}
 .dp-body::-webkit-scrollbar{width:4px}
@@ -183,7 +183,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .content-area{width:100%;height:100%;display:none;flex-direction:column}
 .content-area.active{display:flex}
 .content-header{padding:20px 32px;border-bottom:1px solid var(--muted2);display:flex;align-items:center;gap:16px;flex-shrink:0}
-.content-header-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:400}
+.content-header-title{font-family:Cormorant Garamond,serif;font-size:1.6rem;font-weight:400}
 .content-header-sub{font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-left:auto}
 .content-body{flex:1;overflow-y:auto;padding:32px}
 .content-body::-webkit-scrollbar{width:4px}
@@ -194,7 +194,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .w-content{position:relative;z-index:2;text-align:center;max-width:680px;padding:0 40px;animation:fUp .8s ease both}
 .w-tag{font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:32px;display:flex;align-items:center;justify-content:center;gap:16px}
 .w-tag::before,.w-tag::after{content:'';flex:1;max-width:48px;height:1px;background:var(--gold-border)}
-.w-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,6vw,5.5rem);font-weight:300;line-height:.95;letter-spacing:-.02em;margin-bottom:16px}
+.w-title{font-family:Cormorant Garamond,serif;font-size:clamp(3rem,6vw,5.5rem);font-weight:300;line-height:.95;letter-spacing:-.02em;margin-bottom:16px}
 .w-title em{font-style:italic;color:var(--gold-light)}
 .w-name{color:var(--gold)}
 .w-sub{font-size:.95rem;font-weight:300;color:var(--muted);line-height:1.8;margin:28px auto 0;max-width:400px}
@@ -206,7 +206,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .wc-desc{font-size:.8rem;color:var(--muted);font-weight:300}
 .coming-soon{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px;color:var(--muted)}
 .cs-icon{font-size:3rem;opacity:.3}
-.cs-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--white)}
+.cs-title{font-family:Cormorant Garamond,serif;font-size:2rem;font-weight:300;color:var(--white)}
 .cs-sub{font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
 /* Chat */
 #chat-wrap{display:flex;flex:1;overflow:hidden}
@@ -230,7 +230,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 #chat-input-wrap{padding:16px 20px;border-top:1px solid var(--muted2);flex-shrink:0}
 #chat-input-row{display:flex;align-items:center;gap:10px;background:var(--muted3);border:1px solid var(--muted2);border-radius:8px;padding:10px 14px;transition:border-color .2s}
 #chat-input-row:focus-within{border-color:var(--gold-border)}
-#chat-input{flex:1;background:none;border:none;outline:none;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:300}
+#chat-input{flex:1;background:none;border:none;outline:none;color:var(--white);font-family:DM Sans,sans-serif;font-size:.88rem;font-weight:300}
 #chat-input::placeholder{color:var(--muted)}
 .chat-send{background:none;border:none;color:var(--gold);font-size:1rem;padding:2px 6px;transition:opacity .2s;opacity:.6}
 .chat-send:hover{opacity:1}
@@ -238,7 +238,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .premium-wrap{max-width:800px;margin:0 auto}
 .premium-hero{text-align:center;padding:40px 0 52px;border-bottom:1px solid var(--muted2);margin-bottom:40px}
 .premium-badge{display:inline-flex;align-items:center;gap:8px;font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-border);padding:6px 18px;border-radius:20px;margin-bottom:28px}
-.premium-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:300;line-height:1;margin-bottom:16px}
+.premium-title{font-family:Cormorant Garamond,serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:300;line-height:1;margin-bottom:16px}
 .premium-title em{font-style:italic;color:var(--gold-light)}
 .premium-sub{color:var(--muted);font-size:.9rem;font-weight:300;line-height:1.8;max-width:460px;margin:0 auto 36px}
 .plans{display:grid;grid-template-columns:1fr 1fr;gap:20px}
@@ -246,7 +246,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .plan:hover{border-color:rgba(200,168,75,.4);background:var(--gold-dim)}
 .plan.featured{border-color:var(--gold);background:var(--gold-dim)}
 .plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;padding:4px 14px;border-radius:10px;white-space:nowrap}
-.plan-name{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:400;margin-bottom:6px}
+.plan-name{font-family:Cormorant Garamond,serif;font-size:1.6rem;font-weight:400;margin-bottom:6px}
 .plan-price{font-family:Geist Mono,monospace;font-size:2rem;color:var(--gold);margin-bottom:20px}
 .plan-price span{font-size:.8rem;color:var(--muted)}
 .plan-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
@@ -259,14 +259,14 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .profile-banner{height:140px;background:linear-gradient(135deg,rgba(200,168,75,0.15),rgba(200,168,75,0.03));border:1px solid var(--gold-border);border-radius:8px}
 .profile-avatar-lg{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:1.4rem;font-weight:500;border:3px solid var(--black3);position:absolute;bottom:-40px;left:28px}
 .profile-info{padding:52px 28px 28px;border:1px solid var(--gold-border);border-top:none;border-radius:0 0 8px 8px;margin-bottom:24px}
-.profile-name{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:400}
+.profile-name{font-family:Cormorant Garamond,serif;font-size:1.8rem;font-weight:400}
 .profile-handle{font-family:Geist Mono,monospace;font-size:.65rem;letter-spacing:.12em;color:var(--muted);margin-top:2px}
 .profile-bio{font-size:.88rem;color:var(--muted);font-weight:300;line-height:1.7;margin-top:14px;max-width:480px}
 .profile-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
 .tag{font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;padding:4px 12px;border:1px solid var(--gold-border);color:var(--gold);border-radius:4px}
 .profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
 .stat-box{border:1px solid var(--gold-border);padding:20px;border-radius:8px;text-align:center;background:var(--gold-dim)}
-.stat-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:400;color:var(--gold-light)}
+.stat-val{font-family:Cormorant Garamond,serif;font-size:2rem;font-weight:400;color:var(--gold-light)}
 .stat-label{font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:4px}
 
 
@@ -294,7 +294,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
 .dev-card-banner{height:72px;position:relative;flex-shrink:0}
 .dev-card-avatar{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.85rem;font-weight:500;border:3px solid var(--black3);position:absolute;bottom:-26px;left:20px;overflow:hidden;flex-shrink:0}
 .dev-card-body{padding:34px 20px 20px}
-.dev-card-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:2px}
+.dev-card-name{font-family:Cormorant Garamond,serif;font-size:1.3rem;font-weight:400;margin-bottom:2px}
 .dev-card-handle{font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.1em;color:var(--muted);margin-bottom:10px}
 .dev-card-bio{font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .dev-card-skills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
@@ -325,7 +325,7 @@ nav.scrolled{background:rgba(5,5,10,0.88);backdrop-filter:blur(20px);padding:18p
   --white:#F4F1EA;--muted:rgba(244,241,234,0.4);--muted2:rgba(244,241,234,0.08);--muted3:rgba(244,241,234,0.04);
   --red:#e05a5a;--green:#10b981;--blue:#3b82f6;--purple:#8b5cf6;
 }
-html,body{width:100%;height:100%;overflow:hidden;background:var(--black);font-family:'DM Sans',sans-serif;color:var(--white);-webkit-font-smoothing:antialiased}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--black);font-family:DM Sans,sans-serif;color:var(--white);-webkit-font-smoothing:antialiased}
 *{cursor:default}
 button{cursor:pointer}
 
@@ -339,10 +339,10 @@ button{cursor:pointer}
 /* ── SIDEBAR ── */
 #admin-sidebar{width:240px;flex-shrink:0;background:var(--black2);border-right:1px solid var(--gold-border);display:flex;flex-direction:column;height:100vh;overflow:hidden}
 #admin-view .sidebar-logo{padding:28px 24px 20px;border-bottom:1px solid var(--muted2)}
-#admin-view .sidebar-logo-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;color:var(--gold);letter-spacing:.04em}
+#admin-view .sidebar-logo-title{font-family:Cormorant Garamond,serif;font-size:1.4rem;font-weight:400;color:var(--gold);letter-spacing:.04em}
 #admin-view .sidebar-logo-sub{font-family:Geist Mono,monospace;font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:2px}
 #admin-view .sidebar-section{padding:16px 12px 8px;font-family:Geist Mono,monospace;font-size:.48rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
-#admin-view .nav-btn{display:flex;align-items:center;gap:10px;width:100%;padding:9px 14px;border-radius:6px;background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.88rem;transition:all .2s;text-align:left}
+#admin-view .nav-btn{display:flex;align-items:center;gap:10px;width:100%;padding:9px 14px;border-radius:6px;background:none;border:none;color:var(--muted);font-family:DM Sans,sans-serif;font-size:.88rem;transition:all .2s;text-align:left}
 #admin-view .nav-btn:hover{background:var(--muted3);color:var(--white)}
 #admin-view .nav-btn.active{background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-border)}
 #admin-view .nav-btn svg{flex-shrink:0;opacity:.7}
@@ -356,7 +356,7 @@ button{cursor:pointer}
 #admin-main::-webkit-scrollbar-thumb{background:var(--gold-border);border-radius:2px}
 #admin-view .page{display:none;padding:32px 36px}
 #admin-view .page.active{display:block}
-#admin-view .page-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:400;color:var(--white);margin-bottom:4px}
+#admin-view .page-title{font-family:Cormorant Garamond,serif;font-size:2rem;font-weight:400;color:var(--white);margin-bottom:4px}
 #admin-view .page-sub{font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:28px}
 #admin-view .page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px}
 
@@ -364,14 +364,14 @@ button{cursor:pointer}
 #admin-view .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
 #admin-view .stat-card{background:var(--black2);border:1px solid var(--gold-border);border-radius:8px;padding:20px 22px;position:relative;overflow:hidden}
 #admin-view .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5}
-#admin-view .stat-card-val{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:400;color:var(--white);margin-bottom:4px}
+#admin-view .stat-card-val{font-family:Cormorant Garamond,serif;font-size:2.2rem;font-weight:400;color:var(--white);margin-bottom:4px}
 #admin-view .stat-card-label{font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 #admin-view .stat-card-icon{position:absolute;top:18px;right:18px;opacity:.15;font-size:1.8rem}
 
 /* ── TABLE ── */
 #admin-view .table-wrap{background:var(--black2);border:1px solid var(--gold-border);border-radius:8px;overflow:hidden}
 #admin-view .table-toolbar{padding:16px 20px;border-bottom:1px solid var(--muted2);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-#admin-view .search-input{background:var(--muted3);border:1px solid var(--muted2);padding:8px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.84rem;border-radius:4px;outline:none;min-width:220px;transition:border .2s}
+#admin-view .search-input{background:var(--muted3);border:1px solid var(--muted2);padding:8px 14px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.84rem;border-radius:4px;outline:none;min-width:220px;transition:border .2s}
 #admin-view .search-input:focus{border-color:var(--gold-border)}
 #admin-view .filter-btn{background:none;border:1px solid var(--muted2);color:var(--muted);padding:7px 14px;font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;border-radius:4px;transition:all .2s}
 #admin-view .filter-btn:hover,.filter-btn.active{border-color:var(--gold-border);color:var(--gold);background:var(--gold-dim)}
@@ -423,16 +423,16 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
 #modal::-webkit-scrollbar{width:3px}
 #modal::-webkit-scrollbar-thumb{background:var(--gold-border)}
 #admin-view .modal-header{padding:24px 28px 16px;border-bottom:1px solid var(--muted2);display:flex;align-items:center;justify-content:space-between}
-#admin-view .modal-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400}
+#admin-view .modal-title{font-family:Cormorant Garamond,serif;font-size:1.4rem;font-weight:400}
 #admin-view .modal-close{background:none;border:none;color:var(--muted);font-size:1.2rem;transition:color .2s}
 #admin-view .modal-close:hover{color:var(--white)}
 #admin-view .modal-body{padding:24px 28px}
 #admin-view .modal-section{margin-bottom:22px}
 #admin-view .modal-section-title{font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
 .field-label{font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
-.field-input{width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;border-radius:4px;outline:none;transition:border .2s}
+.field-input{width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.86rem;border-radius:4px;outline:none;transition:border .2s}
 .field-input:focus{border-color:var(--gold-border)}
-.field-select{width:100%;background:var(--black3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;border-radius:4px;outline:none}
+.field-select{width:100%;background:var(--black3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.86rem;border-radius:4px;outline:none}
 #admin-view .modal-footer{padding:16px 28px 24px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--muted2)}
 
 /* ── BADGES GRID ── */
@@ -678,9 +678,9 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
     <div id="dm-modal" style="display:none;position:fixed;inset:0;z-index:8000;background:rgba(5,5,10,.85);backdrop-filter:blur(16px);align-items:center;justify-content:center" onclick="if(event.target===this)closeDMModal()">
       <div style="background:var(--black3);border:1px solid var(--gold-border);width:100%;max-width:420px;padding:32px;position:relative">
         <button onclick="closeDMModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:var(--muted);font-size:1.2rem">×</button>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;margin-bottom:20px">Nouveau message privé</div>
+        <div style="font-family:Cormorant Garamond,serif;font-size:1.4rem;margin-bottom:20px">Nouveau message privé</div>
         <input id="dm-search" type="text" placeholder="Chercher un utilisateur..."
-          style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;border-radius:6px;margin-bottom:12px"/>
+          style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.88rem;outline:none;border-radius:6px;margin-bottom:12px"/>
         <div id="dm-search-results" style="max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:4px"></div>
       </div>
     </div>
@@ -736,24 +736,24 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
             <div>
               <label style="font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Prénom</label>
-              <input id="edit-firstname" type="text" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;border-radius:4px"/>
+              <input id="edit-firstname" type="text" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.86rem;outline:none;border-radius:4px"/>
             </div>
             <div>
               <label style="font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Nom</label>
-              <input id="edit-lastname" type="text" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;border-radius:4px"/>
+              <input id="edit-lastname" type="text" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.86rem;outline:none;border-radius:4px"/>
             </div>
           </div>
           <div style="margin-bottom:14px">
             <label style="font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Bio</label>
-            <textarea id="edit-bio" rows="3" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;border-radius:4px;resize:vertical;line-height:1.6"></textarea>
+            <textarea id="edit-bio" rows="3" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.86rem;outline:none;border-radius:4px;resize:vertical;line-height:1.6"></textarea>
           </div>
           <div style="margin-bottom:14px">
             <label style="font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Entreprise / Statut</label>
-            <input id="edit-company" type="text" placeholder="Ex: Freelance, Google, Étudiant…" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;border-radius:4px"/>
+            <input id="edit-company" type="text" placeholder="Ex: Freelance, Google, Étudiant…" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.86rem;outline:none;border-radius:4px"/>
           </div>
           <div style="margin-bottom:18px">
             <label style="font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Compétences <span style="color:var(--muted);font-size:.5rem">(séparées par des virgules)</span></label>
-            <input id="edit-skills" type="text" placeholder="JavaScript, React, Node.js, Python…" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.86rem;outline:none;border-radius:4px"/>
+            <input id="edit-skills" type="text" placeholder="JavaScript, React, Node.js, Python…" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:9px 12px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.86rem;outline:none;border-radius:4px"/>
           </div>
           <div style="margin-bottom:18px">
             <label style="font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px">Couleur du profil</label>
@@ -789,7 +789,7 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
       <div id="explorer-toolbar" style="padding:16px 28px;border-bottom:1px solid var(--muted2);display:flex;align-items:center;gap:12px;flex-wrap:wrap;flex-shrink:0">
         <div style="flex:1;min-width:200px;display:flex;align-items:center;gap:10px;background:var(--muted3);border:1px solid var(--muted2);border-radius:8px;padding:9px 14px;transition:border-color .2s" id="explorer-search-wrap">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--muted);flex-shrink:0"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          <input id="explorer-search" type="text" placeholder="Chercher par nom, skill, entreprise..." style="background:none;border:none;outline:none;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;flex:1" oninput="explorerSearch(this.value)"/>
+          <input id="explorer-search" type="text" placeholder="Chercher par nom, skill, entreprise..." style="background:none;border:none;outline:none;color:var(--white);font-family:DM Sans,sans-serif;font-size:.88rem;flex:1" oninput="explorerSearch(this.value)"/>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap" id="skill-filters"></div>
         <button onclick="explorerLoad()" style="background:none;border:1px solid var(--gold-border);color:var(--gold);padding:8px 14px;font-family:Geist Mono,monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;border-radius:6px;transition:all .2s" onmouseenter="this.style.background='var(--gold-dim)'" onmouseleave="this.style.background='none'">
@@ -801,7 +801,7 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
       <div style="flex:1;overflow-y:auto;padding:28px" id="explorer-grid-wrap">
         <div id="explorer-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px"></div>
         <div id="explorer-empty" style="display:none;text-align:center;padding:80px 20px">
-          <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--white);margin-bottom:8px">Aucun développeur trouvé</div>
+          <div style="font-family:Cormorant Garamond,serif;font-size:2rem;font-weight:300;color:var(--white);margin-bottom:8px">Aucun développeur trouvé</div>
           <div style="font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)">Essaie d'autres filtres</div>
         </div>
       </div>
@@ -848,7 +848,7 @@ let currentUser=null,userProfile=null;
   const{data:{session}}=await sb.auth.getSession();
   if(session){
     currentUser=session.user;
-    const{data}=await sb.from('dc_users').select('*').eq('id',currentUser.id).maybeSingle();
+    const{data}=await sb.from('dc_users').select('id,email,firstname,lastname,initials,color,photo,banner,bio,role,rank,company,skills,status,joined,last_seen').eq('id',currentUser.id).maybeSingle();
     if(!data){
       // Profile missing — create a minimal one
       const email=currentUser.email||'';
@@ -930,10 +930,16 @@ async function submitRegister(){
     if(data.user){
       const colors=['#f59e0b','#3b82f6','#10b981','#8b5cf6','#ef4444','#f97316'];
       await sb.from('dc_users').upsert({id:data.user.id,email,firstname:first,lastname:last,initials:(first[0]+last[0]).toUpperCase(),color:colors[Math.floor(Math.random()*colors.length)],role:'dev',rank:'member',joined:Date.now()});
+      // Auto-login after register
+      const {error:loginErr} = await sb.auth.signInWithPassword({email, password:pwd});
+      if(!loginErr){ closeAuth(); location.reload(); return; }
     }
     closeAuth();
-    alert('Compte créé ! Connecte-toi maintenant.');
+    showErr('reg','');
     switchTab('login');
+    document.getElementById('login-email').value = email;
+    showErr('login','Compte créé ! Connecte-toi maintenant.');
+    document.getElementById('login-err').style.color='var(--gold)';
   }catch(e){showErr('reg',e.message)}
   setLoad('reg',false);
 }
@@ -983,6 +989,8 @@ function setSpace(space){
   const panel=document.getElementById('dpanel');
   const hidePanel=space==='home';
   panel.classList.toggle('hidden',hidePanel);
+  if(space==='explorer') setTimeout(explorerLoad,50);
+  if(space==='profil') setTimeout(()=>{ loadProfileStats(); renderProfile(); },50);
   if(cfg.items.length&&!hidePanel){
     const sec=document.createElement('div');sec.className='dp-section';
     cfg.items.forEach(item=>{
@@ -1177,7 +1185,7 @@ async function loadMessagesSimple(){
 
 // ── Subscribe realtime ──
 function subscribeRealtime(){
-  if(realtimeSub){ sb.removeChannel(realtimeSub); realtimeSub=null; }
+  try{ if(realtimeSub){ sb.removeChannel(realtimeSub); realtimeSub=null; } }catch(e){}
   realtimeSub = sb.channel('chat-'+Date.now())
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'dc_messages'},async payload=>{
       const m = payload.new;
@@ -1726,6 +1734,10 @@ async function saveProfile(){
   const updates = { firstname, lastname, bio, company, skills, color, initials };
 
   const { error } = await sb.from('dc_users').update(updates).eq('id', currentUser.id);
+  if(error && error.code === '42501') {
+    // RLS issue - try with service approach
+    console.error('RLS blocked profile update:', error);
+  }
 
   btn.textContent = 'Enregistrer'; btn.style.opacity='1';
 
@@ -1938,7 +1950,7 @@ async function openDevModal(userId){
     <div style="padding:0 28px 28px">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px">
         <div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:400">${escHtml(name)}</div>
+          <div style="font-family:Cormorant Garamond,serif;font-size:1.7rem;font-weight:400">${escHtml(name)}</div>
           <div style="font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.1em;color:var(--muted)">${escHtml(handle)}${u.company?' · '+escHtml(u.company):''}</div>
         </div>
         <div style="display:flex;gap:8px;flex-shrink:0">
@@ -1950,15 +1962,15 @@ async function openDevModal(userId){
       <!-- Stats -->
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
         <div style="border:1px solid var(--gold-border);padding:14px;border-radius:6px;text-align:center;background:var(--gold-dim)">
-          <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold-light)">${msgs.count||0}</div>
+          <div style="font-family:Cormorant Garamond,serif;font-size:1.6rem;color:var(--gold-light)">${msgs.count||0}</div>
           <div style="font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:3px">Messages</div>
         </div>
         <div style="border:1px solid var(--gold-border);padding:14px;border-radius:6px;text-align:center;background:var(--gold-dim)">
-          <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold-light)">${friends.count||0}</div>
+          <div style="font-family:Cormorant Garamond,serif;font-size:1.6rem;color:var(--gold-light)">${friends.count||0}</div>
           <div style="font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:3px">Amis</div>
         </div>
         <div style="border:1px solid var(--gold-border);padding:14px;border-radius:6px;text-align:center;background:var(--gold-dim)">
-          <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold-light)">${u.joined?Math.floor((Date.now()-u.joined)/(1000*60*60*24)):0}</div>
+          <div style="font-family:Cormorant Garamond,serif;font-size:1.6rem;color:var(--gold-light)">${u.joined?Math.floor((Date.now()-u.joined)/(1000*60*60*24)):0}</div>
           <div style="font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:3px">Jours</div>
         </div>
       </div>
@@ -1974,11 +1986,7 @@ function closeDevModal(){
 }
 
 // Auto-load explorer when entering space
-const _origSetSpace = setSpace;
-setSpace = function(space){
-  _origSetSpace(space);
-  if(space==='explorer') explorerLoad();
-};
+// Explorer auto-load handled in setSpace
 
 
 
@@ -2025,7 +2033,8 @@ async function initAdmin(){
 
   // Show active nav button
   const firstBtn = document.querySelector('#admin-view .nav-btn');
-  if(firstBtn) showPage('dashboard', firstBtn);
+  if(firstBtn){ firstBtn.classList.add('active'); }
+  showPage('dashboard', firstBtn);
   loadDashboard();
 }
 
@@ -2696,11 +2705,11 @@ async function loadDashboard(){
 <div id="admin-view">
   <div id="admin-app">
     <div id="admin-loading-screen">
-      <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold)">Administration</div>
+      <div style="font-family:Cormorant Garamond,serif;font-size:1.6rem;color:var(--gold)">Administration</div>
       <div style="font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.2em;color:var(--muted)">Vérification des droits...</div>
     </div>
     <div id="admin-access-denied">
-      <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold)">Accès refusé</div>
+      <div style="font-family:Cormorant Garamond,serif;font-size:2rem;color:var(--gold)">Accès refusé</div>
       <div style="color:var(--muted);font-size:.9rem">Cette zone est réservée aux administrateurs.</div>
       <button onclick="showAdminPanel(false)" style="margin-top:16px;padding:10px 28px;border:1px solid var(--gold-border);background:none;color:var(--white);font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase">Retour</button>
     </div>
