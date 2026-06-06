@@ -776,7 +776,60 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
       </div></div>
     </div>
     <!-- COMING SOON -->
-    <div class="content-area" id="area-travail"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></span><div class="content-header-title">Travail</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">VS Code intégré · Projets · Collaboration</div></div></div></div>
+    <div class="content-area" id="area-travail">
+  <div class="content-header">
+    <span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></span>
+    <div><div class="content-header-title">Travail</div><div style="font-size:.78rem;color:var(--muted);font-weight:300">Espace de travail collaboratif</div></div>
+    <div class="content-header-sub">Workspace</div>
+  </div>
+  <div class="content-body">
+    <div style="max-width:900px;margin:0 auto">
+
+      <!-- Projects section -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300">Mes Projets</div>
+        <button onclick="createProject()" style="display:flex;align-items:center;gap:8px;padding:9px 20px;border:1px solid var(--gold-border);background:var(--gold-dim);color:var(--gold);font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;border-radius:6px;transition:all .2s" onmouseenter="this.style.background='rgba(200,168,75,.18)'" onmouseleave="this.style.background='var(--gold-dim)'">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nouveau projet
+        </button>
+      </div>
+
+      <div id="projects-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:32px"></div>
+
+      <!-- New project modal -->
+      <div id="new-project-modal" style="display:none;position:fixed;inset:0;z-index:8000;background:rgba(5,5,10,.88);backdrop-filter:blur(16px);align-items:center;justify-content:center" onclick="if(event.target===this)closeProjectModal()">
+        <div style="background:var(--black3);border:1px solid var(--gold-border);width:100%;max-width:480px;padding:36px;position:relative">
+          <button onclick="closeProjectModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:var(--muted);font-size:1.3rem">×</button>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;margin-bottom:24px">Nouveau projet</div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div>
+              <label style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Nom du projet</label>
+              <input id="proj-name" type="text" placeholder="Mon super projet" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;border-radius:6px" onfocus="this.style.borderColor='var(--gold-border)'" onblur="this.style.borderColor='var(--muted2)'"/>
+            </div>
+            <div>
+              <label style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Description</label>
+              <textarea id="proj-desc" placeholder="Description courte..." rows="3" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;border-radius:6px;resize:vertical" onfocus="this.style.borderColor='var(--gold-border)'" onblur="this.style.borderColor='var(--muted2)'"></textarea>
+            </div>
+            <div>
+              <label style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Stack technique</label>
+              <input id="proj-stack" type="text" placeholder="React, Node.js, PostgreSQL..." style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;border-radius:6px" onfocus="this.style.borderColor='var(--gold-border)'" onblur="this.style.borderColor='var(--muted2)'"/>
+            </div>
+            <div>
+              <label style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Visibilité</label>
+              <select id="proj-visibility" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;border-radius:6px">
+                <option value="public">Public</option>
+                <option value="private">Privé</option>
+              </select>
+            </div>
+          </div>
+          <div id="proj-err" style="display:none;color:#e05a5a;font-size:.8rem;margin-top:12px"></div>
+          <button onclick="submitProject()" style="width:100%;margin-top:20px;padding:12px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#000;font-family:'Geist Mono',monospace;font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;border:none;border-radius:6px;transition:all .3s" onmouseenter="this.style.opacity='.9'" onmouseleave="this.style.opacity='1'">Créer le projet</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
     <div class="content-area" id="area-ia"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="3"/></svg></span><div class="content-header-title">Intelligence Artificielle</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Assistants IA · Outils · Génération de code</div></div></div></div>
     <div class="content-area" id="area-apprendre"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></span><div class="content-header-title">Apprendre</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Cours · Défis de code · Certifications</div></div></div></div>
     <div class="content-area" id="area-explorer">
@@ -816,7 +869,106 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
     <div class="content-area" id="area-recommandations"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span><div class="content-header-title">Recommandations</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Projets suggérés · Devs à suivre</div></div></div></div>
     <div class="content-area" id="area-recrutement"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span><div class="content-header-title">Recrutement</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Offres · Candidatures · Matching</div></div></div></div>
     <div class="content-area" id="area-portfolio"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span><div class="content-header-title">Coin Développeur</div><div class="content-header-sub">Bientôt</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Portfolio · Stats · Réseau social dev</div></div></div></div>
-    <div class="content-area" id="area-settings"><div class="content-header"><span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span><div class="content-header-title">Paramètres</div><div class="content-header-sub">Compte</div></div><div class="content-body"><div class="coming-soon"><div class="cs-title">En construction</div><div class="cs-sub">Profil · Confidentialité · Amis · Blocages MP</div></div></div></div>
+    <div class="content-area" id="area-settings">
+  <div class="content-header">
+    <span class="ch-icon-svg"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>
+    <div class="content-header-title">Paramètres</div>
+    <div class="content-header-sub">Compte</div>
+  </div>
+  <div class="content-body">
+    <div style="max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:24px">
+
+      <!-- Compte -->
+      <div style="border:1px solid var(--gold-border);border-radius:8px;overflow:hidden">
+        <div style="padding:18px 24px;border-bottom:1px solid var(--muted2);display:flex;align-items:center;gap:10px">
+          <span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem">Compte</span>
+        </div>
+        <div style="padding:20px 24px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:.9rem" id="settings-email-display">—</div>
+              <div style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.1em;color:var(--muted);margin-top:2px">Adresse e-mail</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:.9rem" id="settings-role-display">—</div>
+              <div style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.1em;color:var(--muted);margin-top:2px">Rôle</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:.9rem" id="settings-joined-display">—</div>
+              <div style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.1em;color:var(--muted);margin-top:2px">Membre depuis</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Changer mot de passe -->
+      <div style="border:1px solid var(--gold-border);border-radius:8px;overflow:hidden">
+        <div style="padding:18px 24px;border-bottom:1px solid var(--muted2)">
+          <span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem">Mot de passe</span>
+        </div>
+        <div style="padding:20px 24px;display:flex;flex-direction:column;gap:12px">
+          <div>
+            <label style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Nouveau mot de passe</label>
+            <input id="settings-new-pwd" type="password" placeholder="••••••••" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;border-radius:6px;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold-border)'" onblur="this.style.borderColor='var(--muted2)'"/>
+          </div>
+          <div>
+            <label style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Confirmer</label>
+            <input id="settings-confirm-pwd" type="password" placeholder="••••••••" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;border-radius:6px;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold-border)'" onblur="this.style.borderColor='var(--muted2)'"/>
+          </div>
+          <div id="settings-pwd-msg" style="display:none;font-size:.82rem;margin-top:4px"></div>
+          <button onclick="changePassword()" style="align-self:flex-start;padding:10px 24px;border:1px solid var(--gold-border);background:var(--gold-dim);color:var(--gold);font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;border-radius:6px;transition:all .2s" onmouseenter="this.style.background='rgba(200,168,75,.18)'" onmouseleave="this.style.background='var(--gold-dim)'">Mettre à jour</button>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div style="border:1px solid var(--gold-border);border-radius:8px;overflow:hidden">
+        <div style="padding:18px 24px;border-bottom:1px solid var(--muted2)">
+          <span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem">Notifications</span>
+        </div>
+        <div style="padding:20px 24px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:.88rem">Nouveaux messages</div>
+              <div style="font-family:'Geist Mono',monospace;font-size:.56rem;color:var(--muted);margin-top:2px">Alertes pour les messages reçus</div>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" id="notif-msg" checked onchange="saveNotifSettings()"><span class="toggle-slider"></span></label>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:.88rem">Demandes d'ami</div>
+              <div style="font-family:'Geist Mono',monospace;font-size:.56rem;color:var(--muted);margin-top:2px">Quand quelqu'un vous ajoute</div>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" id="notif-friend" checked onchange="saveNotifSettings()"><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Amis & blocages -->
+      <div style="border:1px solid var(--gold-border);border-radius:8px;overflow:hidden">
+        <div style="padding:18px 24px;border-bottom:1px solid var(--muted2);display:flex;align-items:center;justify-content:space-between">
+          <span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem">Amis</span>
+          <span id="settings-friends-count" style="font-family:'Geist Mono',monospace;font-size:.58rem;color:var(--muted)">—</span>
+        </div>
+        <div id="settings-friends-list" style="max-height:280px;overflow-y:auto"></div>
+      </div>
+
+      <!-- Zone danger -->
+      <div style="border:1px solid rgba(224,90,90,.3);border-radius:8px;overflow:hidden">
+        <div style="padding:18px 24px;border-bottom:1px solid rgba(224,90,90,.15)">
+          <span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#e05a5a">Zone danger</span>
+        </div>
+        <div style="padding:20px 24px">
+          <button onclick="confirmLogout()" style="padding:10px 24px;border:1px solid rgba(224,90,90,.4);background:none;color:#e05a5a;font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;border-radius:6px;transition:all .2s" onmouseenter="this.style.background='rgba(224,90,90,.08)'" onmouseleave="this.style.background='none'">Se déconnecter</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
   </main>
 </div>
 
@@ -991,6 +1143,8 @@ function setSpace(space){
   panel.classList.toggle('hidden',hidePanel);
   if(space==='explorer') setTimeout(explorerLoad,50);
   if(space==='profil') setTimeout(()=>{ loadProfileStats(); renderProfile(); },50);
+  if(space==='settings') setTimeout(()=>{ initSettings(); loadNotifSettings(); },50);
+  if(space==='travail') setTimeout(loadProjects,50);
   if(cfg.items.length&&!hidePanel){
     const sec=document.createElement('div');sec.className='dp-section';
     cfg.items.forEach(item=>{
@@ -1734,10 +1888,6 @@ async function saveProfile(){
   const updates = { firstname, lastname, bio, company, skills, color, initials };
 
   const { error } = await sb.from('dc_users').update(updates).eq('id', currentUser.id);
-  if(error && error.code === '42501') {
-    // RLS issue - try with service approach
-    console.error('RLS blocked profile update:', error);
-  }
 
   btn.textContent = 'Enregistrer'; btn.style.opacity='1';
 
@@ -2699,7 +2849,168 @@ async function loadDashboard(){
 // ══════════════════════════════════════════════════════
 // ══════════════════════════════════════════════════════
 //  UTILS
-// ══════════════════════════════════════════════════════</script>
+// ══════════════════════════════════════════════════════
+
+// ══════════════════════════════════════════════════════
+//  SETTINGS
+// ══════════════════════════════════════════════════════
+
+function initSettings(){
+  if(!userProfile) return;
+  const el = id => document.getElementById(id);
+  if(el('settings-email-display')) el('settings-email-display').textContent = userProfile.email || '—';
+  const roles = {founder:'Fondateur',cofounder:'Co-Fondateur',admin:'Administrateur',mod:'Modérateur',dev:'Développeur',member:'Membre'};
+  if(el('settings-role-display')) el('settings-role-display').textContent = roles[userProfile.role] || userProfile.role || 'Développeur';
+  if(el('settings-joined-display') && userProfile.joined) el('settings-joined-display').textContent = new Date(userProfile.joined).toLocaleDateString('fr',{day:'numeric',month:'long',year:'numeric'});
+  loadSettingsFriends();
+}
+
+async function loadSettingsFriends(){
+  const list = document.getElementById('settings-friends-list');
+  const count = document.getElementById('settings-friends-count');
+  if(!list) return;
+  const {data} = await sb.from('dc_friends')
+    .select('*').or(`from_id.eq.${currentUser.id},to_id.eq.${currentUser.id}`)
+    .eq('status','accepted');
+  if(!data){ list.innerHTML=''; return; }
+  if(count) count.textContent = data.length + ' ami' + (data.length!==1?'s':'');
+  const otherIds = data.map(f => f.from_id===currentUser.id ? f.to_id : f.from_id);
+  if(!otherIds.length){ list.innerHTML='<div style="padding:16px 24px;color:var(--muted);font-size:.84rem">Aucun ami pour l'instant.</div>'; return; }
+  const {data:users} = await sb.from('dc_users').select('id,firstname,lastname,initials,color,email').in('id',otherIds);
+  list.innerHTML = (users||[]).map(u => {
+    const c = u.color||'#C8A84B';
+    const n = ((u.firstname||'')+(u.lastname?' '+u.lastname:'')).trim()||u.email||'?';
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-bottom:1px solid var(--muted2)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:32px;height:32px;border-radius:50%;background:${c}22;color:${c};display:flex;align-items:center;justify-content:center;font-family:Geist Mono,monospace;font-size:.6rem">${u.initials||'?'}</div>
+        <div style="font-size:.88rem">${escHtml(n)}</div>
+      </div>
+      <button onclick="removeFriend('${u.id}')" style="background:none;border:1px solid rgba(224,90,90,.3);color:#e05a5a;padding:5px 12px;font-family:Geist Mono,monospace;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;border-radius:4px;transition:all .2s" onmouseenter="this.style.background='rgba(224,90,90,.08)'" onmouseleave="this.style.background='none'">Retirer</button>
+    </div>`;
+  }).join('');
+}
+
+async function removeFriend(userId){
+  await sb.from('dc_friends').delete()
+    .or(`and(from_id.eq.${currentUser.id},to_id.eq.${userId}),and(from_id.eq.${userId},to_id.eq.${currentUser.id})`);
+  loadSettingsFriends();
+}
+
+async function changePassword(){
+  const pwd = document.getElementById('settings-new-pwd').value;
+  const confirm = document.getElementById('settings-confirm-pwd').value;
+  const msg = document.getElementById('settings-pwd-msg');
+  msg.style.display = 'block';
+  if(pwd.length < 8){ msg.style.color='#e05a5a'; msg.textContent='Minimum 8 caractères.'; return; }
+  if(pwd !== confirm){ msg.style.color='#e05a5a'; msg.textContent='Les mots de passe ne correspondent pas.'; return; }
+  const {error} = await sb.auth.updateUser({password:pwd});
+  if(error){ msg.style.color='#e05a5a'; msg.textContent=error.message; return; }
+  msg.style.color='var(--gold)'; msg.textContent='Mot de passe mis à jour.';
+  document.getElementById('settings-new-pwd').value='';
+  document.getElementById('settings-confirm-pwd').value='';
+}
+
+function saveNotifSettings(){
+  const prefs = {
+    msg: document.getElementById('notif-msg')?.checked,
+    friend: document.getElementById('notif-friend')?.checked,
+  };
+  localStorage.setItem('dc_notif_prefs', JSON.stringify(prefs));
+}
+
+function loadNotifSettings(){
+  try {
+    const prefs = JSON.parse(localStorage.getItem('dc_notif_prefs')||'{}');
+    if(document.getElementById('notif-msg') && prefs.msg !== undefined) document.getElementById('notif-msg').checked = prefs.msg;
+    if(document.getElementById('notif-friend') && prefs.friend !== undefined) document.getElementById('notif-friend').checked = prefs.friend;
+  } catch(e){}
+}
+
+function confirmLogout(){
+  if(confirm('Se déconnecter ?')) logout();
+}
+
+// ══════════════════════════════════════════════════════
+//  TRAVAIL — PROJETS
+// ══════════════════════════════════════════════════════
+
+async function loadProjects(){
+  const grid = document.getElementById('projects-grid');
+  if(!grid) return;
+  grid.innerHTML = '<div style="color:var(--muted);font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.14em;padding:20px">Chargement...</div>';
+  const {data} = await sb.from('dc_posts')
+    .select('*').eq('user_id', currentUser.id).eq('type','project')
+    .order('ts',{ascending:false});
+  if(!data || !data.length){
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px"><div style="font-family:Cormorant Garamond,serif;font-size:1.6rem;font-weight:300;color:var(--white);margin-bottom:8px">Aucun projet</div><div style="font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)">Crée ton premier projet</div></div>';
+    return;
+  }
+  grid.innerHTML = data.map(p => {
+    const stack = (p.body||'').split('||')[1]||'';
+    const desc = (p.body||'').split('||')[0]||'';
+    const tags = stack.split(',').map(s=>s.trim()).filter(Boolean);
+    return `<div style="border:1px solid var(--muted2);border-radius:8px;padding:20px;background:var(--black3);transition:all .3s;position:relative" onmouseenter="this.style.borderColor='var(--gold-border)';this.style.transform='translateY(-2px)'" onmouseleave="this.style.borderColor='var(--muted2)';this.style.transform='none'">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+        <div style="font-family:Cormorant Garamond,serif;font-size:1.2rem;font-weight:400">${escHtml(p.title||'Sans titre')}</div>
+        <button onclick="deleteProject('${p.id}')" style="background:none;border:none;color:var(--muted);font-size:.9rem;padding:2px 6px;transition:color .2s;line-height:1" onmouseenter="this.style.color='#e05a5a'" onmouseleave="this.style.color='var(--muted)'">×</button>
+      </div>
+      <div style="font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:12px">${escHtml(desc)}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px">${tags.map(t=>`<span style="font-family:Geist Mono,monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--gold-border);color:var(--gold);border-radius:3px">${escHtml(t)}</span>`).join('')}</div>
+      <div style="margin-top:12px;font-family:Geist Mono,monospace;font-size:.52rem;color:var(--muted);letter-spacing:.08em">${p.ts?new Date(p.ts).toLocaleDateString('fr'):'—'}</div>
+    </div>`;
+  }).join('');
+}
+
+function createProject(){
+  document.getElementById('new-project-modal').style.display='flex';
+  setTimeout(()=>document.getElementById('proj-name').focus(),100);
+}
+function closeProjectModal(){
+  document.getElementById('new-project-modal').style.display='none';
+  document.getElementById('proj-name').value='';
+  document.getElementById('proj-desc').value='';
+  document.getElementById('proj-stack').value='';
+  document.getElementById('proj-err').style.display='none';
+}
+
+async function submitProject(){
+  const name = document.getElementById('proj-name').value.trim();
+  const desc = document.getElementById('proj-desc').value.trim();
+  const stack = document.getElementById('proj-stack').value.trim();
+  const vis = document.getElementById('proj-visibility').value;
+  const err = document.getElementById('proj-err');
+  if(!name){ err.style.display='block'; err.textContent='Le nom est requis.'; return; }
+  const id = 'proj_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+  const {error} = await sb.from('dc_posts').insert({
+    id, user_id:currentUser.id, type:'project',
+    title:name, body:desc+'||'+stack,
+    ts:Date.now()
+  });
+  if(error){ err.style.display='block'; err.textContent=error.message; return; }
+  closeProjectModal();
+  loadProjects();
+}
+
+async function deleteProject(id){
+  if(!confirm('Supprimer ce projet ?')) return;
+  await sb.from('dc_posts').delete().eq('id',id).eq('user_id',currentUser.id);
+  loadProjects();
+}
+
+// ══════════════════════════════════════════════════════
+//  TOGGLE SWITCH CSS
+// ══════════════════════════════════════════════════════
+
+// Inject toggle CSS if not present
+(function(){
+  if(document.getElementById('toggle-css')) return;
+  const s = document.createElement('style');
+  s.id = 'toggle-css';
+  s.textContent = `.toggle-switch{position:relative;display:inline-block;width:40px;height:22px}.toggle-switch input{opacity:0;width:0;height:0}.toggle-slider{position:absolute;cursor:none;inset:0;background:var(--muted2);border-radius:22px;transition:.3s}.toggle-slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;bottom:3px;background:var(--white);border-radius:50%;transition:.3s}.toggle-switch input:checked+.toggle-slider{background:var(--gold-dim);border:1px solid var(--gold-border)}.toggle-switch input:checked+.toggle-slider::before{transform:translateX(18px);background:var(--gold)}`;
+  document.head.appendChild(s);
+})();
+
+</script>
 
 <!-- ═══ ADMIN VIEW ═══ -->
 <div id="admin-view">
