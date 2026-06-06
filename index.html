@@ -787,8 +787,8 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
 
       <!-- Projects section -->
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300">Mes Projets</div>
-        <button onclick="createProject()" style="display:flex;align-items:center;gap:8px;padding:9px 20px;border:1px solid var(--gold-border);background:var(--gold-dim);color:var(--gold);font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;border-radius:6px;transition:all .2s" onmouseenter="this.style.background='rgba(200,168,75,.18)'" onmouseleave="this.style.background='var(--gold-dim)'">
+        <div style="font-family:Cormorant Garamond,serif;font-size:1.8rem;font-weight:300">Mes Projets</div>
+        <button onclick="createProject()" style="display:flex;align-items:center;gap:8px;padding:9px 20px;border:1px solid var(--gold-border);background:var(--gold-dim);color:var(--gold);font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;border-radius:6px;transition:all .2s" onmouseenter="this.style.background='rgba(200,168,75,.18)'" onmouseleave="this.style.background='var(--gold-dim)'">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Nouveau projet
         </button>
@@ -800,30 +800,30 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
       <div id="new-project-modal" style="display:none;position:fixed;inset:0;z-index:8000;background:rgba(5,5,10,.88);backdrop-filter:blur(16px);align-items:center;justify-content:center" onclick="if(event.target===this)closeProjectModal()">
         <div style="background:var(--black3);border:1px solid var(--gold-border);width:100%;max-width:480px;padding:36px;position:relative">
           <button onclick="closeProjectModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:var(--muted);font-size:1.3rem">×</button>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;margin-bottom:24px">Nouveau projet</div>
+          <div style="font-family:Cormorant Garamond,serif;font-size:1.5rem;margin-bottom:24px">Nouveau projet</div>
           <div style="display:flex;flex-direction:column;gap:14px">
             <div>
-              <label style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Nom du projet</label>
-              <input id="proj-name" type="text" placeholder="Mon super projet" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;border-radius:6px" onfocus="this.style.borderColor='var(--gold-border)'" onblur="this.style.borderColor='var(--muted2)'"/>
+              <label style="font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Nom du projet</label>
+              <input id="proj-name" type="text" placeholder="Mon super projet" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.88rem;outline:none;border-radius:6px" onfocus="this.style.borderColor='var(--gold-border)'" onblur="this.style.borderColor='var(--muted2)'"/>
             </div>
             <div>
-              <label style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Description</label>
-              <textarea id="proj-desc" placeholder="Description courte..." rows="3" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;border-radius:6px;resize:vertical" onfocus="this.style.borderColor='var(--gold-border)'" onblur="this.style.borderColor='var(--muted2)'"></textarea>
+              <label style="font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Description</label>
+              <textarea id="proj-desc" placeholder="Description courte..." rows="3" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.88rem;outline:none;border-radius:6px;resize:vertical" onfocus="this.style.borderColor='var(--gold-border)'" onblur="this.style.borderColor='var(--muted2)'"></textarea>
             </div>
             <div>
-              <label style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Stack technique</label>
-              <input id="proj-stack" type="text" placeholder="React, Node.js, PostgreSQL..." style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;border-radius:6px" onfocus="this.style.borderColor='var(--gold-border)'" onblur="this.style.borderColor='var(--muted2)'"/>
+              <label style="font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Stack technique</label>
+              <input id="proj-stack" type="text" placeholder="React, Node.js, PostgreSQL..." style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.88rem;outline:none;border-radius:6px" onfocus="this.style.borderColor='var(--gold-border)'" onblur="this.style.borderColor='var(--muted2)'"/>
             </div>
             <div>
-              <label style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Visibilité</label>
-              <select id="proj-visibility" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;border-radius:6px">
+              <label style="font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Visibilité</label>
+              <select id="proj-visibility" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.88rem;outline:none;border-radius:6px">
                 <option value="public">Public</option>
                 <option value="private">Privé</option>
               </select>
             </div>
           </div>
           <div id="proj-err" style="display:none;color:#e05a5a;font-size:.8rem;margin-top:12px"></div>
-          <button onclick="submitProject()" style="width:100%;margin-top:20px;padding:12px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#000;font-family:'Geist Mono',monospace;font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;border:none;border-radius:6px;transition:all .3s" onmouseenter="this.style.opacity='.9'" onmouseleave="this.style.opacity='1'">Créer le projet</button>
+          <button onclick="submitProject()" style="width:100%;margin-top:20px;padding:12px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#000;font-family:Geist Mono,monospace;font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;border:none;border-radius:6px;transition:all .3s" onmouseenter="this.style.opacity='.9'" onmouseleave="this.style.opacity='1'">Créer le projet</button>
         </div>
       </div>
 
@@ -881,25 +881,25 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
       <!-- Compte -->
       <div style="border:1px solid var(--gold-border);border-radius:8px;overflow:hidden">
         <div style="padding:18px 24px;border-bottom:1px solid var(--muted2);display:flex;align-items:center;gap:10px">
-          <span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem">Compte</span>
+          <span style="font-family:Cormorant Garamond,serif;font-size:1.2rem">Compte</span>
         </div>
         <div style="padding:20px 24px;display:flex;flex-direction:column;gap:14px">
           <div style="display:flex;align-items:center;justify-content:space-between">
             <div>
               <div style="font-size:.9rem" id="settings-email-display">—</div>
-              <div style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.1em;color:var(--muted);margin-top:2px">Adresse e-mail</div>
+              <div style="font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.1em;color:var(--muted);margin-top:2px">Adresse e-mail</div>
             </div>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between">
             <div>
               <div style="font-size:.9rem" id="settings-role-display">—</div>
-              <div style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.1em;color:var(--muted);margin-top:2px">Rôle</div>
+              <div style="font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.1em;color:var(--muted);margin-top:2px">Rôle</div>
             </div>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between">
             <div>
               <div style="font-size:.9rem" id="settings-joined-display">—</div>
-              <div style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.1em;color:var(--muted);margin-top:2px">Membre depuis</div>
+              <div style="font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.1em;color:var(--muted);margin-top:2px">Membre depuis</div>
             </div>
           </div>
         </div>
@@ -908,39 +908,39 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
       <!-- Changer mot de passe -->
       <div style="border:1px solid var(--gold-border);border-radius:8px;overflow:hidden">
         <div style="padding:18px 24px;border-bottom:1px solid var(--muted2)">
-          <span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem">Mot de passe</span>
+          <span style="font-family:Cormorant Garamond,serif;font-size:1.2rem">Mot de passe</span>
         </div>
         <div style="padding:20px 24px;display:flex;flex-direction:column;gap:12px">
           <div>
-            <label style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Nouveau mot de passe</label>
-            <input id="settings-new-pwd" type="password" placeholder="••••••••" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;border-radius:6px;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold-border)'" onblur="this.style.borderColor='var(--muted2)'"/>
+            <label style="font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Nouveau mot de passe</label>
+            <input id="settings-new-pwd" type="password" placeholder="••••••••" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.88rem;outline:none;border-radius:6px;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold-border)'" onblur="this.style.borderColor='var(--muted2)'"/>
           </div>
           <div>
-            <label style="font-family:'Geist Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Confirmer</label>
-            <input id="settings-confirm-pwd" type="password" placeholder="••••••••" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;border-radius:6px;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold-border)'" onblur="this.style.borderColor='var(--muted2)'"/>
+            <label style="font-family:Geist Mono,monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px">Confirmer</label>
+            <input id="settings-confirm-pwd" type="password" placeholder="••••••••" style="width:100%;background:var(--muted3);border:1px solid var(--muted2);padding:10px 14px;color:var(--white);font-family:DM Sans,sans-serif;font-size:.88rem;outline:none;border-radius:6px;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold-border)'" onblur="this.style.borderColor='var(--muted2)'"/>
           </div>
           <div id="settings-pwd-msg" style="display:none;font-size:.82rem;margin-top:4px"></div>
-          <button onclick="changePassword()" style="align-self:flex-start;padding:10px 24px;border:1px solid var(--gold-border);background:var(--gold-dim);color:var(--gold);font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;border-radius:6px;transition:all .2s" onmouseenter="this.style.background='rgba(200,168,75,.18)'" onmouseleave="this.style.background='var(--gold-dim)'">Mettre à jour</button>
+          <button onclick="changePassword()" style="align-self:flex-start;padding:10px 24px;border:1px solid var(--gold-border);background:var(--gold-dim);color:var(--gold);font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;border-radius:6px;transition:all .2s" onmouseenter="this.style.background='rgba(200,168,75,.18)'" onmouseleave="this.style.background='var(--gold-dim)'">Mettre à jour</button>
         </div>
       </div>
 
       <!-- Notifications -->
       <div style="border:1px solid var(--gold-border);border-radius:8px;overflow:hidden">
         <div style="padding:18px 24px;border-bottom:1px solid var(--muted2)">
-          <span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem">Notifications</span>
+          <span style="font-family:Cormorant Garamond,serif;font-size:1.2rem">Notifications</span>
         </div>
         <div style="padding:20px 24px;display:flex;flex-direction:column;gap:14px">
           <div style="display:flex;align-items:center;justify-content:space-between">
             <div>
               <div style="font-size:.88rem">Nouveaux messages</div>
-              <div style="font-family:'Geist Mono',monospace;font-size:.56rem;color:var(--muted);margin-top:2px">Alertes pour les messages reçus</div>
+              <div style="font-family:Geist Mono,monospace;font-size:.56rem;color:var(--muted);margin-top:2px">Alertes pour les messages reçus</div>
             </div>
             <label class="toggle-switch"><input type="checkbox" id="notif-msg" checked onchange="saveNotifSettings()"><span class="toggle-slider"></span></label>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between">
             <div>
               <div style="font-size:.88rem">Demandes d'ami</div>
-              <div style="font-family:'Geist Mono',monospace;font-size:.56rem;color:var(--muted);margin-top:2px">Quand quelqu'un vous ajoute</div>
+              <div style="font-family:Geist Mono,monospace;font-size:.56rem;color:var(--muted);margin-top:2px">Quand quelqu'un vous ajoute</div>
             </div>
             <label class="toggle-switch"><input type="checkbox" id="notif-friend" checked onchange="saveNotifSettings()"><span class="toggle-slider"></span></label>
           </div>
@@ -950,8 +950,8 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
       <!-- Amis & blocages -->
       <div style="border:1px solid var(--gold-border);border-radius:8px;overflow:hidden">
         <div style="padding:18px 24px;border-bottom:1px solid var(--muted2);display:flex;align-items:center;justify-content:space-between">
-          <span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem">Amis</span>
-          <span id="settings-friends-count" style="font-family:'Geist Mono',monospace;font-size:.58rem;color:var(--muted)">—</span>
+          <span style="font-family:Cormorant Garamond,serif;font-size:1.2rem">Amis</span>
+          <span id="settings-friends-count" style="font-family:Geist Mono,monospace;font-size:.58rem;color:var(--muted)">—</span>
         </div>
         <div id="settings-friends-list" style="max-height:280px;overflow-y:auto"></div>
       </div>
@@ -959,10 +959,10 @@ tbody td{padding:13px 16px;font-size:.86rem;vertical-align:middle}
       <!-- Zone danger -->
       <div style="border:1px solid rgba(224,90,90,.3);border-radius:8px;overflow:hidden">
         <div style="padding:18px 24px;border-bottom:1px solid rgba(224,90,90,.15)">
-          <span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#e05a5a">Zone danger</span>
+          <span style="font-family:Cormorant Garamond,serif;font-size:1.2rem;color:#e05a5a">Zone danger</span>
         </div>
         <div style="padding:20px 24px">
-          <button onclick="confirmLogout()" style="padding:10px 24px;border:1px solid rgba(224,90,90,.4);background:none;color:#e05a5a;font-family:'Geist Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;border-radius:6px;transition:all .2s" onmouseenter="this.style.background='rgba(224,90,90,.08)'" onmouseleave="this.style.background='none'">Se déconnecter</button>
+          <button onclick="confirmLogout()" style="padding:10px 24px;border:1px solid rgba(224,90,90,.4);background:none;color:#e05a5a;font-family:Geist Mono,monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;border-radius:6px;transition:all .2s" onmouseenter="this.style.background='rgba(224,90,90,.08)'" onmouseleave="this.style.background='none'">Se déconnecter</button>
         </div>
       </div>
 
