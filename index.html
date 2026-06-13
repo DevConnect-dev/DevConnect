@@ -1096,14 +1096,14 @@ tailwind.config = {
   // ==========================================
   // CONFIGURATION SUPABASE - REMPLACE ICI !
   // ==========================================
-  const SUPABASE_URL = 'TA_SUPABASE_URL_ICI';
-  const SUPABASE_ANON_KEY = 'TA_SUPABASE_ANON_KEY_ICI';
+  const SUPABASE_URL = 'https://ekezdtageniidwjlgyys.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVrZXpkdGFnZW5paWR3amxneXlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwMTg3NDgsImV4cCI6MjA5NDU5NDc0OH0.aolWqRWGp2sJyHsm3vFNx6wVEyt1uEc7rM5i4fDgb88';
   
   let supabaseClient = null;  // ⚠️ RENOMMÉ pour éviter le conflit
   let currentUser = null;
 
   // Initialisation
-  if (SUPABASE_URL !== 'TA_SUPABASE_URL_ICI' && SUPABASE_ANON_KEY !== 'TA_SUPABASE_ANON_KEY_ICI') {
+  if (SUPABASE_URL !== 'https://ekezdtageniidwjlgyys.supabase.co' && SUPABASE_ANON_KEY !== 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVrZXpkdGFnZW5paWR3amxneXlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwMTg3NDgsImV4cCI6MjA5NDU5NDc0OH0.aolWqRWGp2sJyHsm3vFNx6wVEyt1uEc7rM5i4fDgb88') {
     supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     console.log('✅ Supabase connecté');
   } else {
