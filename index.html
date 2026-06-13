@@ -1096,7 +1096,7 @@ tailwind.config = {
 // ==========================================
 // CONFIGURATION SUPABASE
 // ==========================================
-const SUPABASE_URL = 'https://ekezdtageniidwjlgyys.supabase.co';
+const SUPABASE_URL = 'https://ekezdtageniidwjlgyys.supabaseClient.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVrZXpkdGFnZW5paWR3amxneXlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwMTg3NDgsImV4cCI6MjA5NDU5NDc0OH0.aolWqRWGp2sJyHsm3vFNx6wVEyt1uEc7rM5i4fDgb88';
 
 let supabaseClient = null;
@@ -1120,7 +1120,7 @@ console.log('✅ Supabase connecté avec tes vraies clés !');
       return;
     }
     
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
       email,
       password
     });
@@ -1154,7 +1154,7 @@ console.log('✅ Supabase connecté avec tes vraies clés !');
       return;
     }
     
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabaseClient.auth.signUp({
       email,
       password,
       options: {
@@ -1171,7 +1171,7 @@ console.log('✅ Supabase connecté avec tes vraies clés !');
     }
     
     // Créer le profil dans la table profiles
-    await supabase.from('profiles').insert({
+    await supabaseClient.from('profiles').insert({
       id: data.user.id,
       email,
       first_name: firstName,
@@ -1195,7 +1195,7 @@ console.log('✅ Supabase connecté avec tes vraies clés !');
   
   async function logout() {
     if (supabase) {
-      await supabase.auth.signOut();
+      await supabaseClient.auth.signOut();
     }
     currentUser = null;
     location.reload();
@@ -1448,17 +1448,17 @@ console.log('✅ Supabase connecté avec tes vraies clés !');
     if (!supabase) return;
     
     // Total membres
-    const { count: totalMembers } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+    const { count: totalMembers } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
     document.getElementById('admin-total-members').textContent = totalMembers || '0';
     
     // Premium
-    const { count: premiumCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('is_premium', true);
+    const { count: premiumCount } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true }).eq('is_premium', true);
     document.getElementById('admin-premium').textContent = premiumCount || '0';
     
     // Messages 24h
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const { count: msgs24h } = await supabase.from('messages').select('*', { count: 'exact', head: true }).gte('created_at', yesterday.toISOString());
+    const { count: msgs24h } = await supabaseClient.from('messages').select('*', { count: 'exact', head: true }).gte('created_at', yesterday.toISOString());
     document.getElementById('admin-msgs-24h').textContent = msgs24h || '0';
     
     // Revenus (simulation)
@@ -1466,7 +1466,7 @@ console.log('✅ Supabase connecté avec tes vraies clés !');
     document.getElementById('admin-revenue').textContent = revenue.toFixed(2) + '€';
     
     // Derniers membres
-    const { data: recentMembers } = await supabase.from('profiles').select('*').order('created_at', { ascending: false }).limit(5);
+    const { data: recentMembers } = await supabaseClient.from('profiles').select('*').order('created_at', { ascending: false }).limit(5);
     const membersContainer = document.getElementById('admin-recent-members');
     if (recentMembers && recentMembers.length > 0) {
       membersContainer.innerHTML = recentMembers.map(member => `
@@ -1484,7 +1484,7 @@ console.log('✅ Supabase connecté avec tes vraies clés !');
     }
     
     // Derniers messages
-    const { data: recentMsgs } = await supabase.from('messages').select(`
+    const { data: recentMsgs } = await supabaseClient.from('messages').select(`
       content,
       created_at,
       profiles:user_id (first_name, last_name)
@@ -1574,7 +1574,7 @@ console.log('✅ Supabase connecté avec tes vraies clés !');
       return;
     }
     
-    const { error } = await supabase.from('messages').insert({
+    const { error } = await supabaseClient.from('messages').insert({
       user_id: currentUser.id,
       channel: currentChannel,
       content
@@ -1611,7 +1611,7 @@ console.log('✅ Supabase connecté avec tes vraies clés !');
       return;
     }
     
-    const { error } = await supabase.from('projects').insert(project);
+    const { error } = await supabaseClient.from('projects').insert(project);
     
     if (error) {
       alert('Erreur: ' + error.message);
@@ -1636,7 +1636,7 @@ console.log('✅ Supabase connecté avec tes vraies clés !');
     const price = tier === 'dev-plus' ? '4,99€' : '9,99€';
     if (confirm(`Activer l'abonnement ${tier === 'dev-plus' ? 'Dev+' : 'Builder Pro'} pour ${price}/mois ?`)) {
       if (supabase) {
-        await supabase.from('profiles').update({
+        await supabaseClient.from('profiles').update({
           is_premium: true,
           premium_tier: tier,
           premium_since: new Date().toISOString()
@@ -1664,7 +1664,7 @@ console.log('✅ Supabase connecté avec tes vraies clés !');
     const title = prompt('Titre (ex: Développeur Full Stack):', currentUser.title || '');
     
     if (bio !== null && supabase) {
-      supabase.from('profiles').update({ bio, title }).eq('id', currentUser.id);
+      supabaseClient.from('profiles').update({ bio, title }).eq('id', currentUser.id);
       currentUser.bio = bio;
       currentUser.title = title;
       document.getElementById('profile-bio').textContent = bio || 'Aucune bio.';
@@ -1755,7 +1755,6 @@ console.log('✅ Supabase connecté avec tes vraies clés !');
   
   // Enter pour envoyer message
   document.addEventListener('DOMContentLoaded', () => {
-    initSupabase();
     
     const msgInput = document.getElementById('msg-input');
     if (msgInput) {
