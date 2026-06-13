@@ -1093,630 +1093,230 @@ tailwind.config = {
 </div>
 
 <script>
-// ==========================================
-// CONFIGURATION SUPABASE
-// ==========================================
-const SUPABASE_URL = 'https://ekezdtageniidwjlgyys.supabaseClient.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVrZXpkdGFnZW5paWR3amxneXlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwMTg3NDgsImV4cCI6MjA5NDU5NDc0OH0.aolWqRWGp2sJyHsm3vFNx6wVEyt1uEc7rM5i4fDgb88';
+  // ==========================================
+  // CONFIGURATION SUPABASE
+  // ==========================================
+  const SUPABASE_URL = 'https://ekezdtageniidwjlgyys.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVrZXpkdGFnZW5paWR3amxneXlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwMTg3NDgsImV4cCI6MjA5NDU5NDc0OH0.aolWqRWGp2sJyHsm3vFNx6wVEyt1uEc7rM5i4fDgb88';
 
-let supabaseClient = null;
-let currentUser = null;
-let currentChannel = 'general';
+  let supabaseClient = null;
+  let currentUser = null;
+  let currentChannel = 'general';
 
-// Initialisation immédiate
-supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-console.log('✅ Supabase connecté avec tes vraies clés !');
-  
-  // ============================================
+  // Initialisation immédiate
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  console.log('✅ Supabase connecté avec tes vraies clés !');
+
+  // ==========================================
   // AUTHENTIFICATION
-  // ============================================
-  async function handleLogin(e) {
-    e.preventDefault();
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-    
-    if (!supabase) {
-      alert('Supabase non configuré. Utilise le mode démo ou configure tes clés.');
-      return;
-    }
-    
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email,
-      password
-    });
-    
-    if (error) {
-      alert('Erreur de connexion: ' + error.message);
-      return;
-    }
-    
-    // Récupérer les infos utilisateur depuis la table profiles
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', data.user.id)
-      .single();
-    
-    currentUser = profile || data.user;
-    closeModal('login');
-    enterApp();
-  }
-  
+  // ==========================================
   async function handleSignup(e) {
     e.preventDefault();
+    if (!supabaseClient) { alert("Erreur: Supabase non configuré."); return; }
+    
     const firstName = document.getElementById('signup-firstname').value;
     const lastName = document.getElementById('signup-lastname').value;
     const email = document.getElementById('signup-email').value;
     const password = document.getElementById('signup-password').value;
-    
-    if (!supabase) {
-      alert('Supabase non configuré. Utilise le mode démo ou configure tes clés.');
-      return;
-    }
-    
+
     const { data, error } = await supabaseClient.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          first_name: firstName,
-          last_name: lastName
-        }
-      }
+      email, password,
+      options: { data: { first_name: firstName, last_name: lastName } }
     });
+
+    if (error) { alert("Erreur: " + error.message); return; }
     
-    if (error) {
-      alert('Erreur d\'inscription: ' + error.message);
-      return;
+    if (data.user) {
+      await supabaseClient.from('profiles').upsert({
+        id: data.user.id, email, first_name: firstName, last_name: lastName
+      });
     }
     
-    // Créer le profil dans la table profiles
-    await supabaseClient.from('profiles').insert({
-      id: data.user.id,
-      email,
-      first_name: firstName,
-      last_name: lastName,
-      is_premium: false,
-      is_admin: false
-    });
-    
-    currentUser = {
-      id: data.user.id,
-      email,
-      first_name: firstName,
-      last_name: lastName,
-      is_premium: false,
-      is_admin: false
-    };
-    
+    alert("Compte créé ! Vérifie tes emails, puis connecte-toi.");
     closeModal('signup');
+    openModal('login');
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    if (!supabaseClient) { alert("Erreur: Supabase non configuré."); return; }
+    
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    if (error) { alert("Erreur: " + error.message); return; }
+    
+    const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', data.user.id).single();
+    currentUser = profile || data.user;
+    
     enterApp();
   }
-  
+
   async function logout() {
-    if (supabase) {
-      await supabaseClient.auth.signOut();
-    }
-    currentUser = null;
+    if (supabaseClient) await supabaseClient.auth.signOut();
     location.reload();
   }
-  
+
   function enterApp() {
     document.getElementById('landing').classList.remove('active');
     document.getElementById('landing').classList.add('hidden');
     document.getElementById('app').classList.remove('hidden');
     document.getElementById('app').classList.add('active');
-    updateUIForUser();
-    loadDashboardData();
+    updateUI();
+    loadStats();
   }
-  
-  // ============================================
-  // UI UPDATES
-  // ============================================
-  function updateUIForUser() {
+
+  function updateUI() {
     if (!currentUser) return;
-    
-    // Mettre à jour les infos utilisateur
-    const name = currentUser.first_name || currentUser.email?.split('@')[0] || 'Utilisateur';
-    document.getElementById('user-name').textContent = name;
+    const name = currentUser.first_name || currentUser.email.split('@')[0];
+    document.getElementById('header-name').textContent = name;
     document.getElementById('user-greeting').textContent = `Bienvenue, ${name}`;
-    document.getElementById('user-avatar').textContent = name.charAt(0).toUpperCase();
-    
-    // Profil
-    document.getElementById('profile-name').textContent = `${currentUser.first_name || ''} ${currentUser.last_name || ''}`.trim() || name;
+    document.getElementById('header-avatar').textContent = name.charAt(0).toUpperCase();
+    document.getElementById('profile-name').textContent = `${currentUser.first_name || ''} ${currentUser.last_name || ''}`.trim();
     document.getElementById('profile-avatar').textContent = name.charAt(0).toUpperCase();
-    
-    // Badge Premium
-    if (currentUser.is_premium) {
-      document.getElementById('profile-badge').classList.remove('hidden');
-      
-      // Activer le thème Premium Luxury (blanc/argent)
-      document.body.classList.add('premium-theme');
-      
-      // Changer le logo en version chrome pour Builder Pro
-      if (currentUser.premium_tier === 'builder-pro') {
-        document.querySelectorAll('.bg-gradient-to-br.from-blue-400').forEach(el => {
-          el.classList.remove('from-blue-400', 'to-blue-600');
-          el.classList.add('from-gray-300', 'to-gray-500');
-        });
-      }
-    }
-    
-    // Afficher bouton Admin si admin
-    if (currentUser.is_admin) {
-      document.getElementById('admin-btn').classList.remove('hidden');
-    }
-    
-    // Settings
     document.getElementById('settings-email').value = currentUser.email || '';
     document.getElementById('settings-role').textContent = currentUser.is_admin ? 'Administrateur' : (currentUser.is_premium ? 'Premium' : 'Membre');
     document.getElementById('settings-joined').textContent = currentUser.created_at ? new Date(currentUser.created_at).toLocaleDateString('fr-FR') : '—';
-  }
-  
-  async function loadDashboardData() {
-    if (!supabase) {
-      // Mode démo - données vides
-      document.getElementById('stat-members').textContent = '0';
-      document.getElementById('stat-msgs').textContent = '0';
-      document.getElementById('stat-projects').textContent = '0';
-      document.getElementById('stat-friends').textContent = '0';
-      document.getElementById('stat-rank').textContent = '—';
-      return;
+    if (currentUser.bio) document.getElementById('profile-bio').textContent = currentUser.bio;
+    if (currentUser.title) document.getElementById('profile-title').textContent = currentUser.title;
+    
+    if (currentUser.is_premium) {
+      document.body.classList.add('premium-mode');
+      document.getElementById('profile-badge').classList.remove('hidden');
     }
-    
-    // Charger le nombre total de membres
-    const { count: membersCount } = await supabase
-      .from('profiles')
-      .select('*', { count: 'exact', head: true });
-    document.getElementById('stat-members').textContent = membersCount || '0';
-    
-    // Charger les stats de l'utilisateur
-    if (currentUser) {
-      const { data: messages } = await supabase
-        .from('messages')
-        .select('*')
-        .eq('user_id', currentUser.id);
-      document.getElementById('stat-msgs').textContent = messages?.length || '0';
-      document.getElementById('profile-msgs').textContent = messages?.length || '0';
-      
-      const { data: projects } = await supabase
-        .from('projects')
-        .select('*')
-        .eq('user_id', currentUser.id);
-      document.getElementById('stat-projects').textContent = projects?.length || '0';
-      document.getElementById('profile-projects').textContent = projects?.length || '0';
-    }
-    
-    // Charger les messages récents pour le landing
-    loadLandingMessages();
-    
-    // Charger l'activité récente
-    loadRecentActivity();
-    
-    // Charger les salons
-    loadChannels();
-    
-    // Charger les projets
-    loadProjects();
-    
-    // Admin stats
-    if (currentUser?.is_admin) {
-      loadAdminStats();
+    if (currentUser.is_admin) {
+      document.getElementById('admin-btn').classList.remove('hidden');
     }
   }
-  
-  async function loadLandingMessages() {
-    const container = document.getElementById('landing-messages');
-    if (!supabase) {
-      container.innerHTML = '<div class="text-gray-500 text-sm text-center">Mode démo - Aucun message</div>';
-      return;
-    }
+
+  // ==========================================
+  // CHARGEMENT DES DONNÉES
+  // ==========================================
+  async function loadStats() {
+    if (!supabaseClient || !currentUser) return;
+    const { count: msgs } = await supabaseClient.from('messages').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id);
+    const { count: projects } = await supabaseClient.from('projects').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id);
+    document.getElementById('stat-msgs').textContent = msgs || 0;
+    document.getElementById('stat-projects').textContent = projects || 0;
+    document.getElementById('profile-msgs').textContent = msgs || 0;
+    document.getElementById('profile-projects').textContent = projects || 0;
     
-    const { data: messages } = await supabase
-      .from('messages')
-      .select(`
-        content,
-        created_at,
-        profiles:user_id (first_name, last_name)
-      `)
-      .order('created_at', { ascending: false })
-      .limit(3);
-    
-    if (!messages || messages.length === 0) {
-      container.innerHTML = '<div class="text-gray-500 text-sm text-center">Soyez le premier à poster !</div>';
-      return;
-    }
-    
-    container.innerHTML = messages.map(msg => {
-      const name = msg.profiles ? `${msg.profiles.first_name || ''} ${msg.profiles.last_name || ''}`.trim() : 'Anonyme';
-      const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
-      return `
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-full bg-dev-primary/20 flex items-center justify-center text-xs font-bold text-dev-primary">${initials}</div>
-          <div class="flex-1 glass rounded-lg px-3 py-2 text-sm text-gray-300">${msg.content}</div>
-        </div>
-      `;
-    }).join('');
+    if (currentUser.is_admin) loadAdminStats();
+    loadMessages();
   }
-  
-  async function loadRecentActivity() {
-    const container = document.getElementById('recent-activity');
-    if (!supabase) {
-      container.innerHTML = '<div class="text-gray-500 text-sm text-center py-4">Aucune activité</div>';
-      return;
-    }
-    
-    // Charger les dernières activités (messages, projets, etc.)
-    const { data: messages } = await supabase
-      .from('messages')
-      .select(`
-        content,
-        created_at,
-        profiles:user_id (first_name, last_name)
-      `)
-      .order('created_at', { ascending: false })
-      .limit(5);
-    
-    if (!messages || messages.length === 0) {
-      container.innerHTML = '<div class="text-gray-500 text-sm text-center py-4">Aucune activité récente</div>';
-      return;
-    }
-    
-    container.innerHTML = messages.map(msg => {
-      const name = msg.profiles ? `${msg.profiles.first_name || ''} ${msg.profiles.last_name || ''}`.trim() : 'Anonyme';
-      const time = new Date(msg.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-      return `
-        <div class="flex items-center gap-3 p-3 rounded-lg bg-white/5">
-          <div class="w-10 h-10 rounded-full bg-dev-primary/20 flex items-center justify-center text-dev-primary font-bold">${name.charAt(0)}</div>
-          <div class="flex-1">
-            <div class="text-sm text-white font-medium">${name} a posté un message</div>
-            <div class="text-xs text-gray-500">Il y a ${time}</div>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-  
-  async function loadChannels() {
-    const container = document.getElementById('channels-list');
-    const sidebar = document.getElementById('sidebar-channels');
-    
-    const channels = [
-      { id: 'general', name: 'général', icon: '#' },
-      { id: 'aide', name: 'aide', icon: '#' },
-      { id: 'projets', name: 'projets', icon: '#' },
-      { id: 'showcase', name: 'showcase', icon: '#' }
-    ];
-    
-    const html = channels.map(ch => `
-      <div onclick="selectChannel('${ch.id}')" class="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 transition cursor-pointer ${currentChannel === ch.id ? 'bg-dev-primary/20' : ''}">
-        <div class="flex items-center gap-3">
-          <span class="text-dev-accent">${ch.icon}</span>
-          <span class="text-white font-medium">${ch.name}</span>
-        </div>
-      </div>
-    `).join('');
-    
-    if (container) container.innerHTML = html;
-    if (sidebar) sidebar.innerHTML = `
-      <div class="text-xs text-gray-500 font-semibold uppercase px-2 py-2">Salons</div>
-      ${html}
-      <div class="text-xs text-gray-500 font-semibold uppercase px-2 py-2 mt-4">Messages privés</div>
-      <div class="text-gray-500 text-sm text-center py-2">Aucun MP</div>
-    `;
-  }
-  
-  async function loadProjects() {
-    const container = document.getElementById('projects-grid');
-    if (!container) return;
-    
-    if (!supabase || !currentUser) {
-      container.innerHTML = '<div class="text-gray-500 text-center py-12 col-span-full">Aucun projet</div>';
-      return;
-    }
-    
-    const { data: projects } = await supabase
-      .from('projects')
-      .select('*')
-      .eq('user_id', currentUser.id);
-    
-    if (!projects || projects.length === 0) {
-      container.innerHTML = '<div class="text-gray-500 text-center py-12 col-span-full">Aucun projet</div>';
-      return;
-    }
-    
-    container.innerHTML = projects.map(project => `
-      <div class="glass rounded-2xl p-6 card-3d">
-        <div class="flex items-center justify-between mb-4">
-          <span class="px-2 py-1 rounded ${project.visibility === 'public' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'} text-xs font-semibold">
-            ${project.visibility === 'public' ? 'Public' : 'Privé'}
-          </span>
-          <span class="text-xs text-gray-500">${new Date(project.created_at).toLocaleDateString('fr-FR')}</span>
-        </div>
-        <h3 class="text-lg font-bold text-white mb-2">${project.name}</h3>
-        <p class="text-sm text-gray-400 mb-4">${project.description || 'Aucune description'}</p>
-        ${project.stack ? `
-          <div class="flex flex-wrap gap-2 mb-4">
-            ${project.stack.split(',').map(tech => `<span class="px-2 py-1 rounded bg-white/5 text-xs text-gray-300">${tech.trim()}</span>`).join('')}
-          </div>
-        ` : ''}
-      </div>
-    `).join('');
-  }
-  
+
   async function loadAdminStats() {
-    if (!supabase) return;
+    const { count: members } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
+    const { count: msgs } = await supabaseClient.from('messages').select('*', { count: 'exact', head: true });
+    const { count: premium } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true }).eq('is_premium', true);
+    document.getElementById('admin-members').textContent = members || 0;
+    document.getElementById('admin-msgs').textContent = msgs || 0;
+    document.getElementById('admin-premium').textContent = premium || 0;
+    document.getElementById('admin-revenue').textContent = ((premium || 0) * 7.49).toFixed(2) + '€';
     
-    // Total membres
-    const { count: totalMembers } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
-    document.getElementById('admin-total-members').textContent = totalMembers || '0';
-    
-    // Premium
-    const { count: premiumCount } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true }).eq('is_premium', true);
-    document.getElementById('admin-premium').textContent = premiumCount || '0';
-    
-    // Messages 24h
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const { count: msgs24h } = await supabaseClient.from('messages').select('*', { count: 'exact', head: true }).gte('created_at', yesterday.toISOString());
-    document.getElementById('admin-msgs-24h').textContent = msgs24h || '0';
-    
-    // Revenus (simulation)
-    const revenue = (premiumCount || 0) * 7.49; // moyenne entre 4.99 et 9.99
-    document.getElementById('admin-revenue').textContent = revenue.toFixed(2) + '€';
-    
-    // Derniers membres
     const { data: recentMembers } = await supabaseClient.from('profiles').select('*').order('created_at', { ascending: false }).limit(5);
-    const membersContainer = document.getElementById('admin-recent-members');
-    if (recentMembers && recentMembers.length > 0) {
-      membersContainer.innerHTML = recentMembers.map(member => `
+    if (recentMembers) {
+      document.getElementById('admin-recent-members').innerHTML = recentMembers.map(m => `
         <div class="flex items-center gap-3 p-3 rounded-lg bg-white/5">
-          <div class="w-10 h-10 rounded-full bg-dev-primary/20 flex items-center justify-center text-dev-primary font-bold">
-            ${(member.first_name || member.email || 'U').charAt(0)}
-          </div>
-          <div class="flex-1">
-            <div class="text-sm text-white font-medium">${member.first_name || ''} ${member.last_name || ''}</div>
-            <div class="text-xs text-gray-500">${member.email}</div>
-          </div>
-          <div class="text-xs text-gray-500">${new Date(member.created_at).toLocaleDateString('fr-FR')}</div>
+          <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold">${(m.first_name || m.email || 'U').charAt(0)}</div>
+          <div class="flex-1"><div class="text-sm text-white font-medium">${m.first_name || ''} ${m.last_name || ''}</div><div class="text-xs text-gray-500">${m.email}</div></div>
         </div>
       `).join('');
     }
-    
-    // Derniers messages
-    const { data: recentMsgs } = await supabaseClient.from('messages').select(`
-      content,
-      created_at,
-      profiles:user_id (first_name, last_name)
-    `).order('created_at', { ascending: false }).limit(5);
-    const msgsContainer = document.getElementById('admin-recent-msgs');
-    if (recentMsgs && recentMsgs.length > 0) {
-      msgsContainer.innerHTML = recentMsgs.map(msg => {
-        const name = msg.profiles ? `${msg.profiles.first_name || ''} ${msg.profiles.last_name || ''}`.trim() : 'Anonyme';
-        return `
-          <div class="flex items-center gap-3 p-3 rounded-lg bg-white/5">
-            <div class="w-10 h-10 rounded-full bg-dev-accent/20 flex items-center justify-center text-dev-accent font-bold">${name.charAt(0)}</div>
-            <div class="flex-1">
-              <div class="text-sm text-white font-medium">${name}</div>
-              <div class="text-xs text-gray-500 truncate">${msg.content}</div>
-            </div>
-            <div class="text-xs text-gray-500">${new Date(msg.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</div>
-          </div>
-        `;
-      }).join('');
-    }
   }
-  
-  // ============================================
-  // MESSAGING
-  // ============================================
-  function selectChannel(channelId) {
-    currentChannel = channelId;
-    document.getElementById('current-channel').textContent = `# ${channelId}`;
-    loadMessages();
-    loadChannels(); // Refresh pour mettre à jour la sélection
-  }
-  
-  async function loadMessages() {
-    const container = document.getElementById('messages-container');
-    if (!supabase) {
-      container.innerHTML = '<div class="text-gray-500 text-center py-8">Mode démo - Aucun message</div>';
-      return;
-    }
-    
-    const { data: messages } = await supabase
-      .from('messages')
-      .select(`
-        content,
-        created_at,
-        profiles:user_id (first_name, last_name, email)
-      `)
-      .eq('channel', currentChannel)
-      .order('created_at', { ascending: true });
-    
-    if (!messages || messages.length === 0) {
-      container.innerHTML = '<div class="text-gray-500 text-center py-8">Aucun message. Soyez le premier !</div>';
-      return;
-    }
-    
-    container.innerHTML = messages.map(msg => {
-      const profile = msg.profiles;
-      const name = profile ? `${profile.first_name || ''} ${profile.last_name || ''}`.trim() : (profile?.email?.split('@')[0] || 'Anonyme');
-      const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
-      const time = new Date(msg.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-      
-      return `
-        <div class="flex gap-3">
-          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold flex-shrink-0">${initials}</div>
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="text-white font-semibold text-sm">${name}</span>
-              <span class="text-xs text-gray-500">${time}</span>
-            </div>
-            <p class="text-gray-300 text-sm mt-1">${msg.content}</p>
-          </div>
-        </div>
-      `;
-    }).join('');
-    
-    // Scroll to bottom
-    container.scrollTop = container.scrollHeight;
-  }
-  
+
+  // ==========================================
+  // MESSAGES & PROJETS
+  // ==========================================
   async function sendMessage() {
     const input = document.getElementById('msg-input');
     const content = input.value.trim();
+    if (!content || !currentUser || !supabaseClient) return;
     
-    if (!content || !currentUser) return;
-    
-    if (!supabase) {
-      alert('Supabase non configuré');
-      return;
-    }
-    
-    const { error } = await supabaseClient.from('messages').insert({
-      user_id: currentUser.id,
-      channel: currentChannel,
-      content
-    });
-    
-    if (error) {
-      alert('Erreur: ' + error.message);
-      return;
-    }
-    
+    await supabaseClient.from('messages').insert({ user_id: currentUser.id, channel: currentChannel, content });
     input.value = '';
     loadMessages();
-    loadDashboardData(); // Refresh stats
+    loadStats();
   }
-  
-  // ============================================
-  // PROJECTS
-  // ============================================
+
+  async function loadMessages() {
+    if (!supabaseClient) return;
+    const { data } = await supabaseClient.from('messages').select(`content, created_at, profiles:user_id(first_name, last_name)`).eq('channel', currentChannel).order('created_at', { ascending: true }).limit(50);
+    const container = document.getElementById('chat-container');
+    if (!data || data.length === 0) { container.innerHTML = '<div class="text-gray-500 text-center py-8">Aucun message. Sois le premier !</div>'; return; }
+    
+    container.innerHTML = data.map(m => {
+      const name = m.profiles ? `${m.profiles.first_name || ''} ${m.profiles.last_name || ''}`.trim() : 'Anonyme';
+      const time = new Date(m.created_at).toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+      return `<div class="flex gap-3"><div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white font-bold flex-shrink-0">${name.charAt(0)}</div><div><div class="flex items-center gap-2"><span class="text-white font-semibold text-sm">${name}</span><span class="text-xs text-gray-500">${time}</span></div><p class="text-gray-300 text-sm mt-1">${m.content}</p></div></div>`;
+    }).join('');
+    container.scrollTop = container.scrollHeight;
+  }
+
   async function createProject(e) {
     e.preventDefault();
-    
-    if (!currentUser) return;
-    
-    const project = {
+    if (!currentUser || !supabaseClient) return;
+    await supabaseClient.from('projects').insert({
       user_id: currentUser.id,
       name: document.getElementById('project-name').value,
       description: document.getElementById('project-desc').value,
       stack: document.getElementById('project-stack').value,
       visibility: document.getElementById('project-visibility').value
-    };
-    
-    if (!supabase) {
-      alert('Supabase non configuré');
-      return;
-    }
-    
-    const { error } = await supabaseClient.from('projects').insert(project);
-    
-    if (error) {
-      alert('Erreur: ' + error.message);
-      return;
-    }
-    
+    });
     closeModal('new-project');
-    loadProjects();
-    loadDashboardData();
+    loadStats();
+    e.target.reset();
   }
-  
-  // ============================================
-  // PREMIUM SUBSCRIPTION
-  // ============================================
+
   async function subscribe(tier) {
-    if (!currentUser) {
-      alert('Veuillez vous connecter d\'abord');
-      openModal('login');
-      return;
-    }
-    
-    const price = tier === 'dev-plus' ? '4,99€' : '9,99€';
-    if (confirm(`Activer l'abonnement ${tier === 'dev-plus' ? 'Dev+' : 'Builder Pro'} pour ${price}/mois ?`)) {
-      if (supabase) {
-        await supabaseClient.from('profiles').update({
-          is_premium: true,
-          premium_tier: tier,
-          premium_since: new Date().toISOString()
-        }).eq('id', currentUser.id);
-        
-        currentUser.is_premium = true;
-        currentUser.premium_tier = tier;
-        updateUIForUser();
-        alert('✅ Abonnement activé avec succès !');
-      } else {
-        // Mode démo
-        currentUser.is_premium = true;
-        currentUser.premium_tier = tier;
-        updateUIForUser();
-        alert('✅ Mode démo: Abonnement activé !');
-      }
+    if (!currentUser) { openModal('login'); return; }
+    if (confirm(`Activer l'abonnement ${tier === 'dev-plus' ? 'Dev+' : 'Builder Pro'} ?`)) {
+      await supabaseClient.from('profiles').update({ is_premium: true, premium_tier: tier }).eq('id', currentUser.id);
+      currentUser.is_premium = true;
+      currentUser.premium_tier = tier;
+      updateUI();
+      alert('✅ Premium activé avec succès !');
     }
   }
-  
-  // ============================================
-  // PROFILE EDITION
-  // ============================================
-  function editProfile() {
+
+  async function editProfile() {
     const bio = prompt('Nouvelle bio:', currentUser.bio || '');
     const title = prompt('Titre (ex: Développeur Full Stack):', currentUser.title || '');
-    
-    if (bio !== null && supabase) {
-      supabaseClient.from('profiles').update({ bio, title }).eq('id', currentUser.id);
+    if (bio !== null && supabaseClient) {
+      await supabaseClient.from('profiles').update({ bio, title }).eq('id', currentUser.id);
       currentUser.bio = bio;
       currentUser.title = title;
-      document.getElementById('profile-bio').textContent = bio || 'Aucune bio.';
-      if (title) document.getElementById('profile-title').textContent = title;
+      updateUI();
     }
   }
-  
-  function editBanner() {
-    alert('Fonctionnalité à venir: Upload de bannière personnalisée');
+
+  function editBanner() { alert('Fonctionnalité upload de bannière à venir !'); }
+
+  // ==========================================
+  // NAVIGATION & UI
+  // ==========================================
+  function openModal(name) { 
+    document.getElementById('modal-' + name).classList.remove('hidden'); 
+    document.getElementById('modal-' + name).classList.add('flex'); 
   }
-  
-  // ============================================
-  // NAVIGATION
-  // ============================================
-  function openModal(name) {
-    document.getElementById('modal-' + name).classList.remove('hidden');
-    document.getElementById('modal-' + name).classList.add('flex');
-  }
-  
-  function closeModal(name) {
-    document.getElementById('modal-' + name).classList.add('hidden');
-    document.getElementById('modal-' + name).classList.remove('flex');
+  function closeModal(name) { 
+    document.getElementById('modal-' + name).classList.add('hidden'); 
+    document.getElementById('modal-' + name).classList.remove('flex'); 
   }
   
   function showPage(page) {
     document.querySelectorAll('.app-page').forEach(p => p.classList.add('hidden'));
     document.getElementById('page-' + page).classList.remove('hidden');
-    
     document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
-    document.querySelector('.sidebar-item[data-page="' + page + '"]')?.classList.add('active');
-    
-    const titles = {
-      home: 'Dashboard',
-      messages: 'Messages',
-      work: 'Travail',
-      explore: 'Explorer',
-      recruit: 'Recrutement',
-      premium: 'Premium',
-      profile: 'Mon Profil',
-      settings: 'Paramètres',
-      admin: 'Admin Panel'
-    };
+    document.querySelector(`.sidebar-item[data-page="${page}"]`)?.classList.add('active');
+    const titles = { home: 'Dashboard', messages: 'Messages', work: 'Travail', explore: 'Explorer', recruit: 'Recrutement', premium: 'Premium', profile: 'Mon Profil', settings: 'Paramètres', admin: 'Admin Panel' };
     document.getElementById('page-title').textContent = titles[page] || 'Dashboard';
-    
-    // Charger les données spécifiques à la page
     if (page === 'messages') loadMessages();
-    if (page === 'work') loadProjects();
-    if (page === 'profile') loadDashboardData();
     if (page === 'admin' && currentUser?.is_admin) loadAdminStats();
   }
-  
-  // Effet 3D tilt
+
+  // 3D Tilt Effect
   document.addEventListener('mousemove', (e) => {
     document.querySelectorAll('.card-3d').forEach(card => {
       const rect = card.getBoundingClientRect();
@@ -1727,41 +1327,21 @@ console.log('✅ Supabase connecté avec tes vraies clés !');
         const centerY = rect.height / 2;
         const rotateX = ((y - centerY) / centerY) * -5;
         const rotateY = ((x - centerX) / centerX) * 5;
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
       } else {
         card.style.transform = '';
       }
     });
   });
-  
-  // Smooth scroll
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) target.scrollIntoView({ behavior: 'smooth' });
-    });
+
+  document.querySelectorAll('[id^="modal-"]').forEach(m => { 
+    m.addEventListener('click', (e) => { 
+      if (e.target === m) closeModal(m.id.replace('modal-', '')); 
+    }); 
   });
   
-  // Fermer modal au clic extérieur
-  document.querySelectorAll('.modal-overlay').forEach(m => {
-    m.addEventListener('click', (e) => {
-      if (e.target === m) {
-        m.classList.add('hidden');
-        m.classList.remove('flex');
-      }
-    });
-  });
-  
-  // Enter pour envoyer message
-  document.addEventListener('DOMContentLoaded', () => {
-    
-    const msgInput = document.getElementById('msg-input');
-    if (msgInput) {
-      msgInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendMessage();
-      });
-    }
+  document.getElementById('msg-input')?.addEventListener('keypress', (e) => { 
+    if (e.key === 'Enter') sendMessage(); 
   });
 </script>
 
