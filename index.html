@@ -1,856 +1,1794 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevConnect - La communauté des développeurs</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevConnect — La plateforme des builders d'élite</title>
 
-        /* FREE MODE (violet/bleu) */
-        :root {
-            --bg: #0a0a1a;
-            --bg-card: #12122e;
-            --text: #ffffff;
-            --text-muted: #a0a0c0;
-            --primary: #7c3aed;
-            --primary-light: #a78bfa;
-            --secondary: #3b82f6;
-            --success: #10b981;
-            --danger: #ef4444;
-            --border: rgba(139, 92, 246, 0.2);
-            --gradient: linear-gradient(135deg, #7c3aed, #3b82f6);
-        }
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-        /* PREMIUM MODE (blanc/argent) */
-        body.premium {
-            --bg: #f5f7fb;
-            --bg-card: #ffffff;
-            --text: #1a1a2e;
-            --text-muted: #6b7280;
-            --primary: #3b82f6;
-            --primary-light: #60a5fa;
-            --secondary: #8b5cf6;
-            --border: #e2e8f0;
-            --gradient: linear-gradient(135deg, #1e293b, #475569);
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        dev: { 
+          dark: '#020617', 
+          card: '#0B1121', 
+          primary: '#3B82F6', 
+          accent: '#06B6D4', 
+          purple: '#8B5CF6',
+          silver: '#C0C0C0',
+          gold: '#FFD700'
+        },
+        premium: {
+          bg: '#FAFAFA',
+          card: '#FFFFFF',
+          text: '#1a1a1a',
+          border: '#E5E5E5'
         }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            transition: all 0.3s ease;
-        }
-
-        /* Premium toggle */
-        .premium-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: var(--gradient);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 30px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .premium-btn:hover {
-            transform: scale(1.05);
-        }
-
-        /* Layout */
-        .app {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 260px;
-            background: var(--bg-card);
-            border-right: 1px solid var(--border);
-            padding: 20px;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-
-        .logo {
-            font-family: 'Syne', sans-serif;
-            font-size: 24px;
-            font-weight: 800;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            margin: 4px 0;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: var(--text-muted);
-        }
-
-        .nav-item:hover, .nav-item.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        .nav-item i {
-            font-size: 20px;
-        }
-
-        /* Main content */
-        .main {
-            flex: 1;
-            margin-left: 260px;
-            padding: 20px;
-        }
-
-        /* Cards */
-        .card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border);
-            transition: transform 0.2s;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-        }
-
-        /* Grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        /* Chat */
-        .chat-container {
-            display: flex;
-            gap: 20px;
-            height: 70vh;
-        }
-
-        .channels {
-            width: 250px;
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 16px;
-            overflow-y: auto;
-        }
-
-        .channel {
-            padding: 10px;
-            margin: 4px 0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .channel:hover, .channel.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        .messages {
-            flex: 1;
-            background: var(--bg-card);
-            border-radius: 16px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .msg-list {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .msg {
-            margin-bottom: 16px;
-            padding: 10px;
-            border-radius: 12px;
-            background: rgba(124, 58, 237, 0.1);
-        }
-
-        .msg-input {
-            display: flex;
-            gap: 10px;
-            padding: 16px;
-            border-top: 1px solid var(--border);
-        }
-
-        .msg-input input {
-            flex: 1;
-            padding: 12px;
-            border-radius: 24px;
-            border: 1px solid var(--border);
-            background: var(--bg);
-            color: var(--text);
-        }
-
-        /* Buttons */
-        button {
-            background: var(--gradient);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 30px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        button:hover {
-            opacity: 0.9;
-        }
-
-        input, textarea, select {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            padding: 10px;
-            border-radius: 8px;
-            color: var(--text);
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.8);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
-            .main {
-                margin-left: 0;
-            }
-            .chat-container {
-                flex-direction: column;
-            }
-            .channels {
-                width: 100%;
-            }
-        }
-
-        /* Badges */
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .badge-premium {
-            background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
-            color: #1e293b;
-        }
-
-        /* Animation */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card {
-            animation: fadeIn 0.4s ease forwards;
-        }
-    </style>
+      },
+      fontFamily: { 
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Space Grotesk', 'system-ui', 'sans-serif']
+      }
+    }
+  }
+}
+</script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap');
+  
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #020617;
+    color: #E2E8F0;
+    overflow-x: hidden;
+    margin: 0;
+  }
+  
+  /* Fond animé avec grille 3D */
+  .bg-3d {
+    position: fixed; inset: 0; z-index: 0;
+    background: 
+      radial-gradient(ellipse at 20% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, rgba(6, 182, 212, 0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(11, 17, 33, 0.8) 0%, #020617 100%);
+  }
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: 
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  }
+  
+  /* Effet 3D Glassmorphism */
+  .glass {
+    background: rgba(11, 17, 33, 0.5);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .glass-strong {
+    background: rgba(11, 17, 33, 0.75);
+    backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* PREMIUM LUXURY THEME - Blanc/Argent */
+  .premium-theme {
+    background: #FAFAFA !important;
+    color: #1a1a1a !important;
+  }
+  .premium-theme .glass,
+  .premium-theme .glass-strong {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(192, 192, 192, 0.3) !important;
+    backdrop-filter: blur(30px);
+  }
+  .premium-theme .text-white {
+    color: #1a1a1a !important;
+  }
+  .premium-theme .text-gray-400 {
+    color: #666 !important;
+  }
+  .premium-theme .bg-dev-dark {
+    background: #FAFAFA !important;
+  }
+  .premium-theme .border-white\/5,
+  .premium-theme .border-white\/10 {
+    border-color: rgba(0,0,0,0.1) !important;
+  }
+  .premium-theme .sidebar-item.active {
+    background: linear-gradient(90deg, rgba(192, 192, 192, 0.2), transparent) !important;
+    border-left-color: #C0C0C0 !important;
+  }
+  
+  /* Chrome effect */
+  .chrome-text {
+    background: linear-gradient(90deg, #C0C0C0 0%, #FFFFFF 25%, #C0C0C0 50%, #FFFFFF 75%, #C0C0C0 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 4s linear infinite;
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  
+  .chrome-border {
+    background: linear-gradient(135deg, rgba(192,192,192,0.3), rgba(255,255,255,0.1), rgba(192,192,192,0.3));
+    border: 2px solid rgba(192, 192, 192, 0.5);
+  }
+  
+  /* Cartes 3D avec tilt */
+  .card-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+    will-change: transform;
+  }
+  .card-3d:hover {
+    box-shadow: 0 30px 60px -15px rgba(59, 130, 246, 0.4), 0 0 40px rgba(6, 182, 212, 0.2);
+  }
+  .card-3d-inner {
+    transform: translateZ(30px);
+  }
+  
+  /* Perspective */
+  .perspective { perspective: 1500px; }
+  .perspective-deep { perspective: 2000px; }
+  
+  /* Animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotateX(5deg) rotateY(-5deg); }
+    50% { transform: translateY(-20px) rotateX(5deg) rotateY(-5deg); }
+  }
+  @keyframes glow {
+    0% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+    100% { box-shadow: 0 0 50px rgba(6, 182, 212, 0.6), 0 0 80px rgba(59, 130, 246, 0.3); }
+  }
+  @keyframes spin3d {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
+  }
+  
+  .animate-float { animation: float 6s ease-in-out infinite; }
+  .animate-glow { animation: glow 3s ease-in-out infinite alternate; }
+  
+  /* Boutons 3D */
+  .btn-3d {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: all 0.3s ease;
+  }
+  .btn-3d:hover { transform: translateY(-3px) translateZ(10px); }
+  .btn-3d:active { transform: translateY(0) translateZ(0); }
+  
+  /* Sidebar */
+  .sidebar-item {
+    position: relative;
+    transition: all 0.3s ease;
+    transform-style: preserve-3d;
+  }
+  .sidebar-item:hover {
+    transform: translateX(8px) translateZ(20px);
+  }
+  .sidebar-item.active {
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), transparent);
+    border-left: 3px solid #3B82F6;
+  }
+  
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #0B1121; }
+  ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #3B82F6, #06B6D4); border-radius: 4px; }
+  
+  /* Modal */
+  .modal-overlay {
+    background: rgba(2, 6, 23, 0.8);
+    backdrop-filter: blur(10px);
+  }
+  
+  /* Input */
+  .input-3d {
+    background: rgba(11, 17, 33, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+  }
+  .input-3d:focus {
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    outline: none;
+  }
+  
+  /* Pages */
+  .page { display: none; animation: fadeIn 0.5s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Gradients */
+  .gradient-text {
+    background: linear-gradient(135deg, #FFFFFF 0%, #3B82F6 50%, #06B6D4 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* Badges */
+  .badge-chrome {
+    background: linear-gradient(135deg, #E8E8E8 0%, #C0C0C0 50%, #FFFFFF 100%);
+    color: #020617;
+    font-weight: 700;
+    border: 1px solid rgba(255,255,255,0.5);
+  }
+  .badge-blue {
+    background: linear-gradient(135deg, #3B82F6, #06B6D4);
+    color: white;
+    font-weight: 700;
+  }
+  
+  /* Orbe */
+  .orb-container {
+    position: relative;
+    width: 400px;
+    height: 400px;
+  }
+  .orb-core {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.8), rgba(6, 182, 212, 0.4), transparent);
+    border-radius: 50%;
+    filter: blur(20px);
+  }
+  .orb-ring {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid rgba(59, 130, 246, 0.3);
+    border-radius: 50%;
+    animation: spin3d 30s linear infinite;
+  }
+  .orb-ring:nth-child(2) { width: 300px; height: 300px; animation-direction: reverse; animation-duration: 25s; }
+  .orb-ring:nth-child(3) { width: 350px; height: 350px; animation-duration: 35s; }
+  
+  /* Bento Grid */
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  /* Icons */
+  .icon-svg {
+    width: 24px; height: 24px;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+  
+  /* Profile banner */
+  .profile-banner {
+    background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+    height: 200px;
+    border-radius: 1rem;
+  }
+  
+  /* Loading */
+  .loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+  }
+  .empty-state svg {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+  }
+</style>
 </head>
-<body>
-    <button class="premium-btn" id="premiumToggle">✨ Mode Premium (4.99€/mois)</button>
+<body class="min-h-screen relative">
 
-    <div class="app">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="logo">DevConnect</div>
-            <nav>
-                <div class="nav-item active" data-page="home">🏠 Accueil</div>
-                <div class="nav-item" data-page="chat">💬 Chat</div>
-                <div class="nav-item" data-page="projects">📁 Projets</div>
-                <div class="nav-item" data-page="explorer">🔍 Explorer</div>
-                <div class="nav-item" data-page="ranking">🏆 Classement</div>
-                <div class="nav-item" data-page="recruitment">💼 Recrutement</div>
-                <div class="nav-item" data-page="ai">🤖 IA Assistant</div>
-                <div class="nav-item" data-page="learn">📚 Apprendre</div>
-                <div class="nav-item" data-page="premium">💎 Premium</div>
-                <div class="nav-item" data-page="profile">👤 Mon Profil</div>
-                <div class="nav-item" data-page="settings">⚙️ Paramètres</div>
-                <div class="nav-item" data-page="admin" id="adminNav" style="display:none">👑 Admin Panel</div>
-            </nav>
+<!-- Backgrounds -->
+<div class="bg-3d"></div>
+<div class="bg-grid"></div>
+
+<!-- ============ LANDING PAGE ============ -->
+<div id="landing" class="page active relative z-10">
+  
+  <!-- Navbar -->
+  <nav class="fixed top-0 w-full z-50 glass-strong border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-3 perspective">
+        <!-- NOUVEAU LOGO DC BLEU -->
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center font-black text-white shadow-lg shadow-blue-500/50 card-3d">
+          <span class="card-3d-inner text-lg">DC</span>
         </div>
-
-        <!-- Main Content -->
-        <div class="main" id="mainContent">
-            <!-- Home Page -->
-            <div id="page-home" class="page">
-                <div class="card">
-                    <h1>Bienvenue sur DevConnect 🚀</h1>
-                    <p>La communauté des développeurs qui construisent le futur.</p>
-                </div>
-                <div class="grid">
-                    <div class="card">
-                        <h3>📊 Statistiques</h3>
-                        <p>👥 2,450+ membres actifs</p>
-                        <p>💬 12,800+ messages échangés</p>
-                        <p>📁 340+ projets créés</p>
-                    </div>
-                    <div class="card">
-                        <h3>🏆 Top Dev de la semaine</h3>
-                        <p>1. SarahCode 🔥</p>
-                        <p>2. WebMasterPro ⭐</p>
-                        <p>3. JuliaDev 💎</p>
-                    </div>
-                    <div class="card">
-                        <h3>✨ À la une</h3>
-                        <p>Nouveau : Mode Premium avec interface argent exclusif !</p>
-                        <button onclick="switchToPremium()">Découvrir Premium →</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Chat Page -->
-            <div id="page-chat" class="page" style="display:none">
-                <div class="chat-container">
-                    <div class="channels">
-                        <h3>Salons</h3>
-                        <div class="channel active" data-channel="general"># général</div>
-                        <div class="channel" data-channel="aide"># aide</div>
-                        <div class="channel" data-channel="projets"># projets</div>
-                        <div class="channel" data-channel="offres"># offres</div>
-                        <div class="channel" data-channel="random"># random</div>
-                    </div>
-                    <div class="messages">
-                        <div class="msg-list" id="msgList">
-                            <div class="msg"><strong>SarahCode:</strong> Salut tout le monde ! 👋</div>
-                            <div class="msg"><strong>WebMasterPro:</strong> Quelqu'un connaît React ?</div>
-                            <div class="msg"><strong>JuliaDev:</strong> Oui, je peux aider !</div>
-                        </div>
-                        <div class="msg-input">
-                            <input type="text" id="msgInput" placeholder="Écris ton message...">
-                            <button onclick="sendMessage()">Envoyer</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Projects Page -->
-            <div id="page-projects" class="page" style="display:none">
-                <div class="card">
-                    <div style="display:flex; justify-content:space-between; align-items:center">
-                        <h2>📁 Mes Projets</h2>
-                        <button onclick="showCreateProjectModal()">+ Nouveau projet</button>
-                    </div>
-                </div>
-                <div class="grid" id="projectsList">
-                    <div class="card">
-                        <h3>DevConnect App</h3>
-                        <p>Plateforme sociale pour développeurs</p>
-                        <span class="badge">React, Node.js</span>
-                    </div>
-                    <div class="card">
-                        <h3>AI Code Assistant</h3>
-                        <p>Assistant IA pour générer du code</p>
-                        <span class="badge">Python, GPT-4</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Explorer Page -->
-            <div id="page-explorer" class="page" style="display:none">
-                <div class="card">
-                    <h2>🔍 Explorer la communauté</h2>
-                    <input type="text" id="searchInput" placeholder="Rechercher par nom, skill..." style="width:100%; margin-top:10px">
-                </div>
-                <div class="grid" id="developersList">
-                    <div class="card">
-                        <h3>SarahCode</h3>
-                        <p>⚛️ React • 🟦 TypeScript • 🐍 Python</p>
-                        <button>Voir profil</button>
-                    </div>
-                    <div class="card">
-                        <h3>WebMasterPro</h3>
-                        <p>🌐 HTML/CSS • 🎨 UI/UX • ⚡ Node.js</p>
-                        <button>Voir profil</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ranking Page -->
-            <div id="page-ranking" class="page" style="display:none">
-                <div class="card">
-                    <h2>🏆 Classement des développeurs</h2>
-                </div>
-                <div class="grid">
-                    <div class="card">
-                        <h3>🥇 SarahCode</h3>
-                        <p>⭐ 2,450 points • 🔥 150 contributions</p>
-                        <span class="badge">Top Developer</span>
-                    </div>
-                    <div class="card">
-                        <h3>🥈 WebMasterPro</h3>
-                        <p>⭐ 2,100 points • 🔥 128 contributions</p>
-                        <span class="badge">Mentor</span>
-                    </div>
-                    <div class="card">
-                        <h3>🥉 JuliaDev</h3>
-                        <p>⭐ 1,890 points • 🔥 112 contributions</p>
-                        <span class="badge">Builder</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recruitment Page -->
-            <div id="page-recruitment" class="page" style="display:none">
-                <div class="card">
-                    <div style="display:flex; justify-content:space-between">
-                        <h2>💼 Offres d'emploi</h2>
-                        <button onclick="showPostJobModal()">+ Publier une offre</button>
-                    </div>
-                </div>
-                <div class="grid" id="jobsList">
-                    <div class="card">
-                        <h3>Développeur React Senior</h3>
-                        <p>💰 55€/h (dont 50€ pour le dev)</p>
-                        <p>📍 Full remote • CDI</p>
-                        <button>Postuler</button>
-                    </div>
-                    <div class="card">
-                        <h3>Lead Developer Node.js</h3>
-                        <p>💰 65€/h (dont 59€ pour le dev)</p>
-                        <p>📍 Paris • Freelance</p>
-                        <button>Postuler</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- AI Page -->
-            <div id="page-ai" class="page" style="display:none">
-                <div class="card">
-                    <h2>🤖 Assistant IA</h2>
-                    <p>Pose tes questions techniques, je t'aide à coder !</p>
-                </div>
-                <div class="card">
-                    <div class="msg-list" id="aiMessages" style="height:300px">
-                        <div class="msg"><strong>🤖 IA:</strong> Bonjour ! Comment puis-je t'aider aujourd'hui ?</div>
-                    </div>
-                    <div class="msg-input">
-                        <input type="text" id="aiInput" placeholder="Pose ta question...">
-                        <button onclick="askAI()">Envoyer</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Learn Page -->
-            <div id="page-learn" class="page" style="display:none">
-                <div class="card">
-                    <h2>📚 Formations et Challenges</h2>
-                </div>
-                <div class="grid">
-                    <div class="card">
-                        <h3>🚀 React Masterclass</h3>
-                        <p>Apprends React de zéro à expert</p>
-                        <span class="badge">⭐ 4.8 • 1,200 étudiants</span>
-                        <button style="margin-top:10px">Commencer</button>
-                    </div>
-                    <div class="card">
-                        <h3>🐍 Python pour Data Science</h3>
-                        <p>Analyse de données avec Python</p>
-                        <span class="badge">⭐ 4.9 • 890 étudiants</span>
-                        <button style="margin-top:10px">Commencer</button>
-                    </div>
-                    <div class="card">
-                        <h3>🎨 UI/UX Design</h3>
-                        <p>Deviens designer d'interface</p>
-                        <span class="badge">⭐ 4.7 • 650 étudiants</span>
-                        <button style="margin-top:10px">Commencer</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Premium Page -->
-            <div id="page-premium" class="page" style="display:none">
-                <div class="card" style="text-align:center; background: linear-gradient(135deg, #1e293b, #475569); color:white">
-                    <h2>✨ DevConnect Premium ✨</h2>
-                    <p style="font-size:48px; margin:20px 0">4,99€ <span style="font-size:18px">/mois</span></p>
-                    <p>🚀 Interface argent exclusive</p>
-                    <p>🏆 Badge Premium vérifié</p>
-                    <p>💎 Salons VIP privés</p>
-                    <p>📊 Analytics avancés</p>
-                    <p>🤖 IA prioritaire (GPT-4)</p>
-                    <p>📧 Support prioritaire 24/7</p>
-                    <button id="subscribeBtn" style="margin-top:20px; background:white; color:#1e293b">🔥 Passer à Premium</button>
-                </div>
-            </div>
-
-            <!-- Profile Page -->
-            <div id="page-profile" class="page" style="display:none">
-                <div class="card" style="text-align:center">
-                    <div style="width:100px; height:100px; background:var(--primary); border-radius:50%; margin:0 auto 20px; display:flex; align-items:center; justify-content:center; font-size:40px">👤</div>
-                    <h2 id="profileName">Développeur</h2>
-                    <p>📧 dev@devconnect.com</p>
-                    <p>🏷️ Rôle: <span id="profileRole">Free</span></p>
-                    <p>📅 Membre depuis: Janvier 2025</p>
-                    <button onclick="editProfile()">Modifier le profil</button>
-                </div>
-                <div class="card">
-                    <h3>📊 Statistiques</h3>
-                    <p>💬 127 messages envoyés</p>
-                    <p>📁 3 projets créés</p>
-                    <p>👥 12 amis</p>
-                </div>
-            </div>
-
-            <!-- Settings Page -->
-            <div id="page-settings" class="page" style="display:none">
-                <div class="card">
-                    <h2>⚙️ Paramètres du compte</h2>
-                    <div style="margin:20px 0">
-                        <label>✉️ Email</label>
-                        <input type="email" style="width:100%; margin-top:5px" value="dev@devconnect.com">
-                    </div>
-                    <div style="margin:20px 0">
-                        <label>🔒 Nouveau mot de passe</label>
-                        <input type="password" style="width:100%; margin-top:5px" placeholder="••••••••">
-                    </div>
-                    <div style="margin:20px 0">
-                        <label>🔔 Notifications</label>
-                        <select style="width:100%; margin-top:5px">
-                            <option>Toutes les notifications</option>
-                            <option>Uniquement messages</option>
-                            <option>Aucune</option>
-                        </select>
-                    </div>
-                    <button>💾 Enregistrer</button>
-                    <button style="background:var(--danger); margin-left:10px">🚪 Se déconnecter</button>
-                </div>
-            </div>
-
-            <!-- Admin Page -->
-            <div id="page-admin" class="page" style="display:none">
-                <div class="card">
-                    <h2>👑 Administration DevConnect</h2>
-                    <div class="grid">
-                        <div class="card">
-                            <h3>📊 Dashboard</h3>
-                            <p>👥 2,450 utilisateurs</p>
-                            <p>💬 12,800 messages</p>
-                            <p>📁 340 projets</p>
-                        </div>
-                        <div class="card">
-                            <h3>👥 Gestion utilisateurs</h3>
-                            <div id="usersList">
-                                <div style="display:flex; justify-content:space-between; padding:10px">
-                                    <span>SarahCode</span>
-                                    <button onclick="changeRole(this, 'premium')">Passer Premium</button>
-                                </div>
-                                <div style="display:flex; justify-content:space-between; padding:10px">
-                                    <span>WebMasterPro</span>
-                                    <button onclick="changeRole(this, 'admin')">Passer Admin</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <span class="text-2xl font-black tracking-tight text-white font-['Space_Grotesk']">Dev<span class="text-dev-accent">Connect</span></span>
+      </div>
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+        <a href="#introduction" class="hover:text-white transition">Introduction</a>
+        <a href="#features" class="hover:text-white transition">Fonctionnalités</a>
+        <a href="#payment" class="hover:text-white transition">Paiement</a>
+        <a href="#premium" class="hover:text-white transition">Premium</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="openModal('login')" class="text-gray-300 hover:text-white font-medium transition px-4 py-2">Se connecter</button>
+        <button onclick="openModal('signup')" class="btn-3d bg-white text-dev-dark px-5 py-2.5 rounded-lg font-bold hover:bg-dev-accent hover:text-white transition shadow-lg shadow-white/20">
+          Rejoindre
+        </button>
+      </div>
     </div>
+  </nav>
 
-    <!-- Modals -->
-    <div id="projectModal" class="modal">
-        <div class="modal-content">
-            <h3>📁 Nouveau projet</h3>
-            <input type="text" id="projName" placeholder="Nom du projet" style="width:100%; margin:10px 0">
-            <textarea id="projDesc" placeholder="Description" style="width:100%; margin:10px 0"></textarea>
-            <input type="text" id="projStack" placeholder="Stack (React, Node...)" style="width:100%; margin:10px 0">
-            <button onclick="createProject()">Créer</button>
-            <button onclick="closeModal('projectModal')">Annuler</button>
+  <!-- Hero Section -->
+  <section id="introduction" class="relative pt-32 pb-20 px-6 min-h-screen flex items-center">
+    <div class="max-w-7xl mx-auto w-full">
+      
+      <div class="text-center mb-16 perspective-deep">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border border-dev-primary/30 text-dev-primary text-sm font-semibold mb-6">
+          <span class="w-2 h-2 rounded-full bg-dev-accent animate-pulse"></span>
+          Nouvelle version — v3.0
         </div>
-    </div>
+        
+        <h1 class="text-5xl md:text-7xl font-black leading-tight mb-6">
+          <span class="block text-white">La plateforme d'élite</span>
+          <span class="block gradient-text">pour les builders</span>
+        </h1>
+        
+        <p class="text-xl text-gray-400 max-w-4xl mx-auto leading-relaxed mb-8">
+          DevConnect révolutionne la manière dont les développeurs et les recruteurs se rencontrent. 
+          Une plateforme complète où talent rencontre opportunité, avec un système de paiement 
+          sécurisé et une protection d'achat intégrée.
+        </p>
 
-    <div id="jobModal" class="modal">
-        <div class="modal-content">
-            <h3>💼 Publier une offre</h3>
-            <input type="text" id="jobTitle" placeholder="Titre du poste" style="width:100%; margin:10px 0">
-            <input type="number" id="jobPrice" placeholder="Prix horaire (€)" style="width:100%; margin:10px 0">
-            <textarea id="jobDesc" placeholder="Description" style="width:100%; margin:10px 0"></textarea>
-            <button onclick="postJob()">Publier</button>
-            <button onclick="closeModal('jobModal')">Annuler</button>
+        <!-- Stats dynamiques (seront chargées depuis Supabase) -->
+        <div class="flex flex-wrap justify-center gap-12 pt-8 border-t border-white/5">
+          <div>
+            <div class="text-4xl font-black text-white" id="stat-members">—</div>
+            <div class="text-sm text-gray-500 mt-1">Développeurs actifs</div>
+          </div>
+          <div>
+            <div class="text-4xl font-black text-white">10%</div>
+            <div class="text-sm text-gray-500 mt-1">Commission plateforme</div>
+          </div>
+          <div>
+            <div class="text-4xl font-black text-white">100%</div>
+            <div class="text-sm text-gray-500 mt-1">Sécurisé & Protégé</div>
+          </div>
         </div>
-    </div>
+      </div>
 
-    <script>
-        // Premium management
-        let isPremium = localStorage.getItem('premium') === 'true';
-        let isAdmin = localStorage.getItem('role') === 'admin';
+      <!-- Orbe Lumineux -->
+      <div class="flex justify-center mb-20 perspective-deep">
+        <div class="orb-container">
+          <div class="orb-core"></div>
+          <div class="orb-ring"></div>
+          <div class="orb-ring"></div>
+          <div class="orb-ring"></div>
+        </div>
+      </div>
+
+      <!-- Features Grid -->
+      <div id="features" class="bento-grid mb-20">
+        <!-- Feature 1: Chat -->
+        <div class="glass rounded-2xl p-8 card-3d col-span-1 md:col-span-2">
+          <div class="card-3d-inner">
+            <div class="flex items-start justify-between mb-6">
+              <div>
+                <h3 class="text-2xl font-bold text-white mb-2">Chat Temps Réel</h3>
+                <p class="text-gray-400">Salons thématiques, messages privés et notifications instantanées via Supabase Realtime.</p>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-dev-primary to-dev-accent flex items-center justify-center shadow-lg shadow-dev-primary/40">
+                <svg class="icon-svg text-white" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+              </div>
+            </div>
+            <!-- Messages seront chargés depuis Supabase -->
+            <div id="landing-messages" class="glass rounded-lg p-4 space-y-3">
+              <div class="text-gray-500 text-sm text-center">Chargement des messages...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 2: Profils -->
+        <div class="glass rounded-2xl p-8 card-3d">
+          <div class="card-3d-inner">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-4 shadow-lg shadow-purple-500/40">
+              <svg class="icon-svg text-white" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Profils Personnalisables</h3>
+            <p class="text-gray-400 text-sm">Photo de profil, bannière, badges, bio, skills. Présente-toi comme tu l'entends.</p>
+          </div>
+        </div>
+
+        <!-- Feature 3: Paiement -->
+        <div id="payment" class="glass rounded-2xl p-8 card-3d">
+          <div class="card-3d-inner">
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg shadow-yellow-500/40">
+                <svg class="icon-svg text-white" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+              </div>
+              <div class="px-3 py-1 rounded-full bg-yellow-400/20 text-yellow-400 text-xs font-bold">10% Commission</div>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Paiement Sécurisé</h3>
+            <p class="text-gray-400 text-sm mb-4">Protection d'achat intégrée. Le développeur reçoit 50€, le recruteur paie 55€.</p>
+            <div class="flex items-center gap-2 text-xs text-gray-400">
+              <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              <span>Protection maximale</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Autres features... -->
+        <div class="glass rounded-2xl p-8 card-3d">
+          <div class="card-3d-inner">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center mb-4 shadow-lg shadow-green-500/40">
+              <svg class="icon-svg text-white" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Espace Travail</h3>
+            <p class="text-gray-400 text-sm">Crée et partage tes projets. Trouve des collaborateurs.</p>
+          </div>
+        </div>
+
+        <div class="glass rounded-2xl p-8 card-3d">
+          <div class="card-3d-inner">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center mb-4 shadow-lg shadow-cyan-500/40">
+              <svg class="icon-svg text-white" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Explorer</h3>
+            <p class="text-gray-400 text-sm">Filtre par stack tech. Connecte-toi avec les bons devs.</p>
+          </div>
+        </div>
+
+        <div class="glass rounded-2xl p-8 card-3d">
+          <div class="card-3d-inner">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-dev-purple to-dev-primary flex items-center justify-center mb-4 shadow-lg shadow-dev-purple/40">
+              <svg class="icon-svg text-white" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Intelligence Artificielle</h3>
+            <p class="text-gray-400 text-sm">Assistants IA pour booster ta productivité. Plus de chats avec Premium.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="text-center perspective-deep">
+        <div class="flex flex-wrap justify-center gap-4">
+          <button onclick="openModal('signup')" class="btn-3d group relative px-8 py-4 bg-gradient-to-r from-dev-primary to-dev-accent rounded-xl font-bold text-white overflow-hidden shadow-xl shadow-dev-primary/40">
+            <span class="relative flex items-center gap-2">
+              Rejoindre maintenant
+              <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+            </span>
+          </button>
+          <button onclick="openModal('login')" class="btn-3d px-8 py-4 rounded-xl font-bold text-white glass border border-white/10 hover:border-dev-accent/50 transition">
+            Se connecter
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Premium Section -->
+  <section id="premium" class="relative py-24 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <div class="inline-block px-4 py-1 rounded-full chrome-border text-sm font-semibold mb-4 chrome-text"> Premium Exclusif</div>
+        <h2 class="text-5xl font-black text-white mb-4">L'expérience <span class="chrome-text">DevConnect</span> au niveau supérieur</h2>
+        <p class="text-gray-400 text-lg">Deux formules pour les builders sérieux</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8 perspective-deep max-w-5xl mx-auto">
+        <!-- Dev+ -->
+        <div class="glass rounded-3xl p-8 card-3d relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-dev-primary/20 rounded-full blur-3xl"></div>
+          <div class="card-3d-inner relative">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-full badge-blue flex items-center justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+              </div>
+              <h3 class="text-2xl font-black text-white">Dev+</h3>
+            </div>
+            <div class="flex items-baseline gap-1 mb-6">
+              <span class="text-5xl font-black text-white">4,99€</span>
+              <span class="text-gray-400">/ mois</span>
+            </div>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center gap-3 text-gray-300">
+                <svg class="w-5 h-5 text-dev-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Interface argent exclusive
+              </li>
+              <li class="flex items-center gap-3 text-gray-300">
+                <svg class="w-5 h-5 text-dev-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Badge vérifié Premium
+              </li>
+              <li class="flex items-center gap-3 text-gray-300">
+                <svg class="w-5 h-5 text-dev-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Historique messages illimité
+              </li>
+              <li class="flex items-center gap-3 text-gray-300">
+                <svg class="w-5 h-5 text-dev-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Upload avatar HD (10Mo)
+              </li>
+              <li class="flex items-center gap-3 text-gray-300">
+                <svg class="w-5 h-5 text-dev-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Profil mis en avant
+              </li>
+              <li class="flex items-center gap-3 text-gray-300">
+                <svg class="w-5 h-5 text-dev-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Accès IA avancé
+              </li>
+            </ul>
+            <button onclick="subscribe('dev-plus')" class="btn-3d w-full py-4 rounded-xl font-bold text-white glass border border-dev-primary/50 hover:border-dev-primary transition">
+              Activer Dev+
+            </button>
+          </div>
+        </div>
+
+        <!-- Builder Pro -->
+        <div class="rounded-3xl p-8 card-3d relative overflow-hidden chrome-border animate-glow">
+          <div class="absolute top-4 right-4 px-3 py-1 rounded-full badge-chrome text-xs font-black">★ POPULAIRE</div>
+          <div class="absolute top-0 right-0 w-40 h-40 bg-yellow-400/20 rounded-full blur-3xl"></div>
+          <div class="card-3d-inner relative">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-full badge-chrome flex items-center justify-center">
+                <svg class="w-5 h-5 text-dev-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+              </div>
+              <h3 class="text-2xl font-black chrome-text">Builder Pro</h3>
+            </div>
+            <div class="flex items-baseline gap-1 mb-6">
+              <span class="text-5xl font-black chrome-text">9,99€</span>
+              <span class="text-gray-400">/ mois</span>
+            </div>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center gap-3 text-gray-200">
+                <svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                <strong>Tout Dev+ inclus</strong>
+              </li>
+              <li class="flex items-center gap-3 text-gray-200">
+                <svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Logo DC chromé exclusif
+              </li>
+              <li class="flex items-center gap-3 text-gray-200">
+                <svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Accès prioritaire aux offres
+              </li>
+              <li class="flex items-center gap-3 text-gray-200">
+                <svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Analytics profil détaillés
+              </li>
+              <li class="flex items-center gap-3 text-gray-200">
+                <svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                CV export PDF
+              </li>
+              <li class="flex items-center gap-3 text-gray-200">
+                <svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Mentoring matchmaking
+              </li>
+              <li class="flex items-center gap-3 text-gray-200">
+                <svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Support prioritaire
+              </li>
+              <li class="flex items-center gap-3 text-gray-200">
+                <svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                IA illimitée
+              </li>
+            </ul>
+            <button onclick="subscribe('builder-pro')" class="btn-3d w-full py-4 rounded-xl font-black text-dev-dark bg-gradient-to-r from-yellow-400 via-white to-yellow-400 hover:from-yellow-300 hover:to-yellow-500 transition shadow-xl shadow-yellow-400/30">
+              Activer Builder Pro
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="relative border-t border-white/5 py-12 px-6">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center font-black text-white">DC</div>
+        <span class="font-bold text-white">DevConnect</span>
+      </div>
+      <p class="text-gray-500 text-sm">© 2026 DevConnect — La communauté des builders</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ============ APP DASHBOARD ============ -->
+<div id="app" class="page relative z-10 hidden">
+  <div class="flex h-screen">
+    
+    <!-- Sidebar -->
+    <aside class="w-64 glass-strong border-r border-white/5 flex flex-col">
+      <div class="p-6 border-b border-white/5">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center font-black text-white shadow-lg shadow-blue-500/40">DC</div>
+          <div>
+            <div class="font-black text-white">DevConnect</div>
+            <div class="text-xs text-gray-500">v3.0</div>
+          </div>
+        </div>
+      </div>
+      
+      <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+        <div class="text-xs text-gray-500 font-semibold uppercase tracking-wider px-3 py-2">Principal</div>
+        <button onclick="showPage('home')" class="sidebar-item active w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 text-gray-300 hover:text-white" data-page="home">
+          <svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+          <span class="font-medium">Accueil</span>
+        </button>
+        <button onclick="showPage('messages')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 text-gray-300 hover:text-white" data-page="messages">
+          <svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+          <span class="font-medium">Messages</span>
+          <span id="msg-count" class="ml-auto bg-dev-primary text-white text-xs px-2 py-0.5 rounded-full hidden">0</span>
+        </button>
+        <button onclick="showPage('work')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 text-gray-300 hover:text-white" data-page="work">
+          <svg class="icon-svg" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+          <span class="font-medium">Travail</span>
+        </button>
+        <button onclick="showPage('explore')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 text-gray-300 hover:text-white" data-page="explore">
+          <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+          <span class="font-medium">Explorer</span>
+        </button>
+        <button onclick="showPage('recruit')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 text-gray-300 hover:text-white" data-page="recruit">
+          <svg class="icon-svg" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+          <span class="font-medium">Recrutement</span>
+        </button>
         
-        function updateTheme() {
-            if (isPremium) {
-                document.body.classList.add('premium');
-                document.getElementById('premiumToggle').textContent = '⭐ Mode Free';
-            } else {
-                document.body.classList.remove('premium');
-                document.getElementById('premiumToggle').textContent = '✨ Mode Premium (4.99€/mois)';
-            }
-        }
+        <div class="text-xs text-gray-500 font-semibold uppercase tracking-wider px-3 py-2 mt-6">Compte</div>
+        <button onclick="showPage('premium')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 text-gray-300 hover:text-white" data-page="premium">
+          <span class="text-lg">✦</span>
+          <span class="font-medium chrome-text">Premium</span>
+        </button>
+        <button onclick="showPage('profile')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 text-gray-300 hover:text-white" data-page="profile">
+          <svg class="icon-svg" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <span class="font-medium">Mon Profil</span>
+        </button>
+        <button onclick="showPage('settings')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 text-gray-300 hover:text-white" data-page="settings">
+          <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span class="font-medium">Paramètres</span>
+        </button>
         
-        function switchToPremium() {
-            if (isPremium) {
-                isPremium = false;
-                localStorage.setItem('premium', 'false');
-            } else {
-                if (confirm('Passer à Premium pour 4,99€/mois ?')) {
-                    // Simulate payment
-                    alert('✨ Paiement réussi ! Bienvenue en Premium !');
-                    isPremium = true;
-                    localStorage.setItem('premium', 'true');
-                }
-            }
-            updateTheme();
-            updateUIForRole();
-        }
+        <!-- ADMIN PANEL - Visible seulement si admin -->
+        <button id="admin-btn" onclick="showPage('admin')" class="sidebar-item hidden w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 text-gray-300 hover:text-white" data-page="admin">
+          <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+          <span class="font-medium text-red-400">Admin Panel</span>
+        </button>
+      </nav>
+      
+      <div class="p-4 border-t border-white/5">
+        <button onclick="logout()" class="w-full px-4 py-3 rounded-lg glass border border-red-500/30 text-red-400 hover:bg-red-500/10 transition flex items-center gap-3">
+          <svg class="icon-svg" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          <span class="font-medium">Se déconnecter</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto">
+      
+      <!-- Top Bar -->
+      <header class="glass-strong border-b border-white/5 px-8 py-4 flex items-center justify-between sticky top-0 z-20">
+        <div>
+          <h1 class="text-2xl font-black text-white" id="page-title">Dashboard</h1>
+          <p class="text-sm text-gray-400" id="user-greeting">Bienvenue</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <button class="w-10 h-10 rounded-lg glass flex items-center justify-center text-gray-400 hover:text-white transition relative">
+            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <span id="notif-dot" class="absolute top-2 right-2 w-2 h-2 bg-dev-accent rounded-full hidden"></span>
+          </button>
+          <div class="flex items-center gap-3 glass rounded-lg px-3 py-2">
+            <div id="user-avatar" class="w-8 h-8 rounded-full bg-gradient-to-br from-dev-primary to-dev-accent flex items-center justify-center font-bold text-white text-sm">U</div>
+            <span id="user-name" class="text-sm font-medium text-white">Utilisateur</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="p-8">
         
-        document.getElementById('premiumToggle').onclick = switchToPremium;
-        document.getElementById('subscribeBtn')?.addEventListener('click', switchToPremium);
-        
-        function updateUIForRole() {
-            const profileRole = document.getElementById('profileRole');
-            if (profileRole) {
-                profileRole.textContent = isPremium ? 'Premium ⭐' : 'Free';
-                profileRole.style.color = isPremium ? '#e2e8f0' : '';
-            }
+        <!-- HOME PAGE -->
+        <div id="page-home" class="app-page">
+          <div class="glass-strong rounded-2xl p-8 mb-6 card-3d">
+            <div class="card-3d-inner">
+              <h2 class="text-3xl font-black text-white mb-2">Dashboard DevConnect v3</h2>
+              <p class="text-gray-400">Ta plateforme tout-en-un pour coder, collaborer et évoluer.</p>
+            </div>
+          </div>
+          
+          <!-- Stats dynamiques depuis Supabase -->
+          <div class="grid md:grid-cols-4 gap-4 mb-6">
+            <div class="glass rounded-xl p-6 card-3d">
+              <div class="text-dev-accent text-sm font-semibold mb-2">Messages</div>
+              <div id="stat-msgs" class="text-3xl font-black text-white">—</div>
+            </div>
+            <div class="glass rounded-xl p-6 card-3d">
+              <div class="text-dev-primary text-sm font-semibold mb-2">Projets</div>
+              <div id="stat-projects" class="text-3xl font-black text-white">—</div>
+            </div>
+            <div class="glass rounded-xl p-6 card-3d">
+              <div class="text-purple-400 text-sm font-semibold mb-2">Amis</div>
+              <div id="stat-friends" class="text-3xl font-black text-white">—</div>
+            </div>
+            <div class="glass rounded-xl p-6 card-3d">
+              <div class="text-yellow-400 text-sm font-semibold mb-2">Rang</div>
+              <div id="stat-rank" class="text-3xl font-black text-white">—</div>
+            </div>
+          </div>
+
+          <!-- Activité récente -->
+          <div class="grid lg:grid-cols-2 gap-6">
+            <div class="glass rounded-2xl p-6">
+              <h3 class="font-bold text-white mb-4">Activité récente</h3>
+              <div id="recent-activity" class="space-y-3">
+                <div class="text-gray-500 text-sm text-center py-4">Chargement...</div>
+              </div>
+            </div>
             
-            const adminNav = document.getElementById('adminNav');
-            if (adminNav) {
-                adminNav.style.display = isAdmin ? 'flex' : 'none';
-            }
-            
-            // Premium badge on premium page
-            if (isPremium) {
-                const premiumCard = document.querySelector('#page-premium .card');
-                if (premiumCard) {
-                    premiumCard.innerHTML = '<h2>✨ Vous êtes Premium ! ✨</h2><p>Merci de soutenir DevConnect !</p><button onclick="switchToPremium()" style="background:white; color:#1e293b">Désactiver Premium</button>';
-                }
-            }
+            <div class="glass rounded-2xl p-6">
+              <h3 class="font-bold text-white mb-4">Salons populaires</h3>
+              <div id="channels-list" class="space-y-2">
+                <div class="text-gray-500 text-sm text-center py-4">Chargement...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MESSAGES PAGE -->
+        <div id="page-messages" class="app-page hidden">
+          <div class="grid lg:grid-cols-3 gap-6 h-[calc(100vh-180px)]">
+            <div class="glass rounded-2xl p-4 overflow-y-auto">
+              <h3 class="font-bold text-white mb-4 px-2">Salons & DMs</h3>
+              <div id="sidebar-channels" class="space-y-1">
+                <div class="text-gray-500 text-sm text-center py-4">Chargement...</div>
+              </div>
+            </div>
+            <div class="lg:col-span-2 glass rounded-2xl p-6 flex flex-col">
+              <div class="border-b border-white/5 pb-4 mb-4">
+                <h3 id="current-channel" class="font-bold text-white"># général</h3>
+                <p class="text-xs text-gray-500">Salon général DevConnect</p>
+              </div>
+              <div id="messages-container" class="flex-1 space-y-4 overflow-y-auto mb-4">
+                <div class="text-gray-500 text-center py-8">Aucun message</div>
+              </div>
+              <div class="flex gap-2">
+                <input id="msg-input" type="text" placeholder="Écrire un message..." class="input-3d flex-1 rounded-lg px-4 py-3 text-white">
+                <button onclick="sendMessage()" class="btn-3d px-6 py-3 bg-gradient-to-r from-dev-primary to-dev-accent rounded-lg font-bold text-white">Envoyer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WORK PAGE -->
+        <div id="page-work" class="app-page hidden">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-black text-white">Tes projets</h2>
+            <button onclick="openModal('new-project')" class="btn-3d px-5 py-2.5 bg-gradient-to-r from-dev-primary to-dev-accent rounded-lg font-bold text-white">+ Nouveau projet</button>
+          </div>
+          <div id="projects-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="text-gray-500 text-center py-12 col-span-full">Aucun projet</div>
+          </div>
+        </div>
+
+        <!-- EXPLORE PAGE -->
+        <div id="page-explore" class="app-page hidden">
+          <div class="glass rounded-2xl p-6 mb-6">
+            <input type="text" placeholder="Rechercher un développeur, une stack, un projet..." class="input-3d w-full rounded-lg px-4 py-3 text-white">
+          </div>
+          <div class="text-center py-20">
+            <div class="text-6xl mb-4">🔍</div>
+            <h3 class="text-xl font-bold text-white mb-2">Exploration communautaire</h3>
+            <p class="text-gray-400">Filtre par stack tech et connecte-toi avec les bons devs.</p>
+          </div>
+        </div>
+
+        <!-- RECRUIT PAGE -->
+        <div id="page-recruit" class="app-page hidden">
+          <div class="text-center py-20">
+            <div class="text-6xl mb-4">💼</div>
+            <h3 class="text-xl font-bold text-white mb-2">Recrutement</h3>
+            <p class="text-gray-400">Offres · Candidatures · Matching — Bientôt</p>
+          </div>
+        </div>
+
+        <!-- PREMIUM PAGE -->
+        <div id="page-premium" class="app-page hidden">
+          <div class="text-center mb-8">
+            <div class="inline-block px-4 py-1 rounded-full chrome-border text-sm font-semibold mb-4 chrome-text"> Exclusif DC</div>
+            <h2 class="text-4xl font-black chrome-text mb-2">DevConnect Premium</h2>
+            <p class="text-gray-400">L'expérience DevConnect au niveau supérieur</p>
+          </div>
+          <div class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+            <!-- Dev+ -->
+            <div class="glass rounded-3xl p-8 card-3d">
+              <h3 class="text-2xl font-black text-white mb-2">Dev+</h3>
+              <div class="flex items-baseline gap-1 mb-6"><span class="text-4xl font-black text-white">4,99€</span><span class="text-gray-400">/ mois</span></div>
+              <ul class="space-y-3 mb-6 text-sm">
+                <li class="text-gray-300 flex gap-2"><svg class="w-5 h-5 text-dev-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Interface argent exclusive</li>
+                <li class="text-gray-300 flex gap-2"><svg class="w-5 h-5 text-dev-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Badge vérifié Premium</li>
+                <li class="text-gray-300 flex gap-2"><svg class="w-5 h-5 text-dev-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Historique messages illimité</li>
+                <li class="text-gray-300 flex gap-2"><svg class="w-5 h-5 text-dev-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Upload avatar HD (10Mo)</li>
+                <li class="text-gray-300 flex gap-2"><svg class="w-5 h-5 text-dev-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Profil mis en avant</li>
+                <li class="text-gray-300 flex gap-2"><svg class="w-5 h-5 text-dev-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Accès IA avancé</li>
+              </ul>
+              <button onclick="subscribe('dev-plus')" class="btn-3d w-full py-3 rounded-xl font-bold text-white glass border border-dev-primary/50">Activer Dev+</button>
+            </div>
+            <!-- Builder Pro -->
+            <div class="rounded-3xl p-8 card-3d chrome-border animate-glow relative">
+              <div class="absolute top-4 right-4 px-3 py-1 rounded-full badge-chrome text-xs font-black">★ POPULAIRE</div>
+              <h3 class="text-2xl font-black chrome-text mb-2">Builder Pro</h3>
+              <div class="flex items-baseline gap-1 mb-6"><span class="text-4xl font-black chrome-text">9,99€</span><span class="text-gray-400">/ mois</span></div>
+              <ul class="space-y-3 mb-6 text-sm">
+                <li class="text-gray-200 flex gap-2"><svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <strong>Tout Dev+ inclus</strong></li>
+                <li class="text-gray-200 flex gap-2"><svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Logo DC chromé exclusif</li>
+                <li class="text-gray-200 flex gap-2"><svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Accès prioritaire aux offres</li>
+                <li class="text-gray-200 flex gap-2"><svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Analytics profil détaillés</li>
+                <li class="text-gray-200 flex gap-2"><svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> CV export PDF</li>
+                <li class="text-gray-200 flex gap-2"><svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Mentoring matchmaking</li>
+                <li class="text-gray-200 flex gap-2"><svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Support prioritaire</li>
+                <li class="text-gray-200 flex gap-2"><svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> IA illimitée</li>
+              </ul>
+              <button onclick="subscribe('builder-pro')" class="btn-3d w-full py-3 rounded-xl font-black text-dev-dark bg-gradient-to-r from-yellow-400 via-white to-yellow-400">Activer Builder Pro</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROFILE PAGE -->
+        <div id="page-profile" class="app-page hidden">
+          <div class="glass-strong rounded-2xl overflow-hidden card-3d">
+            <div class="profile-banner relative">
+              <button onclick="editBanner()" class="absolute top-4 right-4 px-4 py-2 rounded-lg glass text-white text-sm font-medium hover:bg-white/10 transition">
+                Modifier la bannière
+              </button>
+            </div>
+            <div class="p-8">
+              <div class="flex items-end gap-6 -mt-16 mb-6">
+                <div id="profile-avatar" class="w-32 h-32 rounded-full bg-gradient-to-br from-dev-primary to-dev-accent border-4 border-dev-card flex items-center justify-center text-4xl font-black text-white shadow-xl">U</div>
+                <div class="flex-1">
+                  <div class="flex items-center gap-3 mb-2">
+                    <h2 id="profile-name" class="text-3xl font-black text-white">Utilisateur</h2>
+                    <span id="profile-badge" class="hidden px-3 py-1 rounded-full badge-blue text-xs font-bold flex items-center gap-1">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                      Premium
+                    </span>
+                  </div>
+                  <p id="profile-title" class="text-gray-400">Développeur Full Stack · Paris, France</p>
+                </div>
+                <button onclick="editProfile()" class="px-6 py-3 rounded-lg glass border border-white/10 text-white font-medium hover:bg-white/5 transition">
+                  Modifier le profil
+                </button>
+              </div>
+              
+              <div class="grid md:grid-cols-3 gap-6 mb-6">
+                <div class="glass rounded-xl p-4 text-center">
+                  <div id="profile-msgs" class="text-2xl font-black text-white">—</div>
+                  <div class="text-sm text-gray-400">Messages</div>
+                </div>
+                <div class="glass rounded-xl p-4 text-center">
+                  <div id="profile-friends" class="text-2xl font-black text-white">—</div>
+                  <div class="text-sm text-gray-400">Amis</div>
+                </div>
+                <div class="glass rounded-xl p-4 text-center">
+                  <div id="profile-projects" class="text-2xl font-black text-white">—</div>
+                  <div class="text-sm text-gray-400">Projets</div>
+                </div>
+              </div>
+
+              <div class="glass rounded-xl p-6">
+                <h3 class="font-bold text-white mb-4">Bio</h3>
+                <p id="profile-bio" class="text-gray-400">Aucune bio.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SETTINGS PAGE -->
+        <div id="page-settings" class="app-page hidden">
+          <h2 class="text-2xl font-black text-white mb-6">Paramètres</h2>
+          <div class="grid lg:grid-cols-2 gap-6">
+            <div class="glass rounded-2xl p-6">
+              <h3 class="font-bold text-white mb-4">Compte</h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="text-xs text-gray-500 uppercase font-semibold">Adresse e-mail</label>
+                  <input id="settings-email" type="email" class="input-3d w-full rounded-lg px-4 py-2.5 text-white mt-1">
+                </div>
+                <div>
+                  <label class="text-xs text-gray-500 uppercase font-semibold">Rôle</label>
+                  <div id="settings-role" class="text-white mt-1">Membre</div>
+                </div>
+                <div>
+                  <label class="text-xs text-gray-500 uppercase font-semibold">Membre depuis</label>
+                  <div id="settings-joined" class="text-white mt-1">—</div>
+                </div>
+              </div>
+            </div>
+            <div class="glass rounded-2xl p-6">
+              <h3 class="font-bold text-white mb-4">Mot de passe</h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="text-xs text-gray-500 uppercase font-semibold">Nouveau mot de passe</label>
+                  <input type="password" class="input-3d w-full rounded-lg px-4 py-2.5 text-white mt-1">
+                </div>
+                <div>
+                  <label class="text-xs text-gray-500 uppercase font-semibold">Confirmer</label>
+                  <input type="password" class="input-3d w-full rounded-lg px-4 py-2.5 text-white mt-1">
+                </div>
+                <button class="btn-3d w-full py-2.5 rounded-lg font-bold text-white glass border border-dev-primary/50">Mettre à jour</button>
+              </div>
+            </div>
+            <div class="glass rounded-2xl p-6">
+              <h3 class="font-bold text-white mb-4">Notifications</h3>
+              <div class="space-y-3">
+                <label class="flex items-center justify-between cursor-pointer">
+                  <span class="text-gray-300">Nouveaux messages</span>
+                  <input type="checkbox" checked class="w-5 h-5 accent-dev-primary">
+                </label>
+                <label class="flex items-center justify-between cursor-pointer">
+                  <span class="text-gray-300">Demandes d'ami</span>
+                  <input type="checkbox" checked class="w-5 h-5 accent-dev-primary">
+                </label>
+              </div>
+            </div>
+            <div class="glass rounded-2xl p-6 border border-red-500/20">
+              <h3 class="font-bold text-red-400 mb-4">Zone danger</h3>
+              <button onclick="logout()" class="w-full py-2.5 rounded-lg font-bold text-white bg-red-500/20 hover:bg-red-500/30 transition border border-red-500/30">Se déconnecter</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADMIN PANEL -->
+        <div id="page-admin" class="app-page hidden">
+          <div class="glass-strong rounded-2xl p-8 mb-6 border border-red-500/30">
+            <h2 class="text-3xl font-black text-white mb-2 flex items-center gap-3">
+              <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+              Admin Panel
+            </h2>
+            <p class="text-gray-400">Gestion complète de la plateforme DevConnect</p>
+          </div>
+
+          <div class="grid md:grid-cols-4 gap-4 mb-6">
+            <div class="glass rounded-xl p-6 card-3d">
+              <div class="text-blue-400 text-sm font-semibold mb-2">Total Membres</div>
+              <div id="admin-total-members" class="text-3xl font-black text-white">—</div>
+            </div>
+            <div class="glass rounded-xl p-6 card-3d">
+              <div class="text-green-400 text-sm font-semibold mb-2">Messages (24h)</div>
+              <div id="admin-msgs-24h" class="text-3xl font-black text-white">—</div>
+            </div>
+            <div class="glass rounded-xl p-6 card-3d">
+              <div class="text-purple-400 text-sm font-semibold mb-2">Premium</div>
+              <div id="admin-premium" class="text-3xl font-black text-white">—</div>
+            </div>
+            <div class="glass rounded-xl p-6 card-3d">
+              <div class="text-yellow-400 text-sm font-semibold mb-2">Revenus</div>
+              <div id="admin-revenue" class="text-3xl font-black text-white">—</div>
+            </div>
+          </div>
+
+          <div class="grid lg:grid-cols-2 gap-6">
+            <div class="glass rounded-2xl p-6">
+              <h3 class="font-bold text-white mb-4">Derniers membres</h3>
+              <div id="admin-recent-members" class="space-y-3">
+                <div class="text-gray-500 text-sm text-center py-4">Chargement...</div>
+              </div>
+            </div>
+            <div class="glass rounded-2xl p-6">
+              <h3 class="font-bold text-white mb-4">Derniers messages</h3>
+              <div id="admin-recent-msgs" class="space-y-3">
+                <div class="text-gray-500 text-sm text-center py-4">Chargement...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ============ MODALS ============ -->
+<!-- Login Modal -->
+<div id="modal-login" class="fixed inset-0 z-[100] hidden items-center justify-center modal-overlay">
+  <div class="glass-strong rounded-3xl p-8 max-w-md w-full mx-4 card-3d relative">
+    <button onclick="closeModal('login')" class="absolute top-4 right-4 w-8 h-8 rounded-lg glass flex items-center justify-center text-gray-400 hover:text-white">×</button>
+    <div class="text-center mb-6">
+      <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center font-black text-white text-2xl mx-auto mb-4 shadow-xl shadow-blue-500/50">DC</div>
+      <h2 class="text-2xl font-black text-white">Connexion</h2>
+      <p class="text-gray-400 text-sm">Rejoins la communauté des builders</p>
+    </div>
+    <form onsubmit="handleLogin(event)" class="space-y-4">
+      <input type="email" id="login-email" placeholder="Email" required class="input-3d w-full rounded-lg px-4 py-3 text-white">
+      <input type="password" id="login-password" placeholder="Mot de passe" required class="input-3d w-full rounded-lg px-4 py-3 text-white">
+      <button type="submit" class="btn-3d w-full py-3 rounded-lg font-bold text-white bg-gradient-to-r from-dev-primary to-dev-accent shadow-lg shadow-dev-primary/40">
+        Se connecter
+      </button>
+    </form>
+    <p class="text-center text-sm text-gray-400 mt-6">Pas encore membre ? <button onclick="closeModal('login'); openModal('signup')" class="text-dev-accent font-semibold hover:underline">Créer un compte</button></p>
+  </div>
+</div>
+
+<!-- Signup Modal -->
+<div id="modal-signup" class="fixed inset-0 z-[100] hidden items-center justify-center modal-overlay">
+  <div class="glass-strong rounded-3xl p-8 max-w-md w-full mx-4 card-3d relative">
+    <button onclick="closeModal('signup')" class="absolute top-4 right-4 w-8 h-8 rounded-lg glass flex items-center justify-center text-gray-400 hover:text-white">×</button>
+    <div class="text-center mb-6">
+      <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center font-black text-white text-2xl mx-auto mb-4 shadow-xl shadow-blue-500/50">DC</div>
+      <h2 class="text-2xl font-black text-white">Inscription</h2>
+      <p class="text-gray-400 text-sm">Crée ton compte en 30 secondes</p>
+    </div>
+    <form onsubmit="handleSignup(event)" class="space-y-3">
+      <div class="grid grid-cols-2 gap-3">
+        <input type="text" id="signup-firstname" placeholder="Prénom" required class="input-3d w-full rounded-lg px-4 py-3 text-white">
+        <input type="text" id="signup-lastname" placeholder="Nom" required class="input-3d w-full rounded-lg px-4 py-3 text-white">
+      </div>
+      <input type="email" id="signup-email" placeholder="Email" required class="input-3d w-full rounded-lg px-4 py-3 text-white">
+      <input type="password" id="signup-password" placeholder="Mot de passe" required class="input-3d w-full rounded-lg px-4 py-3 text-white">
+      <button type="submit" class="btn-3d w-full py-3 rounded-lg font-bold text-white bg-gradient-to-r from-dev-primary to-dev-accent shadow-lg shadow-dev-primary/40">
+        Créer mon compte
+      </button>
+    </form>
+    <p class="text-center text-sm text-gray-400 mt-6">Déjà membre ? <button onclick="closeModal('signup'); openModal('login')" class="text-dev-accent font-semibold hover:underline">Se connecter</button></p>
+  </div>
+</div>
+
+<!-- New Project Modal -->
+<div id="modal-new-project" class="fixed inset-0 z-[100] hidden items-center justify-center modal-overlay">
+  <div class="glass-strong rounded-3xl p-8 max-w-lg w-full mx-4 card-3d relative">
+    <button onclick="closeModal('new-project')" class="absolute top-4 right-4 w-8 h-8 rounded-lg glass flex items-center justify-center text-gray-400 hover:text-white">×</button>
+    <h2 class="text-2xl font-black text-white mb-6">Nouveau projet</h2>
+    <form onsubmit="createProject(event)" class="space-y-4">
+      <div>
+        <label class="text-xs text-gray-500 uppercase font-semibold">Nom</label>
+        <input type="text" id="project-name" required class="input-3d w-full rounded-lg px-4 py-2.5 text-white mt-1">
+      </div>
+      <div>
+        <label class="text-xs text-gray-500 uppercase font-semibold">Description</label>
+        <textarea id="project-desc" rows="3" class="input-3d w-full rounded-lg px-4 py-2.5 text-white mt-1"></textarea>
+      </div>
+      <div>
+        <label class="text-xs text-gray-500 uppercase font-semibold">Stack technique</label>
+        <input type="text" id="project-stack" placeholder="React, Node.js, PostgreSQL..." class="input-3d w-full rounded-lg px-4 py-2.5 text-white mt-1">
+      </div>
+      <div>
+        <label class="text-xs text-gray-500 uppercase font-semibold">Visibilité</label>
+        <select id="project-visibility" class="input-3d w-full rounded-lg px-4 py-2.5 text-white mt-1">
+          <option value="public">Public</option>
+          <option value="private">Privé</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-3d w-full py-3 rounded-lg font-bold text-white bg-gradient-to-r from-dev-primary to-dev-accent">
+        Créer le projet
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  // ============================================
+  // CONFIGURATION SUPABASE
+  // ============================================
+  const SUPABASE_URL = 'https://ekezdtageniidwjlgyys.supabase.co/rest/v1/';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVrZXpkdGFnZW5paWR3amxneXlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwMTg3NDgsImV4cCI6MjA5NDU5NDc0OH0.aolWqRWGp2sJyHsm3vFNx6wVEyt1uEc7rM5i4fDgb88';
+  
+  let supabase;
+  let currentUser = null;
+  let currentChannel = 'general';
+  
+  // Initialiser Supabase si les clés sont configurées
+  function initSupabase() {
+    if (SUPABASE_URL !== 'YOUR_SUPABASE_URL' && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY') {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      console.log('✅ Supabase initialisé');
+    } else {
+      console.warn('⚠️ Supabase non configuré - Mode démo');
+      // Mode démo - données simulées
+      startDemoMode();
+    }
+  }
+  
+  // Mode démo pour tester sans Supabase
+  function startDemoMode() {
+    console.log('🎮 Mode démo activé');
+    // Simuler un utilisateur connecté
+    currentUser = {
+      id: 'demo-user-1',
+      email: 'demo@devconnect.com',
+      first_name: 'Demo',
+      last_name: 'User',
+      is_premium: false,
+      is_admin: false,
+      created_at: new Date().toISOString()
+    };
+    updateUIForUser();
+  }
+  
+  // ============================================
+  // AUTHENTIFICATION
+  // ============================================
+  async function handleLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    
+    if (!supabase) {
+      alert('Supabase non configuré. Utilise le mode démo ou configure tes clés.');
+      return;
+    }
+    
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+    
+    if (error) {
+      alert('Erreur de connexion: ' + error.message);
+      return;
+    }
+    
+    // Récupérer les infos utilisateur depuis la table profiles
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', data.user.id)
+      .single();
+    
+    currentUser = profile || data.user;
+    closeModal('login');
+    enterApp();
+  }
+  
+  async function handleSignup(e) {
+    e.preventDefault();
+    const firstName = document.getElementById('signup-firstname').value;
+    const lastName = document.getElementById('signup-lastname').value;
+    const email = document.getElementById('signup-email').value;
+    const password = document.getElementById('signup-password').value;
+    
+    if (!supabase) {
+      alert('Supabase non configuré. Utilise le mode démo ou configure tes clés.');
+      return;
+    }
+    
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          first_name: firstName,
+          last_name: lastName
         }
-        
-        function changeRole(btn, role) {
-            if (role === 'admin') {
-                isAdmin = true;
-                localStorage.setItem('role', 'admin');
-                alert('Utilisateur promu Admin !');
-                updateUIForRole();
-            } else if (role === 'premium') {
-                alert('Utilisateur passé en Premium !');
-            }
-        }
-        
-        // Navigation
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const page = item.dataset.page;
-                document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-                document.getElementById(`page-${page}`).style.display = 'block';
-                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-                item.classList.add('active');
-            });
+      }
+    });
+    
+    if (error) {
+      alert('Erreur d\'inscription: ' + error.message);
+      return;
+    }
+    
+    // Créer le profil dans la table profiles
+    await supabase.from('profiles').insert({
+      id: data.user.id,
+      email,
+      first_name: firstName,
+      last_name: lastName,
+      is_premium: false,
+      is_admin: false
+    });
+    
+    currentUser = {
+      id: data.user.id,
+      email,
+      first_name: firstName,
+      last_name: lastName,
+      is_premium: false,
+      is_admin: false
+    };
+    
+    closeModal('signup');
+    enterApp();
+  }
+  
+  async function logout() {
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
+    currentUser = null;
+    location.reload();
+  }
+  
+  function enterApp() {
+    document.getElementById('landing').classList.remove('active');
+    document.getElementById('landing').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+    document.getElementById('app').classList.add('active');
+    updateUIForUser();
+    loadDashboardData();
+  }
+  
+  // ============================================
+  // UI UPDATES
+  // ============================================
+  function updateUIForUser() {
+    if (!currentUser) return;
+    
+    // Mettre à jour les infos utilisateur
+    const name = currentUser.first_name || currentUser.email?.split('@')[0] || 'Utilisateur';
+    document.getElementById('user-name').textContent = name;
+    document.getElementById('user-greeting').textContent = `Bienvenue, ${name}`;
+    document.getElementById('user-avatar').textContent = name.charAt(0).toUpperCase();
+    
+    // Profil
+    document.getElementById('profile-name').textContent = `${currentUser.first_name || ''} ${currentUser.last_name || ''}`.trim() || name;
+    document.getElementById('profile-avatar').textContent = name.charAt(0).toUpperCase();
+    
+    // Badge Premium
+    if (currentUser.is_premium) {
+      document.getElementById('profile-badge').classList.remove('hidden');
+      
+      // Activer le thème Premium Luxury (blanc/argent)
+      document.body.classList.add('premium-theme');
+      
+      // Changer le logo en version chrome pour Builder Pro
+      if (currentUser.premium_tier === 'builder-pro') {
+        document.querySelectorAll('.bg-gradient-to-br.from-blue-400').forEach(el => {
+          el.classList.remove('from-blue-400', 'to-blue-600');
+          el.classList.add('from-gray-300', 'to-gray-500');
         });
+      }
+    }
+    
+    // Afficher bouton Admin si admin
+    if (currentUser.is_admin) {
+      document.getElementById('admin-btn').classList.remove('hidden');
+    }
+    
+    // Settings
+    document.getElementById('settings-email').value = currentUser.email || '';
+    document.getElementById('settings-role').textContent = currentUser.is_admin ? 'Administrateur' : (currentUser.is_premium ? 'Premium' : 'Membre');
+    document.getElementById('settings-joined').textContent = currentUser.created_at ? new Date(currentUser.created_at).toLocaleDateString('fr-FR') : '—';
+  }
+  
+  async function loadDashboardData() {
+    if (!supabase) {
+      // Mode démo - données vides
+      document.getElementById('stat-members').textContent = '0';
+      document.getElementById('stat-msgs').textContent = '0';
+      document.getElementById('stat-projects').textContent = '0';
+      document.getElementById('stat-friends').textContent = '0';
+      document.getElementById('stat-rank').textContent = '—';
+      return;
+    }
+    
+    // Charger le nombre total de membres
+    const { count: membersCount } = await supabase
+      .from('profiles')
+      .select('*', { count: 'exact', head: true });
+    document.getElementById('stat-members').textContent = membersCount || '0';
+    
+    // Charger les stats de l'utilisateur
+    if (currentUser) {
+      const { data: messages } = await supabase
+        .from('messages')
+        .select('*')
+        .eq('user_id', currentUser.id);
+      document.getElementById('stat-msgs').textContent = messages?.length || '0';
+      document.getElementById('profile-msgs').textContent = messages?.length || '0';
+      
+      const { data: projects } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('user_id', currentUser.id);
+      document.getElementById('stat-projects').textContent = projects?.length || '0';
+      document.getElementById('profile-projects').textContent = projects?.length || '0';
+    }
+    
+    // Charger les messages récents pour le landing
+    loadLandingMessages();
+    
+    // Charger l'activité récente
+    loadRecentActivity();
+    
+    // Charger les salons
+    loadChannels();
+    
+    // Charger les projets
+    loadProjects();
+    
+    // Admin stats
+    if (currentUser?.is_admin) {
+      loadAdminStats();
+    }
+  }
+  
+  async function loadLandingMessages() {
+    const container = document.getElementById('landing-messages');
+    if (!supabase) {
+      container.innerHTML = '<div class="text-gray-500 text-sm text-center">Mode démo - Aucun message</div>';
+      return;
+    }
+    
+    const { data: messages } = await supabase
+      .from('messages')
+      .select(`
+        content,
+        created_at,
+        profiles:user_id (first_name, last_name)
+      `)
+      .order('created_at', { ascending: false })
+      .limit(3);
+    
+    if (!messages || messages.length === 0) {
+      container.innerHTML = '<div class="text-gray-500 text-sm text-center">Soyez le premier à poster !</div>';
+      return;
+    }
+    
+    container.innerHTML = messages.map(msg => {
+      const name = msg.profiles ? `${msg.profiles.first_name || ''} ${msg.profiles.last_name || ''}`.trim() : 'Anonyme';
+      const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+      return `
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-dev-primary/20 flex items-center justify-center text-xs font-bold text-dev-primary">${initials}</div>
+          <div class="flex-1 glass rounded-lg px-3 py-2 text-sm text-gray-300">${msg.content}</div>
+        </div>
+      `;
+    }).join('');
+  }
+  
+  async function loadRecentActivity() {
+    const container = document.getElementById('recent-activity');
+    if (!supabase) {
+      container.innerHTML = '<div class="text-gray-500 text-sm text-center py-4">Aucune activité</div>';
+      return;
+    }
+    
+    // Charger les dernières activités (messages, projets, etc.)
+    const { data: messages } = await supabase
+      .from('messages')
+      .select(`
+        content,
+        created_at,
+        profiles:user_id (first_name, last_name)
+      `)
+      .order('created_at', { ascending: false })
+      .limit(5);
+    
+    if (!messages || messages.length === 0) {
+      container.innerHTML = '<div class="text-gray-500 text-sm text-center py-4">Aucune activité récente</div>';
+      return;
+    }
+    
+    container.innerHTML = messages.map(msg => {
+      const name = msg.profiles ? `${msg.profiles.first_name || ''} ${msg.profiles.last_name || ''}`.trim() : 'Anonyme';
+      const time = new Date(msg.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      return `
+        <div class="flex items-center gap-3 p-3 rounded-lg bg-white/5">
+          <div class="w-10 h-10 rounded-full bg-dev-primary/20 flex items-center justify-center text-dev-primary font-bold">${name.charAt(0)}</div>
+          <div class="flex-1">
+            <div class="text-sm text-white font-medium">${name} a posté un message</div>
+            <div class="text-xs text-gray-500">Il y a ${time}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  
+  async function loadChannels() {
+    const container = document.getElementById('channels-list');
+    const sidebar = document.getElementById('sidebar-channels');
+    
+    const channels = [
+      { id: 'general', name: 'général', icon: '#' },
+      { id: 'aide', name: 'aide', icon: '#' },
+      { id: 'projets', name: 'projets', icon: '#' },
+      { id: 'showcase', name: 'showcase', icon: '#' }
+    ];
+    
+    const html = channels.map(ch => `
+      <div onclick="selectChannel('${ch.id}')" class="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 transition cursor-pointer ${currentChannel === ch.id ? 'bg-dev-primary/20' : ''}">
+        <div class="flex items-center gap-3">
+          <span class="text-dev-accent">${ch.icon}</span>
+          <span class="text-white font-medium">${ch.name}</span>
+        </div>
+      </div>
+    `).join('');
+    
+    if (container) container.innerHTML = html;
+    if (sidebar) sidebar.innerHTML = `
+      <div class="text-xs text-gray-500 font-semibold uppercase px-2 py-2">Salons</div>
+      ${html}
+      <div class="text-xs text-gray-500 font-semibold uppercase px-2 py-2 mt-4">Messages privés</div>
+      <div class="text-gray-500 text-sm text-center py-2">Aucun MP</div>
+    `;
+  }
+  
+  async function loadProjects() {
+    const container = document.getElementById('projects-grid');
+    if (!container) return;
+    
+    if (!supabase || !currentUser) {
+      container.innerHTML = '<div class="text-gray-500 text-center py-12 col-span-full">Aucun projet</div>';
+      return;
+    }
+    
+    const { data: projects } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('user_id', currentUser.id);
+    
+    if (!projects || projects.length === 0) {
+      container.innerHTML = '<div class="text-gray-500 text-center py-12 col-span-full">Aucun projet</div>';
+      return;
+    }
+    
+    container.innerHTML = projects.map(project => `
+      <div class="glass rounded-2xl p-6 card-3d">
+        <div class="flex items-center justify-between mb-4">
+          <span class="px-2 py-1 rounded ${project.visibility === 'public' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'} text-xs font-semibold">
+            ${project.visibility === 'public' ? 'Public' : 'Privé'}
+          </span>
+          <span class="text-xs text-gray-500">${new Date(project.created_at).toLocaleDateString('fr-FR')}</span>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">${project.name}</h3>
+        <p class="text-sm text-gray-400 mb-4">${project.description || 'Aucune description'}</p>
+        ${project.stack ? `
+          <div class="flex flex-wrap gap-2 mb-4">
+            ${project.stack.split(',').map(tech => `<span class="px-2 py-1 rounded bg-white/5 text-xs text-gray-300">${tech.trim()}</span>`).join('')}
+          </div>
+        ` : ''}
+      </div>
+    `).join('');
+  }
+  
+  async function loadAdminStats() {
+    if (!supabase) return;
+    
+    // Total membres
+    const { count: totalMembers } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+    document.getElementById('admin-total-members').textContent = totalMembers || '0';
+    
+    // Premium
+    const { count: premiumCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('is_premium', true);
+    document.getElementById('admin-premium').textContent = premiumCount || '0';
+    
+    // Messages 24h
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const { count: msgs24h } = await supabase.from('messages').select('*', { count: 'exact', head: true }).gte('created_at', yesterday.toISOString());
+    document.getElementById('admin-msgs-24h').textContent = msgs24h || '0';
+    
+    // Revenus (simulation)
+    const revenue = (premiumCount || 0) * 7.49; // moyenne entre 4.99 et 9.99
+    document.getElementById('admin-revenue').textContent = revenue.toFixed(2) + '€';
+    
+    // Derniers membres
+    const { data: recentMembers } = await supabase.from('profiles').select('*').order('created_at', { ascending: false }).limit(5);
+    const membersContainer = document.getElementById('admin-recent-members');
+    if (recentMembers && recentMembers.length > 0) {
+      membersContainer.innerHTML = recentMembers.map(member => `
+        <div class="flex items-center gap-3 p-3 rounded-lg bg-white/5">
+          <div class="w-10 h-10 rounded-full bg-dev-primary/20 flex items-center justify-center text-dev-primary font-bold">
+            ${(member.first_name || member.email || 'U').charAt(0)}
+          </div>
+          <div class="flex-1">
+            <div class="text-sm text-white font-medium">${member.first_name || ''} ${member.last_name || ''}</div>
+            <div class="text-xs text-gray-500">${member.email}</div>
+          </div>
+          <div class="text-xs text-gray-500">${new Date(member.created_at).toLocaleDateString('fr-FR')}</div>
+        </div>
+      `).join('');
+    }
+    
+    // Derniers messages
+    const { data: recentMsgs } = await supabase.from('messages').select(`
+      content,
+      created_at,
+      profiles:user_id (first_name, last_name)
+    `).order('created_at', { ascending: false }).limit(5);
+    const msgsContainer = document.getElementById('admin-recent-msgs');
+    if (recentMsgs && recentMsgs.length > 0) {
+      msgsContainer.innerHTML = recentMsgs.map(msg => {
+        const name = msg.profiles ? `${msg.profiles.first_name || ''} ${msg.profiles.last_name || ''}`.trim() : 'Anonyme';
+        return `
+          <div class="flex items-center gap-3 p-3 rounded-lg bg-white/5">
+            <div class="w-10 h-10 rounded-full bg-dev-accent/20 flex items-center justify-center text-dev-accent font-bold">${name.charAt(0)}</div>
+            <div class="flex-1">
+              <div class="text-sm text-white font-medium">${name}</div>
+              <div class="text-xs text-gray-500 truncate">${msg.content}</div>
+            </div>
+            <div class="text-xs text-gray-500">${new Date(msg.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+  
+  // ============================================
+  // MESSAGING
+  // ============================================
+  function selectChannel(channelId) {
+    currentChannel = channelId;
+    document.getElementById('current-channel').textContent = `# ${channelId}`;
+    loadMessages();
+    loadChannels(); // Refresh pour mettre à jour la sélection
+  }
+  
+  async function loadMessages() {
+    const container = document.getElementById('messages-container');
+    if (!supabase) {
+      container.innerHTML = '<div class="text-gray-500 text-center py-8">Mode démo - Aucun message</div>';
+      return;
+    }
+    
+    const { data: messages } = await supabase
+      .from('messages')
+      .select(`
+        content,
+        created_at,
+        profiles:user_id (first_name, last_name, email)
+      `)
+      .eq('channel', currentChannel)
+      .order('created_at', { ascending: true });
+    
+    if (!messages || messages.length === 0) {
+      container.innerHTML = '<div class="text-gray-500 text-center py-8">Aucun message. Soyez le premier !</div>';
+      return;
+    }
+    
+    container.innerHTML = messages.map(msg => {
+      const profile = msg.profiles;
+      const name = profile ? `${profile.first_name || ''} ${profile.last_name || ''}`.trim() : (profile?.email?.split('@')[0] || 'Anonyme');
+      const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+      const time = new Date(msg.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      
+      return `
+        <div class="flex gap-3">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold flex-shrink-0">${initials}</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-white font-semibold text-sm">${name}</span>
+              <span class="text-xs text-gray-500">${time}</span>
+            </div>
+            <p class="text-gray-300 text-sm mt-1">${msg.content}</p>
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    // Scroll to bottom
+    container.scrollTop = container.scrollHeight;
+  }
+  
+  async function sendMessage() {
+    const input = document.getElementById('msg-input');
+    const content = input.value.trim();
+    
+    if (!content || !currentUser) return;
+    
+    if (!supabase) {
+      alert('Supabase non configuré');
+      return;
+    }
+    
+    const { error } = await supabase.from('messages').insert({
+      user_id: currentUser.id,
+      channel: currentChannel,
+      content
+    });
+    
+    if (error) {
+      alert('Erreur: ' + error.message);
+      return;
+    }
+    
+    input.value = '';
+    loadMessages();
+    loadDashboardData(); // Refresh stats
+  }
+  
+  // ============================================
+  // PROJECTS
+  // ============================================
+  async function createProject(e) {
+    e.preventDefault();
+    
+    if (!currentUser) return;
+    
+    const project = {
+      user_id: currentUser.id,
+      name: document.getElementById('project-name').value,
+      description: document.getElementById('project-desc').value,
+      stack: document.getElementById('project-stack').value,
+      visibility: document.getElementById('project-visibility').value
+    };
+    
+    if (!supabase) {
+      alert('Supabase non configuré');
+      return;
+    }
+    
+    const { error } = await supabase.from('projects').insert(project);
+    
+    if (error) {
+      alert('Erreur: ' + error.message);
+      return;
+    }
+    
+    closeModal('new-project');
+    loadProjects();
+    loadDashboardData();
+  }
+  
+  // ============================================
+  // PREMIUM SUBSCRIPTION
+  // ============================================
+  async function subscribe(tier) {
+    if (!currentUser) {
+      alert('Veuillez vous connecter d\'abord');
+      openModal('login');
+      return;
+    }
+    
+    const price = tier === 'dev-plus' ? '4,99€' : '9,99€';
+    if (confirm(`Activer l'abonnement ${tier === 'dev-plus' ? 'Dev+' : 'Builder Pro'} pour ${price}/mois ?`)) {
+      if (supabase) {
+        await supabase.from('profiles').update({
+          is_premium: true,
+          premium_tier: tier,
+          premium_since: new Date().toISOString()
+        }).eq('id', currentUser.id);
         
-        // Chat functions
-        function sendMessage() {
-            const input = document.getElementById('msgInput');
-            const msg = input.value.trim();
-            if (msg) {
-                const msgList = document.getElementById('msgList');
-                const newMsg = document.createElement('div');
-                newMsg.className = 'msg';
-                newMsg.innerHTML = `<strong>Vous:</strong> ${msg}`;
-                msgList.appendChild(newMsg);
-                input.value = '';
-                msgList.scrollTop = msgList.scrollHeight;
-                
-                // Auto-reply (simulation)
-                setTimeout(() => {
-                    const reply = document.createElement('div');
-                    reply.className = 'msg';
-                    reply.innerHTML = `<strong>🤖 Bot:</strong> Merci pour ton message ! La communauté te répondra bientôt.`;
-                    msgList.appendChild(reply);
-                    msgList.scrollTop = msgList.scrollHeight;
-                }, 1000);
-            }
-        }
-        
-        // AI functions
-        function askAI() {
-            const input = document.getElementById('aiInput');
-            const question = input.value.trim();
-            if (question) {
-                const aiMessages = document.getElementById('aiMessages');
-                const userMsg = document.createElement('div');
-                userMsg.className = 'msg';
-                userMsg.innerHTML = `<strong>Vous:</strong> ${question}`;
-                aiMessages.appendChild(userMsg);
-                input.value = '';
-                
-                setTimeout(() => {
-                    const aiReply = document.createElement('div');
-                    aiReply.className = 'msg';
-                    const answers = [
-                        "Voici comment résoudre ce problème...",
-                        "Je te conseille d'utiliser React pour ça !",
-                        "Super question ! La meilleure pratique est...",
-                        "As-tu regardé la documentation officielle ?"
-                    ];
-                    aiReply.innerHTML = `<strong>🤖 IA:</strong> ${answers[Math.floor(Math.random() * answers.length)]}`;
-                    aiMessages.appendChild(aiReply);
-                    aiMessages.scrollTop = aiMessages.scrollHeight;
-                }, 800);
-            }
-        }
-        
-        // Project functions
-        function showCreateProjectModal() {
-            document.getElementById('projectModal').classList.add('active');
-        }
-        
-        function createProject() {
-            const name = document.getElementById('projName').value;
-            const desc = document.getElementById('projDesc').value;
-            const stack = document.getElementById('projStack').value;
-            
-            if (name) {
-                const projectsList = document.getElementById('projectsList');
-                const newProject = document.createElement('div');
-                newProject.className = 'card';
-                newProject.innerHTML = `<h3>${name}</h3><p>${desc || 'Nouveau projet'}</p><span class="badge">${stack || 'En développement'}</span>`;
-                projectsList.appendChild(newProject);
-                closeModal('projectModal');
-                document.getElementById('projName').value = '';
-                document.getElementById('projDesc').value = '';
-                document.getElementById('projStack').value = '';
-                alert('Projet créé avec succès !');
-            }
-        }
-        
-        // Job functions
-        function showPostJobModal() {
-            document.getElementById('jobModal').classList.add('active');
-        }
-        
-        function postJob() {
-            const title = document.getElementById('jobTitle').value;
-            const price = document.getElementById('jobPrice').value;
-            const desc = document.getElementById('jobDesc').value;
-            
-            if (title && price) {
-                const jobsList = document.getElementById('jobsList');
-                const devPrice = Math.round(price * 0.9);
-                const newJob = document.createElement('div');
-                newJob.className = 'card';
-                newJob.innerHTML = `<h3>${title}</h3>
-                    <p>💰 ${price}€/h (dont ${devPrice}€ pour le dev)</p>
-                    <p>${desc || 'Description à venir'}</p>
-                    <button>Postuler</button>`;
-                jobsList.appendChild(newJob);
-                closeModal('jobModal');
-                document.getElementById('jobTitle').value = '';
-                document.getElementById('jobPrice').value = '';
-                document.getElementById('jobDesc').value = '';
-                alert('Offre publiée avec commission 10% DevConnect !');
-            }
-        }
-        
-        // Modal helper
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-        }
-        
-        window.onclick = function(e) {
-            if (e.target.classList.contains('modal')) {
-                e.target.classList.remove('active');
-            }
-        }
-        
-        function editProfile() {
-            const newName = prompt('Nouveau pseudo:');
-            if (newName) {
-                document.getElementById('profileName').textContent = newName;
-                alert('Profil mis à jour !');
-            }
-        }
-        
-        // Channel selection
-        document.querySelectorAll('.channel').forEach(channel => {
-            channel.addEventListener('click', function() {
-                document.querySelectorAll('.channel').forEach(c => c.classList.remove('active'));
-                this.classList.add('active');
-                const channelName = this.textContent;
-                const msgList = document.getElementById('msgList');
-                msgList.innerHTML = `<div class="msg"><strong>Bienvenue sur ${channelName}:</strong> Commencez la discussion !</div>`;
-            });
-        });
-        
-        // Search in explorer
-        document.getElementById('searchInput')?.addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const cards = document.querySelectorAll('#developersList .card');
-            cards.forEach(card => {
-                const text = card.textContent.toLowerCase();
-                card.style.display = text.includes(searchTerm) ? 'block' : 'none';
-            });
-        });
-        
-        // Initialize
-        updateTheme();
-        updateUIForRole();
-        
-        // Show home page by default
-        document.querySelector('#page-home').style.display = 'block';
-    </script>
+        currentUser.is_premium = true;
+        currentUser.premium_tier = tier;
+        updateUIForUser();
+        alert('✅ Abonnement activé avec succès !');
+      } else {
+        // Mode démo
+        currentUser.is_premium = true;
+        currentUser.premium_tier = tier;
+        updateUIForUser();
+        alert('✅ Mode démo: Abonnement activé !');
+      }
+    }
+  }
+  
+  // ============================================
+  // PROFILE EDITION
+  // ============================================
+  function editProfile() {
+    const bio = prompt('Nouvelle bio:', currentUser.bio || '');
+    const title = prompt('Titre (ex: Développeur Full Stack):', currentUser.title || '');
+    
+    if (bio !== null && supabase) {
+      supabase.from('profiles').update({ bio, title }).eq('id', currentUser.id);
+      currentUser.bio = bio;
+      currentUser.title = title;
+      document.getElementById('profile-bio').textContent = bio || 'Aucune bio.';
+      if (title) document.getElementById('profile-title').textContent = title;
+    }
+  }
+  
+  function editBanner() {
+    alert('Fonctionnalité à venir: Upload de bannière personnalisée');
+  }
+  
+  // ============================================
+  // NAVIGATION
+  // ============================================
+  function openModal(name) {
+    document.getElementById('modal-' + name).classList.remove('hidden');
+    document.getElementById('modal-' + name).classList.add('flex');
+  }
+  
+  function closeModal(name) {
+    document.getElementById('modal-' + name).classList.add('hidden');
+    document.getElementById('modal-' + name).classList.remove('flex');
+  }
+  
+  function showPage(page) {
+    document.querySelectorAll('.app-page').forEach(p => p.classList.add('hidden'));
+    document.getElementById('page-' + page).classList.remove('hidden');
+    
+    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+    document.querySelector('.sidebar-item[data-page="' + page + '"]')?.classList.add('active');
+    
+    const titles = {
+      home: 'Dashboard',
+      messages: 'Messages',
+      work: 'Travail',
+      explore: 'Explorer',
+      recruit: 'Recrutement',
+      premium: 'Premium',
+      profile: 'Mon Profil',
+      settings: 'Paramètres',
+      admin: 'Admin Panel'
+    };
+    document.getElementById('page-title').textContent = titles[page] || 'Dashboard';
+    
+    // Charger les données spécifiques à la page
+    if (page === 'messages') loadMessages();
+    if (page === 'work') loadProjects();
+    if (page === 'profile') loadDashboardData();
+    if (page === 'admin' && currentUser?.is_admin) loadAdminStats();
+  }
+  
+  // Effet 3D tilt
+  document.addEventListener('mousemove', (e) => {
+    document.querySelectorAll('.card-3d').forEach(card => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -5;
+        const rotateY = ((x - centerX) / centerX) * 5;
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+      } else {
+        card.style.transform = '';
+      }
+    });
+  });
+  
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+  
+  // Fermer modal au clic extérieur
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', (e) => {
+      if (e.target === m) {
+        m.classList.add('hidden');
+        m.classList.remove('flex');
+      }
+    });
+  });
+  
+  // Enter pour envoyer message
+  document.addEventListener('DOMContentLoaded', () => {
+    initSupabase();
+    
+    const msgInput = document.getElementById('msg-input');
+    if (msgInput) {
+      msgInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+      });
+    }
+  });
+</script>
+
 </body>
 </html>
