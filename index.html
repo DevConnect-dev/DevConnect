@@ -1078,17 +1078,43 @@ async function fetchProfiles(ids){
 
 // ═══ CURSOR ═══
 (function(){
-  const ring=$('cur-ring'),dot=$('cur-dot');
-  let rx=0,ry=0,mx=window.innerWidth/2,my=window.innerHeight/2;
-  document.addEventListener('mousemove',e=>{
-    mx=e.clientX;my=e.clientY;
-    dot.style.left=mx+'px';dot.style.top=my+'px';
-    dot.style.opacity='1';ring.style.opacity='1';
+  const ring = $('cur-ring'), dot = $('cur-dot');
+  
+  // Si les éléments n'existent pas dans le HTML, on arrête tout ici proprement.
+  if (!ring || !dot) return; 
+
+  let rx=0, ry=0, mx=window.innerWidth/2, my=window.innerHeight/2;
+  
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top = my + 'px';
+    dot.style.opacity = '1';
+    ring.style.opacity = '1';
   });
-  (function a(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(a);})();
-  document.addEventListener('mouseleave',()=>{ring.style.opacity='0';dot.style.opacity='0';});
-  document.addEventListener('mouseenter',()=>{ring.style.opacity='1';dot.style.opacity='1';});
-  document.addEventListener('mousedown',()=>{document.body.classList.add('ch');setTimeout(()=>document.body.classList.remove('ch'),300);});
+  
+  (function a(){
+    rx += (mx - rx) * .1;
+    ry += (my - ry) * .1;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(a);
+  })();
+  
+  document.addEventListener('mouseleave', () => {
+    ring.style.opacity = '0';
+    dot.style.opacity = '0';
+  });
+  
+  document.addEventListener('mouseenter', () => {
+    ring.style.opacity = '1';
+    dot.style.opacity = '1';
+  });
+  
+  document.addEventListener('mousedown', () => {
+    document.body.classList.add('ch');
+    setTimeout(() => document.body.classList.remove('ch'), 300);
+  });
 })();
 
 // ═══ CANVAS GLOBE (curseur interactif) ═══
