@@ -1922,7 +1922,6 @@ function togBdg(id,btn){if(bdgCur.includes(id)){bdgCur=bdgCur.filter(b=>b!==id);
 async function saveBdgs(){if(!bdgTarget)return;await sb.from('dc_users').update({badges:bdgCur}).eq('id',bdgTarget.id);await logAction('SET_BADGES',`User ${bdgTarget.id}`);aToast('Badges enregistrés ✓');}
 function closeBdgArea(){bdgTarget=null;$('bdgarea').style.display='none';$('bdgemp').style.display='block';$('bdgures').style.display='none';if($('bdgsrch'))$('bdgsrch').value='';}
 
-let adMsgsAll=[];
 async function loadAdMsgs(){const{data}=await sb.from('dc_messages').select('*').order('created_at',{ascending:false}).limit(100);adMsgsAll=data||[];const uids=[...new Set(adMsgsAll.map(m=>m.user_id))];const profiles=await fetchProfiles(uids);adMsgsAll=adMsgsAll.map(m=>({...m,...(profiles[m.user_id]||{}),user_id:m.user_id}));filtMsgs($('msgsch')?.value||'');}
 function filtMsgs(q){const list=adMsgsAll.filter(m=>{const n=((m.pseudo||'')+' '+(m.firstname||'')+' '+(m.content||'')).toLowerCase();return(!q||n.includes(q.toLowerCase()))&&(cF==='all'||m.channel===cF)&&!m.dm_to;});renderMsgsTable(list);}
 function setCF(cf,btn){cF=cf;document.querySelectorAll('#apg-messages .a-chip').forEach(b=>b.classList.remove('on'));btn.classList.add('on');filtMsgs($('msgsch')?.value||'');}
