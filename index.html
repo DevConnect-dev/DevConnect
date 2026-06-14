@@ -1880,7 +1880,6 @@ async function loadAdDash(){
   const rml=$('arml');if(rml)rml.innerHTML=(rm||[]).map(m=>{const u=profiles[m.user_id]||{},c=u.color||'#7c3aed';return `<div style="display:flex;align-items:center;gap:9px;padding:9px 14px;border-bottom:1px solid rgba(139,92,246,0.06)"><div style="width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:JetBrains Mono,monospace;font-size:.52rem;font-weight:700;background:${c}18;color:${c};flex-shrink:0">${u.initials||'?'}</div><div style="flex:1;font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc((m.content||'').slice(0,44))}</div><div style="font-family:JetBrains Mono,monospace;font-size:.44rem;color:var(--neo);flex-shrink:0">${m.channel?'#'+m.channel:'DM'}</div></div>`;}).join('');
 }
 
-let adUsersAll=[];
 async function loadAdUsers(){const{data}=await sb.from('dc_users').select('*').order('joined',{ascending:false});adUsersAll=data||[];filtUsers($('usrsch')?.value||'');}
 function filtUsers(q){const list=adUsersAll.filter(u=>{const n=((u.pseudo||'')+' '+(u.firstname||'')+' '+(u.lastname||'')+' '+u.email).toLowerCase();return(!q||n.includes(q.toLowerCase()))&&(rF==='all'||u.role===rF);});renderUsersTable(list);}
 function setRF(rf,btn){rF=rf;document.querySelectorAll('#apg-users .a-chip').forEach(b=>b.classList.remove('on'));btn.classList.add('on');filtUsers($('usrsch')?.value||'');}
