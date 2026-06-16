@@ -1165,19 +1165,18 @@ async function fetchProfiles(ids){
 }
 
 // ═══ CURSOR ═══
-(function(){
+document.addEventListener('DOMContentLoaded',()=>{
   const curEl=document.getElementById('cur');
   const arrow=document.getElementById('cur-arrow');
-  if(!curEl||!arrow)return;
-  let visible=false;
+  if(!curEl||!arrow) return;
   document.addEventListener('mousemove',e=>{
     curEl.style.left=e.clientX+'px';
     curEl.style.top=e.clientY+'px';
-    if(!visible){arrow.style.opacity='1';visible=true;}
-  });
-  document.addEventListener('mouseleave',()=>{arrow.style.opacity='0';visible=false;});
-  document.addEventListener('mouseenter',()=>{if(visible)arrow.style.opacity='1';});
-})();
+    arrow.style.opacity='1';
+  },{ passive:true });
+  document.addEventListener('mouseleave',()=>{ arrow.style.opacity='0'; });
+  document.addEventListener('mouseenter',()=>{ arrow.style.opacity='1'; });
+});
 
 // ═══ CANVAS GLOBE (curseur interactif) ═══
 function initGlobe(canvasId){
@@ -1270,20 +1269,25 @@ function initGlobe(canvasId){
 
 // ═══ LANDING ═══
 function showLanding(){
-  $('landing').style.display='flex';
-  $('l-pages').style.display='none';
-  $('l-pages').classList.remove('show');
-  $('l-dots').classList.remove('show');
-  $('dash').classList.remove('show');
-  initGlobe('globe-canvas');
+  const landing=$('landing');
+  const lp=$('l-pages');
+  const dots=$('l-dots');
+  const dash=$('dash');
+  if(landing) landing.style.display='flex';
+  if(lp){ lp.style.display='none'; lp.classList.remove('show'); }
+  if(dots) dots.classList.remove('show');
+  if(dash) dash.classList.remove('show');
+  setTimeout(()=>initGlobe('globe-canvas'), 100);
 }
 
 function enterPages(){
-  $('landing').style.display='none';
-  $('l-pages').style.display='block';
-  $('l-pages').classList.add('show');
-  $('l-dots').classList.add('show');
-  initGlobe('globe-canvas2');
+  const landing=$('landing');
+  const lp=$('l-pages');
+  const dots=$('l-dots');
+  if(landing) landing.style.display='none';
+  if(lp){ lp.style.display='block'; lp.classList.add('show'); }
+  if(dots) dots.classList.add('show');
+  setTimeout(()=>initGlobe('globe-canvas2'),100);
   // Scroll listener
   $('l-pages').addEventListener('scroll',()=>{
     const st=$('l-pages').scrollTop,h=window.innerHeight;
@@ -1357,15 +1361,19 @@ async function initDash(){
   const{data:{session}}=await sb.auth.getSession();
   if(!session){showLanding();return;}
   CU=session.user;
-  const{data:p}=await sb.from('profiles').select('*').eq('id',CU.id).maybeSingle();
+  let p=null;
+  try { const res=await sb.from('profiles').select('*').eq('id',CU.id).maybeSingle(); p=res.data; } catch(e){}
   UP=p?{...p,firstname:p.first_name||'',lastname:p.last_name||'',color:p.accent_color||PCOLS[0],photo:p.avatar_url||null,banner:p.banner_url||null,role:p.is_admin?'admin':'member'}:{id:CU.id,email:CU.email,pseudo:'user',firstname:'',lastname:'',initials:'U',color:PCOLS[0],role:'member'};
   showDash();renderProf();if(typeof applyPremiumMode==='function')applyPremiumMode(UP);checkAdmin();initChat();subNotifs();
 }
 
 function showDash(){
-  $('landing').style.display='none';
-  $('l-pages').style.display='none';
-  $('dash').classList.add('show');
+  const landing=$('landing');
+  const lp=$('l-pages');
+  const dash=$('dash');
+  if(landing) landing.style.display='none';
+  if(lp) lp.style.display='none';
+  if(dash) dash.classList.add('show');
 }
 
 // ═══ NAV ═══
@@ -1442,8 +1450,12 @@ function renderMsg(m,forceNew=false){
 async function loadMsgs(){
   const c=$('msgs');if(!c)return;
   let q;
-  if(chatMode==='channel'){q=sb.from('messages').select('*').eq('channel',curCh).is('dm_to',null).order('created_at',{ascending:true}).limit(80);}
-  else{const me=CU.id,them=curDM.id;q=sb.from('messages').select('*').or(`and(user_id.eq.${me},dm_to.eq.${them}),and(user_id.eq.${them},dm_to.eq.${me})`).order('created_at',{ascending:true}).limit(80);}
+  if(chatMode==='channel'){
+    q=sb.from('messages').select('*').eq('channel',curCh).order('created_at',{ascending:true}).limit(80);
+  } else {
+    const me=CU.id,them=curDM.id;
+    q=sb.from('messages').select('*').or(`and(user_id.eq.${me},dm_to.eq.${them}),and(user_id.eq.${them},dm_to.eq.${me})`).order('created_at',{ascending:true}).limit(80);
+  }
   const{data,error}=await q;
   c.innerHTML='';lastUID=null;
   if(error){c.innerHTML=`<div style="text-align:center;padding:40px;color:var(--r);font-size:.78rem">${esc(error.message)}</div>`;return;}
@@ -2057,17 +2069,17 @@ async function updateUserBadges(userId,badgeIds){
 
 // ═══ BOOT ═══
 (async()=>{
-  // Cursor init
-  const curEl=$('cur');const ring=$('cur-ring');const dot=$('cur-dot');
-  document.addEventListener('mousemove',e=>{curEl.style.left=e.clientX+'px';curEl.style.top=e.clientY+'px';});
+  // Check session d'abord
+  let session = null;
+  try {
+    const res = await sb.auth.getSession();
+    session = res.data.session;
+  } catch(e) { console.warn('Supabase error:', e); }
 
-  // Check session
-  const{data:{session}}=await sb.auth.getSession();
-  if(session){await initDash();}
-  else{showLanding();}
+  if(session){ await initDash(); }
+  else { showLanding(); }
 
-  // Auth state change
-  sb.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT'){location.reload();}});
+  sb.auth.onAuthStateChange((event,s)=>{ if(event==='SIGNED_OUT') location.reload(); });
 })();
 </script>
 </body>
