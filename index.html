@@ -1447,11 +1447,16 @@ async function handleRegister(){
   err.classList.remove('show');
   const{data,error}=await db.auth.signUp({email,password:pass,options:{data:{username,specialty:selectedSpecialty,tech_stack:selectedTags,level}}});
   if(error){err.textContent=error.message;err.classList.add('show');return;}
+  // Si pas de session ET pas d'identityData = email déjà utilisé (faux succès Supabase)
+  if(!data.session && !data.user?.identities?.length){
+    err.textContent='Cet email est déjà utilisé. Connecte-toi avec tes identifiants.';
+    err.classList.add('show');
+    setTimeout(()=>switchAuthTab('login'),2000);
+    return;
+  }
   if(data.session){
-    // Confirmation email désactivée : session directe, l'utilisateur est connecté
     showToast('Compte créé ! Bienvenue sur DevConnect 🎉','success');
   } else {
-    // Confirmation email activée : prévenir clairement l'utilisateur
     showToast('Compte créé ! Confirme ton email avant de te connecter.','success');
   }
   setTimeout(()=>switchAuthTab('login'),2500);
