@@ -154,6 +154,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .topnav-search:hover{border-color:var(--border-light);}
 .topnav-search span{font-size:12px;color:var(--text-muted);font-family:var(--font-mono);}
 .nav-avatar{width:30px;height:30px;border-radius:50%;background:var(--bg3);border:1px solid var(--border-light);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--accent);font-family:var(--font-mono);overflow:hidden;}
+.nav-avatar img,.profile-avatar img,.upload-preview img{width:100%;height:100%;object-fit:cover;}
 .notif-btn{position:relative;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius);cursor:pointer;color:var(--text-secondary);font-size:16px;background:transparent;border:none;transition:all .2s;}
 .notif-btn:hover{background:var(--bg3);color:var(--text);}
 .notif-badge{position:absolute;top:2px;right:2px;width:7px;height:7px;background:var(--accent);border-radius:50%;border:1.5px solid var(--bg1);}
@@ -224,6 +225,22 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .profile-tab.active{background:var(--bg2);color:var(--text);border:1px solid var(--border);}
 .profile-tab-content{display:none;}
 .profile-tab-content.active{display:block;}
+.profile-status-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:100px;font-size:12px;color:var(--text-secondary);margin-bottom:12px;}
+.profile-emoji-img{width:16px;height:16px;object-fit:contain;}
+.profile-widgets{display:grid;gap:10px;margin-top:16px;}
+.profile-widget-card{background:var(--bg0);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;}
+.profile-widget-card .widget-title{font-size:11px;}
+.upload-row{display:flex;align-items:center;gap:14px;}
+.upload-preview{width:56px;height:56px;border-radius:50%;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:18px;font-family:var(--font-mono);color:var(--accent);flex-shrink:0;}
+.upload-preview.banner-preview{width:100px;height:44px;border-radius:8px;}
+.upload-preview img{width:100%;height:100%;object-fit:cover;}
+.upload-btn-small{padding:6px 12px;font-size:12px;}
+.tier-lock-card{background:var(--bg2);border:1px dashed var(--border-light);border-radius:var(--radius-lg);padding:18px;text-align:center;}
+.tier-lock-card .tier-lock-title{font-size:13px;color:var(--text-secondary);margin-bottom:10px;}
+.color-input-row{display:flex;align-items:center;gap:10px;}
+.color-input-row input[type=color]{width:40px;height:32px;border:1px solid var(--border);border-radius:6px;background:none;cursor:pointer;padding:2px;}
+.widget-checkbox-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);}
+.widget-checkbox-row:last-child{border-bottom:none;}
 .project-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:12px;transition:all .2s;position:relative;overflow:hidden;}
 .project-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--border-light),transparent);opacity:0;transition:opacity .3s;}
 .project-card:hover{border-color:var(--border-light);}
@@ -820,6 +837,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
             <div class="profile-info">
               <div class="profile-name" id="profile-display-name">Utilisateur <span class="architect-badge" id="profile-role-badge" style="display:none">Architect</span></div>
               <div class="profile-username" id="profile-username-display">@username</div>
+              <div class="profile-status-pill" id="profile-status-pill" style="display:none"></div>
               <div class="profile-bio" id="profile-bio-display">Aucune bio renseignée.</div>
               <div class="profile-badges"><span class="profile-badge" id="profile-specialty-badge">Tech</span></div>
               <div class="profile-stats">
@@ -832,6 +850,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
                 <a href="#" class="profile-link" id="profile-linkedin-link" style="display:none">LinkedIn</a>
                 <a href="#" class="profile-link" id="profile-portfolio-link" style="display:none">Portfolio</a>
               </div>
+              <div class="profile-widgets" id="profile-widgets"></div>
               <button class="btn btn-ghost w-full" style="margin-top:16px;justify-content:center;font-size:13px" onclick="navigate('settings')">Modifier le profil</button>
             </div>
           </div>
@@ -1129,6 +1148,17 @@ main();</textarea>
           <div class="settings-section active" id="settings-profil">
             <div class="settings-card">
               <div class="settings-card-title">Mon profil</div>
+              <div class="form-group">
+                <label class="form-label">Photo de profil</label>
+                <div class="upload-row">
+                  <div class="upload-preview" id="s-avatar-preview">DC</div>
+                  <div>
+                    <input type="file" id="s-avatar-input" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="uploadAvatar(this)">
+                    <button class="btn btn-ghost upload-btn-small" onclick="document.getElementById('s-avatar-input').click()">Changer la photo</button>
+                    <div style="font-size:11px;color:var(--text-muted);margin-top:6px">JPG, PNG ou WebP — 2 Mo max. Pas de GIF ni vidéo.</div>
+                  </div>
+                </div>
+              </div>
               <div class="form-group"><label class="form-label">Pseudo</label><input type="text" class="form-input form-input-mono" id="s-username" placeholder="ton_pseudo"></div>
               <div class="form-group"><label class="form-label">Bio</label><textarea class="form-input" rows="3" id="s-bio" placeholder="Décris-toi en quelques mots..."></textarea></div>
               <div class="form-group"><label class="form-label">Titre / Poste</label><input type="text" class="form-input" id="s-title" placeholder="Développeur Fullstack · Paris"></div>
@@ -1156,6 +1186,69 @@ main();</textarea>
             <div class="settings-card">
               <div class="settings-card-title">Apparence</div>
               <div class="settings-row"><div><div class="settings-row-label">Langue</div><div class="settings-row-sub">Langue de l'interface</div></div><select class="form-input" style="width:auto"><option>Français</option><option>English</option></select></div>
+            </div>
+
+            <div class="settings-card" id="dev-plus-banner-card">
+              <div class="settings-card-title">Bannière de profil <span class="premium-badge devplus">Dev+</span></div>
+              <div id="dev-plus-banner-locked" class="tier-lock-card" style="display:none">
+                <div class="tier-lock-title">🔒 Réservé aux membres Dev+</div>
+                <button class="btn btn-ghost btn-sm" onclick="switchSettingsByName('premium-s')">Voir le Premium</button>
+              </div>
+              <div id="dev-plus-banner-unlocked" style="display:none">
+                <div class="upload-row">
+                  <div class="upload-preview banner-preview" id="s-banner-preview"></div>
+                  <div>
+                    <input type="file" id="s-banner-input" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="uploadBanner(this)">
+                    <button class="btn btn-ghost upload-btn-small" onclick="document.getElementById('s-banner-input').click()">Changer la bannière</button>
+                    <div style="font-size:11px;color:var(--text-muted);margin-top:6px">JPG, PNG ou WebP — 3 Mo max.</div>
+                  </div>
+                </div>
+                <div class="form-group" style="margin-top:18px">
+                  <label class="form-label">Couleur de fond du profil</label>
+                  <div class="color-input-row">
+                    <input type="color" id="s-profile-color" value="#0e0e0e" onchange="updateProfileColor(this.value)">
+                    <span style="font-size:12px;color:var(--text-muted)">Visible derrière ta bannière, sur ta carte de profil</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-card" id="dc-plus-card">
+              <div class="settings-card-title">Statut, emoji & widgets <span class="premium-badge devconnectplus">DevConnect+</span></div>
+              <div id="dc-plus-locked" class="tier-lock-card" style="display:none">
+                <div class="tier-lock-title">🔒 Réservé aux membres DevConnect+</div>
+                <button class="btn btn-ghost btn-sm" onclick="switchSettingsByName('premium-s')">Voir le Premium</button>
+              </div>
+              <div id="dc-plus-unlocked" style="display:none">
+                <div class="form-group">
+                  <label class="form-label">Statut personnalisé</label>
+                  <input type="text" class="form-input" id="s-status" maxlength="40" placeholder="Dispo pour collab 🔥">
+                  <div style="font-size:11px;color:var(--text-muted);margin-top:6px">40 caractères max, emoji autorisé.</div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Emoji personnalisé</label>
+                  <div class="upload-row">
+                    <div class="upload-preview" id="s-emoji-preview" style="border-radius:8px;width:40px;height:40px"></div>
+                    <div>
+                      <input type="file" id="s-emoji-input" accept="image/png,image/jpeg,image/webp,image/gif" style="display:none" onchange="uploadEmoji(this)">
+                      <button class="btn btn-ghost upload-btn-small" onclick="document.getElementById('s-emoji-input').click()">Uploader un emoji</button>
+                      <div style="font-size:11px;color:var(--text-muted);margin-top:6px">256 Ko max. Utilisable dans le chat et tes posts.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Widgets affichés sur ton profil</label>
+                  <div id="widgets-checkbox-list">
+                    <div class="widget-checkbox-row"><span>📊 Stats (XP, rang, posts)</span><button class="toggle" id="w-stats" onclick="this.classList.toggle('on')"></button></div>
+                    <div class="widget-checkbox-row"><span>🏆 Derniers badges</span><button class="toggle" id="w-badges" onclick="this.classList.toggle('on')"></button></div>
+                    <div class="widget-checkbox-row"><span>🎮 "Travaille actuellement sur..."</span><button class="toggle" id="w-activity" onclick="this.classList.toggle('on');toggleWidgetSubfield('activity')"></button></div>
+                    <div class="form-group" id="w-activity-field" style="display:none;margin-top:8px"><input type="text" class="form-input" id="s-activity-text" maxlength="60" placeholder="Travaille sur DevConnect 🚀"></div>
+                    <div class="widget-checkbox-row"><span>🌍 Disponibilité mission</span><button class="toggle" id="w-avail" onclick="this.classList.toggle('on');toggleWidgetSubfield('avail')"></button></div>
+                    <div class="form-group" id="w-avail-field" style="display:none;margin-top:8px"><select class="form-input" id="s-avail-status"><option value="true">Dispo pour mission</option><option value="false">Non disponible</option></select></div>
+                  </div>
+                </div>
+                <button class="btn btn-primary upload-btn-small" onclick="saveAppearanceExtras()">Sauvegarder</button>
+              </div>
             </div>
           </div>
           <div class="settings-section" id="settings-notifs">
@@ -1395,15 +1488,23 @@ async function handleRegister(){
 }
 
 // PROFILE
+const WIDGET_LABELS={stats:'📊 Stats',badges:'🏆 Badges',activity:'🎮 Activité',avail:'🌍 Disponibilité'};
+
 async function loadProfile(){
   if(!currentUser)return;
   const{data}=await db.from('profiles').select('*').eq('id',currentUser.id).maybeSingle();
   if(data){currentProfile=data;updateNavAvatar();updateProfileSection();updateSettingsSection();checkArchitect();}
 }
 
+function isDevPlus(){return!!(currentProfile?.is_premium||currentProfile?.premium_tier==='devconnect-plus');}
+function isDevConnectPlus(){return currentProfile?.premium_tier==='devconnect-plus';}
+
+function avatarHtml(url,initials){return url?`<img src="${esc(url)}" alt="avatar">`:esc(initials);}
+
 function updateNavAvatar(){
   if(!currentProfile)return;
-  document.getElementById('nav-avatar').textContent=(currentProfile.username||'DC').substring(0,2).toUpperCase();
+  const init=(currentProfile.username||'DC').substring(0,2).toUpperCase();
+  document.getElementById('nav-avatar').innerHTML=avatarHtml(currentProfile.avatar_url,init);
 }
 
 function updateProfileSection(){
@@ -1419,6 +1520,47 @@ function updateProfileSection(){
   if(p.github_url){const el=document.getElementById('profile-github-link');if(el){el.href=p.github_url;el.style.display='inline-flex';}}
   if(p.linkedin_url){const el=document.getElementById('profile-linkedin-link');if(el){el.href=p.linkedin_url;el.style.display='inline-flex';}}
   if(p.portfolio_url){const el=document.getElementById('profile-portfolio-link');if(el){el.href=p.portfolio_url;el.style.display='inline-flex';}}
+
+  const init=(p.username||'DC').substring(0,2).toUpperCase();
+  document.getElementById('profile-avatar-big').innerHTML=avatarHtml(p.avatar_url,init);
+
+  const banner=document.getElementById('profile-banner');
+  if(isDevPlus()&&p.banner_url){banner.style.background=`url('${p.banner_url}') center/cover`;}
+  else if(isDevPlus()&&p.profile_color){banner.style.background=p.profile_color;}
+  else{banner.style.background='linear-gradient(135deg,var(--bg3),var(--bg2))';}
+
+  const pill=document.getElementById('profile-status-pill');
+  if(isDevConnectPlus()&&p.status_text){pill.style.display='inline-flex';pill.textContent='';
+    if(p.custom_emoji_url){const img=document.createElement('img');img.src=p.custom_emoji_url;img.className='profile-emoji-img';pill.appendChild(img);}
+    pill.appendChild(document.createTextNode(p.status_text));
+  }else{pill.style.display='none';}
+
+  renderProfileWidgets(p);
+}
+
+function renderProfileWidgets(p){
+  const c=document.getElementById('profile-widgets');
+  c.innerHTML='';
+  if(!isDevConnectPlus())return;
+  const w=p.widgets&&typeof p.widgets==='object'&&!Array.isArray(p.widgets)?p.widgets:{};
+  const enabled=w.enabled||[];
+  if(enabled.includes('stats')){
+    c.innerHTML+=`<div class="profile-widget-card"><div class="widget-title">📊 Stats</div><div style="font-size:13px;margin-top:4px">${p.xp||0} XP · ${p.streak||0} jours de streak</div></div>`;
+  }
+  if(enabled.includes('badges')){
+    c.innerHTML+=`<div class="profile-widget-card"><div class="widget-title">🏆 Derniers badges</div><div style="font-size:13px;margin-top:4px">Fondateur</div></div>`;
+  }
+  if(enabled.includes('activity')&&w.activity_text){
+    c.innerHTML+=`<div class="profile-widget-card"><div class="widget-title">🎮 Activité</div><div style="font-size:13px;margin-top:4px">${esc(w.activity_text)}</div></div>`;
+  }
+  if(enabled.includes('avail')&&w.available!==undefined&&w.available!==null){
+    c.innerHTML+=`<div class="profile-widget-card"><div class="widget-title">🌍 Disponibilité</div><div style="font-size:13px;margin-top:4px">${w.available?'Dispo pour mission':'Non disponible'}</div></div>`;
+  }
+}
+
+function toggleWidgetSubfield(name){
+  const on=document.getElementById('w-'+name).classList.contains('on');
+  document.getElementById('w-'+name+'-field').style.display=on?'block':'none';
 }
 
 function updateSettingsSection(){
@@ -1428,6 +1570,96 @@ function updateSettingsSection(){
   setVal('s-github',p.github_url||'');setVal('s-linkedin',p.linkedin_url||'');setVal('s-portfolio',p.portfolio_url||'');
   setEl('s-email-display',currentUser.email||'—');
   setEl('s-since',new Date(p.created_at).toLocaleDateString('fr-FR',{year:'numeric',month:'long',day:'numeric'}));
+
+  const init=(p.username||'DC').substring(0,2).toUpperCase();
+  document.getElementById('s-avatar-preview').innerHTML=avatarHtml(p.avatar_url,init);
+
+  const devPlus=isDevPlus(),dcPlus=isDevConnectPlus();
+  document.getElementById('dev-plus-banner-locked').style.display=devPlus?'none':'block';
+  document.getElementById('dev-plus-banner-unlocked').style.display=devPlus?'block':'none';
+  document.getElementById('dc-plus-locked').style.display=dcPlus?'none':'block';
+  document.getElementById('dc-plus-unlocked').style.display=dcPlus?'block':'none';
+
+  if(devPlus){
+    document.getElementById('s-banner-preview').style.background=p.banner_url?`url('${p.banner_url}') center/cover`:'var(--bg2)';
+    setVal('s-profile-color',p.profile_color||'#0e0e0e');
+  }
+  if(dcPlus){
+    setVal('s-status',p.status_text||'');
+    document.getElementById('s-emoji-preview').innerHTML=p.custom_emoji_url?`<img src="${esc(p.custom_emoji_url)}" style="width:100%;height:100%;object-fit:contain">`:'';
+    const w=p.widgets&&typeof p.widgets==='object'&&!Array.isArray(p.widgets)?p.widgets:{};
+    const enabled=w.enabled||[];
+    ['stats','badges','activity','avail'].forEach(k=>{document.getElementById('w-'+k).classList.toggle('on',enabled.includes(k));});
+    setVal('s-activity-text',w.activity_text||'');
+    if(w.available!==undefined&&w.available!==null)setVal('s-avail-status',String(w.available));
+    toggleWidgetSubfield('activity');toggleWidgetSubfield('avail');
+  }
+}
+
+function switchSettingsByName(s){
+  const el=[...document.querySelectorAll('.settings-nav-item')].find(n=>n.getAttribute('onclick')?.includes(`'${s}'`));
+  if(el)switchSettings(el,s);
+}
+
+function validateImageFile(file,maxBytes,allowGif){
+  const okTypes=allowGif?['image/png','image/jpeg','image/webp','image/gif']:['image/png','image/jpeg','image/webp'];
+  if(!okTypes.includes(file.type)){showToast(allowGif?'Format non supporté.':'Format non supporté (pas de GIF/vidéo).','error');return false;}
+  if(file.size>maxBytes){showToast('Fichier trop lourd ('+Math.round(maxBytes/1024/1024*10)/10+' Mo max).','error');return false;}
+  return true;
+}
+
+async function uploadToBucket(bucket,file){
+  const ext=file.name.split('.').pop();
+  const path=`${currentUser.id}/${bucket}-${Date.now()}.${ext}`;
+  const{error}=await db.storage.from(bucket).upload(path,file,{upsert:true});
+  if(error){showToast('Erreur upload : '+error.message,'error');return null;}
+  const{data}=db.storage.from(bucket).getPublicUrl(path);
+  return data.publicUrl;
+}
+
+async function uploadAvatar(input){
+  const file=input.files[0];if(!file)return;
+  if(!validateImageFile(file,2*1024*1024,false))return;
+  const url=await uploadToBucket('avatars',file);if(!url)return;
+  const{error}=await db.from('profiles').update({avatar_url:url}).eq('id',currentUser.id);
+  if(error){showToast('Erreur lors de la sauvegarde.','error');return;}
+  await loadProfile();showToast('Photo de profil mise à jour !','success');
+}
+
+async function uploadBanner(input){
+  if(!isDevPlus()){showToast('Réservé aux membres Dev+.','error');return;}
+  const file=input.files[0];if(!file)return;
+  if(!validateImageFile(file,3*1024*1024,false))return;
+  const url=await uploadToBucket('banners',file);if(!url)return;
+  const{error}=await db.from('profiles').update({banner_url:url}).eq('id',currentUser.id);
+  if(error){showToast('Erreur lors de la sauvegarde.','error');return;}
+  await loadProfile();showToast('Bannière mise à jour !','success');
+}
+
+async function uploadEmoji(input){
+  if(!isDevConnectPlus()){showToast('Réservé aux membres DevConnect+.','error');return;}
+  const file=input.files[0];if(!file)return;
+  if(!validateImageFile(file,256*1024,true))return;
+  const url=await uploadToBucket('emojis',file);if(!url)return;
+  const{error}=await db.from('profiles').update({custom_emoji_url:url}).eq('id',currentUser.id);
+  if(error){showToast('Erreur lors de la sauvegarde.','error');return;}
+  await loadProfile();showToast('Emoji mis à jour !','success');
+}
+
+async function updateProfileColor(value){
+  if(!isDevPlus()){showToast('Réservé aux membres Dev+.','error');return;}
+  const{error}=await db.from('profiles').update({profile_color:value}).eq('id',currentUser.id);
+  if(error){showToast('Erreur lors de la sauvegarde.','error');return;}
+  await loadProfile();
+}
+
+async function saveAppearanceExtras(){
+  if(!isDevConnectPlus()){showToast('Réservé aux membres DevConnect+.','error');return;}
+  const enabled=['stats','badges','activity','avail'].filter(k=>document.getElementById('w-'+k).classList.contains('on'));
+  const widgets={enabled,activity_text:getVal('s-activity-text'),available:enabled.includes('avail')?getVal('s-avail-status')==='true':null};
+  const{error}=await db.from('profiles').update({status_text:getVal('s-status'),widgets,updated_at:new Date().toISOString()}).eq('id',currentUser.id);
+  if(error){showToast('Erreur lors de la sauvegarde.','error');return;}
+  await loadProfile();showToast('Apparence mise à jour !','success');
 }
 
 function checkArchitect(){
