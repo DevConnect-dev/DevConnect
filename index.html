@@ -525,6 +525,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .toast.error{border-left:3px solid #9a5a5a;}
 .toast.info{border-left:3px solid var(--accent-dim);}
 @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+.post-action.post-liked{color:var(--accent);}
 .font-mono{font-family:var(--font-mono);}
 .font-display{font-family:var(--font-display);}
 </style>
@@ -638,7 +639,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
         <div class="form-group"><label class="form-label">Mot de passe</label><input type="password" id="login-password" class="form-input" placeholder="••••••••"></div>
         <div id="login-error" class="form-error">Email ou mot de passe incorrect.</div>
         <button class="btn btn-primary w-full" style="margin-top:16px;justify-content:center" onclick="handleLogin()">Se connecter</button>
-        <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--text-muted)">Pas de compte ? <a href="#" style="color:var(--text-secondary)" onclick="switchAuthTab('register')">Créer un compte</a></div>
+        <div style="text-align:center;margin-top:12px;font-size:13px;color:var(--text-muted)"><a href="#" style="color:var(--text-secondary)" onclick="handleForgotPassword()">Mot de passe oublié ?</a></div>
+        <div style="text-align:center;margin-top:8px;font-size:13px;color:var(--text-muted)">Pas de compte ? <a href="#" style="color:var(--text-secondary)" onclick="switchAuthTab('register')">Créer un compte</a></div>
         <button class="btn btn-ghost w-full" style="margin-top:12px;justify-content:center;font-size:13px" onclick="showPage('landing')">← Retour</button>
       </div>
       <!-- REGISTER -->
@@ -755,62 +757,13 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
             </div>
           </div>
           <div id="feed-posts">
-            <div class="post-card">
-              <div class="post-header">
-                <div class="post-avatar">AX</div>
-                <div class="post-meta">
-                  <div class="post-name">Alex_dev <span class="badge-inline">Dev Web</span> <span class="premium-badge devplus">Dev+</span></div>
-                  <div class="post-role">Développeur Frontend · React · TypeScript</div>
-                </div>
-                <div class="post-time">il y a 2h</div>
-              </div>
-              <div class="post-content">Je viens de finir une feature de rendu 3D en pur CSS — sans WebGL. Franchement bluffant ce qu'on peut faire avec <code>transform-style: preserve-3d</code>. Dispo pour collaborer 🔥</div>
-              <div class="post-actions">
-                <button class="post-action">◆ 24</button>
-                <button class="post-action">◇ Commenter</button>
-                <button class="post-action">⬡ Partager</button>
-              </div>
-            </div>
-            <div class="post-card">
-              <div class="post-header">
-                <div class="post-avatar">MR</div>
-                <div class="post-meta">
-                  <div class="post-name">m4rx_sec <span class="badge-inline">Cybersec</span></div>
-                  <div class="post-role">Pentesteur · OSINT · Bug Bounty</div>
-                </div>
-                <div class="post-time">il y a 5h</div>
-              </div>
-              <div class="post-content">Nouveau challenge en ligne — niveau Hard. Sujet : injection SQL avancée sur une app Node/Postgres. Les 10 premiers à résoudre auront accès aux solutions. Go 🎯</div>
-              <div class="post-actions">
-                <button class="post-action">◆ 47</button>
-                <button class="post-action">◇ Commenter</button>
-                <button class="post-action">⬡ Partager</button>
-              </div>
-            </div>
-            <div class="post-card">
-              <div class="post-header">
-                <div class="post-avatar">SK</div>
-                <div class="post-meta">
-                  <div class="post-name">sk_devops <span class="badge-inline">DevOps</span> <span class="premium-badge devconnectplus">DevConnect+</span></div>
-                  <div class="post-role">SRE · Kubernetes · AWS</div>
-                </div>
-                <div class="post-time">hier</div>
-              </div>
-              <div class="post-content">Mon setup Kubernetes en prod après 6 mois. La partie la plus compliquée : la gestion des secrets avec Vault. J'ai écrit un article détaillé, questions bienvenues 👇</div>
-              <div class="post-actions">
-                <button class="post-action">◆ 89</button>
-                <button class="post-action">◇ Commenter</button>
-                <button class="post-action">⬡ Partager</button>
-              </div>
-            </div>
+            <div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement du fil...</div>
           </div>
         </div>
         <div>
           <div class="sidebar-widget">
             <div class="widget-title">Top cette semaine</div>
-            <div class="leaderboard-item"><div class="lb-rank">1</div><div class="lb-avatar">MR</div><div class="lb-info"><div class="lb-name">m4rx_sec</div><div class="lb-specialty">cybersec</div></div><div class="lb-xp">4.2k xp</div></div>
-            <div class="leaderboard-item"><div class="lb-rank">2</div><div class="lb-avatar">AX</div><div class="lb-info"><div class="lb-name">Alex_dev</div><div class="lb-specialty">web dev</div></div><div class="lb-xp">3.8k xp</div></div>
-            <div class="leaderboard-item"><div class="lb-rank">3</div><div class="lb-avatar">SK</div><div class="lb-info"><div class="lb-name">sk_devops</div><div class="lb-specialty">devops</div></div><div class="lb-xp">3.1k xp</div></div>
+            <div id="sidebar-leaderboard"><div style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono)">Chargement...</div></div>
           </div>
           <div class="sidebar-widget">
             <div class="widget-title">Events à venir</div>
@@ -981,9 +934,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
           </div>
           <div class="sub-filters" id="sub-filters"></div>
           <div id="dev-results">
-            <div class="dev-card"><div class="dev-avatar">AX</div><div class="dev-info"><div class="dev-name">Alex_dev <span class="premium-badge devplus">Dev+</span></div><div class="dev-title">Développeur Frontend Senior · Paris</div><div class="dev-stack"><span class="stack-tag">React</span><span class="stack-tag">TypeScript</span><span class="stack-tag">Next.js</span></div></div><div class="dev-actions"><div class="dev-rate">~450€/j</div><button class="btn btn-ghost btn-sm">Profil</button><button class="btn btn-primary btn-sm">Contacter</button></div></div>
-            <div class="dev-card"><div class="dev-avatar">MR</div><div class="dev-info"><div class="dev-name">m4rx_sec</div><div class="dev-title">Pentesteur · Expert OSINT · Bug Bounty</div><div class="dev-stack"><span class="stack-tag">Pentest</span><span class="stack-tag">OSINT</span><span class="stack-tag">Python</span></div></div><div class="dev-actions"><div class="dev-rate">~600€/j</div><button class="btn btn-ghost btn-sm">Profil</button><button class="btn btn-primary btn-sm">Contacter</button></div></div>
-            <div class="dev-card"><div class="dev-avatar">SK</div><div class="dev-info"><div class="dev-name">sk_devops <span class="premium-badge devconnectplus">DevConnect+</span></div><div class="dev-title">SRE · Infrastructure Cloud · Kubernetes</div><div class="dev-stack"><span class="stack-tag">Kubernetes</span><span class="stack-tag">AWS</span><span class="stack-tag">Terraform</span></div></div><div class="dev-actions"><div class="dev-rate">~550€/j</div><button class="btn btn-ghost btn-sm">Profil</button><button class="btn btn-primary btn-sm">Contacter</button></div></div>
+            <div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement...</div>
           </div>
         </div>
         <div class="ai-panel" id="ai-panel">
@@ -1048,11 +999,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
         </div>
         <div class="ranking-table">
           <div class="ranking-row header"><span>#</span><span>Membre</span><span>Score</span></div>
-          <div class="ranking-row"><div class="rank-num gold">1</div><div class="rank-user"><div class="rank-avatar">MR</div><div><div class="rank-name">m4rx_sec</div><div class="rank-spec">cybersecurity</div></div></div><div class="rank-score"><div class="rank-xp">4 280 XP</div><div class="rank-badges">12 badges</div></div></div>
-          <div class="ranking-row"><div class="rank-num silver">2</div><div class="rank-user"><div class="rank-avatar">AX</div><div><div class="rank-name">Alex_dev</div><div class="rank-spec">web dev</div></div></div><div class="rank-score"><div class="rank-xp">3 820 XP</div><div class="rank-badges">9 badges</div></div></div>
-          <div class="ranking-row"><div class="rank-num bronze">3</div><div class="rank-user"><div class="rank-avatar">SK</div><div><div class="rank-name">sk_devops</div><div class="rank-spec">devops</div></div></div><div class="rank-score"><div class="rank-xp">3 140 XP</div><div class="rank-badges">7 badges</div></div></div>
-          <div class="ranking-row"><div class="rank-num">4</div><div class="rank-user"><div class="rank-avatar">NL</div><div><div class="rank-name">n0ur_data</div><div class="rank-spec">data / ia</div></div></div><div class="rank-score"><div class="rank-xp">2 760 XP</div><div class="rank-badges">6 badges</div></div></div>
-          <div class="ranking-row"><div class="rank-num">5</div><div class="rank-user"><div class="rank-avatar">YA</div><div><div class="rank-name">yanis_mob</div><div class="rank-spec">mobile dev</div></div></div><div class="rank-score"><div class="rank-xp">2 310 XP</div><div class="rank-badges">5 badges</div></div></div>
+          <div id="ranking-rows"><div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement...</div></div>
         </div>
       </div>
     </div>
@@ -1386,9 +1333,7 @@ main();</textarea>
   <div class="search-box">
     <div class="search-input-wrap"><span>⌕</span><input class="search-main-input" id="search-main-input" placeholder="Rechercher un profil, un projet, un channel..."><span class="search-kbd">Echap</span></div>
     <div class="search-results" id="search-results">
-      <div class="search-result-item"><span class="search-result-icon">◈</span><div><div class="search-result-name">Alex_dev</div><div class="search-result-type">profil · Dev Web</div></div></div>
-      <div class="search-result-item"><span class="search-result-icon">#</span><div><div class="search-result-name">#cybersec</div><div class="search-result-type">channel</div></div></div>
-      <div class="search-result-item"><span class="search-result-icon">◆</span><div><div class="search-result-name">SQL Injection — Bypass</div><div class="search-result-type">challenge · Hard</div></div></div>
+      <div style="padding:20px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Tape pour rechercher...</div>
     </div>
   </div>
 </div>
@@ -1405,10 +1350,10 @@ let currentUser=null,currentProfile=null,currentSection='home',selectedSpecialty
 // INIT
 window.addEventListener('load',async()=>{
   const{data:{session}}=await db.auth.getSession();
-  if(session){currentUser=session.user;await loadProfile();showPage('app');}
+  if(session){currentUser=session.user;await loadProfile();showPage('app');loadFeed();loadSidebarLeaderboard();}
   else showPage('landing');
   db.auth.onAuthStateChange(async(event,session)=>{
-    if(event==='SIGNED_IN'){currentUser=session.user;await loadProfile();showPage('app');}
+    if(event==='SIGNED_IN'){currentUser=session.user;await loadProfile();showPage('app');loadFeed();loadSidebarLeaderboard();}
     else if(event==='SIGNED_OUT'){currentUser=null;currentProfile=null;showPage('landing');}
   });
   document.addEventListener('keydown',e=>{
@@ -1437,6 +1382,19 @@ async function handleLogin(){
   if(!email||!pass){err.textContent='Remplis tous les champs.';err.classList.add('show');return;}
   const{error}=await db.auth.signInWithPassword({email,password:pass});
   if(error){err.textContent='Email ou mot de passe incorrect.';err.classList.add('show');}
+}
+
+async function handleForgotPassword(){
+  const email=document.getElementById('login-email').value.trim();
+  if(!email){
+    const err=document.getElementById('login-error');
+    err.textContent='Entre ton email ci-dessus puis clique sur "Mot de passe oublié".';
+    err.classList.add('show');
+    return;
+  }
+  const{error}=await db.auth.resetPasswordForEmail(email,{redirectTo:window.location.href});
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  showToast('Email de réinitialisation envoyé ! Vérifie ta boîte mail.','success');
 }
 
 function nextStep(step){
@@ -1704,15 +1662,80 @@ async function changePassword(){
 async function handleLogout(){await db.auth.signOut();showToast('Déconnecté.','info');}
 
 // NAVIGATION
-function navigate(section){
-  document.querySelectorAll('.app-section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('section-'+section)?.classList.add('active');
+function navigate(section) {
+  document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('section-' + section)?.classList.add('active');
   document.querySelector(`[data-section="${section}"]`)?.classList.add('active');
-  currentSection=section;
-  if(section==='admin')loadAdminData();
-  if(section==='messages')loadMessages();
-  if(section==='profile')updateProfileSection();
+  currentSection = section;
+  if (section === 'admin') loadAdminData();
+  if (section === 'messages') loadMessages();
+  if (section === 'profile') updateProfileSection();
+  if (section === 'home') { loadFeed(); loadSidebarLeaderboard(); }
+  if (section === 'ranking') loadRanking();
+  if (section === 'discover') loadDiscover();
+}
+
+// CLASSEMENT RÉEL
+async function loadRanking() {
+  const cont = document.getElementById('ranking-rows');
+  const { data } = await db.from('profiles').select('username,avatar_url,specialty,xp,is_premium,premium_tier').eq('is_banned', false).order('xp', { ascending: false }).limit(20);
+  if (!data || data.length === 0) {
+    cont.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun membre pour l\'instant.</div>';
+    return;
+  }
+  const specLabels = { web_dev: 'web dev', mobile_dev: 'mobile', backend_dev: 'backend', fullstack_dev: 'fullstack', cybersecurity: 'cybersecurity', devops: 'devops', data: 'data', ai_ml: 'ia / ml', designer_ux: 'design', recruiter: 'recruteur' };
+  const medals = ['gold', 'silver', 'bronze'];
+  cont.innerHTML = data.map((u, i) => {
+    const name = u.username || 'Inconnu';
+    const init = name.substring(0, 2).toUpperCase();
+    const avatarH = u.avatar_url ? `<img src="${esc(u.avatar_url)}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : init;
+    const rankClass = medals[i] ? `rank-num ${medals[i]}` : 'rank-num';
+    const prem = u.premium_tier === 'devconnect-plus' ? '<span class="premium-badge devconnectplus">DevConnect+</span>' : u.is_premium ? '<span class="premium-badge devplus">Dev+</span>' : '';
+    return `<div class="ranking-row">
+      <div class="${rankClass}">${i + 1}</div>
+      <div class="rank-user">
+        <div class="rank-avatar">${avatarH}</div>
+        <div>
+          <div class="rank-name">${esc(name)} ${prem}</div>
+          <div class="rank-spec">${esc(specLabels[u.specialty] || u.specialty || '—')}</div>
+        </div>
+      </div>
+      <div class="rank-score">
+        <div class="rank-xp">${(u.xp || 0).toLocaleString('fr-FR')} XP</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// SIDEBAR TOP 5
+async function loadSidebarLeaderboard() {
+  const cont = document.getElementById('sidebar-leaderboard');
+  const { data } = await db.from('profiles').select('username,avatar_url,specialty,xp').eq('is_banned', false).order('xp', { ascending: false }).limit(5);
+  if (!data || data.length === 0) { cont.innerHTML = '<div style="font-size:12px;color:var(--text-muted)">Aucun membre.</div>'; return; }
+  const specLabels = { web_dev: 'web dev', mobile_dev: 'mobile', backend_dev: 'backend', fullstack_dev: 'fullstack', cybersecurity: 'cybersec', devops: 'devops', data: 'data', ai_ml: 'ia/ml', designer_ux: 'design', recruiter: 'recruteur' };
+  cont.innerHTML = data.map((u, i) => {
+    const name = u.username || 'Inconnu';
+    const init = name.substring(0, 2).toUpperCase();
+    const avatarH = u.avatar_url ? `<img src="${esc(u.avatar_url)}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : init;
+    const xpStr = (u.xp || 0) >= 1000 ? `${((u.xp || 0) / 1000).toFixed(1)}k xp` : `${u.xp || 0} xp`;
+    return `<div class="leaderboard-item">
+      <div class="lb-rank">${i + 1}</div>
+      <div class="lb-avatar">${avatarH}</div>
+      <div class="lb-info"><div class="lb-name">${esc(name)}</div><div class="lb-specialty">${esc(specLabels[u.specialty] || '—')}</div></div>
+      <div class="lb-xp">${xpStr}</div>
+    </div>`;
+  }).join('');
+}
+
+// UTILITAIRE : temps relatif
+function timeAgo(dateStr) {
+  const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
+  if (diff < 60) return 'à l\'instant';
+  if (diff < 3600) return `il y a ${Math.floor(diff / 60)}min`;
+  if (diff < 86400) return `il y a ${Math.floor(diff / 3600)}h`;
+  if (diff < 172800) return 'hier';
+  return new Date(dateStr).toLocaleDateString('fr-FR');
 }
 
 // MESSAGES
@@ -1767,23 +1790,159 @@ function switchKeyboardTab(el,tab){document.querySelectorAll('.keyboard-tab').fo
 function insertChar(char){const i=document.getElementById('chat-input');if(!i)return;const p=i.selectionStart,v=i.value;i.value=v.substring(0,p)+char+v.substring(p);i.selectionStart=i.selectionEnd=p+char.length;i.focus();}
 
 // FEED
-function publishPost(){
-  if(!currentUser){showToast('Connecte-toi pour publier.','error');return;}
-  const content=document.getElementById('post-composer').value.trim();
-  if(!content)return;
-  document.getElementById('post-composer').value='';
-  showToast('Post publié !','success');
+async function loadFeed() {
+  const cont = document.getElementById('feed-posts');
+  const { data: posts, error } = await db
+    .from('posts')
+    .select('*, profiles(username, avatar_url, specialty, is_premium, premium_tier, title)')
+    .order('created_at', { ascending: false })
+    .limit(30);
+  if (error || !posts || posts.length === 0) {
+    cont.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Aucun post pour l\'instant. Sois le premier à publier !</div>';
+    return;
+  }
+  // Charger les likes du user connecté pour savoir quels posts il a likés
+  let myLikes = new Set();
+  if (currentUser) {
+    const { data: lk } = await db.from('post_likes').select('post_id').eq('user_id', currentUser.id);
+    if (lk) lk.forEach(l => myLikes.add(l.post_id));
+  }
+  const specLabels = { web_dev: 'Dev Web', mobile_dev: 'Mobile', backend_dev: 'Backend', fullstack_dev: 'Fullstack', cybersecurity: 'Cybersec', devops: 'DevOps', data: 'Data', ai_ml: 'IA/ML', designer_ux: 'Design', recruiter: 'Recruteur' };
+  cont.innerHTML = posts.map(p => {
+    const prof = p.profiles || {};
+    const name = prof.username || 'Inconnu';
+    const init = name.substring(0, 2).toUpperCase();
+    const avatarHtmlPost = prof.avatar_url ? `<img src="${esc(prof.avatar_url)}" alt="avatar">` : init;
+    const prem = prof.premium_tier === 'devconnect-plus' ? '<span class="premium-badge devconnectplus">DevConnect+</span>' : prof.is_premium ? '<span class="premium-badge devplus">Dev+</span>' : '';
+    const spec = prof.specialty ? `<span class="badge-inline">${esc(specLabels[prof.specialty] || prof.specialty)}</span>` : '';
+    const sub = prof.title || prof.specialty ? (prof.title || specLabels[prof.specialty] || prof.specialty) : '';
+    const liked = myLikes.has(p.id);
+    const timeStr = timeAgo(p.created_at);
+    return `<div class="post-card" data-post-id="${esc(p.id)}">
+      <div class="post-header">
+        <div class="post-avatar">${avatarHtmlPost}</div>
+        <div class="post-meta">
+          <div class="post-name">${esc(name)} ${spec} ${prem}</div>
+          <div class="post-role">${esc(sub)}</div>
+        </div>
+        <div class="post-time">${timeStr}</div>
+      </div>
+      <div class="post-content">${esc(p.content).replace(/`([^`]+)`/g, '<code>$1</code>')}</div>
+      <div class="post-actions">
+        <button class="post-action ${liked ? 'post-liked' : ''}" onclick="toggleLike('${esc(p.id)}',this)">◆ <span class="like-count">${p.likes_count || 0}</span></button>
+        <button class="post-action">◇ Commenter</button>
+        <button class="post-action">⬡ Partager</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function toggleLike(postId, btn) {
+  if (!currentUser) { showToast('Connecte-toi pour liker.', 'error'); return; }
+  const liked = btn.classList.contains('post-liked');
+  const countEl = btn.querySelector('.like-count');
+  if (liked) {
+    btn.classList.remove('post-liked');
+    countEl.textContent = Math.max(0, parseInt(countEl.textContent) - 1);
+    await db.from('post_likes').delete().eq('post_id', postId).eq('user_id', currentUser.id);
+  } else {
+    btn.classList.add('post-liked');
+    countEl.textContent = parseInt(countEl.textContent) + 1;
+    await db.from('post_likes').insert({ post_id: postId, user_id: currentUser.id });
+  }
+}
+
+async function publishPost() {
+  if (!currentUser) { showToast('Connecte-toi pour publier.', 'error'); return; }
+  const content = document.getElementById('post-composer').value.trim();
+  if (!content) return;
+  if (content.length > 2000) { showToast('Post trop long (2000 caractères max).', 'error'); return; }
+  const { error } = await db.from('posts').insert({ user_id: currentUser.id, content });
+  if (error) { showToast('Erreur lors de la publication.', 'error'); return; }
+  document.getElementById('post-composer').value = '';
+  showToast('Post publié !', 'success');
+  await loadFeed();
 }
 function insertTag(type){const ta=document.getElementById('post-composer');const tags={code:'`code ici`',link:'[texte](https://)' };const p=ta.selectionStart,v=ta.value;ta.value=v.substring(0,p)+(tags[type]||'')+v.substring(p);ta.focus();}
 
 // DISCOVER
-function setFilter(el,f){document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');loadSubFilters(f);}
-function loadSubFilters(f){
-  const s={web_dev:['React','Vue','Angular','Node.js','TypeScript','PHP'],cybersecurity:['Pentest','OSINT','Forensics','Bug Bounty','CTF'],devops:['Docker','Kubernetes','AWS','Terraform','CI/CD'],data:['Python','SQL','Spark','Power BI'],ai_ml:['LLM','PyTorch','TensorFlow','NLP'],mobile_dev:['React Native','Flutter','Swift','Kotlin'],all:[],recruiter:[]};
-  document.getElementById('sub-filters').innerHTML=(s[f]||[]).map(x=>`<button class="sub-filter" onclick="this.classList.toggle('active')">${x}</button>`).join('');
+let discoverFilter = 'all', discoverSubFilters = [], discoverSearch = '';
+
+async function loadDiscover() {
+  const cont = document.getElementById('dev-results');
+  cont.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement...</div>';
+  let q = db.from('profiles').select('username,avatar_url,specialty,tech_stack,title,is_premium,premium_tier,xp').eq('is_banned', false).order('xp', { ascending: false }).limit(40);
+  if (discoverFilter !== 'all') q = q.eq('specialty', discoverFilter);
+  if (discoverSearch) q = q.ilike('username', `%${discoverSearch}%`);
+  const { data } = await q;
+  if (!data || data.length === 0) {
+    cont.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Aucun profil trouvé.</div>';
+    return;
+  }
+  const specLabels = { web_dev: 'Dev Web', mobile_dev: 'Mobile', backend_dev: 'Backend', fullstack_dev: 'Fullstack', cybersecurity: 'Cybersec', devops: 'DevOps', data: 'Data', ai_ml: 'IA/ML', designer_ux: 'Design', recruiter: 'Recruteur' };
+  // Filtrage par sub-filters si actifs
+  let filtered = data;
+  if (discoverSubFilters.length > 0) {
+    filtered = data.filter(u => {
+      const stack = u.tech_stack || [];
+      return discoverSubFilters.some(sf => stack.some(t => t.toLowerCase() === sf.toLowerCase()));
+    });
+  }
+  if (filtered.length === 0) {
+    cont.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Aucun profil avec ces filtres.</div>';
+    return;
+  }
+  cont.innerHTML = filtered.map(u => {
+    const name = u.username || 'Inconnu';
+    const init = name.substring(0, 2).toUpperCase();
+    const avatarH = u.avatar_url ? `<img src="${esc(u.avatar_url)}" alt="avatar">` : init;
+    const prem = u.premium_tier === 'devconnect-plus' ? '<span class="premium-badge devconnectplus">DevConnect+</span>' : u.is_premium ? '<span class="premium-badge devplus">Dev+</span>' : '';
+    const stack = (u.tech_stack || []).slice(0, 4).map(t => `<span class="stack-tag">${esc(t)}</span>`).join('');
+    const sub = u.title || (u.specialty ? specLabels[u.specialty] || u.specialty : '');
+    return `<div class="dev-card">
+      <div class="dev-avatar">${avatarH}</div>
+      <div class="dev-info">
+        <div class="dev-name">${esc(name)} ${prem}</div>
+        <div class="dev-title">${esc(sub)}</div>
+        <div class="dev-stack">${stack}</div>
+      </div>
+      <div class="dev-actions">
+        <div class="dev-rate" style="font-size:11px;color:var(--text-muted)">${u.xp || 0} XP</div>
+        <button class="btn btn-ghost btn-sm">Profil</button>
+        <button class="btn btn-primary btn-sm">Contacter</button>
+      </div>
+    </div>`;
+  }).join('');
 }
-function filterDevs(q){}
-function closeAiPanel(){document.getElementById('ai-panel').style.display='none';}
+
+function setFilter(el, f) {
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  discoverFilter = f;
+  discoverSubFilters = [];
+  loadSubFilters(f);
+  loadDiscover();
+}
+
+function loadSubFilters(f) {
+  const s = { web_dev: ['React', 'Vue', 'Angular', 'Node.js', 'TypeScript', 'PHP'], cybersecurity: ['Pentest', 'OSINT', 'Forensics', 'Bug Bounty', 'CTF'], devops: ['Docker', 'Kubernetes', 'AWS', 'Terraform', 'CI/CD'], data: ['Python', 'SQL', 'Spark', 'Power BI'], ai_ml: ['LLM', 'PyTorch', 'TensorFlow', 'NLP'], mobile_dev: ['React Native', 'Flutter', 'Swift', 'Kotlin'], all: [], recruiter: [] };
+  document.getElementById('sub-filters').innerHTML = (s[f] || []).map(x => `<button class="sub-filter" onclick="toggleSubFilter(this,'${x}')">${x}</button>`).join('');
+}
+
+function toggleSubFilter(el, tag) {
+  el.classList.toggle('active');
+  if (el.classList.contains('active')) discoverSubFilters.push(tag);
+  else discoverSubFilters = discoverSubFilters.filter(t => t !== tag);
+  loadDiscover();
+}
+
+function filterDevs(q) {
+  discoverSearch = q;
+  clearTimeout(window._dt);
+  window._dt = setTimeout(loadDiscover, 300);
+}
+
+function closeAiPanel() { document.getElementById('ai-panel').style.display = 'none'; }
 
 // LEARN
 function setLearnCat(el){document.querySelectorAll('.learn-cat').forEach(c=>c.classList.remove('active'));el.classList.add('active');}
@@ -1819,9 +1978,24 @@ function submitChallenge(){
   fb.style.display='block';
   if(ok){
     fb.style.color='#5a9a6a';
-    fb.textContent='✓ Correct ! Challenge résolu. +'+( c.meta.match(/\d+ XP/)?.[0]||'XP');
+    const xpGain=parseInt(c.meta.match(/(\d+) XP/)?.[1]||'0');
+    fb.textContent='✓ Correct ! Challenge résolu. +'+xpGain+' XP';
+    awardXP(challengeId, xpGain);
     showSolutions();showToast('Challenge résolu ! 🎉','success');
   }else{fb.style.color='#9a5a5a';fb.textContent='✗ Pas tout à fait... Réessaie ou consulte l\'indice.';}
+}
+
+async function awardXP(cid, xpGain) {
+  if(!currentUser||!xpGain)return;
+  // Vérifier si déjà complété
+  const{data:existing}=await db.from('challenge_completions').select('id').eq('user_id',currentUser.id).eq('challenge_id',cid).maybeSingle();
+  if(existing)return; // déjà résolu, pas de double gain
+  // Enregistrer la complétion
+  await db.from('challenge_completions').insert({user_id:currentUser.id,challenge_id:cid,xp_gained:xpGain});
+  // Ajouter l'XP au profil
+  const currentXP=currentProfile?.xp||0;
+  const{error}=await db.from('profiles').update({xp:currentXP+xpGain,updated_at:new Date().toISOString()}).eq('id',currentUser.id);
+  if(!error){await loadProfile();showToast(`+${xpGain} XP ajoutés à ton profil !`,'success');}
 }
 
 function showSolutions(){
@@ -1851,7 +2025,7 @@ async function sendEditorAI(){
 }
 
 // ADMIN
-async function loadAdminData(){loadAdminStats();loadAdminUsers();}
+async function loadAdminData(){loadAdminStats();loadAdminUsers();loadAdminTickets();loadAdminLogs();}
 async function loadAdminStats(){
   const[u,m,p,t]=await Promise.all([
     db.from('profiles').select('id',{count:'exact',head:true}),
@@ -1877,7 +2051,8 @@ function searchAdminUsers(v){clearTimeout(window._st);window._st=setTimeout(()=>
 async function banUser(username,ban){
   const{error}=await db.from('profiles').update({is_banned:ban}).eq('username',username);
   if(error){showToast('Erreur.','error');return;}
-  showToast(`Utilisateur ${ban?'banni':'débanni'}.`,'success');loadAdminUsers();
+  await writeAdminLog(ban?`Bannissement de @${username}`:`Débannissement de @${username}`,'moderation');
+  showToast(`Utilisateur ${ban?'banni':'débanni'}.`,'success');loadAdminUsers();loadAdminStats();
 }
 
 async function grantPremium(){
@@ -1887,6 +2062,7 @@ async function grantPremium(){
   const updates=tier==='none'?{is_premium:false,premium_tier:null,premium_since:null}:{is_premium:true,premium_tier:tier,premium_since:new Date().toISOString()};
   const{error}=await db.from('profiles').update(updates).eq('username',username);
   if(error){showToast('Erreur ou utilisateur introuvable.','error');return;}
+  await writeAdminLog(tier==='none'?`Retrait premium de @${username}`:`Premium ${tier} accordé à @${username}`,'premium');
   showToast(`Premium ${tier==='none'?'retiré':'accordé'} à @${username} !`,'success');
 }
 
@@ -1896,7 +2072,60 @@ async function assignRole(){
   if(!username){showToast('Entre un pseudo.','error');return;}
   const{error}=await db.from('profiles').update({role}).eq('username',username);
   if(error){showToast('Erreur ou utilisateur introuvable.','error');return;}
+  await writeAdminLog(`Rôle "${ROLE_LABELS[role]||role}" attribué à @${username}`,'role');
   showToast(`Rôle "${ROLE_LABELS[role]||role}" attribué à @${username} !`,'success');
+}
+
+// TICKETS DE MODÉRATION (vrais)
+async function loadAdminTickets(){
+  const cont=document.getElementById('admin-tickets-list');
+  const{data}=await db.from('report_tickets').select('*,reporter:profiles!report_tickets_reporter_id_fkey(username),target:profiles!report_tickets_target_id_fkey(username)').order('created_at',{ascending:false}).limit(30);
+  if(!data||data.length===0){
+    cont.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun ticket pour l\'instant.</div>';
+    return;
+  }
+  cont.innerHTML=data.map(t=>`<div class="admin-table-row ticket-grid">
+    <div><strong style="font-size:13px">${esc(t.reason||'—')}</strong><div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">Par @${esc(t.reporter?.username||'?')} → @${esc(t.target?.username||'?')}</div></div>
+    <div style="font-size:12px;font-family:var(--font-mono);color:var(--text-secondary)">${esc(t.category||'—')}</div>
+    <div style="font-size:12px;font-family:var(--font-mono);color:var(--text-secondary)">${esc(t.priority||'—')}</div>
+    <div><span class="status-badge ${t.status==='open'?'status-open':t.status==='claimed'?'status-claimed':'status-resolved'}">${t.status}</span></div>
+    <div class="action-btns">
+      ${t.status==='open'?`<button class="btn btn-ghost btn-sm" onclick="claimTicket('${t.id}')">Prendre</button>`:''}
+      ${t.status!=='resolved'?`<button class="btn btn-ghost btn-sm" onclick="resolveTicket('${t.id}')">Résoudre</button>`:''}
+    </div>
+  </div>`).join('');
+}
+
+async function claimTicket(id){
+  await db.from('report_tickets').update({status:'claimed',claimed_by:currentUser.id}).eq('id',id);
+  await writeAdminLog(`Ticket ${id} pris en charge`,'moderation');
+  showToast('Ticket pris en charge.','info');loadAdminTickets();loadAdminStats();
+}
+
+async function resolveTicket(id){
+  await db.from('report_tickets').update({status:'resolved',resolved_at:new Date().toISOString()}).eq('id',id);
+  await writeAdminLog(`Ticket ${id} résolu`,'moderation');
+  showToast('Ticket résolu.','success');loadAdminTickets();loadAdminStats();
+}
+
+// LOGS ADMIN (vrais)
+async function loadAdminLogs(){
+  const cont=document.getElementById('admin-logs-list');
+  const{data}=await db.from('admin_logs').select('*,admin:profiles!admin_logs_admin_id_fkey(username)').order('created_at',{ascending:false}).limit(30);
+  if(!data||data.length===0){
+    cont.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun log pour l\'instant.</div>';
+    return;
+  }
+  cont.innerHTML=data.map(l=>`<div class="admin-table-row" style="grid-template-columns:1fr 120px 140px">
+    <div style="font-size:13px">${esc(l.action||'—')}</div>
+    <div style="font-size:11px;font-family:var(--font-mono);color:var(--accent-dim)">${esc(l.category||'—')}</div>
+    <div style="font-size:11px;font-family:var(--font-mono);color:var(--text-muted)">${timeAgo(l.created_at)} · @${esc(l.admin?.username||'?')}</div>
+  </div>`).join('');
+}
+
+async function writeAdminLog(action,category='general'){
+  if(!currentUser)return;
+  await db.from('admin_logs').insert({admin_id:currentUser.id,action,category});
 }
 
 function switchAdmin(el,section){
@@ -1911,8 +2140,49 @@ function switchSettings(el,s){document.querySelectorAll('.settings-nav-item').fo
 function switchProfileTab(tab,el){document.querySelectorAll('.profile-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.profile-tab-content').forEach(c=>c.classList.remove('active'));document.getElementById('tab-'+tab)?.classList.add('active');}
 
 // SEARCH
-function openSearch(){document.getElementById('search-modal').classList.add('show');setTimeout(()=>document.getElementById('search-main-input').focus(),50);}
-function closeSearch(){document.getElementById('search-modal').classList.remove('show');}
+function openSearch() {
+  document.getElementById('search-modal').classList.add('show');
+  setTimeout(() => {
+    const inp = document.getElementById('search-main-input');
+    inp.focus();
+    inp.oninput = (e) => runSearch(e.target.value);
+  }, 50);
+}
+function closeSearch() { document.getElementById('search-modal').classList.remove('show'); }
+
+async function runSearch(q) {
+  const cont = document.getElementById('search-results');
+  if (!q || q.trim().length < 2) {
+    cont.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Tape pour rechercher...</div>';
+    return;
+  }
+  const term = q.trim();
+  // Recherche en parallèle : profils + channels statiques + challenges
+  const { data: profiles } = await db.from('profiles').select('username,specialty,avatar_url').ilike('username', `%${term}%`).eq('is_banned', false).limit(6);
+  const specLabels = { web_dev: 'Dev Web', mobile_dev: 'Mobile', backend_dev: 'Backend', fullstack_dev: 'Fullstack', cybersecurity: 'Cybersec', devops: 'DevOps', data: 'Data', ai_ml: 'IA/ML', designer_ux: 'Design', recruiter: 'Recruteur' };
+  const channels = ['général', 'aide', 'projets', 'showcase', 'cybersec', 'devops', 'data-ia'].filter(c => c.includes(term.toLowerCase()));
+  const challengeList = [
+    { title: "SQL Injection — Bypass", id: 'sql-injection', diff: 'Hard' },
+    { title: "React — Optimisation de rendu", id: 'react-perf', diff: 'Moyen' },
+    { title: "Docker — Container Escape", id: 'docker-escape', diff: 'Extrême' },
+    { title: "Algorithme — Tri en O(n log n)", id: 'algo-sort', diff: 'Facile' }
+  ].filter(c => c.title.toLowerCase().includes(term.toLowerCase()));
+
+  let html = '';
+  (profiles || []).forEach(u => {
+    const init = (u.username || '').substring(0, 2).toUpperCase();
+    const avatarH = u.avatar_url ? `<img src="${esc(u.avatar_url)}" alt="" style="width:20px;height:20px;border-radius:50%;object-fit:cover">` : `<span style="font-family:var(--font-mono);font-size:11px">${init}</span>`;
+    html += `<div class="search-result-item" onclick="navigate('discover');closeSearch()"><span class="search-result-icon">${avatarH}</span><div><div class="search-result-name">${esc(u.username)}</div><div class="search-result-type">profil · ${esc(specLabels[u.specialty] || u.specialty || '—')}</div></div></div>`;
+  });
+  channels.forEach(c => {
+    html += `<div class="search-result-item" onclick="navigate('messages');closeSearch()"><span class="search-result-icon">#</span><div><div class="search-result-name">#${c}</div><div class="search-result-type">channel</div></div></div>`;
+  });
+  challengeList.forEach(c => {
+    html += `<div class="search-result-item" onclick="navigate('learn');openChallenge('${c.id}');closeSearch()"><span class="search-result-icon">◆</span><div><div class="search-result-name">${esc(c.title)}</div><div class="search-result-type">challenge · ${c.diff}</div></div></div>`;
+  });
+  if (!html) html = '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Aucun résultat.</div>';
+  cont.innerHTML = html;
+}
 
 // DROPDOWN
 function toggleProfileDropdown(){document.getElementById('profile-dropdown').classList.toggle('show');}
