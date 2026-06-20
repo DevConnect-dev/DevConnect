@@ -2071,19 +2071,19 @@ async function loadAdminStats(){
 }
 
 async function loadAdminUsers(search=''){
-  let q=db.from('profiles').select('username,email,specialty,is_premium,premium_tier,is_banned').order('created_at',{ascending:false}).limit(50);
+  let q=db.from('profiles').select('id,username,email,specialty,is_premium,premium_tier,is_banned').order('created_at',{ascending:false}).limit(50);
   if(search)q=q.ilike('username',`%${search}%`);
   const{data}=await q;
   const cont=document.getElementById('admin-users-list');
   if(!data||!data.length){cont.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun utilisateur trouvé.</div>';return;}
   const smap={web_dev:'Dev Web',mobile_dev:'Mobile',backend_dev:'Backend',fullstack_dev:'Fullstack',cybersecurity:'Cyber',devops:'DevOps',data:'Data',ai_ml:'IA/ML',designer_ux:'Design',recruiter:'Recruteur'};
-  cont.innerHTML=data.map(u=>`<div class="admin-table-row users-grid"><div><strong>${esc(u.username||'—')}</strong><div style="font-size:11px;color:var(--text-muted)">${esc(u.email||'')}</div></div><div style="font-size:12px;font-family:var(--font-mono);color:var(--text-secondary)">${smap[u.specialty]||'—'}</div><div>${u.premium_tier?`<span class="premium-badge ${u.premium_tier==='devconnect-plus'?'devconnectplus':'devplus'}">${u.premium_tier}</span>`:'<span style="color:var(--text-muted);font-size:12px">—</span>'}</div><div><span class="status-badge ${u.is_banned?'status-open':'status-resolved'}">${u.is_banned?'Banni':'Actif'}</span></div><div class="action-btns"><button class="btn btn-ghost btn-sm" onclick="banUser('${esc(u.username)}',${!u.is_banned})">${u.is_banned?'Débannir':'Bannir'}</button></div></div>`).join('');
+  cont.innerHTML=data.map(u=>`<div class="admin-table-row users-grid"><div><strong>${esc(u.username||'—')}</strong><div style="font-size:11px;color:var(--text-muted)">${esc(u.email||'')}</div></div><div style="font-size:12px;font-family:var(--font-mono);color:var(--text-secondary)">${smap[u.specialty]||'—'}</div><div>${u.premium_tier?`<span class="premium-badge ${u.premium_tier==='devconnect-plus'?'devconnectplus':'devplus'}">${u.premium_tier}</span>`:'<span style="color:var(--text-muted);font-size:12px">—</span>'}</div><div><span class="status-badge ${u.is_banned?'status-open':'status-resolved'}">${u.is_banned?'Banni':'Actif'}</span></div><div class="action-btns"><button class="btn btn-ghost btn-sm" onclick="banUser('${esc(u.id)}','${esc(u.username)}',${!u.is_banned})">${u.is_banned?'Débannir':'Bannir'}</button></div></div>`).join('');
 }
 
 function searchAdminUsers(v){clearTimeout(window._st);window._st=setTimeout(()=>loadAdminUsers(v),300);}
 
-async function banUser(username,ban){
-  const{error}=await db.from('profiles').update({is_banned:ban}).eq('username',username);
+async function banUser(id,username,ban){
+  const{error}=await db.from('profiles').update({is_banned:ban}).eq('id',id);
   if(error){showToast('Erreur.','error');return;}
   await writeAdminLog(ban?`Bannissement de @${username}`:`Débannissement de @${username}`,'moderation');
   showToast(`Utilisateur ${ban?'banni':'débanni'}.`,'success');loadAdminUsers();loadAdminStats();
@@ -2093,9 +2093,11 @@ async function grantPremium(){
   const username=getVal('premium-username').trim();
   const tier=getVal('premium-tier-select');
   if(!username){showToast('Entre un pseudo.','error');return;}
+  const{data:user}=await db.from('profiles').select('id').eq('username',username).maybeSingle();
+  if(!user){showToast('Utilisateur introuvable.','error');return;}
   const updates=tier==='none'?{is_premium:false,premium_tier:null,premium_since:null}:{is_premium:true,premium_tier:tier,premium_since:new Date().toISOString()};
-  const{error}=await db.from('profiles').update(updates).eq('username',username);
-  if(error){showToast('Erreur ou utilisateur introuvable.','error');return;}
+  const{error}=await db.from('profiles').update(updates).eq('id',user.id);
+  if(error){showToast('Erreur lors de la mise à jour.','error');return;}
   await writeAdminLog(tier==='none'?`Retrait premium de @${username}`:`Premium ${tier} accordé à @${username}`,'premium');
   showToast(`Premium ${tier==='none'?'retiré':'accordé'} à @${username} !`,'success');
 }
@@ -2104,8 +2106,10 @@ async function assignRole(){
   const username=getVal('role-username').trim();
   const role=getVal('role-select');
   if(!username){showToast('Entre un pseudo.','error');return;}
-  const{error}=await db.from('profiles').update({role}).eq('username',username);
-  if(error){showToast('Erreur ou utilisateur introuvable.','error');return;}
+  const{data:user}=await db.from('profiles').select('id').eq('username',username).maybeSingle();
+  if(!user){showToast('Utilisateur introuvable.','error');return;}
+  const{error}=await db.from('profiles').update({role}).eq('id',user.id);
+  if(error){showToast('Erreur lors de la mise à jour.','error');return;}
   await writeAdminLog(`Rôle "${ROLE_LABELS[role]||role}" attribué à @${username}`,'role');
   showToast(`Rôle "${ROLE_LABELS[role]||role}" attribué à @${username} !`,'success');
 }
