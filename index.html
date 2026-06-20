@@ -1302,7 +1302,7 @@ main();</textarea>
         </div>
         <div class="admin-main">
           <div class="admin-section active" id="admin-overview">
-            <div style="font-family:var(--font-display);font-size:20px;font-weight:600;margin-bottom:24px">Bienvenue, <span class="architect-badge">Architect</span></div>
+            <div style="font-family:var(--font-display);font-size:20px;font-weight:600;margin-bottom:24px">Bienvenue, <span class="architect-badge" id="admin-welcome-role">Admin</span></div>
             <div class="admin-stats">
               <div class="admin-stat"><div class="admin-stat-num" id="stat-users">—</div><div class="admin-stat-label">utilisateurs</div></div>
               <div class="admin-stat"><div class="admin-stat-num" id="stat-messages">—</div><div class="admin-stat-label">messages</div></div>
@@ -1344,7 +1344,7 @@ main();</textarea>
             <div class="settings-card">
               <div class="settings-card-title">Attribuer un rôle</div>
               <div class="form-group"><label class="form-label">Pseudo</label><input type="text" class="form-input form-input-mono" id="role-username" placeholder="pseudo_utilisateur"></div>
-              <div class="form-group"><label class="form-label">Rôle</label><select class="form-input" id="role-select"><option value="core_dev">Core Dev</option><option value="designer">Designer</option><option value="security">Security</option><option value="admin">Admin</option><option value="moderator">Modérateur</option><option value="recruiter">Recruteur</option></select></div>
+              <div class="form-group"><label class="form-label">Rôle</label><select class="form-input" id="role-select"><option value="architect">Architect</option><option value="admin">Admin</option><option value="core_dev">Core Dev</option><option value="designer">Designer</option><option value="security">Security</option><option value="moderator">Modérateur</option><option value="recruiter">Recruteur</option></select></div>
               <button class="btn btn-primary btn-sm" onclick="assignRole()">Attribuer</button>
             </div>
           </div>
@@ -1662,11 +1662,21 @@ async function saveAppearanceExtras(){
   await loadProfile();showToast('Apparence mise à jour !','success');
 }
 
+const ROLE_LABELS={admin:'Admin',architect:'Architect',core_dev:'Core Dev',designer:'Designer',security:'Security',moderator:'Modérateur',recruiter:'Recruteur'};
+
 function checkArchitect(){
-  const isArch=currentProfile?.username==='architect'||currentUser?.email===currentProfile?.email&&currentProfile?.username==='architect';
+  const role=currentProfile?.role;
+  const isAdmin=role==='admin'||role==='architect'||currentProfile?.username==='architect';
   const adminNav=document.getElementById('nav-admin');
   const badge=document.getElementById('profile-role-badge');
-  if(isArch){if(adminNav)adminNav.style.display='flex';if(badge)badge.style.display='inline';}
+  if(isAdmin){
+    if(adminNav)adminNav.style.display='flex';
+    if(badge){badge.style.display='inline';badge.textContent=ROLE_LABELS[role]||'Admin';}
+  }else{
+    if(adminNav)adminNav.style.display='none';
+    if(badge)badge.style.display='none';
+  }
+  setEl('admin-welcome-role',ROLE_LABELS[role]||'Admin');
 }
 
 async function saveProfile(){
@@ -1874,7 +1884,14 @@ async function grantPremium(){
   showToast(`Premium ${tier==='none'?'retiré':'accordé'} à @${username} !`,'success');
 }
 
-function assignRole(){showToast('Rôle attribué !','success');}
+async function assignRole(){
+  const username=getVal('role-username').trim();
+  const role=getVal('role-select');
+  if(!username){showToast('Entre un pseudo.','error');return;}
+  const{error}=await db.from('profiles').update({role}).eq('username',username);
+  if(error){showToast('Erreur ou utilisateur introuvable.','error');return;}
+  showToast(`Rôle "${ROLE_LABELS[role]||role}" attribué à @${username} !`,'success');
+}
 
 function switchAdmin(el,section){
   document.querySelectorAll('.admin-nav-item').forEach(n=>n.classList.remove('active'));el.classList.add('active');
