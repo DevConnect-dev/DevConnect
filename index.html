@@ -1492,7 +1492,13 @@ const WIDGET_LABELS={stats:'📊 Stats',badges:'🏆 Badges',activity:'🎮 Acti
 
 async function loadProfile(){
   if(!currentUser)return;
-  const{data}=await db.from('profiles').select('*').eq('id',currentUser.id).maybeSingle();
+  let{data}=await db.from('profiles').select('*').eq('id',currentUser.id).maybeSingle();
+  if(!data){
+    const meta=currentUser.user_metadata||{};
+    const{data:created,error}=await db.from('profiles').insert({id:currentUser.id,username:meta.username||currentUser.email.split('@')[0],email:currentUser.email,specialty:meta.specialty||null}).select().maybeSingle();
+    if(error){showToast('Impossible de charger ton profil. Contacte un admin.','error');return;}
+    data=created;
+  }
   if(data){currentProfile=data;updateNavAvatar();updateProfileSection();updateSettingsSection();checkArchitect();}
 }
 
