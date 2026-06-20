@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DevConnect</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 34 34' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='14' y='6' width='16' height='20' rx='4' fill='%2312121f'/%3E%3Crect x='9' y='4' width='16' height='20' rx='4' fill='%233a3a58'/%3E%3Crect x='4' y='2' width='16' height='20' rx='4' fill='%23c8c8d8'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -30,8 +31,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 #page-landing{flex-direction:column;align-items:center;}
 .landing-nav{width:100%;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(8,8,16,.85);backdrop-filter:blur(12px);position:fixed;top:0;z-index:100;}
 .logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:600;font-size:18px;color:var(--text);text-decoration:none;}
-.logo-mark{width:34px;height:34px;border:1.5px solid var(--border-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:13px;color:var(--accent);background:var(--bg1);position:relative;overflow:hidden;}
-.logo-mark::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:shimmer 3s ease-in-out infinite;}
+.logo-mark{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;position:relative;overflow:visible;background:transparent;border:none;}
+
 @keyframes shimmer{0%,100%{opacity:.3}50%{opacity:1}}
 .landing-nav-links{display:flex;align-items:center;gap:32px;list-style:none;}
 .landing-nav-links a{color:var(--text-secondary);text-decoration:none;font-size:14px;transition:color .2s;}
@@ -535,7 +536,11 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 <!-- LANDING PAGE -->
 <div id="page-landing" class="page active">
   <nav class="landing-nav">
-    <a href="#" class="logo"><div class="logo-mark">DC</div>DevConnect</a>
+    <a href="#" class="logo"><div class="logo-mark"><svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="14" y="6" width="16" height="20" rx="4" fill="#12121f"/>
+  <rect x="9" y="4" width="16" height="20" rx="4" fill="#3a3a58"/>
+  <rect x="4" y="2" width="16" height="20" rx="4" fill="#c8c8d8"/>
+</svg></div>DevConnect</a>
     <ul class="landing-nav-links">
       <li><a href="#features">Fonctionnalités</a></li>
       <li><a href="#refs">Pourquoi DevConnect</a></li>
@@ -616,7 +621,11 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     </div>
   </div>
   <footer class="landing-footer">
-    <div class="logo"><div class="logo-mark">DC</div>DevConnect</div>
+    <div class="logo"><div class="logo-mark"><svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="14" y="6" width="16" height="20" rx="4" fill="#12121f"/>
+  <rect x="9" y="4" width="16" height="20" rx="4" fill="#3a3a58"/>
+  <rect x="4" y="2" width="16" height="20" rx="4" fill="#c8c8d8"/>
+</svg></div>DevConnect</div>
     <div class="footer-copy">© 2026 DevConnect — Tous droits réservés</div>
     <div style="font-size:12px;color:var(--text-muted)">Construit pour la communauté tech 🛠</div>
   </footer>
@@ -626,7 +635,11 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 <div id="page-auth" class="page">
   <div class="auth-container">
     <div class="auth-box">
-      <div class="auth-logo"><div class="logo-mark">DC</div><span style="font-family:var(--font-display);font-weight:600;font-size:16px">DevConnect</span></div>
+      <div class="auth-logo"><div class="logo-mark"><svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="14" y="6" width="16" height="20" rx="4" fill="#12121f"/>
+  <rect x="9" y="4" width="16" height="20" rx="4" fill="#3a3a58"/>
+  <rect x="4" y="2" width="16" height="20" rx="4" fill="#c8c8d8"/>
+</svg></div><span style="font-family:var(--font-display);font-weight:600;font-size:16px">DevConnect</span></div>
       <!-- LOGIN -->
       <div id="auth-login">
         <div class="auth-title">Bon retour 👋</div>
@@ -713,7 +726,11 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 <!-- APP PAGE -->
 <div id="page-app" class="page">
   <nav class="topnav">
-    <a href="#" class="topnav-logo" onclick="navigate('home');return false"><div class="logo-mark">DC</div>DevConnect</a>
+    <a href="#" class="topnav-logo" onclick="navigate('home');return false"><div class="logo-mark"><svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="14" y="6" width="16" height="20" rx="4" fill="#12121f"/>
+  <rect x="9" y="4" width="16" height="20" rx="4" fill="#3a3a58"/>
+  <rect x="4" y="2" width="16" height="20" rx="4" fill="#c8c8d8"/>
+</svg></div>DevConnect</a>
     <div class="nav-items">
       <a class="nav-item active" onclick="navigate('home')" data-section="home"><span class="nav-item-icon">⌂</span>Accueil</a>
       <a class="nav-item" onclick="navigate('messages')" data-section="messages"><span class="nav-item-icon">◉</span>Messages</a>
