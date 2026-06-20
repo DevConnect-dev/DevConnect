@@ -1381,7 +1381,13 @@ async function handleLogin(){
   err.classList.remove('show');
   if(!email||!pass){err.textContent='Remplis tous les champs.';err.classList.add('show');return;}
   const{error}=await db.auth.signInWithPassword({email,password:pass});
-  if(error){err.textContent='Email ou mot de passe incorrect.';err.classList.add('show');}
+  if(error){
+    const isUnconfirmed=error.message?.toLowerCase().includes('email not confirmed')||error.message?.toLowerCase().includes('not confirmed');
+    err.textContent=isUnconfirmed
+      ? 'Tu dois confirmer ton email avant de te connecter. Vérifie ta boîte mail (et tes spams).'
+      : 'Email ou mot de passe incorrect.';
+    err.classList.add('show');
+  }
 }
 
 async function handleForgotPassword(){
@@ -1439,10 +1445,16 @@ async function handleRegister(){
   const level=document.getElementById('reg-level').value;
   const err=document.getElementById('reg-error-2');
   err.classList.remove('show');
-  const{error}=await db.auth.signUp({email,password:pass,options:{data:{username,specialty:selectedSpecialty,tech_stack:selectedTags,level}}});
+  const{data,error}=await db.auth.signUp({email,password:pass,options:{data:{username,specialty:selectedSpecialty,tech_stack:selectedTags,level}}});
   if(error){err.textContent=error.message;err.classList.add('show');return;}
-  showToast('Compte créé ! Vérifie ton email.','success');
-  setTimeout(()=>switchAuthTab('login'),2000);
+  if(data.session){
+    // Confirmation email désactivée : session directe, l'utilisateur est connecté
+    showToast('Compte créé ! Bienvenue sur DevConnect 🎉','success');
+  } else {
+    // Confirmation email activée : prévenir clairement l'utilisateur
+    showToast('Compte créé ! Confirme ton email avant de te connecter.','success');
+  }
+  setTimeout(()=>switchAuthTab('login'),2500);
 }
 
 // PROFILE
