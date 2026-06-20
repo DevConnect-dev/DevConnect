@@ -897,20 +897,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
             <div><div class="chat-header-name" id="current-channel-name">général</div><div class="chat-header-desc">Salon général de discussion</div></div>
           </div>
           <div class="chat-messages" id="chat-messages">
-            <div class="chat-msg">
-              <div class="chat-msg-avatar">AX</div>
-              <div class="chat-msg-body">
-                <div class="chat-msg-header"><span class="chat-msg-name">Alex_dev</span><span class="premium-badge devplus">Dev+</span><span class="chat-msg-time">aujourd'hui à 14:32</span></div>
-                <div class="chat-msg-content">Salut tout le monde ! Quelqu'un a déjà bossé avec <code>Bun</code> en prod ?</div>
-              </div>
-            </div>
-            <div class="chat-msg">
-              <div class="chat-msg-avatar">SK</div>
-              <div class="chat-msg-body">
-                <div class="chat-msg-header"><span class="chat-msg-name">sk_devops</span><span class="premium-badge devconnectplus">DevConnect+</span><span class="chat-msg-time">aujourd'hui à 14:35</span></div>
-                <div class="chat-msg-content">Ouais j'ai testé sur un side project — rapide pour les scripts mais je reste sur Node pour la prod. Support de certains packages encore instable.</div>
-              </div>
-            </div>
+            <div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Chargement...</div>
           </div>
           <div class="chat-input-area">
             <div class="chat-input-box">
@@ -958,10 +945,10 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
           <div class="ai-panel-header"><div class="ai-panel-title"><div class="ai-dot"></div>Suggestions IA</div><button class="ai-close" onclick="closeAiPanel()">×</button></div>
           <div class="ai-panel-body">
             <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px">Basé sur ta recherche, les profils les plus fiables :</div>
-            <div class="ai-suggestion"><div class="ai-suggestion-name">m4rx_sec ◉</div><div class="ai-suggestion-reason">Expert certifié cybersécurité, 47 challenges résolus, note recruteur 4.9/5.</div><div class="ai-suggestion-score">◆ Score fiabilité : 97%</div></div>
-            <div class="ai-suggestion"><div class="ai-suggestion-name">Alex_dev</div><div class="ai-suggestion-reason">5 projets publics vérifiés, badge Dev+ actif, 3 missions complétées avec succès.</div><div class="ai-suggestion-score">◆ Score fiabilité : 91%</div></div>
+            <div id="ai-suggestions-list"><div style="font-size:12px;color:var(--text-muted)">Chargement...</div></div>
           </div>
         </div>
+        <button id="reopen-ai-btn" onclick="reopenAiPanel()" style="display:none;position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:50%;background:var(--accent);border:none;align-items:center;justify-content:center;cursor:pointer;z-index:50;font-size:18px;color:#000;box-shadow:0 4px 16px rgba(0,0,0,.4)">⌕</button>
       </div>
     </div>
 
@@ -1009,9 +996,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
         <div class="ranking-header">
           <div class="feed-title">Classement</div>
           <div style="display:flex;gap:6px">
-            <button class="filter-chip active">Cette semaine</button>
-            <button class="filter-chip">Ce mois</button>
-            <button class="filter-chip">Global</button>
+            <button class="filter-chip active" onclick="setRankingPeriod(this,'week')">Cette semaine</button>
+            <button class="filter-chip" onclick="setRankingPeriod(this,'month')">Ce mois</button>
+            <button class="filter-chip" onclick="setRankingPeriod(this,'global')">Global</button>
           </div>
         </div>
         <div class="ranking-table">
@@ -1027,10 +1014,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
         <div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
             <div class="feed-title">Offres disponibles</div>
-            <button class="btn btn-primary btn-sm">+ Publier une offre</button>
+            <button class="btn btn-primary btn-sm" onclick="openJobModal()">+ Publier une offre</button>
           </div>
-          <div class="job-card"><div class="job-header"><div><div class="job-title">Développeur React Senior</div><div class="job-company">TechCorp SAS · Paris (Remote OK)</div></div><div class="job-budget">2 400€/sem</div></div><div class="job-desc">Mission de 3 mois pour refondre entièrement le dashboard client. Stack React + TypeScript, tests E2E avec Playwright.</div><div class="job-tags"><span class="stack-tag">React</span><span class="stack-tag">TypeScript</span><span class="stack-tag">Remote</span></div></div>
-          <div class="job-card"><div class="job-header"><div><div class="job-title">Audit de sécurité — App Web</div><div class="job-company">Confidentiel · En ligne</div></div><div class="job-budget">4 000€ forfait</div></div><div class="job-desc">Audit complet d'une app web en production (Node.js + PostgreSQL). Tests de pénétration, rapport détaillé avec recommandations.</div><div class="job-tags"><span class="stack-tag">Pentest</span><span class="stack-tag">OWASP</span><span class="stack-tag">Node.js</span></div></div>
+          <div id="job-list"><div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement...</div></div>
         </div>
         <div>
           <div class="sidebar-widget">
@@ -1049,38 +1035,21 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="app-section" id="section-editor">
       <div class="editor-layout">
         <div class="editor-sidebar">
-          <div class="editor-sidebar-header">Explorateur</div>
-          <div class="file-tree">
-            <div class="file-item active"><span class="file-icon">◉</span>index.js</div>
-            <div class="file-item"><span class="file-icon">◉</span>utils.js</div>
-            <div class="file-item"><span class="file-icon">◇</span>style.css</div>
-            <div class="file-item"><span class="file-icon">◆</span>README.md</div>
+          <div class="editor-sidebar-header" style="display:flex;align-items:center;justify-content:space-between">
+            <span>Explorateur</span>
+            <span style="display:flex;gap:6px">
+              <button title="Nouveau fichier" onclick="createEditorFile()" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:14px">+</button>
+              <button title="Importer un fichier" onclick="document.getElementById('file-import-input').click()" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:13px">⇪</button>
+              <button title="Télécharger le fichier actif" onclick="downloadEditorFile()" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:13px">⇩</button>
+            </span>
           </div>
+          <input type="file" id="file-import-input" style="display:none" onchange="importEditorFile(this)">
+          <div class="file-tree" id="editor-file-tree"></div>
         </div>
         <div class="editor-main">
-          <div class="editor-tabs"><button class="editor-tab active">◉ index.js</button></div>
-          <textarea class="editor-code-area" id="code-editor" spellcheck="false">// DevConnect — Éditeur de code intégré
-// Utilise l'IA à droite pour déboguer
-
-function fetchUserProfile(userId) {
-  return supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', userId)
-    .maybeSingle();
-}
-
-async function main() {
-  const { data, error } = await fetchUserProfile('123');
-  if (error) {
-    console.error('Erreur:', error.message);
-    return;
-  }
-  console.log('Profil:', data);
-}
-
-main();</textarea>
-          <div class="editor-statusbar"><span>JavaScript</span><span>UTF-8</span><span>Ln 1, Col 1</span><span style="margin-left:auto">◉ IA connectée</span></div>
+          <div class="editor-tabs" id="editor-tabs"></div>
+          <textarea class="editor-code-area" id="code-editor" spellcheck="false" oninput="onEditorEdit()"></textarea>
+          <div class="editor-statusbar"><span id="editor-lang-label">JavaScript</span><span>UTF-8</span><span>Ln 1, Col 1</span><span style="margin-left:auto">◉ IA connectée</span></div>
         </div>
         <div class="editor-ai-panel">
           <div class="editor-ai-header"><div class="ai-dot"></div>Assistant IA</div>
@@ -1341,6 +1310,37 @@ main();</textarea>
         <div style="font-size:14px;font-weight:500;margin:24px 0 12px;padding-top:20px;border-top:1px solid var(--border)">Solutions de la communauté (top 10)</div>
         <div id="solutions-list"></div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- JOB POST MODAL -->
+<div class="modal-overlay" id="job-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Publier une offre</div>
+      <button class="modal-close" onclick="closeJobModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Titre du poste</label><input type="text" class="form-input" id="job-title" placeholder="Développeur React Senior"></div>
+      <div class="form-group"><label class="form-label">Entreprise / Contexte</label><input type="text" class="form-input" id="job-company" placeholder="TechCorp SAS · Paris (Remote OK)"></div>
+      <div class="form-group"><label class="form-label">Budget</label><input type="text" class="form-input" id="job-budget" placeholder="2 400€/sem ou 4 000€ forfait"></div>
+      <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="job-desc" rows="4" placeholder="Décris la mission..."></textarea></div>
+      <div class="form-group"><label class="form-label">Tags (séparés par des virgules)</label><input type="text" class="form-input" id="job-tags" placeholder="React, TypeScript, Remote"></div>
+      <button class="btn btn-primary w-full" onclick="publishJob()">Publier l'offre</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW PROFILE MODAL (universel, cliquable depuis n'importe où) -->
+<div class="modal-overlay" id="view-profile-modal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-header">
+      <div class="modal-title">Profil</div>
+      <button class="modal-close" onclick="closeProfileModal()">×</button>
+    </div>
+    <div class="modal-body" id="view-profile-body" style="text-align:center;padding:8px 4px">
+      <div style="padding:24px;color:var(--text-muted);font-size:13px">Chargement...</div>
     </div>
   </div>
 </div>
@@ -1708,19 +1708,45 @@ function navigate(section) {
   if (section === 'home') { loadFeed(); loadSidebarLeaderboard(); }
   if (section === 'ranking') loadRanking();
   if (section === 'discover') loadDiscover();
+  if (section === 'recruit') loadJobs();
+  if (section === 'editor') renderEditorFileTree();
 }
 
 // CLASSEMENT RÉEL
+let rankingPeriod='week';
+function setRankingPeriod(el,p){
+  document.querySelectorAll('#section-ranking .filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');rankingPeriod=p;loadRanking();
+}
+
 async function loadRanking() {
   const cont = document.getElementById('ranking-rows');
-  const { data } = await db.from('profiles').select('username,avatar_url,specialty,xp,is_premium,premium_tier').eq('is_banned', false).order('xp', { ascending: false }).limit(20);
-  if (!data || data.length === 0) {
+  cont.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement...</div>';
+  const specLabels = { web_dev: 'web dev', mobile_dev: 'mobile', backend_dev: 'backend', fullstack_dev: 'fullstack', cybersecurity: 'cybersecurity', devops: 'devops', data: 'data', ai_ml: 'ia / ml', designer_ux: 'design', recruiter: 'recruteur' };
+  const medals = ['gold', 'silver', 'bronze'];
+  let rows=[];
+
+  if(rankingPeriod==='global'){
+    const{data}=await db.from('profiles').select('username,avatar_url,specialty,xp,is_premium,premium_tier').eq('is_banned',false).order('xp',{ascending:false}).limit(20);
+    rows=(data||[]).map(u=>({username:u.username,avatar_url:u.avatar_url,specialty:u.specialty,is_premium:u.is_premium,premium_tier:u.premium_tier,score:u.xp||0}));
+  }else{
+    const since=new Date();
+    since.setDate(since.getDate()-(rankingPeriod==='week'?7:30));
+    const{data:logs}=await db.from('xp_logs').select('user_id,amount').gte('created_at',since.toISOString());
+    if(!logs||logs.length===0){cont.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucune activité sur cette période.</div>';return;}
+    const totals={};
+    logs.forEach(l=>{totals[l.user_id]=(totals[l.user_id]||0)+l.amount;});
+    const ids=Object.keys(totals);
+    const{data:profs}=await db.from('profiles').select('id,username,avatar_url,specialty,is_premium,premium_tier').in('id',ids).eq('is_banned',false);
+    rows=(profs||[]).map(u=>({username:u.username,avatar_url:u.avatar_url,specialty:u.specialty,is_premium:u.is_premium,premium_tier:u.premium_tier,score:totals[u.id]||0}))
+      .sort((a,b)=>b.score-a.score).slice(0,20);
+  }
+
+  if (rows.length === 0) {
     cont.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun membre pour l\'instant.</div>';
     return;
   }
-  const specLabels = { web_dev: 'web dev', mobile_dev: 'mobile', backend_dev: 'backend', fullstack_dev: 'fullstack', cybersecurity: 'cybersecurity', devops: 'devops', data: 'data', ai_ml: 'ia / ml', designer_ux: 'design', recruiter: 'recruteur' };
-  const medals = ['gold', 'silver', 'bronze'];
-  cont.innerHTML = data.map((u, i) => {
+  cont.innerHTML = rows.map((u, i) => {
     const name = u.username || 'Inconnu';
     const init = name.substring(0, 2).toUpperCase();
     const avatarH = u.avatar_url ? `<img src="${esc(u.avatar_url)}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : init;
@@ -1728,7 +1754,7 @@ async function loadRanking() {
     const prem = u.premium_tier === 'devconnect-plus' ? '<span class="premium-badge devconnectplus">DevConnect+</span>' : u.is_premium ? '<span class="premium-badge devplus">Dev+</span>' : '';
     return `<div class="ranking-row">
       <div class="${rankClass}">${i + 1}</div>
-      <div class="rank-user">
+      <div class="rank-user" style="cursor:pointer" onclick="openProfile('${esc(name)}')">
         <div class="rank-avatar">${avatarH}</div>
         <div>
           <div class="rank-name">${esc(name)} ${prem}</div>
@@ -1736,7 +1762,7 @@ async function loadRanking() {
         </div>
       </div>
       <div class="rank-score">
-        <div class="rank-xp">${(u.xp || 0).toLocaleString('fr-FR')} XP</div>
+        <div class="rank-xp">${(u.score || 0).toLocaleString('fr-FR')} XP</div>
       </div>
     </div>`;
   }).join('');
@@ -1753,7 +1779,7 @@ async function loadSidebarLeaderboard() {
     const init = name.substring(0, 2).toUpperCase();
     const avatarH = u.avatar_url ? `<img src="${esc(u.avatar_url)}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : init;
     const xpStr = (u.xp || 0) >= 1000 ? `${((u.xp || 0) / 1000).toFixed(1)}k xp` : `${u.xp || 0} xp`;
-    return `<div class="leaderboard-item">
+    return `<div class="leaderboard-item" style="cursor:pointer" onclick="openProfile('${esc(name)}')">
       <div class="lb-rank">${i + 1}</div>
       <div class="lb-avatar">${avatarH}</div>
       <div class="lb-info"><div class="lb-name">${esc(name)}</div><div class="lb-specialty">${esc(specLabels[u.specialty] || '—')}</div></div>
@@ -1775,7 +1801,7 @@ function timeAgo(dateStr) {
 // MESSAGES
 async function loadMessages(){
   const{data:chan}=await db.from('channels').select('id').eq('name',currentChannel).maybeSingle();
-  if(!chan)return;
+  if(!chan){document.getElementById('chat-messages').innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Ce canal n\'existe pas encore en base.</div>';return;}
   const{data:msgs}=await db.from('messages').select('*,profiles(username,is_premium,premium_tier)').eq('channel_id',chan.id).eq('is_dm',false).order('created_at',{ascending:true}).limit(50);
   if(msgs&&msgs.length>0){
     const c=document.getElementById('chat-messages');
@@ -1784,9 +1810,11 @@ async function loadMessages(){
       const init=name.substring(0,2).toUpperCase();
       const prem=m.profiles?.premium_tier==='devconnect-plus'?'<span class="premium-badge devconnectplus">DevConnect+</span>':m.profiles?.is_premium?'<span class="premium-badge devplus">Dev+</span>':'';
       const time=new Date(m.created_at).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-      return`<div class="chat-msg"><div class="chat-msg-avatar">${init}</div><div class="chat-msg-body"><div class="chat-msg-header"><span class="chat-msg-name">${esc(name)}</span>${prem}<span class="chat-msg-time">${time}</span></div><div class="chat-msg-content">${esc(m.content)}</div></div></div>`;
+      return`<div class="chat-msg"><div class="chat-msg-avatar" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${init}</div><div class="chat-msg-body"><div class="chat-msg-header"><span class="chat-msg-name" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${esc(name)}</span>${prem}<span class="chat-msg-time">${time}</span></div><div class="chat-msg-content">${esc(m.content)}</div></div></div>`;
     }).join('');
     c.scrollTop=c.scrollHeight;
+  }else{
+    document.getElementById('chat-messages').innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun message dans ce canal. Sois le premier !</div>';
   }
 }
 
@@ -1796,15 +1824,11 @@ async function sendMessage(){
   const content=input.value.trim();
   if(!content)return;
   const{data:chan}=await db.from('channels').select('id').eq('name',currentChannel).maybeSingle();
-  if(!chan)return;
-  await db.from('messages').insert({user_id:currentUser.id,channel_id:chan.id,content,is_dm:false});
+  if(!chan){showToast('Ce canal n\'existe pas en base (à créer côté Supabase).','error');return;}
+  const{error}=await db.from('messages').insert({user_id:currentUser.id,channel_id:chan.id,content,is_dm:false});
+  if(error){showToast('Erreur lors de l\'envoi : '+error.message,'error');return;}
   input.value='';
-  const c=document.getElementById('chat-messages');
-  const init=(currentProfile?.username||'ME').substring(0,2).toUpperCase();
-  const time=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-  const prem=currentProfile?.premium_tier==='devconnect-plus'?'<span class="premium-badge devconnectplus">DevConnect+</span>':currentProfile?.is_premium?'<span class="premium-badge devplus">Dev+</span>':'';
-  c.innerHTML+=`<div class="chat-msg"><div class="chat-msg-avatar">${init}</div><div class="chat-msg-body"><div class="chat-msg-header"><span class="chat-msg-name">${esc(currentProfile?.username||'Moi')}</span>${prem}<span class="chat-msg-time">${time}</span></div><div class="chat-msg-content">${esc(content)}</div></div></div>`;
-  c.scrollTop=c.scrollHeight;
+  await loadMessages();
 }
 
 function switchChannel(el,name){
@@ -1854,9 +1878,9 @@ async function loadFeed() {
     const timeStr = timeAgo(p.created_at);
     return `<div class="post-card" data-post-id="${esc(p.id)}">
       <div class="post-header">
-        <div class="post-avatar">${avatarHtmlPost}</div>
+        <div class="post-avatar" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${avatarHtmlPost}</div>
         <div class="post-meta">
-          <div class="post-name">${esc(name)} ${spec} ${prem}</div>
+          <div class="post-name" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${esc(name)} ${spec} ${prem}</div>
           <div class="post-role">${esc(sub)}</div>
         </div>
         <div class="post-time">${timeStr}</div>
@@ -1892,9 +1916,13 @@ async function publishPost() {
   if (!content) return;
   if (content.length > 2000) { showToast('Post trop long (2000 caractères max).', 'error'); return; }
   const { error } = await db.from('posts').insert({ user_id: currentUser.id, content });
-  if (error) { showToast('Erreur lors de la publication.', 'error'); return; }
+  if (error) { showToast('Erreur lors de la publication : ' + error.message, 'error'); return; }
   document.getElementById('post-composer').value = '';
-  showToast('Post publié !', 'success');
+  await db.from('xp_logs').insert({ user_id: currentUser.id, action: 'post_created', amount: 5 });
+  const currentXP = currentProfile?.xp || 0;
+  await db.from('profiles').update({ xp: currentXP + 5 }).eq('id', currentUser.id);
+  await loadProfile();
+  showToast('Post publié ! +5 XP', 'success');
   await loadFeed();
 }
 function insertTag(type){const ta=document.getElementById('post-composer');const tags={code:'`code ici`',link:'[texte](https://)' };const p=ta.selectionStart,v=ta.value;ta.value=v.substring(0,p)+(tags[type]||'')+v.substring(p);ta.focus();}
@@ -1942,11 +1970,12 @@ async function loadDiscover() {
       </div>
       <div class="dev-actions">
         <div class="dev-rate" style="font-size:11px;color:var(--text-muted)">${u.xp || 0} XP</div>
-        <button class="btn btn-ghost btn-sm">Profil</button>
-        <button class="btn btn-primary btn-sm">Contacter</button>
+        <button class="btn btn-ghost btn-sm" onclick="openProfile('${esc(u.username)}')">Profil</button>
+        <button class="btn btn-primary btn-sm" onclick="openProfile('${esc(u.username)}')">Contacter</button>
       </div>
     </div>`;
   }).join('');
+  loadAiSuggestions();
 }
 
 function setFilter(el, f) {
@@ -1976,7 +2005,83 @@ function filterDevs(q) {
   window._dt = setTimeout(loadDiscover, 300);
 }
 
-function closeAiPanel() { document.getElementById('ai-panel').style.display = 'none'; }
+// RECRUTEMENT — OFFRES RÉELLES
+function openJobModal(){
+  if(!currentUser){showToast('Connecte-toi pour publier une offre.','error');return;}
+  document.getElementById('job-modal').classList.add('show');
+}
+function closeJobModal(){document.getElementById('job-modal').classList.remove('show');}
+
+async function publishJob(){
+  const title=getVal('job-title').trim();
+  const company=getVal('job-company').trim();
+  const budget=getVal('job-budget').trim();
+  const desc=getVal('job-desc').trim();
+  const tags=getVal('job-tags').split(',').map(t=>t.trim()).filter(Boolean);
+  if(!title||!desc){showToast('Titre et description obligatoires.','error');return;}
+  const{error}=await db.from('job_posts').insert({user_id:currentUser.id,title,company,budget,description:desc,tags});
+  if(error){showToast('Erreur lors de la publication : '+error.message,'error');return;}
+  showToast('Offre publiée !','success');
+  closeJobModal();
+  document.getElementById('job-title').value='';document.getElementById('job-company').value='';document.getElementById('job-budget').value='';document.getElementById('job-desc').value='';document.getElementById('job-tags').value='';
+  await loadJobs();
+}
+
+async function loadJobs(){
+  const cont=document.getElementById('job-list');
+  if(!cont)return;
+  const{data,error}=await db.from('job_posts').select('*,profiles(username)').order('created_at',{ascending:false}).limit(30);
+  if(error||!data||data.length===0){cont.innerHTML='<div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Aucune offre pour l\'instant. Sois le premier à publier !</div>';return;}
+  cont.innerHTML=data.map(j=>{
+    const tags=(j.tags||[]).map(t=>`<span class="stack-tag">${esc(t)}</span>`).join('');
+    const author=j.profiles?.username?`<span style="cursor:pointer" onclick="event.stopPropagation();openProfile('${esc(j.profiles.username)}')">par @${esc(j.profiles.username)}</span>`:'';
+    return`<div class="job-card"><div class="job-header"><div><div class="job-title">${esc(j.title)}</div><div class="job-company">${esc(j.company||'')} ${author?'· '+author:''}</div></div><div class="job-budget">${esc(j.budget||'')}</div></div><div class="job-desc">${esc(j.description)}</div><div class="job-tags">${tags}</div></div>`;
+  }).join('');
+}
+async function openProfile(username){
+  if(!username)return;
+  const modal=document.getElementById('view-profile-modal');
+  const body=document.getElementById('view-profile-body');
+  modal.classList.add('show');
+  body.innerHTML='<div style="padding:24px;color:var(--text-muted);font-size:13px">Chargement...</div>';
+  const{data:p}=await db.from('profiles').select('*').eq('username',username).maybeSingle();
+  if(!p){body.innerHTML='<div style="padding:24px;color:var(--text-muted);font-size:13px">Profil introuvable.</div>';return;}
+  const specLabels={web_dev:'Dev Web',mobile_dev:'Dev Mobile',backend_dev:'Dev Backend',fullstack_dev:'Fullstack',cybersecurity:'Cybersécurité',devops:'DevOps',data:'Data',ai_ml:'IA / ML',designer_ux:'Designer UX',recruiter:'Recruteur tech'};
+  const init=(p.username||'DC').substring(0,2).toUpperCase();
+  const avatarH=p.avatar_url?`<img src="${esc(p.avatar_url)}" alt="avatar" style="width:100%;height:100%;object-fit:cover">`:init;
+  const bannerStyle=p.banner_url?`background:url('${esc(p.banner_url)}') center/cover`:p.profile_color?`background:${esc(p.profile_color)}`:`background:linear-gradient(135deg,var(--bg3),var(--bg2))`;
+  const prem=p.premium_tier==='devconnect-plus'?'<span class="premium-badge devconnectplus">DevConnect+</span>':p.is_premium?'<span class="premium-badge devplus">Dev+</span>':'';
+  const stack=(p.tech_stack||[]).slice(0,6).map(t=>`<span class="stack-tag">${esc(t)}</span>`).join('');
+  const links=[p.github_url?`<a href="${esc(p.github_url)}" target="_blank" class="profile-link">GitHub</a>`:'',p.linkedin_url?`<a href="${esc(p.linkedin_url)}" target="_blank" class="profile-link">LinkedIn</a>`:'',p.portfolio_url?`<a href="${esc(p.portfolio_url)}" target="_blank" class="profile-link">Portfolio</a>`:''].filter(Boolean).join('');
+  body.innerHTML=`
+    <div style="height:70px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;margin:-8px -4px 0;${bannerStyle}"></div>
+    <div style="width:60px;height:60px;border-radius:50%;background:var(--bg2);border:3px solid var(--bg1);overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);color:var(--accent);font-size:18px;margin:-30px auto 8px">${avatarH}</div>
+    <div style="font-weight:600;font-size:16px">${esc(p.username||'Utilisateur')} ${prem}</div>
+    <div style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono)">@${esc(p.username||'')}</div>
+    <div style="font-size:13px;color:var(--text-secondary);margin:10px 0">${esc(p.bio||'Aucune bio renseignée.')}</div>
+    ${p.specialty?`<div class="profile-badge" style="display:inline-block;margin-bottom:10px">${esc(specLabels[p.specialty]||p.specialty)}</div>`:''}
+    <div style="display:flex;justify-content:center;gap:18px;margin:10px 0;font-size:12px;color:var(--text-muted)"><span><strong style="color:var(--text)">${p.xp||0}</strong> xp</span></div>
+    ${stack?`<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:10px">${stack}</div>`:''}
+    ${links?`<div class="profile-links" style="justify-content:center">${links}</div>`:''}
+    <button class="btn btn-primary w-full" style="margin-top:14px" onclick="closeProfileModal();navigate('messages')">✉ Contacter</button>
+  `;
+}
+function closeProfileModal(){document.getElementById('view-profile-modal').classList.remove('show');}
+
+function closeAiPanel(){document.getElementById('ai-panel').style.display='none';document.getElementById('reopen-ai-btn').style.display='flex';}
+function reopenAiPanel(){document.getElementById('ai-panel').style.display='block';document.getElementById('reopen-ai-btn').style.display='none';}
+
+async function loadAiSuggestions(){
+  const cont=document.getElementById('ai-suggestions-list');
+  if(!cont)return;
+  const{data}=await db.from('profiles').select('username,specialty,xp,is_premium').eq('is_banned',false).order('xp',{ascending:false}).limit(2);
+  if(!data||data.length===0){cont.innerHTML='<div style="font-size:12px;color:var(--text-muted)">Pas assez de profils pour le moment.</div>';return;}
+  const specLabels={web_dev:'Dev Web',mobile_dev:'Dev Mobile',backend_dev:'Dev Backend',fullstack_dev:'Fullstack',cybersecurity:'Cybersécurité',devops:'DevOps',data:'Data',ai_ml:'IA/ML',designer_ux:'Designer UX',recruiter:'Recruteur'};
+  cont.innerHTML=data.map(u=>{
+    const score=Math.min(99,50+Math.floor((u.xp||0)/20)+(u.is_premium?5:0));
+    return`<div class="ai-suggestion" style="cursor:pointer" onclick="openProfile('${esc(u.username)}')"><div class="ai-suggestion-name">${esc(u.username)}</div><div class="ai-suggestion-reason">${esc(specLabels[u.specialty]||u.specialty||'Profil tech')} · ${u.xp||0} XP</div><div class="ai-suggestion-score">◆ Score fiabilité : ${score}%</div></div>`;
+  }).join('');
+}
 
 // LEARN
 function setLearnCat(el){document.querySelectorAll('.learn-cat').forEach(c=>c.classList.remove('active'));el.classList.add('active');}
@@ -2026,6 +2131,8 @@ async function awardXP(cid, xpGain) {
   if(existing)return; // déjà résolu, pas de double gain
   // Enregistrer la complétion
   await db.from('challenge_completions').insert({user_id:currentUser.id,challenge_id:cid,xp_gained:xpGain});
+  // Logger l'XP (alimente le classement par période)
+  await db.from('xp_logs').insert({user_id:currentUser.id,action:'challenge_completed',amount:xpGain});
   // Ajouter l'XP au profil
   const currentXP=currentProfile?.xp||0;
   const{error}=await db.from('profiles').update({xp:currentXP+xpGain,updated_at:new Date().toISOString()}).eq('id',currentUser.id);
@@ -2039,6 +2146,80 @@ function showSolutions(){
 }
 
 // EDITOR AI
+// ÉDITEUR — VRAI SYSTÈME DE FICHIERS (en mémoire, par session)
+let editorFiles={'main.js':'// Bienvenue dans l\'éditeur DevConnect\n// Utilise l\'IA à droite pour déboguer ton code\n\nconsole.log("Hello DevConnect !");'};
+let activeEditorFile='main.js';
+
+function fileIconFor(name){
+  if(name.endsWith('.css'))return'◇';
+  if(name.endsWith('.md'))return'◆';
+  if(name.endsWith('.json'))return'◈';
+  if(name.endsWith('.html'))return'⬡';
+  return'◉';
+}
+function langFor(name){
+  if(name.endsWith('.css'))return'CSS';
+  if(name.endsWith('.md'))return'Markdown';
+  if(name.endsWith('.json'))return'JSON';
+  if(name.endsWith('.html'))return'HTML';
+  if(name.endsWith('.py'))return'Python';
+  return'JavaScript';
+}
+
+function renderEditorFileTree(){
+  const tree=document.getElementById('editor-file-tree');
+  const tabs=document.getElementById('editor-tabs');
+  if(!tree||!tabs)return;
+  const names=Object.keys(editorFiles);
+  tree.innerHTML=names.map(n=>`<div class="file-item ${n===activeEditorFile?'active':''}" onclick="switchEditorFile('${esc(n)}')"><span class="file-icon">${fileIconFor(n)}</span>${esc(n)}<span onclick="event.stopPropagation();deleteEditorFile('${esc(n)}')" style="margin-left:auto;opacity:.5;cursor:pointer;padding:0 4px">×</span></div>`).join('');
+  tabs.innerHTML=names.map(n=>`<button class="editor-tab ${n===activeEditorFile?'active':''}" onclick="switchEditorFile('${esc(n)}')">${fileIconFor(n)} ${esc(n)}</button>`).join('');
+  document.getElementById('code-editor').value=editorFiles[activeEditorFile]||'';
+  document.getElementById('editor-lang-label').textContent=langFor(activeEditorFile);
+}
+
+function switchEditorFile(name){activeEditorFile=name;renderEditorFileTree();}
+function onEditorEdit(){editorFiles[activeEditorFile]=document.getElementById('code-editor').value;}
+
+function createEditorFile(){
+  const name=prompt('Nom du nouveau fichier (ex: utils.js) :');
+  if(!name)return;
+  if(editorFiles[name]){showToast('Ce fichier existe déjà.','error');return;}
+  editorFiles[name]='';
+  activeEditorFile=name;
+  renderEditorFileTree();
+}
+
+function deleteEditorFile(name){
+  if(Object.keys(editorFiles).length<=1){showToast('Il doit rester au moins un fichier.','error');return;}
+  delete editorFiles[name];
+  if(activeEditorFile===name)activeEditorFile=Object.keys(editorFiles)[0];
+  renderEditorFileTree();
+}
+
+function importEditorFile(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    editorFiles[file.name]=reader.result;
+    activeEditorFile=file.name;
+    renderEditorFileTree();
+    showToast(`Fichier "${file.name}" importé.`,'success');
+  };
+  reader.readAsText(file);
+  input.value='';
+}
+
+function downloadEditorFile(){
+  const content=editorFiles[activeEditorFile]||'';
+  const blob=new Blob([content],{type:'text/plain'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=activeEditorFile;
+  document.body.appendChild(a);a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 async function sendEditorAI(){
   if(!currentUser){showToast('Connecte-toi pour utiliser l\'IA.','error');return;}
   const input=document.getElementById('editor-ai-input');
@@ -2049,12 +2230,12 @@ async function sendEditorAI(){
   c.scrollTop=c.scrollHeight;
   const code=document.getElementById('code-editor').value;
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:'Tu es un assistant de code expert intégré dans DevConnect. Tu aides à déboguer, optimiser et expliquer du code. Réponds en français, de façon concise.',messages:[{role:'user',content:`Code :\n\`\`\`\n${code}\n\`\`\`\n\nQuestion : ${msg}`}]})});
-    const data=await r.json();
-    const text=data.content?.[0]?.text||'Erreur de réponse.';
+    const{data,error}=await db.functions.invoke('editor-ai',{body:{code,question:msg}});
+    if(error)throw error;
+    const text=data?.reply||'Erreur de réponse.';
     const el=document.getElementById('ai-typing');
     if(el){el.innerHTML=text.replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\n/g,'<br>');el.removeAttribute('id');}
-  }catch(e){const el=document.getElementById('ai-typing');if(el){el.textContent='Erreur de connexion.';el.removeAttribute('id');}}
+  }catch(e){const el=document.getElementById('ai-typing');if(el){el.textContent='Erreur de connexion à l\'IA. (Edge Function "editor-ai" non déployée ?)';el.removeAttribute('id');}}
   c.scrollTop=c.scrollHeight;
 }
 
