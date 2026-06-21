@@ -260,7 +260,18 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .channel-item:hover{background:var(--bg2);color:var(--text);}
 .channel-item.active{background:var(--bg3);color:var(--text);}
 .channel-hash{color:var(--text-muted);font-family:var(--font-mono);}
+
+.dm-list{display:flex;flex-direction:column;gap:2px;}
 .dm-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--radius);cursor:pointer;transition:all .15s;font-size:13px;color:var(--text-secondary);}
+.dm-item:hover{background:var(--bg2);color:var(--text);}
+.dm-item.active{background:var(--bg3);color:var(--text);}
+.dm-avatar{width:28px;height:28px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-family:var(--font-mono);color:var(--accent-dim);flex-shrink:0;overflow:hidden;}
+.dm-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.dm-unread{margin-left:auto;background:var(--accent);color:var(--bg0);border-radius:100px;font-size:10px;padding:1px 6px;font-weight:600;}
+.dm-new-btn{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:var(--radius);cursor:pointer;font-size:12px;color:var(--text-muted);border:1px dashed var(--border);margin:6px 0;transition:all .15s;}
+.dm-new-btn:hover{color:var(--text);border-color:var(--border-light);}
+.dm-mode-badge{font-size:10px;font-family:var(--font-mono);color:var(--text-muted);padding:2px 8px;background:var(--bg3);border-radius:100px;margin-left:4px;}
+
 .dm-item:hover{background:var(--bg2);color:var(--text);}
 .dm-avatar{width:24px;height:24px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:9px;font-family:var(--font-mono);color:var(--accent-dim);flex-shrink:0;position:relative;}
 .online-dot{position:absolute;bottom:-1px;right:-1px;width:8px;height:8px;background:#5a9a6a;border-radius:50%;border:1.5px solid var(--bg1);}
@@ -887,8 +898,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
             <div class="channel-item" onclick="switchChannel(this,'devops')"># devops</div>
             <div class="channel-item" onclick="switchChannel(this,'data-ia')"># data-ia</div>
             <div class="section-label-sidebar" style="margin-top:8px">Messages directs</div>
-            <div class="dm-item"><div class="dm-avatar">AX<div class="online-dot"></div></div>Alex_dev</div>
-            <div class="dm-item"><div class="dm-avatar">MR</div>m4rx_sec</div>
+            <div class="dm-new-btn" onclick="openNewDmModal()">+ Nouveau message</div>
+            <div class="dm-list" id="dm-list"><div style="font-size:12px;color:var(--text-muted);padding:4px 10px">Chargement...</div></div>
           </div>
         </div>
         <div class="chat-area">
@@ -1390,6 +1401,21 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   </div>
 </div>
 
+
+<!-- NEW DM MODAL -->
+<div class="modal-overlay" id="new-dm-modal" onclick="if(event.target===this)closeNewDmModal()">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-header">
+      <div class="modal-title">Nouveau message</div>
+      <button class="modal-close" onclick="closeNewDmModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="text" class="form-input" id="dm-search-input" placeholder="Chercher un pseudo..." oninput="searchDmUsers(this.value)" autocomplete="off">
+      <div id="dm-search-results" style="margin-top:12px;display:flex;flex-direction:column;gap:4px;max-height:280px;overflow-y:auto"></div>
+    </div>
+  </div>
+</div>
+
 <!-- SEARCH MODAL -->
 <div class="search-modal" id="search-modal" onclick="if(event.target===this)closeSearch()">
   <div class="search-box">
@@ -1407,7 +1433,7 @@ const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
 const{createClient}=supabase;
 const db=createClient(SUPABASE_URL,SUPABASE_KEY);
 
-let currentUser=null,currentProfile=null,currentSection='home',selectedSpecialty=null,selectedTags=[],currentStep=0,currentChannel='général',challengeId=null;
+let currentUser=null,currentProfile=null,currentSection='home',selectedSpecialty=null,selectedTags=[],currentStep=0,currentChannel='général',challengeId=null,currentDmConvId=null,currentDmUser=null,isDmMode=false,dmRealtimeSub=null;
 
 // INIT
 window.addEventListener('load',async()=>{
@@ -1863,6 +1889,142 @@ function timeAgo(dateStr) {
   return new Date(dateStr).toLocaleDateString('fr-FR');
 }
 
+
+// ============================================================
+// SYSTÈME DM RÉEL
+// ============================================================
+
+// Charger la liste des conversations DM
+async function loadDmList(){
+  if(!currentUser)return;
+  const cont=document.getElementById('dm-list');
+  if(!cont)return;
+  // Récupère toutes les convs où l'user est user1 ou user2
+  const{data:convs1}=await db.from('dm_conversations').select('id,user2_id,profiles!dm_conversations_user2_id_fkey(username,avatar_url)').eq('user1_id',currentUser.id);
+  const{data:convs2}=await db.from('dm_conversations').select('id,user1_id,profiles!dm_conversations_user1_id_fkey(username,avatar_url)').eq('user2_id',currentUser.id);
+  const all=[];
+  (convs1||[]).forEach(c=>all.push({id:c.id,otherUser:c.profiles}));
+  (convs2||[]).forEach(c=>all.push({id:c.id,otherUser:c.profiles}));
+  if(all.length===0){cont.innerHTML='<div style="font-size:12px;color:var(--text-muted);padding:4px 10px">Aucune conversation.</div>';return;}
+  cont.innerHTML=all.map(c=>{
+    const u=c.otherUser||{};
+    const name=u.username||'Inconnu';
+    const init=name.substring(0,2).toUpperCase();
+    const avatarH=u.avatar_url?`<img src="${esc(u.avatar_url)}" alt="avatar">`:`${init}`;
+    return`<div class="dm-item ${currentDmConvId===c.id?'active':''}" onclick="openDmConv('${c.id}','${esc(name)}')">
+      <div class="dm-avatar">${avatarH}</div>
+      <span>${esc(name)}</span>
+    </div>`;
+  }).join('');
+}
+
+// Ouvrir une conversation DM existante
+async function openDmConv(convId, username){
+  currentDmConvId=convId;
+  currentDmUser=username;
+  isDmMode=true;
+  // Update UI
+  document.querySelectorAll('.dm-item').forEach(d=>d.classList.remove('active'));
+  event?.currentTarget?.classList.add('active');
+  document.querySelectorAll('.channel-item').forEach(c=>c.classList.remove('active'));
+  // Header
+  document.getElementById('current-channel-name').textContent=username;
+  document.querySelector('.chat-header-desc').textContent='Message direct privé';
+  document.querySelector('.channel-hash').textContent='@';
+  document.getElementById('chat-input').placeholder=`Message à @${username}...`;
+  // Charger messages DM
+  await loadDmMessages();
+  // Realtime
+  if(dmRealtimeSub)db.removeChannel(dmRealtimeSub);
+  dmRealtimeSub=db.channel('dm-'+convId)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`dm_conversation_id=eq.${convId}`},()=>loadDmMessages())
+    .subscribe();
+}
+
+// Charger les messages d'une conv DM
+async function loadDmMessages(){
+  if(!currentDmConvId)return;
+  const c=document.getElementById('chat-messages');
+  const{data:msgs}=await db.from('messages')
+    .select('*,profiles(username,avatar_url,is_premium,premium_tier,is_certified)')
+    .eq('dm_conversation_id',currentDmConvId)
+    .eq('is_dm',true)
+    .order('created_at',{ascending:true})
+    .limit(50);
+  if(!msgs||msgs.length===0){
+    c.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Début de la conversation. Dis bonjour ! 👋</div>';
+    return;
+  }
+  c.innerHTML=msgs.map(m=>{
+    const name=m.profiles?.username||'Inconnu';
+    const init=name.substring(0,2).toUpperCase();
+    const avatarH=m.profiles?.avatar_url?`<img src="${esc(m.profiles.avatar_url)}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:init;
+    const prem=m.profiles?.premium_tier==='devconnect-plus'?'<span class="premium-badge devconnectplus">DevConnect+</span>':m.profiles?.is_premium?'<span class="premium-badge devplus">Dev+</span>':'';
+    const certif=m.profiles?.is_certified?certifBadge():'';
+    const time=new Date(m.created_at).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+    const isMe=m.user_id===currentUser?.id;
+    return`<div class="chat-msg" style="${isMe?'flex-direction:row-reverse;text-align:right':''}">
+      <div class="chat-msg-avatar" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${avatarH}</div>
+      <div class="chat-msg-body">
+        <div class="chat-msg-header"><span class="chat-msg-name" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${esc(name)}</span>${certif}${prem}<span class="chat-msg-time">${time}</span></div>
+        <div class="chat-msg-content">${esc(m.content)}</div>
+      </div>
+    </div>`;
+  }).join('');
+  c.scrollTop=c.scrollHeight;
+}
+
+// Ouvrir modal nouveau DM
+function openNewDmModal(){
+  document.getElementById('new-dm-modal').classList.add('show');
+  setTimeout(()=>document.getElementById('dm-search-input').focus(),50);
+}
+function closeNewDmModal(){
+  document.getElementById('new-dm-modal').classList.remove('show');
+  document.getElementById('dm-search-input').value='';
+  document.getElementById('dm-search-results').innerHTML='';
+}
+
+// Chercher un user pour ouvrir un DM
+async function searchDmUsers(q){
+  const cont=document.getElementById('dm-search-results');
+  if(!q||q.length<2){cont.innerHTML='';return;}
+  const{data}=await db.from('profiles').select('id,username,avatar_url,specialty').ilike('username',`%${q}%`).eq('is_banned',false).neq('id',currentUser.id).limit(8);
+  if(!data||data.length===0){cont.innerHTML='<div style="font-size:13px;color:var(--text-muted);padding:8px">Aucun utilisateur trouvé.</div>';return;}
+  const specLabels={web_dev:'Dev Web',mobile_dev:'Mobile',backend_dev:'Backend',fullstack_dev:'Fullstack',cybersecurity:'Cybersec',devops:'DevOps',data:'Data',ai_ml:'IA/ML',designer_ux:'Design',recruiter:'Recruteur'};
+  cont.innerHTML=data.map(u=>{
+    const init=(u.username||'').substring(0,2).toUpperCase();
+    const avatarH=u.avatar_url?`<img src="${esc(u.avatar_url)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:init;
+    return`<div class="dm-item" onclick="startDm('${u.id}','${esc(u.username)}')">
+      <div class="dm-avatar">${avatarH}</div>
+      <div><div style="font-size:13px;font-weight:500">${esc(u.username)}</div><div style="font-size:11px;color:var(--text-muted)">${specLabels[u.specialty]||'—'}</div></div>
+    </div>`;
+  }).join('');
+}
+
+// Démarrer ou rejoindre une conv DM avec un user
+async function startDm(targetId, targetUsername){
+  if(!currentUser){showToast('Connecte-toi.','error');return;}
+  closeNewDmModal();
+  // Cherche une conv existante (dans les 2 sens)
+  let convId=null;
+  const{data:c1}=await db.from('dm_conversations').select('id').eq('user1_id',currentUser.id).eq('user2_id',targetId).maybeSingle();
+  const{data:c2}=await db.from('dm_conversations').select('id').eq('user1_id',targetId).eq('user2_id',currentUser.id).maybeSingle();
+  if(c1){convId=c1.id;}
+  else if(c2){convId=c2.id;}
+  else{
+    // Créer nouvelle conv
+    const{data:newConv,error}=await db.from('dm_conversations').insert({user1_id:currentUser.id,user2_id:targetId}).select().maybeSingle();
+    if(error){showToast('Erreur : '+error.message,'error');return;}
+    convId=newConv.id;
+  }
+  navigate('messages');
+  await loadDmList();
+  await openDmConv(convId,targetUsername);
+}
+
+// ============================================================
+
 // MESSAGES
 async function loadMessages(){
   const{data:chan}=await db.from('channels').select('id').eq('name',currentChannel).maybeSingle();
@@ -1899,6 +2061,13 @@ async function sendMessage(){
 }
 
 function switchChannel(el,name){
+  isDmMode=false;currentDmConvId=null;currentDmUser=null;
+  if(dmRealtimeSub){db.removeChannel(dmRealtimeSub);dmRealtimeSub=null;}
+  document.querySelector('.channel-hash').textContent='#';
+  document.querySelector('.chat-header-desc').textContent='Salon général de discussion';
+  document.querySelectorAll('.dm-item').forEach(d=>d.classList.remove('active'));
+  document.getElementById('chat-input').placeholder='Message #'+name+'...';
+  
   document.querySelectorAll('.channel-item').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');currentChannel=name;
   document.getElementById('current-channel-name').textContent=name;
@@ -2128,7 +2297,7 @@ async function openProfile(username){
     <div style="display:flex;justify-content:center;gap:18px;margin:10px 0;font-size:12px;color:var(--text-muted)"><span><strong style="color:var(--text)">${p.xp||0}</strong> xp</span></div>
     ${stack?`<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:10px">${stack}</div>`:''}
     ${links?`<div class="profile-links" style="justify-content:center">${links}</div>`:''}
-    <button class="btn btn-primary w-full" style="margin-top:14px" onclick="closeProfileModal();navigate('messages')">✉ Contacter</button>
+    ${currentUser&&p.id!==currentUser?.id?`<button class="btn btn-primary w-full" style="margin-top:14px" onclick="closeProfileModal();startDm('${esc(p.id)}','${esc(p.username||'')}')">✉ Message direct</button>`:''}
   `;
 }
 function closeProfileModal(){document.getElementById('view-profile-modal').classList.remove('show');}
