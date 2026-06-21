@@ -1273,12 +1273,57 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
             </div>
           </div>
           <div class="admin-section" id="admin-roles-a">
-            <div class="feed-title" style="margin-bottom:20px">Gestion des Rôles</div>
+            <div class="feed-title" style="margin-bottom:20px">Gestion des Rôles & Certifications</div>
             <div class="settings-card">
               <div class="settings-card-title">Attribuer un rôle</div>
               <div class="form-group"><label class="form-label">Pseudo</label><input type="text" class="form-input form-input-mono" id="role-username" placeholder="pseudo_utilisateur"></div>
-              <div class="form-group"><label class="form-label">Rôle</label><select class="form-input" id="role-select"><option value="architect">Architect</option><option value="admin">Admin</option><option value="core_dev">Core Dev</option><option value="designer">Designer</option><option value="security">Security</option><option value="moderator">Modérateur</option><option value="recruiter">Recruteur</option></select></div>
+              <div class="form-group"><label class="form-label">Rôle</label>
+                <select class="form-input" id="role-select">
+                  <optgroup label="— Leadership">
+                    <option value="architect">⬡ Architect (Owner)</option>
+                    <option value="admin">◈ Admin</option>
+                    <option value="moderator">◉ Modérateur</option>
+                  </optgroup>
+                  <optgroup label="— Équipe DevConnect">
+                    <option value="core_dev">◆ Core Dev</option>
+                    <option value="designer_team">◇ Designer UI/UX</option>
+                    <option value="security_team">⬢ Security</option>
+                    <option value="devops_team">⬟ DevOps</option>
+                    <option value="community_manager">◈ Community Manager</option>
+                  </optgroup>
+                  <optgroup label="— Membres">
+                    <option value="web_dev">Dev Web</option>
+                    <option value="mobile_dev">Dev Mobile</option>
+                    <option value="backend_dev">Dev Backend</option>
+                    <option value="fullstack_dev">Fullstack</option>
+                    <option value="cybersecurity">Cybersécurité</option>
+                    <option value="devops">DevOps</option>
+                    <option value="data">Data</option>
+                    <option value="ai_ml">IA / ML</option>
+                    <option value="designer_ux">Designer UX</option>
+                    <option value="recruiter">Recruteur tech</option>
+                  </optgroup>
+                </select>
+              </div>
               <button class="btn btn-primary btn-sm" onclick="assignRole()">Attribuer</button>
+            </div>
+            <div class="settings-card" style="margin-top:16px">
+              <div class="settings-card-title">Certification ✦</div>
+              <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6">Badge de certification accordé à n'importe quel membre — visible sur le profil et dans le chat.</div>
+              <div class="form-group"><label class="form-label">Pseudo</label><input type="text" class="form-input form-input-mono" id="certif-username" placeholder="pseudo_utilisateur"></div>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-primary btn-sm" onclick="toggleCertif(true)">✦ Certifier</button>
+                <button class="btn btn-ghost btn-sm" onclick="toggleCertif(false)">Retirer la certif</button>
+              </div>
+            </div>
+            <div class="settings-card" style="margin-top:16px">
+              <div class="settings-card-title">Modération utilisateur</div>
+              <div class="form-group"><label class="form-label">Pseudo</label><input type="text" class="form-input form-input-mono" id="mod-username" placeholder="pseudo_utilisateur"></div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn btn-ghost btn-sm" onclick="muteUser(true)">🔇 Mute</button>
+                <button class="btn btn-ghost btn-sm" onclick="muteUser(false)">🔊 Unmute</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteUserAccount()">⚠ Supprimer le compte</button>
+              </div>
             </div>
           </div>
           <div class="admin-section" id="admin-logs">
@@ -1462,7 +1507,14 @@ async function handleRegister(){
   const level=document.getElementById('reg-level').value;
   const err=document.getElementById('reg-error-2');
   err.classList.remove('show');
-  const{data,error}=await db.auth.signUp({email,password:pass,options:{data:{username,specialty:selectedSpecialty,tech_stack:selectedTags,level}}});
+  // Validation username
+  if(username.length<3||username.length>24){err.textContent='Le pseudo doit faire entre 3 et 24 caractères.';err.classList.add('show');return;}
+  if(!/^[a-zA-Z0-9_.\- ]+$/.test(username)){err.textContent='Pseudo invalide (lettres, chiffres, _ . - et espace uniquement).';err.classList.add('show');return;}
+  const forbidden=['architect','admin','moderator','devconnect','support','staff','system','root','bot'];
+  if(forbidden.includes(username.toLowerCase())){err.textContent='Ce pseudo est réservé.';err.classList.add('show');return;}
+  if(pass.length<8){err.textContent='Mot de passe trop court (8 caractères minimum).';err.classList.add('show');return;}
+  const roleFromSpecialty=selectedSpecialty||'web_dev';
+  const{data,error}=await db.auth.signUp({email,password:pass,options:{data:{username,specialty:selectedSpecialty,tech_stack:selectedTags,level,role:roleFromSpecialty}}});
   if(error){err.textContent=error.message;err.classList.add('show');return;}
   // Si pas de session ET pas d'identityData = email déjà utilisé (faux succès Supabase)
   if(!data.session && !data.user?.identities?.length){
@@ -1487,7 +1539,8 @@ async function loadProfile(){
   let{data}=await db.from('profiles').select('*').eq('id',currentUser.id).maybeSingle();
   if(!data){
     const meta=currentUser.user_metadata||{};
-    const{data:created,error}=await db.from('profiles').insert({id:currentUser.id,username:meta.username||currentUser.email.split('@')[0],email:currentUser.email,specialty:meta.specialty||null}).select().maybeSingle();
+    const roleDefault=meta.role||meta.specialty||'web_dev';
+    const{data:created,error}=await db.from('profiles').insert({id:currentUser.id,username:meta.username||currentUser.email.split('@')[0],email:currentUser.email,specialty:meta.specialty||null,role:roleDefault}).select().maybeSingle();
     if(error){showToast('Impossible de charger ton profil. Contacte un admin.','error');return;}
     data=created;
   }
@@ -1660,11 +1713,16 @@ async function saveAppearanceExtras(){
   await loadProfile();showToast('Apparence mise à jour !','success');
 }
 
-const ROLE_LABELS={admin:'Admin',architect:'Architect',core_dev:'Core Dev',designer:'Designer',security:'Security',moderator:'Modérateur',recruiter:'Recruteur'};
+const ROLE_LABELS={
+  architect:'Architect',admin:'Admin',moderator:'Modérateur',
+  core_dev:'Core Dev',designer_team:'Designer UI/UX',security_team:'Security',devops_team:'DevOps',community_manager:'Community Manager',
+  web_dev:'Dev Web',mobile_dev:'Dev Mobile',backend_dev:'Dev Backend',fullstack_dev:'Fullstack',
+  cybersecurity:'Cybersécurité',devops:'DevOps',data:'Data',ai_ml:'IA / ML',designer_ux:'Designer UX',recruiter:'Recruteur tech'
+};
 
 function checkArchitect(){
   const role=currentProfile?.role;
-  const isAdmin=role==='admin'||role==='architect'||currentProfile?.username==='architect';
+  const isAdmin=role==='admin'||role==='architect'||role==='moderator';
   const adminNav=document.getElementById('nav-admin');
   const badge=document.getElementById('profile-role-badge');
   if(isAdmin){
@@ -1693,7 +1751,14 @@ async function changePassword(){
   showToast('Mot de passe changé !','success');
 }
 
-async function handleLogout(){await db.auth.signOut();showToast('Déconnecté.','info');}
+async function handleLogout(){
+  // Nettoyage des résidus localStorage
+  ['dc_sess','dc_logs','dc_vip_settings','dc_vip_theme','dc_vip_color','dc_modchat'].forEach(k=>localStorage.removeItem(k));
+  await db.auth.signOut();
+  showToast('Déconnecté.','info');
+}
+
+function certifBadge(){return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="display:inline;vertical-align:middle;margin-left:3px" title="Membre certifié"><path d="M12 2L14.4 8.26L21 9.27L16.5 13.64L17.76 20.23L12 17L6.24 20.23L7.5 13.64L3 9.27L9.6 8.26L12 2Z" fill="#c8c8d8" stroke="#e8e8f0" stroke-width="0.5"/><path d="M9 12L11 14L15 10" stroke="#0d0d1a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';}
 
 // NAVIGATION
 function navigate(section) {
@@ -1809,8 +1874,9 @@ async function loadMessages(){
       const name=m.profiles?.username||'Inconnu';
       const init=name.substring(0,2).toUpperCase();
       const prem=m.profiles?.premium_tier==='devconnect-plus'?'<span class="premium-badge devconnectplus">DevConnect+</span>':m.profiles?.is_premium?'<span class="premium-badge devplus">Dev+</span>':'';
+      const certif=m.profiles?.is_certified?certifBadge():'';
       const time=new Date(m.created_at).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-      return`<div class="chat-msg"><div class="chat-msg-avatar" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${init}</div><div class="chat-msg-body"><div class="chat-msg-header"><span class="chat-msg-name" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${esc(name)}</span>${prem}<span class="chat-msg-time">${time}</span></div><div class="chat-msg-content">${esc(m.content)}</div></div></div>`;
+      return`<div class="chat-msg"><div class="chat-msg-avatar" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${init}</div><div class="chat-msg-body"><div class="chat-msg-header"><span class="chat-msg-name" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${esc(name)}</span>${certif}${prem}<span class="chat-msg-time">${time}</span></div><div class="chat-msg-content">${esc(m.content)}</div></div></div>`;
     }).join('');
     c.scrollTop=c.scrollHeight;
   }else{
@@ -1820,6 +1886,7 @@ async function loadMessages(){
 
 async function sendMessage(){
   if(!currentUser){showToast('Connecte-toi pour envoyer un message.','error');return;}
+  if(currentProfile?.is_muted){showToast('Tu es muté et ne peux pas envoyer de messages.','error');return;}
   const input=document.getElementById('chat-input');
   const content=input.value.trim();
   if(!content)return;
@@ -1918,9 +1985,7 @@ async function publishPost() {
   const { error } = await db.from('posts').insert({ user_id: currentUser.id, content });
   if (error) { showToast('Erreur lors de la publication : ' + error.message, 'error'); return; }
   document.getElementById('post-composer').value = '';
-  await db.from('xp_logs').insert({ user_id: currentUser.id, action: 'post_created', amount: 5 });
-  const currentXP = currentProfile?.xp || 0;
-  await db.from('profiles').update({ xp: currentXP + 5 }).eq('id', currentUser.id);
+  await db.rpc('add_xp', { user_id: currentUser.id, amount: 5, action_label: 'post_created' });
   await loadProfile();
   showToast('Post publié ! +5 XP', 'success');
   await loadFeed();
@@ -2131,12 +2196,10 @@ async function awardXP(cid, xpGain) {
   if(existing)return; // déjà résolu, pas de double gain
   // Enregistrer la complétion
   await db.from('challenge_completions').insert({user_id:currentUser.id,challenge_id:cid,xp_gained:xpGain});
-  // Logger l'XP (alimente le classement par période)
-  await db.from('xp_logs').insert({user_id:currentUser.id,action:'challenge_completed',amount:xpGain});
-  // Ajouter l'XP au profil
-  const currentXP=currentProfile?.xp||0;
-  const{error}=await db.from('profiles').update({xp:currentXP+xpGain,updated_at:new Date().toISOString()}).eq('id',currentUser.id);
-  if(!error){await loadProfile();showToast(`+${xpGain} XP ajoutés à ton profil !`,'success');}
+  // XP via fonction serveur sécurisée
+  await db.rpc('add_xp', {user_id:currentUser.id, amount:xpGain, action_label:'challenge_completed'});
+  await loadProfile();
+  showToast(`+${xpGain} XP ajoutés à ton profil !`,'success');
 }
 
 function showSolutions(){
@@ -2252,13 +2315,26 @@ async function loadAdminStats(){
 }
 
 async function loadAdminUsers(search=''){
-  let q=db.from('profiles').select('id,username,email,specialty,is_premium,premium_tier,is_banned').order('created_at',{ascending:false}).limit(50);
+  let q=db.from('profiles').select('id,username,email,specialty,role,is_premium,premium_tier,is_banned,is_certified,is_muted').order('created_at',{ascending:false}).limit(50);
   if(search)q=q.ilike('username',`%${search}%`);
   const{data}=await q;
   const cont=document.getElementById('admin-users-list');
   if(!data||!data.length){cont.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun utilisateur trouvé.</div>';return;}
   const smap={web_dev:'Dev Web',mobile_dev:'Mobile',backend_dev:'Backend',fullstack_dev:'Fullstack',cybersecurity:'Cyber',devops:'DevOps',data:'Data',ai_ml:'IA/ML',designer_ux:'Design',recruiter:'Recruteur'};
-  cont.innerHTML=data.map(u=>`<div class="admin-table-row users-grid"><div><strong>${esc(u.username||'—')}</strong><div style="font-size:11px;color:var(--text-muted)">${esc(u.email||'')}</div></div><div style="font-size:12px;font-family:var(--font-mono);color:var(--text-secondary)">${smap[u.specialty]||'—'}</div><div>${u.premium_tier?`<span class="premium-badge ${u.premium_tier==='devconnect-plus'?'devconnectplus':'devplus'}">${u.premium_tier}</span>`:'<span style="color:var(--text-muted);font-size:12px">—</span>'}</div><div><span class="status-badge ${u.is_banned?'status-open':'status-resolved'}">${u.is_banned?'Banni':'Actif'}</span></div><div class="action-btns"><button class="btn btn-ghost btn-sm" onclick="banUser('${esc(u.id)}','${esc(u.username)}',${!u.is_banned})">${u.is_banned?'Débannir':'Bannir'}</button></div></div>`).join('');
+  cont.innerHTML=data.map(u=>`<div class="admin-table-row users-grid">
+    <div>
+      <strong>${esc(u.username||'—')}</strong>${u.is_certified?'<span style="color:#c8c8d8;font-size:11px"> ✦</span>':''}
+      <div style="font-size:11px;color:var(--text-muted)">${esc(u.email||'')}</div>
+    </div>
+    <div style="font-size:11px;font-family:var(--font-mono);color:var(--accent-dim)">${ROLE_LABELS[u.role]||u.role||'—'}</div>
+    <div>${u.premium_tier?`<span class="premium-badge ${u.premium_tier==='devconnect-plus'?'devconnectplus':'devplus'}">${u.premium_tier}</span>`:'<span style="color:var(--text-muted);font-size:12px">—</span>'}</div>
+    <div>
+      <span class="status-badge ${u.is_banned?'status-open':u.is_muted?'status-claimed':'status-resolved'}">${u.is_banned?'Banni':u.is_muted?'Muté':'Actif'}</span>
+    </div>
+    <div class="action-btns">
+      <button class="btn btn-ghost btn-sm" onclick="banUser('${esc(u.id)}','${esc(u.username)}',${!u.is_banned})">${u.is_banned?'Débannir':'Bannir'}</button>
+    </div>
+  </div>`).join('');
 }
 
 function searchAdminUsers(v){clearTimeout(window._st);window._st=setTimeout(()=>loadAdminUsers(v),300);}
@@ -2281,6 +2357,55 @@ async function grantPremium(){
   if(error){showToast('Erreur lors de la mise à jour.','error');return;}
   await writeAdminLog(tier==='none'?`Retrait premium de @${username}`:`Premium ${tier} accordé à @${username}`,'premium');
   showToast(`Premium ${tier==='none'?'retiré':'accordé'} à @${username} !`,'success');
+}
+
+// CERTIFICATION
+async function toggleCertif(certify){
+  const username=getVal('certif-username').trim();
+  if(!username){showToast('Entre un pseudo.','error');return;}
+  const{data:user}=await db.from('profiles').select('id').eq('username',username).maybeSingle();
+  if(!user){showToast('Utilisateur introuvable.','error');return;}
+  const{error}=await db.from('profiles').update({is_certified:certify}).eq('id',user.id);
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  await writeAdminLog(certify?`Certification accordée à @${username}`:`Certification retirée de @${username}`,'certification');
+  showToast(certify?`@${username} est maintenant certifié ✦`:`Certification retirée de @${username}`,'success');
+}
+
+// MUTE
+async function muteUser(mute){
+  const username=getVal('mod-username').trim();
+  if(!username){showToast('Entre un pseudo.','error');return;}
+  const{data:user}=await db.from('profiles').select('id').eq('username',username).maybeSingle();
+  if(!user){showToast('Utilisateur introuvable.','error');return;}
+  const{error}=await db.from('profiles').update({is_muted:mute}).eq('id',user.id);
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  await writeAdminLog(mute?`Mute de @${username}`:`Unmute de @${username}`,'moderation');
+  showToast(mute?`@${username} est maintenant muté.`:`@${username} peut à nouveau parler.`,'success');
+}
+
+// SUPPRESSION COMPTE (admin)
+async function deleteUserAccount(){
+  const username=getVal('mod-username').trim();
+  if(!username){showToast('Entre un pseudo.','error');return;}
+  if(!confirm(`⚠️ Supprimer définitivement le compte @${username} ? Cette action est irréversible.`))return;
+  const{data:user}=await db.from('profiles').select('id').eq('username',username).maybeSingle();
+  if(!user){showToast('Utilisateur introuvable.','error');return;}
+  // Supprimer le profil (les messages/posts resteront anonymisés)
+  const{error}=await db.from('profiles').delete().eq('id',user.id);
+  if(error){showToast('Erreur suppression profil : '+error.message,'error');return;}
+  await writeAdminLog(`Suppression du compte @${username}`,'moderation');
+  showToast(`Compte @${username} supprimé.`,'success');
+  loadAdminUsers();loadAdminStats();
+}
+
+// SUPPRESSION MESSAGE (admin)
+async function deleteMessage(msgId){
+  if(!confirm('Supprimer ce message ?'))return;
+  const{error}=await db.from('messages').delete().eq('id',msgId);
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  await writeAdminLog(`Message ${msgId} supprimé`,'moderation');
+  showToast('Message supprimé.','success');
+  loadMessages();
 }
 
 async function assignRole(){
