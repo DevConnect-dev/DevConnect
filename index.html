@@ -19,6 +19,12 @@
   --font-mono:'JetBrains Mono',monospace;
   --radius:8px;--radius-lg:14px;
 }
+html.light {
+  --bg0:#f5f5f8;--bg1:#ffffff;--bg2:#f0f0f4;--bg3:#e6e6ec;
+  --border:#dcdce4;--border-light:#c8c8d4;
+  --text:#14141f;--text-secondary:#55556a;--text-muted:#8c8c9c;
+  --accent:#2a2a3e;--accent-dim:#55556a;
+}
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{background:var(--bg0);color:var(--text);font-family:var(--font-body);font-size:15px;line-height:1.6;overflow-x:hidden;}
@@ -817,7 +823,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     </div>
     <div class="topnav-right">
       <div class="topnav-search" onclick="openSearch()"><span>⌕</span><span style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono)">Rechercher...</span><span class="search-kbd">/</span></div>
-      <button class="notif-btn" title="Notifications">🔔<div class="notif-badge"></div></button>
+      <button class="notif-btn" title="Notifications" onclick="navigate('settings');switchSettingsByName('notifs')">🔔<div class="notif-badge"></div></button>
       <div class="nav-avatar" id="nav-avatar" onclick="toggleProfileDropdown()">DC</div>
       <div class="profile-dropdown" id="profile-dropdown">
         <div class="dropdown-item" onclick="navigate('profile');toggleProfileDropdown()"><span>◈</span>Mon profil</div>
@@ -3018,8 +3024,18 @@ async function loadAdminUsers(search=''){
     </div>
     <div class="action-btns">
       <button class="btn btn-ghost btn-sm" onclick="banUser('${esc(u.id)}','${esc(u.username)}',${!u.is_banned})">${u.is_banned?'Débannir':'Bannir'}</button>
+      <button class="btn btn-ghost btn-sm" style="color:#e05a5a" onclick="deleteUserById('${esc(u.id)}','${esc(u.username)}')">Supprimer</button>
     </div>
   </div>`).join('');
+}
+
+async function deleteUserById(id,username){
+  if(!confirm(`⚠️ Supprimer définitivement le compte @${username} ? Cette action est irréversible.`))return;
+  const{error}=await db.from('profiles').delete().eq('id',id);
+  if(error){showToast('Erreur suppression : '+error.message,'error');return;}
+  await writeAdminLog(`Suppression du compte @${username}`,'moderation');
+  showToast(`Compte @${username} supprimé.`,'success');
+  loadAdminUsers();loadAdminStats();
 }
 
 function searchAdminUsers(v){clearTimeout(window._st);window._st=setTimeout(()=>loadAdminUsers(v),300);}
