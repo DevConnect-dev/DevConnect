@@ -1657,6 +1657,36 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   </div>
 </div>
 
+<!-- REPORT MODAL -->
+<div class="modal-overlay" id="report-modal" onclick="if(event.target===this)closeReportModal()">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-header">
+      <div class="modal-title">Signaler <span id="report-target-label"></span></div>
+      <button class="modal-close" onclick="closeReportModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Catégorie</label>
+        <select class="form-input" id="report-category">
+          <option value="spam">Spam / publicité</option>
+          <option value="harcelement">Harcèlement / insultes</option>
+          <option value="contenu_illegal">Contenu illégal</option>
+          <option value="usurpation">Usurpation d'identité</option>
+          <option value="autre">Autre</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Priorité</label>
+        <select class="form-input" id="report-priority">
+          <option value="low">Faible</option>
+          <option value="normal" selected>Normale</option>
+          <option value="high">Élevée</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Détails</label><textarea class="form-input" id="report-reason" rows="4" placeholder="Explique le problème en quelques phrases..."></textarea></div>
+      <button class="btn btn-primary w-full" onclick="submitReport()">Envoyer le signalement</button>
+    </div>
+  </div>
+</div>
+
 
 <!-- NEW DM MODAL -->
 <div class="modal-overlay" id="new-dm-modal" onclick="if(event.target===this)closeNewDmModal()">
@@ -2822,9 +2852,38 @@ async function openProfile(username){
     ${stack?`<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:10px">${stack}</div>`:''}
     ${links?`<div class="profile-links" style="justify-content:center">${links}</div>`:''}
     ${currentUser&&p.id!==currentUser?.id?`<button class="btn btn-primary w-full" style="margin-top:14px" onclick="closeProfileModal();startDm('${esc(p.id)}','${esc(p.username||'')}')">✉ Message direct</button>`:''}
+    ${currentUser&&p.id!==currentUser?.id?`<button class="btn btn-ghost w-full" style="margin-top:8px;color:#e05a5a" onclick="closeProfileModal();openReportModal('${esc(p.id)}','${esc(p.username||'')}')">⚠ Signaler ce profil</button>`:''}
   `;
 }
 function closeProfileModal(){document.getElementById('view-profile-modal').classList.remove('show');}
+
+// SIGNALEMENT
+let reportTargetId=null,reportTargetUsername=null;
+function openReportModal(targetId,targetUsername){
+  if(!currentUser){showToast('Connecte-toi pour signaler un profil.','error');return;}
+  if(targetId===currentUser.id){showToast('Tu ne peux pas te signaler toi-même.','error');return;}
+  reportTargetId=targetId;reportTargetUsername=targetUsername;
+  setEl('report-target-label','@'+targetUsername);
+  setVal('report-reason','');
+  document.getElementById('report-modal').classList.add('show');
+}
+function closeReportModal(){document.getElementById('report-modal').classList.remove('show');}
+async function submitReport(){
+  if(!currentUser||!reportTargetId)return;
+  const reason=getVal('report-reason').trim();
+  if(!reason){showToast('Décris le problème avant d\'envoyer.','error');return;}
+  const{error}=await db.from('report_tickets').insert({
+    reporter_id:currentUser.id,
+    target_id:reportTargetId,
+    category:getVal('report-category'),
+    priority:getVal('report-priority'),
+    reason,
+    status:'open'
+  });
+  if(error){showToast('Erreur lors de l\'envoi : '+error.message,'error');return;}
+  closeReportModal();
+  showToast('Signalement envoyé. L\'équipe de modération va l\'examiner.','success');
+}
 
 function closeAiPanel(){document.getElementById('ai-panel').style.display='none';document.getElementById('reopen-ai-btn').style.display='flex';}
 function reopenAiPanel(){document.getElementById('ai-panel').style.display='block';document.getElementById('reopen-ai-btn').style.display='none';}
