@@ -2163,6 +2163,31 @@ const ROLE_LABELS={
   cybersecurity:'Cybersécurité',devops:'DevOps',data:'Data',ai_ml:'IA / ML',designer_ux:'Designer UX',recruiter:'Recruteur tech'
 };
 
+// Hiérarchie des rôles — plus le chiffre est élevé, plus le rôle est puissant
+const ROLE_HIERARCHY={
+  architect:100,
+  admin:80,
+  moderator:60,
+  community_manager:40,
+  core_dev:30,designer_team:30,security_team:30,devops_team:30,
+  web_dev:10,mobile_dev:10,backend_dev:10,fullstack_dev:10,
+  cybersecurity:10,devops:10,data:10,ai_ml:10,designer_ux:10,recruiter:10
+};
+
+function getRoleLevel(role){return ROLE_HIERARCHY[role]||0;}
+function canActOn(actorRole, targetRole){
+  // Un acteur ne peut agir que sur un rôle strictement inférieur au sien
+  return getRoleLevel(actorRole) > getRoleLevel(targetRole);
+}
+function checkHierarchy(targetUsername, targetRole, action){
+  const myRole = currentProfile?.role;
+  if(!canActOn(myRole, targetRole)){
+    showToast(`Impossible — @${targetUsername} a un rang supérieur ou égal au tien.`, 'error');
+    return false;
+  }
+  return true;
+}
+
 function checkArchitect(){
   const role=currentProfile?.role;
   const isAdmin=role==='admin'||role==='architect'||role==='moderator';
@@ -3168,8 +3193,11 @@ async function deleteUserById(id,username){
 function searchAdminUsers(v){clearTimeout(window._st);window._st=setTimeout(()=>loadAdminUsers(v),300);}
 
 async function banUser(id,username,ban){
+  // Vérif hiérarchie
+  const{data:target}=await db.from('profiles').select('role').eq('id',id).maybeSingle();
+  if(!checkHierarchy(username, target?.role, 'bannir'))return;
   const{error}=await db.from('profiles').update({is_banned:ban}).eq('id',id);
-  if(error){showToast('Erreur.','error');return;}
+  if(error){showToast('Erreur : '+error.message,'error');return;}
   await writeAdminLog(ban?`Bannissement de @${username}`:`Débannissement de @${username}`,'moderation');
   showToast(`Utilisateur ${ban?'banni':'débanni'}.`,'success');loadAdminUsers();loadAdminStats();
 }
@@ -3203,8 +3231,9 @@ async function toggleCertif(certify){
 async function muteUser(mute){
   const username=getVal('mod-username').trim();
   if(!username){showToast('Entre un pseudo.','error');return;}
-  const{data:user}=await db.from('profiles').select('id').eq('username',username).maybeSingle();
+  const{data:user}=await db.from('profiles').select('id,role').eq('username',username).maybeSingle();
   if(!user){showToast('Utilisateur introuvable.','error');return;}
+  if(!checkHierarchy(username, user.role, 'muter'))return;
   const{error}=await db.from('profiles').update({is_muted:mute}).eq('id',user.id);
   if(error){showToast('Erreur : '+error.message,'error');return;}
   await writeAdminLog(mute?`Mute de @${username}`:`Unmute de @${username}`,'moderation');
@@ -3240,8 +3269,16 @@ async function assignRole(){
   const username=getVal('role-username').trim();
   const role=getVal('role-select');
   if(!username){showToast('Entre un pseudo.','error');return;}
-  const{data:user}=await db.from('profiles').select('id').eq('username',username).maybeSingle();
+  // Vérif : ne peut pas assigner un rôle supérieur ou égal au sien
+  const myLevel=getRoleLevel(currentProfile?.role);
+  const targetLevel=getRoleLevel(role);
+  if(targetLevel>=myLevel&&currentProfile?.role!=='architect'){
+    showToast(`Tu ne peux pas attribuer un rôle supérieur ou égal au tien.`,'error');return;
+  }
+  const{data:user}=await db.from('profiles').select('id,role').eq('username',username).maybeSingle();
   if(!user){showToast('Utilisateur introuvable.','error');return;}
+  // Vérif : ne peut pas agir sur un user de rang >= au sien
+  if(!checkHierarchy(username, user.role, 'modifier le rôle de'))return;
   const{error}=await db.from('profiles').update({role}).eq('id',user.id);
   if(error){showToast('Erreur lors de la mise à jour.','error');return;}
   await writeAdminLog(`Rôle "${ROLE_LABELS[role]||role}" attribué à @${username}`,'role');
@@ -3376,10 +3413,15 @@ function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
  * ║   Toute copie, reproduction ou distribution est interdite    ║
  * ╚══════════════════════════════════════════════════════════════╝
  *
- * Créateur  : Cover / Cover.dev
+ * Créateur  : Cover / Cover .dev
  * Projet    : DevConnect — Plateforme communautaire pour devs
  * Version   : DC-2026-v2.0
  * Build     : 2026-06-22T21:41:35
+ *
+ * 
+ * TRIGGER SQL HIÉRARCHIE À APPLIQUER DANS SUPABASE :
+ * La fonction prevent_privilege_escalation() gère déjà une partie
+ * de la protection. Le contrôle hiérarchique complet est géré côté JS.
  *
  * Empreinte SHA-256 (preuve de création horodatée) :
  * f3b0e9ceda5fc9df8c563d24851f6ae79b7003aaf476fd62ba8bbe1d9fddb498
