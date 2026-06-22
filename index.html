@@ -439,9 +439,10 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .settings-sidebar{width:240px;min-width:240px;background:var(--bg1);border-right:1px solid var(--border);padding:24px 8px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;}
 .settings-sidebar-label{font-family:var(--font-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:8px 12px 4px;margin-top:8px;}
 .settings-sidebar-label:first-child{margin-top:0;}
-.settings-nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius);cursor:pointer;font-size:13px;color:var(--text-secondary);transition:all .15s;font-weight:400;}
+.settings-nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius);cursor:pointer;font-size:13px;color:var(--text-secondary);transition:all .15s;font-weight:400;text-decoration:none;}
 .settings-nav-item:hover{background:var(--bg3);color:var(--text);}
 .settings-nav-item.active{background:var(--bg3);color:var(--text);font-weight:500;}
+.settings-sidebar-label{color:var(--text-muted) !important;}
 .settings-nav-item .s-icon{width:18px;text-align:center;font-size:14px;}
 .settings-nav-sep{height:1px;background:var(--border);margin:8px 4px;}
 .settings-nav-item.danger{color:#c87a7a;}
@@ -574,6 +575,34 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .post-action.post-liked{color:var(--accent);}
 .font-mono{font-family:var(--font-mono);}
 .font-display{font-family:var(--font-display);}
+
+.role-badge-profile{display:inline-flex;align-items:center;padding:2px 10px;border-radius:100px;font-size:11px;font-family:var(--font-mono);border:1px solid var(--border);color:var(--text-muted);background:var(--bg2);margin-left:6px;vertical-align:middle;}
+.role-badge-profile.architect{border-color:#9a8a5a;color:#c8a86a;background:rgba(200,168,106,.08);}
+.role-badge-profile.admin{border-color:#5a6a9a;color:#8a9ac8;background:rgba(138,154,200,.08);}
+.role-badge-profile.moderator{border-color:#5a8a6a;color:#8ac8a8;background:rgba(138,200,168,.08);}
+.role-badge-profile.core_dev{border-color:#6a5a9a;color:#a88ac8;}
+.settings-preview-panel{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;position:sticky;top:80px;}
+.settings-preview-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:14px;font-family:var(--font-mono);}
+.preview-profile-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;}
+.preview-banner{height:60px;background:linear-gradient(135deg,var(--bg3),var(--bg2));position:relative;}
+.preview-avatar{width:48px;height:48px;border-radius:50%;background:var(--bg3);border:3px solid var(--bg1);position:absolute;bottom:-24px;left:16px;display:flex;align-items:center;justify-content:center;font-size:14px;font-family:var(--font-mono);overflow:hidden;}
+.preview-avatar img{width:100%;height:100%;object-fit:cover;}
+.preview-body{padding:32px 16px 16px;}
+.preview-name{font-weight:700;font-size:15px;margin-bottom:2px;}
+.preview-handle{font-size:12px;color:var(--text-muted);font-family:var(--font-mono);}
+.preview-bio{font-size:12px;color:var(--text-secondary);margin-top:8px;line-height:1.5;}
+.gradient-picker{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.gradient-picker input[type=color]{width:36px;height:36px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:transparent;padding:2px;}
+.gradient-preview-bar{height:32px;border-radius:6px;flex:1;border:1px solid var(--border);}
+.badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin-top:12px;}
+.badge-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px;text-align:center;transition:all .2s;}
+.badge-card.unlocked{border-color:var(--border-light);}
+.badge-card.locked{opacity:.4;}
+.badge-icon{font-size:22px;margin-bottom:6px;}
+.badge-name{font-size:11px;font-weight:600;margin-bottom:3px;}
+.badge-desc{font-size:10px;color:var(--text-muted);line-height:1.4;}
+.theme-toggle-btn{display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:13px;background:var(--bg2);color:var(--text);transition:all .15s;}
+.theme-toggle-btn:hover{border-color:var(--border-light);}
 </style>
 </head>
 <body>
@@ -854,6 +883,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
               <div class="profile-username" id="profile-username-display">@username</div>
               <div class="profile-status-pill" id="profile-status-pill" style="display:none"></div>
               <div class="profile-bio" id="profile-bio-display">Aucune bio renseignée.</div>
+              <div id="profile-pronouns-display" style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono);margin-top:2px;display:none"></div>
               <div class="profile-badges"><span class="profile-badge" id="profile-specialty-badge">Tech</span></div>
               <div class="profile-stats">
                 <div class="stat-item"><div class="stat-num" id="profile-xp">0</div><div class="stat-label">xp</div></div>
@@ -878,39 +908,22 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
             <button class="profile-tab" onclick="switchProfileTab('stats',this)">Stats</button>
           </div>
           <div class="profile-tab-content active" id="tab-projects">
-            <div class="project-card">
-              <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
-                <div class="project-name">DevConnect Platform</div>
-                <div style="display:flex;gap:6px"><a href="#" class="btn btn-ghost btn-sm">GitHub</a><a href="#" class="btn btn-ghost btn-sm">Live</a></div>
-              </div>
-              <div class="project-desc">Plateforme communautaire pour développeurs — messagerie, portfolio, recrutement et challenges tout-en-un.</div>
-              <div class="project-stack"><span class="stack-tag">HTML</span><span class="stack-tag">Supabase</span><span class="stack-tag">JavaScript</span></div>
-            </div>
-            <button class="btn btn-ghost w-full" style="justify-content:center;font-size:13px;margin-top:8px">+ Ajouter un projet</button>
+            <div id="projects-list"><div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Chargement...</div></div>
+            <button class="btn btn-ghost w-full" style="justify-content:center;font-size:13px;margin-top:8px" onclick="openAddProjectModal()">+ Ajouter un projet</button>
           </div>
           <div class="profile-tab-content" id="tab-cv">
-            <div class="project-card">
-              <div class="project-name">Développeur Frontend</div>
-              <div class="project-desc" style="font-family:var(--font-mono);font-size:12px;margin-bottom:8px">Startup XYZ · 2023 – présent</div>
-              <div class="project-desc">Développement interface en React/TypeScript. Mise en place du design system, optimisation des performances.</div>
-            </div>
+            <div id="cv-list"><div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Chargement...</div></div>
             <button class="btn btn-ghost w-full" style="justify-content:center;font-size:13px;margin-top:8px">+ Ajouter une expérience</button>
           </div>
           <div class="profile-tab-content" id="tab-badges">
-            <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px">
-              <div style="background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;text-align:center;width:110px">
-                <div style="font-size:24px;margin-bottom:6px;font-family:var(--font-mono);color:var(--accent)">◈</div>
-                <div style="font-size:12px;font-weight:500">Fondateur</div>
-                <div style="font-size:10px;color:var(--text-muted)">Membre originel</div>
-              </div>
-            </div>
+            <div id="badges-list" class="badge-grid"><div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Chargement...</div></div>
           </div>
           <div class="profile-tab-content" id="tab-stats">
             <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
               <div class="sidebar-widget"><div class="widget-title">XP Total</div><div style="font-family:var(--font-display);font-size:32px;font-weight:600" id="stats-xp">0</div></div>
-              <div class="sidebar-widget"><div class="widget-title">Challenges</div><div style="font-family:var(--font-display);font-size:32px;font-weight:600">0</div></div>
+              <div class="sidebar-widget"><div class="widget-title">Challenges complétés</div><div style="font-family:var(--font-display);font-size:32px;font-weight:600" id="stats-challenges">0</div></div>
               <div class="sidebar-widget"><div class="widget-title">Streak</div><div style="font-family:var(--font-display);font-size:32px;font-weight:600" id="stats-streak">0 jours</div></div>
-              <div class="sidebar-widget"><div class="widget-title">Projets</div><div style="font-family:var(--font-display);font-size:32px;font-weight:600">0</div></div>
+              <div class="sidebar-widget"><div class="widget-title">Posts publiés</div><div style="font-family:var(--font-display);font-size:32px;font-weight:600" id="stats-posts">0</div></div>
             </div>
           </div>
         </div>
@@ -1144,23 +1157,47 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
               </div>
             </div>
 
-            <div class="settings-block">
-              <div class="settings-block-title">Informations</div>
-              <div class="settings-field"><label>Pseudo</label><input type="text" class="form-input-mono" id="s-username" placeholder="ton_pseudo" style="font-family:var(--font-mono)"></div>
-              <div class="settings-field"><label>Bio</label><textarea id="s-bio" placeholder="Décris-toi en quelques mots..."></textarea></div>
-              <div class="settings-field"><label>Titre / Poste</label><input type="text" id="s-title" placeholder="Développeur Fullstack · Paris"></div>
-            </div>
+            <div style="display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:start">
+              <div>
+                <div class="settings-block">
+                  <div class="settings-block-title">Informations</div>
+                  <div class="settings-field"><label>Pseudo</label><input type="text" id="s-username" placeholder="ton_pseudo" style="font-family:var(--font-mono)" oninput="updateLivePreview()"></div>
+                  <div class="settings-field"><label>Pronoms <span style="font-size:10px;color:var(--text-muted);font-weight:400;text-transform:none">(optionnel)</span></label><input type="text" id="s-pronouns" placeholder="il/lui, she/her, they/them..." oninput="updateLivePreview()"></div>
+                  <div class="settings-field"><label>Bio</label><textarea id="s-bio" placeholder="Décris-toi en quelques mots..." oninput="updateLivePreview()"></textarea></div>
+                  <div class="settings-field"><label>Titre / Poste</label><input type="text" id="s-title" placeholder="Développeur Fullstack · Paris" oninput="updateLivePreview()"></div>
+                </div>
 
-            <div class="settings-block">
-              <div class="settings-block-title">Réseaux & liens</div>
-              <div class="settings-field"><label>GitHub</label><input type="text" id="s-github" placeholder="https://github.com/..." style="font-family:var(--font-mono)"></div>
-              <div class="settings-field"><label>LinkedIn</label><input type="text" id="s-linkedin" placeholder="https://linkedin.com/in/..." style="font-family:var(--font-mono)"></div>
-              <div class="settings-field"><label>Portfolio</label><input type="text" id="s-portfolio" placeholder="https://..." style="font-family:var(--font-mono)"></div>
-            </div>
+                <div class="settings-block">
+                  <div class="settings-block-title">Réseaux & liens</div>
+                  <div class="settings-field"><label>GitHub</label><input type="text" id="s-github" placeholder="https://github.com/..." style="font-family:var(--font-mono)"></div>
+                  <div class="settings-field"><label>LinkedIn</label><input type="text" id="s-linkedin" placeholder="https://linkedin.com/in/..." style="font-family:var(--font-mono)"></div>
+                  <div class="settings-field"><label>Portfolio</label><input type="text" id="s-portfolio" placeholder="https://..." style="font-family:var(--font-mono)"></div>
+                </div>
 
-            <div class="settings-save-bar">
-              <button class="btn btn-primary" onclick="saveProfile()">Sauvegarder les modifications</button>
-              <span style="font-size:12px;color:var(--text-muted)">Les changements sont visibles immédiatement.</span>
+                <div class="settings-save-bar">
+                  <button class="btn btn-primary" onclick="saveProfile()">Sauvegarder les modifications</button>
+                  <span style="font-size:12px;color:var(--text-muted)">Les changements sont visibles immédiatement.</span>
+                </div>
+              </div>
+
+              <!-- APERÇU LIVE -->
+              <div class="settings-preview-panel">
+                <div class="settings-preview-title">Aperçu du profil</div>
+                <div class="preview-profile-card">
+                  <div class="preview-banner" id="preview-banner">
+                    <div class="preview-avatar" id="preview-avatar">DC</div>
+                  </div>
+                  <div class="preview-body">
+                    <div class="preview-name" id="preview-name">—</div>
+                    <div class="preview-handle" id="preview-handle">@—</div>
+                    <div id="preview-pronouns" style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono);margin-top:2px;display:none"></div>
+                    <div class="preview-bio" id="preview-bio">Aucune bio renseignée.</div>
+                  </div>
+                </div>
+                <div style="margin-top:12px;display:flex;gap:6px">
+                  <button class="btn btn-ghost btn-sm" onclick="removeAvatar()">Supprimer l'avatar</button>
+                </div>
+              </div>
             </div>
           </div>
           <div class="settings-section" id="settings-compte">
@@ -1201,26 +1238,97 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
                 <div class="settings-row-left"><div class="settings-row-label">Langue</div><div class="settings-row-sub">Langue de l'interface DevConnect</div></div>
                 <select class="form-input" style="width:140px;padding:6px 10px;font-size:13px"><option>Français</option><option>English</option></select>
               </div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">Thème de l'interface</div><div class="settings-row-sub">Choisir entre le mode sombre et le mode clair</div></div>
+                <div style="display:flex;gap:6px">
+                  <button class="theme-toggle-btn" id="btn-theme-dark" onclick="setTheme('dark')" style="border-color:var(--border-light)">🌙 Sombre</button>
+                  <button class="theme-toggle-btn" id="btn-theme-light" onclick="setTheme('light')">☀️ Clair</button>
+                </div>
+              </div>
             </div>
 
-            <div class="settings-block" id="dev-plus-banner-card">
-              <div class="settings-block-title">Bannière de profil <span class="premium-badge devplus">Dev+</span></div>
-              <div id="dev-plus-banner-locked" style="display:none;padding:16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);text-align:center">
-                <div style="font-size:13px;color:var(--text-muted);margin-bottom:10px">🔒 Réservé aux membres Dev+</div>
-                <button class="btn btn-ghost btn-sm" onclick="switchSettingsByName('premium-s')">Voir le Premium</button>
+            <div class="settings-block">
+              <div class="settings-block-title">Bannière de profil</div>
+
+              <!-- GRATUIT : couleur unie -->
+              <div class="settings-row">
+                <div class="settings-row-left">
+                  <div class="settings-row-label">Couleur de bannière <span style="font-size:10px;color:var(--text-muted);background:var(--bg3);border:1px solid var(--border);border-radius:100px;padding:1px 6px;font-family:var(--font-mono)">Gratuit</span></div>
+                  <div class="settings-row-sub">Couleur de fond visible sur ta carte profil</div>
+                </div>
+                <input type="color" id="s-profile-color" value="#0e0e0e" onchange="updateProfileColor(this.value)" style="width:40px;height:32px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:transparent">
+              </div>
+
+              <!-- DEV+ : image statique -->
+              <div id="dev-plus-banner-locked" style="display:none">
+                <div class="settings-row" style="opacity:.45">
+                  <div class="settings-row-left">
+                    <div class="settings-row-label">Image de bannière <span class="premium-badge devplus">Dev+</span></div>
+                    <div class="settings-row-sub">JPG, PNG ou WebP — 3 Mo max.</div>
+                  </div>
+                  <button class="btn btn-ghost btn-sm" onclick="switchSettingsByName('premium-s')">Voir Dev+</button>
+                </div>
               </div>
               <div id="dev-plus-banner-unlocked" style="display:none">
                 <div class="settings-row">
-                  <div class="settings-row-left"><div class="settings-row-label">Image de bannière</div><div class="settings-row-sub">JPG, PNG ou WebP — 3 Mo max. Visible sur ton profil.</div></div>
-                  <div>
-                    <div class="upload-preview banner-preview" id="s-banner-preview" style="width:80px;height:30px;border-radius:6px;background:var(--bg3);display:inline-block"></div>
+                  <div class="settings-row-left">
+                    <div class="settings-row-label">Image de bannière <span class="premium-badge devplus">Dev+</span></div>
+                    <div class="settings-row-sub">JPG, PNG ou WebP — 3 Mo max.</div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div id="s-banner-preview" style="width:64px;height:24px;border-radius:4px;background:var(--bg3);border:1px solid var(--border);display:inline-block"></div>
                     <input type="file" id="s-banner-input" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="uploadBanner(this)">
-                    <button class="btn btn-ghost btn-sm" style="margin-left:8px" onclick="document.getElementById('s-banner-input').click()">Changer</button>
+                    <button class="btn btn-ghost btn-sm" onclick="document.getElementById('s-banner-input').click()">Changer</button>
+                    <button class="btn btn-ghost btn-sm" onclick="removeBanner()">Supprimer</button>
                   </div>
                 </div>
+              </div>
+
+              <!-- DEVCONNECT+ : GIF animé -->
+              <div id="dc-banner-locked" style="display:none">
+                <div class="settings-row" style="opacity:.45">
+                  <div class="settings-row-left">
+                    <div class="settings-row-label">Bannière GIF <span class="premium-badge devconnectplus">DevConnect+</span></div>
+                    <div class="settings-row-sub">GIF animé — 5 Mo max. Remplace l'image statique.</div>
+                  </div>
+                  <button class="btn btn-ghost btn-sm" onclick="switchSettingsByName('premium-s')">Voir DevConnect+</button>
+                </div>
+              </div>
+              <div id="dc-banner-unlocked" style="display:none">
                 <div class="settings-row">
-                  <div class="settings-row-left"><div class="settings-row-label">Couleur de fond</div><div class="settings-row-sub">Visible derrière ta bannière et sur ta carte profil</div></div>
-                  <input type="color" id="s-profile-color" value="#0e0e0e" onchange="updateProfileColor(this.value)" style="width:40px;height:32px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:transparent">
+                  <div class="settings-row-left">
+                    <div class="settings-row-label">Bannière GIF <span class="premium-badge devconnectplus">DevConnect+</span></div>
+                    <div class="settings-row-sub">GIF animé — 5 Mo max. Remplace l'image statique.</div>
+                  </div>
+                  <div>
+                    <input type="file" id="s-banner-gif-input" accept="image/gif" style="display:none" onchange="uploadBannerGif(this)">
+                    <button class="btn btn-ghost btn-sm" onclick="document.getElementById('s-banner-gif-input').click()">Uploader GIF</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- FOND DU SITE : DevConnect+ -->
+            <div class="settings-block">
+              <div class="settings-block-title">Fond du site <span class="premium-badge devconnectplus">DevConnect+</span></div>
+              <div id="site-bg-locked" style="padding:14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);text-align:center;display:none">
+                <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">🔒 Réservé aux membres DevConnect+</div>
+                <button class="btn btn-ghost btn-sm" onclick="switchSettingsByName('premium-s')">Voir le Premium</button>
+              </div>
+              <div id="site-bg-unlocked" style="display:none">
+                <div style="margin-bottom:8px">
+                  <div class="settings-row-label">Dégradé de fond</div>
+                  <div class="settings-row-sub" style="font-size:12px;color:var(--text-muted);margin-bottom:12px">Mélange 3 couleurs pour personnaliser le fond de l'application</div>
+                  <div class="gradient-picker">
+                    <input type="color" id="grad-color-1" value="#0a0a12" oninput="updateGradientPreview()">
+                    <input type="color" id="grad-color-2" value="#0d0d1e" oninput="updateGradientPreview()">
+                    <input type="color" id="grad-color-3" value="#12101e" oninput="updateGradientPreview()">
+                    <div class="gradient-preview-bar" id="gradient-preview-bar" style="min-width:80px"></div>
+                  </div>
+                  <div style="display:flex;gap:8px;margin-top:10px">
+                    <button class="btn btn-primary btn-sm" onclick="saveSiteGradient()">Appliquer</button>
+                    <button class="btn btn-ghost btn-sm" onclick="clearSiteGradient()">Réinitialiser</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1577,6 +1685,11 @@ let currentUser=null,currentProfile=null,currentSection='home',selectedSpecialty
 
 // INIT
 window.addEventListener('load',async()=>{
+  initTheme();
+  updateGradientPreview();
+  // Restaurer le gradient du site si DevConnect+
+  const _sg=localStorage.getItem('dc_site_gradient');
+  if(_sg){try{const g=JSON.parse(_sg);applySiteGradient(g[0],g[1],g[2]);}catch(e){}}
   const{data:{session}}=await db.auth.getSession();
   if(session){currentUser=session.user;await loadProfile();showPage('app');loadFeed();loadSidebarLeaderboard();}
   else showPage('landing');
@@ -1742,9 +1855,18 @@ function updateProfileSection(){
   document.getElementById('profile-avatar-big').innerHTML=avatarHtml(p.avatar_url,init);
 
   const banner=document.getElementById('profile-banner');
-  if(isDevPlus()&&p.banner_url){banner.style.background=`url('${p.banner_url}') center/cover`;}
+  if(isDevPlus()&&p.banner_url){banner.style.background=`url('${p.banner_url}') center/cover no-repeat`;}
+  else if(isDevPlus()&&p.banner_gradient){banner.style.background=p.banner_gradient;}
   else if(isDevPlus()&&p.profile_color){banner.style.background=p.profile_color;}
   else{banner.style.background='linear-gradient(135deg,var(--bg3),var(--bg2))';}
+
+  // Pronoms
+  const pronounsEl=document.getElementById('profile-pronouns-display');
+  if(pronounsEl){if(p.pronouns){pronounsEl.textContent=p.pronouns;pronounsEl.style.display='block';}else{pronounsEl.style.display='none';}}
+
+  // Badge rôle inline
+  const roleEl=document.getElementById('profile-role-badge');
+  if(roleEl&&p.role){roleEl.className=`role-badge-profile ${p.role}`;roleEl.textContent=ROLE_LABELS[p.role]||p.role;roleEl.style.display='inline-flex';}
 
   const pill=document.getElementById('profile-status-pill');
   if(isDevConnectPlus()&&p.status_text){pill.style.display='inline-flex';pill.textContent='';
@@ -1753,6 +1875,8 @@ function updateProfileSection(){
   }else{pill.style.display='none';}
 
   renderProfileWidgets(p);
+  renderBadgesTab(p);
+  updateLivePreview();
 }
 
 function renderProfileWidgets(p){
@@ -1811,6 +1935,7 @@ function updateSettingsSection(){
   const p=currentProfile;
   setVal('s-username',p.username||'');setVal('s-bio',p.bio||'');setVal('s-title',p.title||'');
   setVal('s-github',p.github_url||'');setVal('s-linkedin',p.linkedin_url||'');setVal('s-portfolio',p.portfolio_url||'');
+  setVal('s-pronouns',p.pronouns||'');
   setEl('s-email-display',currentUser.email||'—');
   setEl('s-since',new Date(p.created_at).toLocaleDateString('fr-FR',{year:'numeric',month:'long',day:'numeric'}));
   setEl('s-userid',currentUser.id||'—');
@@ -1822,15 +1947,31 @@ function updateSettingsSection(){
   document.getElementById('s-avatar-preview').innerHTML=avatarHtml(p.avatar_url,init);
 
   const devPlus=isDevPlus(),dcPlus=isDevConnectPlus();
-  document.getElementById('dev-plus-banner-locked').style.display=devPlus?'none':'block';
-  document.getElementById('dev-plus-banner-unlocked').style.display=devPlus?'block':'none';
   document.getElementById('dc-plus-locked').style.display=dcPlus?'none':'block';
   document.getElementById('dc-plus-unlocked').style.display=dcPlus?'block':'none';
 
+  setVal('s-profile-color',p.profile_color||'#0e0e0e');
+
+  // Banner Dev+
+  document.getElementById('dev-plus-banner-locked').style.display=devPlus?'none':'block';
+  document.getElementById('dev-plus-banner-unlocked').style.display=devPlus?'block':'none';
+  // Banner GIF DevConnect+
+  document.getElementById('dc-banner-locked').style.display=dcPlus?'none':'block';
+  document.getElementById('dc-banner-unlocked').style.display=dcPlus?'block':'none';
+  // Fond du site DevConnect+
+  document.getElementById('site-bg-locked').style.display=dcPlus?'none':'block';
+  document.getElementById('site-bg-unlocked').style.display=dcPlus?'block':'none';
+
   if(devPlus){
-    document.getElementById('s-banner-preview').style.background=p.banner_url?`url('${p.banner_url}') center/cover`:'var(--bg2)';
-    setVal('s-profile-color',p.profile_color||'#0e0e0e');
+    const bPrev=document.getElementById('s-banner-preview');
+    if(bPrev)bPrev.style.background=p.banner_url?`url('${p.banner_url}') center/cover`:'var(--bg2)';
   }
+  // Init gradient
+  const savedGrad=localStorage.getItem('dc_site_gradient');
+  if(savedGrad){
+    try{const g=JSON.parse(savedGrad);setVal('grad-color-1',g[0]);setVal('grad-color-2',g[1]);setVal('grad-color-3',g[2]);}catch(e){}
+  }
+  updateGradientPreview();
   if(dcPlus){
     setVal('s-status',p.status_text||'');
     document.getElementById('s-emoji-preview').innerHTML=p.custom_emoji_url?`<img src="${esc(p.custom_emoji_url)}" style="width:100%;height:100%;object-fit:contain">`:'';
@@ -1877,9 +2018,10 @@ async function uploadBanner(input){
   if(!isDevPlus()){showToast('Réservé aux membres Dev+.','error');return;}
   const file=input.files[0];if(!file)return;
   if(!validateImageFile(file,3*1024*1024,false))return;
+  showToast('Upload en cours...','info');
   const url=await uploadToBucket('banners',file);if(!url)return;
-  const{error}=await db.from('profiles').update({banner_url:url}).eq('id',currentUser.id);
-  if(error){showToast('Erreur lors de la sauvegarde.','error');return;}
+  const{error}=await db.from('profiles').update({banner_url:url,banner_gradient:null}).eq('id',currentUser.id);
+  if(error){showToast('Erreur : '+error.message,'error');return;}
   await loadProfile();showToast('Bannière mise à jour !','success');
 }
 
@@ -1887,9 +2029,10 @@ async function uploadEmoji(input){
   if(!isDevConnectPlus()){showToast('Réservé aux membres DevConnect+.','error');return;}
   const file=input.files[0];if(!file)return;
   if(!validateImageFile(file,256*1024,true))return;
+  showToast('Upload en cours...','info');
   const url=await uploadToBucket('emojis',file);if(!url)return;
   const{error}=await db.from('profiles').update({custom_emoji_url:url}).eq('id',currentUser.id);
-  if(error){showToast('Erreur lors de la sauvegarde.','error');return;}
+  if(error){showToast('Erreur : '+error.message,'error');return;}
   await loadProfile();showToast('Emoji mis à jour !','success');
 }
 
@@ -2057,6 +2200,209 @@ function timeAgo(dateStr) {
   if (diff < 86400) return `il y a ${Math.floor(diff / 3600)}h`;
   if (diff < 172800) return 'hier';
   return new Date(dateStr).toLocaleDateString('fr-FR');
+}
+
+
+
+// ============================================================
+// PROFIL TABS
+// ============================================================
+const ALL_BADGES = [
+  {id:'founder',icon:'◈',name:'Fondateur',desc:'Membre originel',color:'#c8a86a',border:'#9a8a5a'},
+  {id:'early',icon:'⚡',name:'Early Adopter',desc:'Parmi les 100 premiers',color:'#8ac8d8',border:'#5a8a9a'},
+  {id:'certified',icon:'✦',name:'Certifié',desc:'Certifié par un admin',color:'#c8c8d8',border:'#9a9ab8'},
+  {id:'streak',icon:'🔥',name:'Streak Master',desc:'30 jours consécutifs',color:'#c8886a',border:'#9a5a3a'},
+  {id:'warrior',icon:'💻',name:'Code Warrior',desc:'500 XP accumulés',color:'#8ac8a8',border:'#5a9a6a'},
+  {id:'challenger',icon:'🎯',name:'Challenge King',desc:'10 challenges complétés',color:'#c8a8d8',border:'#8a6a9a'},
+  {id:'contributor',icon:'🌟',name:'Top Contributeur',desc:'Top 10 du classement',color:'#c8c86a',border:'#9a9a3a'},
+  {id:'security',icon:'🛡️',name:'Security Expert',desc:'5 challenges cybersec',color:'#8ab8c8',border:'#5a8898'},
+  {id:'deployer',icon:'🚀',name:'First Deploy',desc:'Premier projet publié',color:'#c8a86a',border:'#9a783a'},
+  {id:'social',icon:'👥',name:'Social',desc:'50 messages envoyés',color:'#c8888a',border:'#9a5a5a'},
+  {id:'mentor',icon:'🎓',name:'Mentor',desc:'A aidé 10 membres',color:'#88c8a8',border:'#5a9a78'},
+  {id:'vip',icon:'⭐',name:'VIP',desc:'Membre premium 30j',color:'#c8b86a',border:'#9a8a3a'},
+  {id:'networker',icon:'🤝',name:'Networker',desc:'Suit 20 personnes',color:'#a8c8d8',border:'#7898a8'},
+  {id:'writer',icon:'📝',name:'Rédacteur',desc:'20 posts publiés',color:'#c8a8b8',border:'#9a7888'},
+  {id:'top10',icon:'🏅',name:'Top 10',desc:'Top 10 du classement global',color:'#d8c868',border:'#a89838'},
+  {id:'recruiter',icon:'🌍',name:'Recruteur actif',desc:'3 offres publiées',color:'#88b8c8',border:'#5888a0'},
+];
+
+function getBadgesForProfile(p) {
+  const unlocked = [];
+  if(p.xp >= 1) unlocked.push('founder');
+  if(p.is_certified) unlocked.push('certified');
+  if(p.is_premium) unlocked.push('vip');
+  if(p.xp >= 500) unlocked.push('warrior');
+  if(p.xp >= 1000) unlocked.push('contributor');
+  if(p.streak >= 30) unlocked.push('streak');
+  return unlocked;
+}
+
+function renderBadgesTab(p) {
+  const unlocked = getBadgesForProfile(p);
+  const cont = document.getElementById('badges-list');
+  if(!cont) return;
+  // Badge rôle en premier
+  const roleLabel = ROLE_LABELS[p.role] || p.role || '';
+  let html = '';
+  if(roleLabel) {
+    html += `<div class="badge-card unlocked">
+      <div class="badge-icon">⬡</div>
+      <div class="badge-name">${esc(roleLabel)}</div>
+      <div class="badge-desc">Rôle DevConnect</div>
+    </div>`;
+  }
+  ALL_BADGES.forEach(b => {
+    const isUnlocked = unlocked.includes(b.id);
+    html += `<div class="badge-card ${isUnlocked?'unlocked':'locked'}" title="${esc(b.desc)}">
+      <div class="badge-icon">${b.icon}</div>
+      <div class="badge-name">${esc(b.name)}</div>
+      <div class="badge-desc">${esc(b.desc)}</div>
+    </div>`;
+  });
+  cont.innerHTML = html;
+}
+
+async function renderProjectsTab() {
+  const cont = document.getElementById('projects-list');
+  if(!cont || !currentUser) return;
+  const {data} = await db.from('projects').select('*').eq('user_id', currentUser.id).order('created_at', {ascending:false});
+  if(!data || data.length === 0) {
+    cont.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun projet ajouté. Clique sur + pour commencer !</div>';
+    return;
+  }
+  cont.innerHTML = data.map(p => `<div class="project-card">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+      <div class="project-name">${esc(p.name||'')}</div>
+      <div style="display:flex;gap:6px">${p.github_url?`<a href="${esc(p.github_url)}" target="_blank" class="btn btn-ghost btn-sm">GitHub</a>`:''}</div>
+    </div>
+    <div class="project-desc">${esc(p.description||'')}</div>
+    ${p.stack?`<div class="project-stack">${(p.stack||[]).map(s=>`<span class="stack-tag">${esc(s)}</span>`).join('')}</div>`:''}
+  </div>`).join('');
+}
+
+async function renderStatsTab() {
+  if(!currentUser || !currentProfile) return;
+  setEl('stats-xp', currentProfile.xp || 0);
+  setEl('stats-streak', (currentProfile.streak || 0) + ' jours');
+  const {count: challengeCount} = await db.from('challenge_completions').select('*',{count:'exact',head:true}).eq('user_id', currentUser.id);
+  setEl('stats-challenges', challengeCount || 0);
+  const {count: postCount} = await db.from('posts').select('*',{count:'exact',head:true}).eq('user_id', currentUser.id);
+  setEl('stats-posts', postCount || 0);
+}
+
+function switchProfileTab(tab, el) {
+  document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.profile-tab-content').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-'+tab)?.classList.add('active');
+  if(tab === 'badges') renderBadgesTab(currentProfile || {});
+  if(tab === 'projects') renderProjectsTab();
+  if(tab === 'stats') renderStatsTab();
+}
+
+// ============================================================
+// APERÇU LIVE PROFIL
+// ============================================================
+function updateLivePreview() {
+  const name = getVal('s-username') || currentProfile?.username || '—';
+  const bio = getVal('s-bio') || 'Aucune bio renseignée.';
+  const pronouns = getVal('s-pronouns') || '';
+  setEl('preview-name', name);
+  setEl('preview-handle', '@' + name.toLowerCase().replace(/\s/g,''));
+  setEl('preview-bio', bio);
+  const pron = document.getElementById('preview-pronouns');
+  if(pron) { pron.textContent = pronouns; pron.style.display = pronouns ? 'block' : 'none'; }
+}
+
+// ============================================================
+// GRADIENT BANNIÈRE
+// ============================================================
+function updateGradientPreview() {
+  const c1 = getVal('grad-color-1') || '#0e0e1a';
+  const c2 = getVal('grad-color-2') || '#1a1a3a';
+  const c3 = getVal('grad-color-3') || '#2a1a3a';
+  const bar = document.getElementById('gradient-preview-bar');
+  if(bar) bar.style.background = `linear-gradient(135deg, ${c1}, ${c2}, ${c3})`;
+}
+
+async function saveBannerGradient() {
+  if(!isDevPlus()) { showToast('Réservé aux membres Dev+.', 'error'); return; }
+  const c1 = getVal('grad-color-1');
+  const c2 = getVal('grad-color-2');
+  const c3 = getVal('grad-color-3');
+  const gradient = `linear-gradient(135deg, ${c1}, ${c2}, ${c3})`;
+  const {error} = await db.from('profiles').update({banner_gradient: gradient, banner_url: null}).eq('id', currentUser.id);
+  if(error) { showToast('Erreur : ' + error.message, 'error'); return; }
+  await loadProfile();
+  showToast('Dégradé appliqué !', 'success');
+}
+
+async function saveSiteGradient() {
+  if(!isDevConnectPlus()){showToast('Réservé aux membres DevConnect+.','error');return;}
+  const c1=getVal('grad-color-1')||'#0a0a12';
+  const c2=getVal('grad-color-2')||'#0d0d1e';
+  const c3=getVal('grad-color-3')||'#12101e';
+  localStorage.setItem('dc_site_gradient',JSON.stringify([c1,c2,c3]));
+  applySiteGradient(c1,c2,c3);
+  showToast('Fond du site mis à jour !','success');
+}
+
+function applySiteGradient(c1,c2,c3){
+  document.getElementById('page-app').style.background=`linear-gradient(135deg,${c1},${c2},${c3})`;
+}
+
+async function clearSiteGradient(){
+  localStorage.removeItem('dc_site_gradient');
+  document.getElementById('page-app').style.background='';
+  showToast('Fond réinitialisé.','success');
+}
+
+async function uploadBannerGif(input){
+  if(!isDevConnectPlus()){showToast('Réservé aux membres DevConnect+.','error');return;}
+  const file=input.files[0];if(!file)return;
+  if(file.type!=='image/gif'){showToast('Seuls les GIFs sont acceptés ici.','error');return;}
+  if(file.size>5*1024*1024){showToast('GIF trop lourd (5 Mo max).','error');return;}
+  showToast('Upload en cours...','info');
+  const url=await uploadToBucket('banners',file);if(!url)return;
+  const{error}=await db.from('profiles').update({banner_url:url,banner_gradient:null}).eq('id',currentUser.id);
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  await loadProfile();showToast('Bannière GIF mise à jour !','success');
+}
+
+async function clearBannerGradient() {
+  if(!currentUser) return;
+  await db.from('profiles').update({banner_gradient: null}).eq('id', currentUser.id);
+  await loadProfile();
+  showToast('Dégradé retiré.', 'success');
+}
+
+async function removeBanner() {
+  if(!currentUser) return;
+  await db.from('profiles').update({banner_url: null, banner_gradient: null}).eq('id', currentUser.id);
+  await loadProfile();
+  showToast('Bannière supprimée.', 'success');
+}
+
+async function removeAvatar() {
+  if(!currentUser) return;
+  await db.from('profiles').update({avatar_url: null}).eq('id', currentUser.id);
+  await loadProfile();
+  showToast('Avatar supprimé.', 'success');
+}
+
+// ============================================================
+// THÈME CLAIR / SOMBRE
+// ============================================================
+function setTheme(theme) {
+  document.documentElement.classList.toggle('light', theme === 'light');
+  localStorage.setItem('dc_theme', theme);
+  document.getElementById('btn-theme-dark').style.borderColor = theme === 'dark' ? 'var(--border-light)' : 'var(--border)';
+  document.getElementById('btn-theme-light').style.borderColor = theme === 'light' ? 'var(--border-light)' : 'var(--border)';
+}
+
+function initTheme() {
+  const t = localStorage.getItem('dc_theme') || 'dark';
+  setTheme(t);
 }
 
 
