@@ -831,7 +831,16 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     </div>
     <div class="topnav-right">
       <div class="topnav-search" onclick="openSearch()"><span>⌕</span><span style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono)">Rechercher...</span><span class="search-kbd">/</span></div>
-      <button class="notif-btn" title="Notifications" onclick="navigate('settings');switchSettingsByName('notifs')">🔔<div class="notif-badge"></div></button>
+      <div style="position:relative">
+        <button class="notif-btn" title="Notifications" onclick="toggleNotifDropdown()">🔔<div class="notif-badge" id="notif-badge" style="display:none"></div></button>
+        <div class="profile-dropdown" id="notif-dropdown" style="width:300px;max-height:380px;overflow-y:auto;padding:6px">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px 4px">
+            <span style="font-size:12px;font-weight:600;color:var(--text-secondary)">Notifications</span>
+            <span style="font-size:11px;color:var(--accent);cursor:pointer" onclick="markAllNotifsRead()">Tout marquer comme lu</span>
+          </div>
+          <div id="notif-list"><div style="padding:18px 8px;text-align:center;font-size:12px;color:var(--text-muted)">Chargement...</div></div>
+        </div>
+      </div>
       <div class="nav-avatar" id="nav-avatar" onclick="toggleProfileDropdown()">DC</div>
       <div class="profile-dropdown" id="profile-dropdown">
         <div class="dropdown-item" onclick="navigate('profile');toggleProfileDropdown()"><span>◈</span>Mon profil</div>
@@ -1186,6 +1195,33 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
                   <div class="settings-field"><label>GitHub</label><input type="text" id="s-github" placeholder="https://github.com/..." style="font-family:var(--font-mono)"></div>
                   <div class="settings-field"><label>LinkedIn</label><input type="text" id="s-linkedin" placeholder="https://linkedin.com/in/..." style="font-family:var(--font-mono)"></div>
                   <div class="settings-field"><label>Portfolio</label><input type="text" id="s-portfolio" placeholder="https://..." style="font-family:var(--font-mono)"></div>
+                </div>
+
+                <div class="settings-block">
+                  <div class="settings-block-title">Spécialité</div>
+                  <div class="settings-field"><label>Domaine principal</label>
+                    <select class="form-input" id="s-specialty">
+                      <option value="web_dev">🌐 Dev Web</option>
+                      <option value="mobile_dev">📱 Dev Mobile</option>
+                      <option value="backend_dev">⚙️ Dev Backend</option>
+                      <option value="fullstack_dev">🧩 Fullstack</option>
+                      <option value="cybersecurity">🛡️ Cybersécurité</option>
+                      <option value="devops">🔧 DevOps</option>
+                      <option value="data">📊 Data</option>
+                      <option value="ai_ml">🤖 IA / ML</option>
+                      <option value="designer_ux">🎨 Designer UX</option>
+                      <option value="recruiter">🧑‍💼 Recruteur tech</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="settings-block">
+                  <div class="settings-block-title">Compétences maîtrisées</div>
+                  <div id="s-skills-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px"></div>
+                  <div style="display:flex;gap:8px">
+                    <input type="text" class="form-input" id="s-skill-input" placeholder="Node.js, React, Docker..." onkeydown="if(event.key==='Enter'){event.preventDefault();addSkillTag();}">
+                    <button class="btn btn-ghost btn-sm" onclick="addSkillTag()">Ajouter</button>
+                  </div>
                 </div>
 
                 <div class="settings-save-bar">
@@ -1927,7 +1963,7 @@ async function loadProfile(){
     if(error){showToast('Impossible de charger ton profil. Contacte un admin.','error');return;}
     data=created;
   }
-  if(data){currentProfile=data;updateNavAvatar();updateProfileSection();updateSettingsSection();checkArchitect();}
+  if(data){currentProfile=data;updateNavAvatar();updateProfileSection();updateSettingsSection();checkArchitect();updateNotifBadge();subscribeNotifications();}
 }
 
 function isDevPlus(){return!!(currentProfile?.is_premium||currentProfile?.premium_tier==='devconnect-plus');}
@@ -2040,6 +2076,9 @@ function updateSettingsSection(){
   setVal('s-username',p.username||'');setVal('s-bio',p.bio||'');setVal('s-title',p.title||'');
   setVal('s-github',p.github_url||'');setVal('s-linkedin',p.linkedin_url||'');setVal('s-portfolio',p.portfolio_url||'');
   setVal('s-pronouns',p.pronouns||'');
+  setVal('s-specialty',p.specialty||'web_dev');
+  currentSkills=Array.isArray(p.tech_stack)?[...p.tech_stack]:[];
+  renderSkillTags();
   setEl('s-email-display',currentUser.email||'—');
   setEl('s-since',new Date(p.created_at).toLocaleDateString('fr-FR',{year:'numeric',month:'long',day:'numeric'}));
   setEl('s-userid',currentUser.id||'—');
@@ -2203,9 +2242,26 @@ function checkArchitect(){
   setEl('admin-welcome-role',ROLE_LABELS[role]||'Admin');
 }
 
+let currentSkills=[];
+function renderSkillTags(){
+  const box=document.getElementById('s-skills-tags');
+  if(!box)return;
+  box.innerHTML=currentSkills.map((s,i)=>`<span class="stack-tag" style="display:inline-flex;align-items:center;gap:5px">${esc(s)}<span style="cursor:pointer;opacity:.6" onclick="removeSkillTag(${i})">×</span></span>`).join('')||'<span style="color:var(--text-muted);font-size:12px">Aucune compétence ajoutée.</span>';
+}
+function addSkillTag(){
+  const input=document.getElementById('s-skill-input');
+  const val=(input.value||'').trim();
+  if(!val)return;
+  if(currentSkills.length>=12){showToast('12 compétences maximum.','error');return;}
+  if(!currentSkills.some(s=>s.toLowerCase()===val.toLowerCase()))currentSkills.push(val);
+  input.value='';
+  renderSkillTags();
+}
+function removeSkillTag(i){currentSkills.splice(i,1);renderSkillTags();}
+
 async function saveProfile(){
   if(!currentUser)return;
-  const{error}=await db.from('profiles').update({username:getVal('s-username'),bio:getVal('s-bio'),title:getVal('s-title'),github_url:getVal('s-github'),linkedin_url:getVal('s-linkedin'),portfolio_url:getVal('s-portfolio'),updated_at:new Date().toISOString()}).eq('id',currentUser.id);
+  const{error}=await db.from('profiles').update({username:getVal('s-username'),bio:getVal('s-bio'),title:getVal('s-title'),github_url:getVal('s-github'),linkedin_url:getVal('s-linkedin'),portfolio_url:getVal('s-portfolio'),specialty:getVal('s-specialty'),tech_stack:currentSkills,updated_at:new Date().toISOString()}).eq('id',currentUser.id);
   if(error){showToast('Erreur lors de la sauvegarde.','error');return;}
   await loadProfile();showToast('Profil mis à jour !','success');
 }
@@ -2683,7 +2739,8 @@ async function loadMessages(){
       const prem=m.profiles?.premium_tier==='devconnect-plus'?'<span class="premium-badge devconnectplus">DevConnect+</span>':m.profiles?.is_premium?'<span class="premium-badge devplus">Dev+</span>':'';
       const certif=m.profiles?.is_certified?certifBadge():'';
       const time=new Date(m.created_at).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-      return`<div class="chat-msg"><div class="chat-msg-avatar" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${init}</div><div class="chat-msg-body"><div class="chat-msg-header"><span class="chat-msg-name" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${esc(name)}</span>${certif}${prem}<span class="chat-msg-time">${time}</span></div><div class="chat-msg-content">${esc(m.content)}</div></div></div>`;
+      const reportIcon=(currentUser&&m.user_id!==currentUser.id)?`<span style="cursor:pointer;opacity:.4;font-size:11px;margin-left:6px" title="Signaler" onclick="event.stopPropagation();openReportModal('${esc(m.user_id)}','${esc(name)}')">⚠</span>`:'';
+      return`<div class="chat-msg"><div class="chat-msg-avatar" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${init}</div><div class="chat-msg-body"><div class="chat-msg-header"><span class="chat-msg-name" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${esc(name)}</span>${certif}${prem}<span class="chat-msg-time">${time}</span>${reportIcon}</div><div class="chat-msg-content">${esc(m.content)}</div></div></div>`;
     }).join('');
     c.scrollTop=c.scrollHeight;
   }else{
@@ -2697,12 +2754,38 @@ async function sendMessage(){
   const input=document.getElementById('chat-input');
   const content=input.value.trim();
   if(!content)return;
+
+  if(isDmMode){
+    if(!currentDmConvId){showToast('Aucune conversation ouverte.','error');return;}
+    const{error}=await db.from('messages').insert({user_id:currentUser.id,dm_conversation_id:currentDmConvId,content,is_dm:true});
+    if(error){showToast('Erreur lors de l\'envoi : '+error.message,'error');return;}
+    input.value='';
+    await loadDmMessages();
+    notifyMentions(content,'dm');
+    const{data:conv}=await db.from('dm_conversations').select('user1_id,user2_id').eq('id',currentDmConvId).maybeSingle();
+    if(conv){
+      const otherId=conv.user1_id===currentUser.id?conv.user2_id:conv.user1_id;
+      await notifyUser(otherId,'dm',`@${currentProfile.username} t'a envoyé un message.`,'messages');
+    }
+    return;
+  }
+
   const{data:chan}=await db.from('channels').select('id').eq('name',currentChannel).maybeSingle();
   if(!chan){showToast('Ce canal n\'existe pas en base (à créer côté Supabase).','error');return;}
   const{error}=await db.from('messages').insert({user_id:currentUser.id,channel_id:chan.id,content,is_dm:false});
   if(error){showToast('Erreur lors de l\'envoi : '+error.message,'error');return;}
   input.value='';
   await loadMessages();
+  notifyMentions(content,'channel');
+}
+async function notifyMentions(content,context){
+  const usernames=[...new Set((content.match(/@([a-zA-Z0-9_]{2,32})/g)||[]).map(s=>s.slice(1)))];
+  if(usernames.length===0)return;
+  const{data:mentioned}=await db.from('profiles').select('id,username').in('username',usernames);
+  if(!mentioned)return;
+  for(const u of mentioned){
+    await notifyUser(u.id,'mention',`@${currentProfile.username} t'a mentionné dans ${context==='dm'?'un message direct':'le chat'}.`,'messages');
+  }
 }
 
 function switchChannel(el,name){
@@ -2939,12 +3022,51 @@ async function openProfile(username){
     <div style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono)">@${esc(p.username||'')}</div>
     <div style="font-size:13px;color:var(--text-secondary);margin:10px 0">${esc(p.bio||'Aucune bio renseignée.')}</div>
     ${p.specialty?`<div class="profile-badge" style="display:inline-block;margin-bottom:10px">${esc(specLabels[p.specialty]||p.specialty)}</div>`:''}
-    <div style="display:flex;justify-content:center;gap:18px;margin:10px 0;font-size:12px;color:var(--text-muted)"><span><strong style="color:var(--text)">${p.xp||0}</strong> xp</span></div>
+    <div style="display:flex;justify-content:center;gap:18px;margin:10px 0;font-size:12px;color:var(--text-muted)">
+      <span><strong style="color:var(--text)">${p.xp||0}</strong> xp</span>
+      <span id="profile-followers-count"><strong style="color:var(--text)">…</strong> abonnés</span>
+      <span id="profile-following-count"><strong style="color:var(--text)">…</strong> abonnements</span>
+    </div>
     ${stack?`<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:10px">${stack}</div>`:''}
     ${links?`<div class="profile-links" style="justify-content:center">${links}</div>`:''}
-    ${currentUser&&p.id!==currentUser?.id?`<button class="btn btn-primary w-full" style="margin-top:14px" onclick="closeProfileModal();startDm('${esc(p.id)}','${esc(p.username||'')}')">✉ Message direct</button>`:''}
+    ${currentUser&&p.id!==currentUser?.id?`<button class="btn btn-primary w-full" style="margin-top:14px" id="follow-btn" onclick="toggleFollow('${esc(p.id)}')">Suivre</button>`:''}
+    ${currentUser&&p.id!==currentUser?.id?`<button class="btn btn-ghost w-full" style="margin-top:8px" onclick="closeProfileModal();startDm('${esc(p.id)}','${esc(p.username||'')}')">✉ Message direct</button>`:''}
     ${currentUser&&p.id!==currentUser?.id?`<button class="btn btn-ghost w-full" style="margin-top:8px;color:#e05a5a" onclick="closeProfileModal();openReportModal('${esc(p.id)}','${esc(p.username||'')}')">⚠ Signaler ce profil</button>`:''}
   `;
+  loadFollowCounts(p.id);
+  if(currentUser&&p.id!==currentUser.id)checkFollowState(p.id);
+}
+
+async function loadFollowCounts(profileId){
+  const[{count:followers},{count:following}]=await Promise.all([
+    db.from('follows').select('*',{count:'exact',head:true}).eq('followed_id',profileId),
+    db.from('follows').select('*',{count:'exact',head:true}).eq('follower_id',profileId)
+  ]);
+  const fEl=document.getElementById('profile-followers-count'),gEl=document.getElementById('profile-following-count');
+  if(fEl)fEl.innerHTML=`<strong style="color:var(--text)">${followers||0}</strong> abonnés`;
+  if(gEl)gEl.innerHTML=`<strong style="color:var(--text)">${following||0}</strong> abonnements`;
+}
+async function checkFollowState(targetId){
+  const{data}=await db.from('follows').select('id').eq('follower_id',currentUser.id).eq('followed_id',targetId).maybeSingle();
+  const btn=document.getElementById('follow-btn');
+  if(!btn)return;
+  if(data){btn.textContent='✓ Suivi(e)';btn.classList.remove('btn-primary');btn.classList.add('btn-ghost');btn.dataset.following='1';}
+  else{btn.textContent='Suivre';btn.classList.add('btn-primary');btn.classList.remove('btn-ghost');btn.dataset.following='0';}
+}
+async function toggleFollow(targetId){
+  if(!currentUser){showToast('Connecte-toi pour suivre ce profil.','error');return;}
+  const btn=document.getElementById('follow-btn');
+  const isFollowing=btn?.dataset.following==='1';
+  if(isFollowing){
+    const{error}=await db.from('follows').delete().eq('follower_id',currentUser.id).eq('followed_id',targetId);
+    if(error){showToast('Erreur : '+error.message,'error');return;}
+  } else {
+    const{error}=await db.from('follows').insert({follower_id:currentUser.id,followed_id:targetId});
+    if(error){showToast('Erreur : '+error.message,'error');return;}
+    await notifyUser(targetId,'follow',`@${currentProfile.username} a commencé à te suivre.`,null);
+  }
+  await checkFollowState(targetId);
+  await loadFollowCounts(targetId);
 }
 function closeProfileModal(){document.getElementById('view-profile-modal').classList.remove('show');}
 
@@ -3395,6 +3517,68 @@ async function runSearch(q) {
 
 // DROPDOWN
 function toggleProfileDropdown(){document.getElementById('profile-dropdown').classList.toggle('show');}
+
+// ============================================================
+// NOTIFICATIONS
+// ============================================================
+function timeAgo(dateStr){
+  const diff=(Date.now()-new Date(dateStr).getTime())/1000;
+  if(diff<60)return 'à l\'instant';
+  if(diff<3600)return Math.floor(diff/60)+' min';
+  if(diff<86400)return Math.floor(diff/3600)+' h';
+  return Math.floor(diff/86400)+' j';
+}
+const NOTIF_ICONS={mention:'@',dm:'✉',follow:'★',like:'♥',report:'⚠'};
+function toggleNotifDropdown(){
+  const dd=document.getElementById('notif-dropdown');
+  dd.classList.toggle('show');
+  if(dd.classList.contains('show'))loadNotifications();
+}
+async function loadNotifications(){
+  if(!currentUser)return;
+  const{data,error}=await db.from('notifications').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(25);
+  const list=document.getElementById('notif-list');
+  if(error){list.innerHTML='<div style="padding:18px 8px;text-align:center;font-size:12px;color:var(--text-muted)">Erreur de chargement.</div>';return;}
+  if(!data||data.length===0){list.innerHTML='<div style="padding:18px 8px;text-align:center;font-size:12px;color:var(--text-muted)">Aucune notification pour l\'instant.</div>';return;}
+  list.innerHTML=data.map(n=>`
+    <div class="dropdown-item" style="align-items:flex-start;${n.is_read?'opacity:.55':''}" onclick="openNotif('${esc(n.id)}','${esc(n.link||'')}')">
+      <span style="width:22px;height:22px;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px">${NOTIF_ICONS[n.type]||'●'}</span>
+      <div style="flex:1">
+        <div style="font-size:12px;color:var(--text)">${esc(n.content)}</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:2px">${timeAgo(n.created_at)}</div>
+      </div>
+    </div>`).join('');
+  updateNotifBadge();
+}
+async function updateNotifBadge(){
+  if(!currentUser)return;
+  const{count}=await db.from('notifications').select('*',{count:'exact',head:true}).eq('user_id',currentUser.id).eq('is_read',false);
+  const badge=document.getElementById('notif-badge');
+  if(badge)badge.style.display=count>0?'block':'none';
+}
+async function openNotif(id,link){
+  await db.from('notifications').update({is_read:true}).eq('id',id);
+  document.getElementById('notif-dropdown').classList.remove('show');
+  updateNotifBadge();
+  if(link)navigate(link);
+}
+async function markAllNotifsRead(){
+  if(!currentUser)return;
+  await db.from('notifications').update({is_read:true}).eq('user_id',currentUser.id).eq('is_read',false);
+  loadNotifications();
+}
+async function notifyUser(userId,type,content,link){
+  if(!userId||userId===currentUser?.id)return;
+  await db.from('notifications').insert({user_id:userId,type,content,link,is_read:false});
+}
+function subscribeNotifications(){
+  if(!currentUser)return;
+  db.channel('notifications-'+currentUser.id)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:'user_id=eq.'+currentUser.id},()=>{
+      updateNotifBadge();
+      if(document.getElementById('notif-dropdown').classList.contains('show'))loadNotifications();
+    }).subscribe();
+}
 document.addEventListener('click',e=>{const dd=document.getElementById('profile-dropdown');if(dd&&!e.target.closest('.topnav-right'))dd.classList.remove('show');});
 
 // TOAST
