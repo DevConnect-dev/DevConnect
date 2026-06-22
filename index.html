@@ -434,28 +434,62 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .editor-ai-input input{flex:1;background:var(--bg0);border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;color:var(--text);font-family:var(--font-body);font-size:13px;outline:none;transition:border-color .2s;}
 .editor-ai-input input:focus{border-color:var(--border-light);}
 
-/* SETTINGS */
-.settings-layout{display:grid;grid-template-columns:220px 1fr;gap:24px;width:100%;max-width:960px;margin:0 auto;padding:32px 24px;align-items:start;}
-.settings-nav{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:8px;position:sticky;top:70px;}
-.settings-nav-item{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:var(--radius);cursor:pointer;font-size:13px;color:var(--text-secondary);transition:all .15s;margin-bottom:2px;}
-.settings-nav-item:hover{background:var(--bg2);color:var(--text);}
-.settings-nav-item.active{background:var(--bg3);color:var(--text);}
+/* SETTINGS — Discord style */
+.settings-layout{display:flex;width:100%;height:calc(100vh - 52px);overflow:hidden;}
+.settings-sidebar{width:240px;min-width:240px;background:var(--bg1);border-right:1px solid var(--border);padding:24px 8px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;}
+.settings-sidebar-label{font-family:var(--font-mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:8px 12px 4px;margin-top:8px;}
+.settings-sidebar-label:first-child{margin-top:0;}
+.settings-nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius);cursor:pointer;font-size:13px;color:var(--text-secondary);transition:all .15s;font-weight:400;}
+.settings-nav-item:hover{background:var(--bg3);color:var(--text);}
+.settings-nav-item.active{background:var(--bg3);color:var(--text);font-weight:500;}
+.settings-nav-item .s-icon{width:18px;text-align:center;font-size:14px;}
 .settings-nav-sep{height:1px;background:var(--border);margin:8px 4px;}
+.settings-nav-item.danger{color:#c87a7a;}
+.settings-nav-item.danger:hover{background:rgba(200,80,80,.1);color:#e09090;}
+.settings-content{flex:1;overflow-y:auto;padding:40px 40px 80px;background:var(--bg0);}
+.settings-content-inner{max-width:700px;margin:0 auto;}
+.settings-page-title{font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:4px;color:var(--text);}
+.settings-page-sub{font-size:13px;color:var(--text-muted);margin-bottom:28px;}
 .settings-section{display:none;}
 .settings-section.active{display:block;}
+.settings-divider{height:1px;background:var(--border);margin:24px 0;}
+.settings-block{margin-bottom:32px;}
+.settings-block-title{font-family:var(--font-display);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:16px;}
+.settings-field{margin-bottom:20px;}
+.settings-field label{display:block;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:8px;}
+.settings-field input,.settings-field textarea,.settings-field select{width:100%;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--font-body);font-size:14px;outline:none;transition:border-color .2s;}
+.settings-field input:focus,.settings-field textarea:focus,.settings-field select:focus{border-color:var(--border-light);}
+.settings-field textarea{resize:vertical;min-height:80px;line-height:1.5;}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);}
+.settings-row:last-child{border-bottom:none;}
+.settings-row-left{flex:1;}
+.settings-row-label{font-size:14px;font-weight:500;color:var(--text);}
+.settings-row-sub{font-size:12px;color:var(--text-muted);margin-top:3px;line-height:1.5;}
+.settings-badge-coming{font-size:10px;font-family:var(--font-mono);color:var(--text-muted);background:var(--bg3);border:1px solid var(--border);border-radius:100px;padding:1px 7px;margin-left:8px;vertical-align:middle;}
+.toggle{width:40px;height:22px;background:var(--border);border-radius:11px;position:relative;cursor:pointer;transition:background .2s;border:none;flex-shrink:0;}
+.toggle.on{background:#5a8a6a;}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;background:var(--text);border-radius:50%;transition:transform .2s;}
+.toggle.on::after{transform:translateX(18px);}
+.settings-avatar-row{display:flex;align-items:center;gap:20px;padding:16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:20px;}
+.settings-avatar-img{width:72px;height:72px;border-radius:50%;background:var(--bg3);border:3px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:22px;color:var(--accent);overflow:hidden;flex-shrink:0;}
+.settings-avatar-img img{width:100%;height:100%;object-fit:cover;}
+.settings-avatar-info{flex:1;}
+.settings-avatar-name{font-weight:600;font-size:15px;margin-bottom:4px;}
+.settings-avatar-role{font-size:12px;color:var(--text-muted);font-family:var(--font-mono);}
+.settings-save-bar{display:flex;align-items:center;gap:12px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border);}
+.danger-block{background:rgba(200,80,80,.05);border:1px solid rgba(200,80,80,.2);border-radius:var(--radius-lg);padding:20px;margin-bottom:16px;}
+.danger-block-title{font-size:14px;font-weight:600;color:#e08080;margin-bottom:6px;}
+.danger-block-sub{font-size:13px;color:var(--text-muted);margin-bottom:14px;line-height:1.5;}
 .settings-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:16px;position:relative;overflow:hidden;}
 .settings-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--border-light),transparent);}
 .settings-card-title{font-family:var(--font-display);font-size:16px;font-weight:600;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);}
-.settings-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);}
-.settings-row:last-child{border-bottom:none;}
-.settings-row-label{font-size:14px;font-weight:500;}
-.settings-row-sub{font-size:12px;color:var(--text-secondary);margin-top:2px;}
-.toggle{width:38px;height:22px;background:var(--border);border-radius:11px;position:relative;cursor:pointer;transition:background .2s;border:none;flex-shrink:0;}
-.toggle.on{background:var(--accent-dim);}
-.toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;background:var(--text);border-radius:50%;transition:transform .2s;}
-.toggle.on::after{transform:translateX(16px);}
 .danger-zone{border-color:#5a2a2a;}
 .danger-zone .settings-card-title{color:#e05555;}
+.premium-status-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:16px;}
+.premium-status-icon{font-size:28px;}
+.premium-status-info{flex:1;}
+.premium-status-name{font-weight:600;font-size:15px;margin-bottom:3px;}
+.premium-status-desc{font-size:12px;color:var(--text-muted);}
 
 /* ADMIN */
 .admin-layout{display:grid;grid-template-columns:200px 1fr;width:100%;height:calc(100vh - 52px);}
@@ -1078,161 +1112,267 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <!-- PARAMÈTRES -->
     <div class="app-section" id="section-settings">
       <div class="settings-layout">
-        <div class="settings-nav">
-          <div class="settings-nav-item active" onclick="switchSettings(this,'profil')">◈ Mon profil</div>
-          <div class="settings-nav-item" onclick="switchSettings(this,'compte')">⚙ Compte</div>
-          <div class="settings-nav-item" onclick="switchSettings(this,'apparence')">◉ Apparence</div>
-          <div class="settings-nav-item" onclick="switchSettings(this,'notifs')">🔔 Notifications</div>
-          <div class="settings-nav-item" onclick="switchSettings(this,'securite')">◆ Sécurité</div>
-          <div class="settings-nav-item" onclick="switchSettings(this,'premium-s')">✦ Premium</div>
+        <div class="settings-sidebar">
+          <div class="settings-sidebar-label">Mon compte</div>
+          <div class="settings-nav-item active" onclick="switchSettings(this,'profil')"><span class="s-icon">◈</span>Mon profil</div>
+          <div class="settings-nav-item" onclick="switchSettings(this,'compte')"><span class="s-icon">⚙</span>Compte</div>
+          <div class="settings-nav-item" onclick="switchSettings(this,'securite')"><span class="s-icon">◆</span>Sécurité & confidentialité</div>
+          <div class="settings-sidebar-label">Personnalisation</div>
+          <div class="settings-nav-item" onclick="switchSettings(this,'apparence')"><span class="s-icon">◉</span>Apparence & profil</div>
+          <div class="settings-nav-item" onclick="switchSettings(this,'notifs')"><span class="s-icon">🔔</span>Notifications</div>
+          <div class="settings-nav-item" onclick="switchSettings(this,'premium-s')"><span class="s-icon">✦</span>Premium</div>
           <div class="settings-nav-sep"></div>
-          <div class="settings-nav-item" onclick="switchSettings(this,'danger')" style="color:#9a5a5a">⚠ Zone de danger</div>
+          <div class="settings-sidebar-label">Avancé</div>
+          <div class="settings-nav-item danger" onclick="switchSettings(this,'danger')"><span class="s-icon">⚠</span>Zone de danger</div>
         </div>
-        <div>
+        <div class="settings-content">
+          <div class="settings-content-inner">
           <div class="settings-section active" id="settings-profil">
-            <div class="settings-card">
-              <div class="settings-card-title">Mon profil</div>
-              <div class="form-group">
-                <label class="form-label">Photo de profil</label>
-                <div class="upload-row">
-                  <div class="upload-preview" id="s-avatar-preview">DC</div>
-                  <div>
-                    <input type="file" id="s-avatar-input" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="uploadAvatar(this)">
-                    <button class="btn btn-ghost upload-btn-small" onclick="document.getElementById('s-avatar-input').click()">Changer la photo</button>
-                    <div style="font-size:11px;color:var(--text-muted);margin-top:6px">JPG, PNG ou WebP — 2 Mo max. Pas de GIF ni vidéo.</div>
-                  </div>
-                </div>
+            <div class="settings-page-title">Mon profil</div>
+            <div class="settings-page-sub">Ces informations sont visibles par tous les membres de DevConnect.</div>
+
+            <div class="settings-avatar-row">
+              <div class="settings-avatar-img" id="s-avatar-preview">DC</div>
+              <div class="settings-avatar-info">
+                <div class="settings-avatar-name" id="s-avatar-username">—</div>
+                <div class="settings-avatar-role" id="s-avatar-role">—</div>
               </div>
-              <div class="form-group"><label class="form-label">Pseudo</label><input type="text" class="form-input form-input-mono" id="s-username" placeholder="ton_pseudo"></div>
-              <div class="form-group"><label class="form-label">Bio</label><textarea class="form-input" rows="3" id="s-bio" placeholder="Décris-toi en quelques mots..."></textarea></div>
-              <div class="form-group"><label class="form-label">Titre / Poste</label><input type="text" class="form-input" id="s-title" placeholder="Développeur Fullstack · Paris"></div>
-              <div class="form-group"><label class="form-label">GitHub</label><input type="text" class="form-input form-input-mono" id="s-github" placeholder="https://github.com/..."></div>
-              <div class="form-group"><label class="form-label">LinkedIn</label><input type="text" class="form-input form-input-mono" id="s-linkedin" placeholder="https://linkedin.com/in/..."></div>
-              <div class="form-group"><label class="form-label">Portfolio</label><input type="text" class="form-input form-input-mono" id="s-portfolio" placeholder="https://..."></div>
-              <button class="btn btn-primary" onclick="saveProfile()" style="margin-top:8px">Sauvegarder</button>
+              <div>
+                <input type="file" id="s-avatar-input" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="uploadAvatar(this)">
+                <button class="btn btn-ghost btn-sm" onclick="document.getElementById('s-avatar-input').click()">Changer la photo</button>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:6px">JPG, PNG, WebP — 2 Mo max.</div>
+              </div>
+            </div>
+
+            <div class="settings-block">
+              <div class="settings-block-title">Informations</div>
+              <div class="settings-field"><label>Pseudo</label><input type="text" class="form-input-mono" id="s-username" placeholder="ton_pseudo" style="font-family:var(--font-mono)"></div>
+              <div class="settings-field"><label>Bio</label><textarea id="s-bio" placeholder="Décris-toi en quelques mots..."></textarea></div>
+              <div class="settings-field"><label>Titre / Poste</label><input type="text" id="s-title" placeholder="Développeur Fullstack · Paris"></div>
+            </div>
+
+            <div class="settings-block">
+              <div class="settings-block-title">Réseaux & liens</div>
+              <div class="settings-field"><label>GitHub</label><input type="text" id="s-github" placeholder="https://github.com/..." style="font-family:var(--font-mono)"></div>
+              <div class="settings-field"><label>LinkedIn</label><input type="text" id="s-linkedin" placeholder="https://linkedin.com/in/..." style="font-family:var(--font-mono)"></div>
+              <div class="settings-field"><label>Portfolio</label><input type="text" id="s-portfolio" placeholder="https://..." style="font-family:var(--font-mono)"></div>
+            </div>
+
+            <div class="settings-save-bar">
+              <button class="btn btn-primary" onclick="saveProfile()">Sauvegarder les modifications</button>
+              <span style="font-size:12px;color:var(--text-muted)">Les changements sont visibles immédiatement.</span>
             </div>
           </div>
           <div class="settings-section" id="settings-compte">
-            <div class="settings-card">
-              <div class="settings-card-title">Informations du compte</div>
-              <div class="settings-row"><div><div class="settings-row-label">Email</div><div class="settings-row-sub" id="s-email-display">—</div></div></div>
-              <div class="settings-row"><div><div class="settings-row-label">Membre depuis</div><div class="settings-row-sub" id="s-since">—</div></div></div>
-              <div class="settings-row"><div><div class="settings-row-label">QR Code de profil</div><div class="settings-row-sub">Partage ton profil avec un QR code</div></div><button class="btn btn-ghost btn-sm" onclick="showToast('QR Code : bientôt disponible','info')">Générer</button></div>
+            <div class="settings-page-title">Compte</div>
+            <div class="settings-page-sub">Gère tes informations de connexion et ton compte.</div>
+
+            <div class="settings-block">
+              <div class="settings-block-title">Informations du compte</div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">Adresse email</div><div class="settings-row-sub" id="s-email-display">—</div></div>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">Membre depuis</div><div class="settings-row-sub" id="s-since">—</div></div>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">ID utilisateur</div><div class="settings-row-sub" id="s-userid" style="font-family:var(--font-mono);font-size:11px">—</div></div>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">QR Code de profil<span class="settings-badge-coming">Bientôt</span></div><div class="settings-row-sub">Partage ton profil avec un QR code unique</div></div>
+                <button class="btn btn-ghost btn-sm" onclick="showToast('QR Code disponible prochainement.','info')">Générer</button>
+              </div>
             </div>
-            <div class="settings-card">
-              <div class="settings-card-title">Changer le mot de passe</div>
-              <div class="form-group"><label class="form-label">Nouveau mot de passe</label><input type="password" class="form-input" id="s-new-pass" placeholder="••••••••"></div>
-              <div class="form-group"><label class="form-label">Confirmer</label><input type="password" class="form-input" id="s-confirm-pass" placeholder="••••••••"></div>
-              <button class="btn btn-ghost btn-sm" onclick="changePassword()">Changer le mot de passe</button>
+
+            <div class="settings-block">
+              <div class="settings-block-title">Changer le mot de passe</div>
+              <div class="settings-field"><label>Nouveau mot de passe</label><input type="password" id="s-new-pass" placeholder="8 caractères minimum"></div>
+              <div class="settings-field"><label>Confirmer le mot de passe</label><input type="password" id="s-confirm-pass" placeholder="••••••••"></div>
+              <button class="btn btn-ghost btn-sm" onclick="changePassword()">Mettre à jour le mot de passe</button>
             </div>
           </div>
           <div class="settings-section" id="settings-apparence">
-            <div class="settings-card">
-              <div class="settings-card-title">Apparence</div>
-              <div class="settings-row"><div><div class="settings-row-label">Langue</div><div class="settings-row-sub">Langue de l'interface</div></div><select class="form-input" style="width:auto"><option>Français</option><option>English</option></select></div>
+            <div class="settings-page-title">Apparence & profil</div>
+            <div class="settings-page-sub">Personnalise l'apparence de ton profil sur DevConnect.</div>
+
+            <div class="settings-block">
+              <div class="settings-block-title">Interface</div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">Langue</div><div class="settings-row-sub">Langue de l'interface DevConnect</div></div>
+                <select class="form-input" style="width:140px;padding:6px 10px;font-size:13px"><option>Français</option><option>English</option></select>
+              </div>
             </div>
 
-            <div class="settings-card" id="dev-plus-banner-card">
-              <div class="settings-card-title">Bannière de profil <span class="premium-badge devplus">Dev+</span></div>
-              <div id="dev-plus-banner-locked" class="tier-lock-card" style="display:none">
-                <div class="tier-lock-title">🔒 Réservé aux membres Dev+</div>
+            <div class="settings-block" id="dev-plus-banner-card">
+              <div class="settings-block-title">Bannière de profil <span class="premium-badge devplus">Dev+</span></div>
+              <div id="dev-plus-banner-locked" style="display:none;padding:16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);text-align:center">
+                <div style="font-size:13px;color:var(--text-muted);margin-bottom:10px">🔒 Réservé aux membres Dev+</div>
                 <button class="btn btn-ghost btn-sm" onclick="switchSettingsByName('premium-s')">Voir le Premium</button>
               </div>
               <div id="dev-plus-banner-unlocked" style="display:none">
-                <div class="upload-row">
-                  <div class="upload-preview banner-preview" id="s-banner-preview"></div>
+                <div class="settings-row">
+                  <div class="settings-row-left"><div class="settings-row-label">Image de bannière</div><div class="settings-row-sub">JPG, PNG ou WebP — 3 Mo max. Visible sur ton profil.</div></div>
                   <div>
+                    <div class="upload-preview banner-preview" id="s-banner-preview" style="width:80px;height:30px;border-radius:6px;background:var(--bg3);display:inline-block"></div>
                     <input type="file" id="s-banner-input" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="uploadBanner(this)">
-                    <button class="btn btn-ghost upload-btn-small" onclick="document.getElementById('s-banner-input').click()">Changer la bannière</button>
-                    <div style="font-size:11px;color:var(--text-muted);margin-top:6px">JPG, PNG ou WebP — 3 Mo max.</div>
+                    <button class="btn btn-ghost btn-sm" style="margin-left:8px" onclick="document.getElementById('s-banner-input').click()">Changer</button>
                   </div>
                 </div>
-                <div class="form-group" style="margin-top:18px">
-                  <label class="form-label">Couleur de fond du profil</label>
-                  <div class="color-input-row">
-                    <input type="color" id="s-profile-color" value="#0e0e0e" onchange="updateProfileColor(this.value)">
-                    <span style="font-size:12px;color:var(--text-muted)">Visible derrière ta bannière, sur ta carte de profil</span>
-                  </div>
+                <div class="settings-row">
+                  <div class="settings-row-left"><div class="settings-row-label">Couleur de fond</div><div class="settings-row-sub">Visible derrière ta bannière et sur ta carte profil</div></div>
+                  <input type="color" id="s-profile-color" value="#0e0e0e" onchange="updateProfileColor(this.value)" style="width:40px;height:32px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:transparent">
                 </div>
               </div>
             </div>
 
-            <div class="settings-card" id="dc-plus-card">
-              <div class="settings-card-title">Statut, emoji & widgets <span class="premium-badge devconnectplus">DevConnect+</span></div>
-              <div id="dc-plus-locked" class="tier-lock-card" style="display:none">
-                <div class="tier-lock-title">🔒 Réservé aux membres DevConnect+</div>
+            <div class="settings-block" id="dc-plus-card">
+              <div class="settings-block-title">Statut, emoji & widgets <span class="premium-badge devconnectplus">DevConnect+</span></div>
+              <div id="dc-plus-locked" style="display:none;padding:16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);text-align:center">
+                <div style="font-size:13px;color:var(--text-muted);margin-bottom:10px">🔒 Réservé aux membres DevConnect+</div>
                 <button class="btn btn-ghost btn-sm" onclick="switchSettingsByName('premium-s')">Voir le Premium</button>
               </div>
               <div id="dc-plus-unlocked" style="display:none">
-                <div class="form-group">
-                  <label class="form-label">Statut personnalisé</label>
-                  <input type="text" class="form-input" id="s-status" maxlength="40" placeholder="Dispo pour collab 🔥">
-                  <div style="font-size:11px;color:var(--text-muted);margin-top:6px">40 caractères max, emoji autorisé.</div>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Emoji personnalisé</label>
-                  <div class="upload-row">
-                    <div class="upload-preview" id="s-emoji-preview" style="border-radius:8px;width:40px;height:40px"></div>
-                    <div>
-                      <input type="file" id="s-emoji-input" accept="image/png,image/jpeg,image/webp,image/gif" style="display:none" onchange="uploadEmoji(this)">
-                      <button class="btn btn-ghost upload-btn-small" onclick="document.getElementById('s-emoji-input').click()">Uploader un emoji</button>
-                      <div style="font-size:11px;color:var(--text-muted);margin-top:6px">256 Ko max. Utilisable dans le chat et tes posts.</div>
-                    </div>
+                <div class="settings-field"><label>Statut personnalisé</label><input type="text" id="s-status" maxlength="40" placeholder="Dispo pour collab 🔥"><div style="font-size:11px;color:var(--text-muted);margin-top:4px">40 caractères max</div></div>
+                <div class="settings-field"><label>Emoji personnalisé</label>
+                  <div style="display:flex;align-items:center;gap:12px">
+                    <div id="s-emoji-preview" style="width:40px;height:40px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden"></div>
+                    <div><input type="file" id="s-emoji-input" accept="image/png,image/jpeg,image/webp,image/gif" style="display:none" onchange="uploadEmoji(this)"><button class="btn btn-ghost btn-sm" onclick="document.getElementById('s-emoji-input').click()">Uploader</button><div style="font-size:11px;color:var(--text-muted);margin-top:4px">256 Ko max · GIF autorisé</div></div>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label class="form-label">Widgets affichés sur ton profil</label>
-                  <div id="widgets-checkbox-list">
-                    <div class="widget-checkbox-row"><span>📊 Stats (XP, rang, posts)</span><button class="toggle" id="w-stats" onclick="this.classList.toggle('on')"></button></div>
-                    <div class="widget-checkbox-row"><span>🏆 Derniers badges</span><button class="toggle" id="w-badges" onclick="this.classList.toggle('on')"></button></div>
-                    <div class="widget-checkbox-row"><span>🎮 "Travaille actuellement sur..."</span><button class="toggle" id="w-activity" onclick="this.classList.toggle('on');toggleWidgetSubfield('activity')"></button></div>
-                    <div class="form-group" id="w-activity-field" style="display:none;margin-top:8px"><input type="text" class="form-input" id="s-activity-text" maxlength="60" placeholder="Travaille sur DevConnect 🚀"></div>
-                    <div class="widget-checkbox-row"><span>🌍 Disponibilité mission</span><button class="toggle" id="w-avail" onclick="this.classList.toggle('on');toggleWidgetSubfield('avail')"></button></div>
-                    <div class="form-group" id="w-avail-field" style="display:none;margin-top:8px"><select class="form-input" id="s-avail-status"><option value="true">Dispo pour mission</option><option value="false">Non disponible</option></select></div>
+                <div class="settings-field"><label>Widgets sur le profil</label>
+                  <div id="widgets-checkbox-list" style="display:flex;flex-direction:column;gap:0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+                    <div class="settings-row" style="padding:12px 14px"><span style="font-size:13px">📊 Stats (XP, rang, posts)</span><button class="toggle" id="w-stats" onclick="this.classList.toggle('on')"></button></div>
+                    <div class="settings-row" style="padding:12px 14px"><span style="font-size:13px">🏆 Derniers badges</span><button class="toggle" id="w-badges" onclick="this.classList.toggle('on')"></button></div>
+                    <div class="settings-row" style="padding:12px 14px"><span style="font-size:13px">🎮 Travaille actuellement sur...</span><button class="toggle" id="w-activity" onclick="this.classList.toggle('on');toggleWidgetSubfield('activity')"></button></div>
+                    <div id="w-activity-field" style="display:none;padding:8px 14px;background:var(--bg2)"><input type="text" id="s-activity-text" maxlength="60" placeholder="Travaille sur DevConnect 🚀" style="width:100%;padding:8px 12px;background:var(--bg0);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:13px;outline:none"></div>
+                    <div class="settings-row" style="padding:12px 14px;border-bottom:none"><span style="font-size:13px">🌍 Disponibilité mission</span><button class="toggle" id="w-avail" onclick="this.classList.toggle('on');toggleWidgetSubfield('avail')"></button></div>
+                    <div id="w-avail-field" style="display:none;padding:8px 14px;background:var(--bg2)"><select id="s-avail-status" style="width:100%;padding:8px 12px;background:var(--bg0);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:13px;outline:none"><option value="true">Dispo pour mission</option><option value="false">Non disponible</option></select></div>
                   </div>
                 </div>
-                <button class="btn btn-primary upload-btn-small" onclick="saveAppearanceExtras()">Sauvegarder</button>
+                <button class="btn btn-primary btn-sm" onclick="saveAppearanceExtras()">Sauvegarder</button>
               </div>
             </div>
           </div>
-          <div class="settings-section" id="settings-notifs">
-            <div class="settings-card">
-              <div class="settings-card-title">Notifications</div>
-              <div class="settings-row"><div><div class="settings-row-label">Messages directs</div><div class="settings-row-sub">Notifications pour les DMs</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
-              <div class="settings-row"><div><div class="settings-row-label">Mentions @</div><div class="settings-row-sub">Quand quelqu'un te mentionne</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
-              <div class="settings-row"><div><div class="settings-row-label">Activité sur mes projets</div><div class="settings-row-sub">Likes, commentaires</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
-              <div class="settings-row"><div><div class="settings-row-label">Events & Hackathons</div><div class="settings-row-sub">Rappels et inscriptions</div></div><button class="toggle" onclick="this.classList.toggle('on')"></button></div>
-            </div>
-          </div>
-          <div class="settings-section" id="settings-securite">
-            <div class="settings-card">
-              <div class="settings-card-title">Sécurité & vie privée</div>
-              <div class="settings-row"><div><div class="settings-row-label">Authentification 2FA</div><div class="settings-row-sub">Sécurise ton compte avec une app d'authentification</div></div><button class="btn btn-ghost btn-sm">Activer</button></div>
-              <div class="settings-row"><div><div class="settings-row-label">Sessions actives</div><div class="settings-row-sub">Voir et gérer les connexions actives</div></div><button class="btn btn-ghost btn-sm">Voir</button></div>
-              <div class="settings-row"><div><div class="settings-row-label">Historique des connexions</div><div class="settings-row-sub">Consulter les dernières connexions</div></div><button class="btn btn-ghost btn-sm">Voir</button></div>
-              <div class="settings-row"><div><div class="settings-row-label">Profil visible publiquement</div><div class="settings-row-sub">Ton profil est indexable dans la découverte</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
-            </div>
-          </div>
-          <div class="settings-section" id="settings-premium-s">
-            <div class="settings-card">
-              <div class="settings-card-title">Premium</div>
-              <div style="font-size:14px;color:var(--text-secondary);margin-bottom:20px">Le premium est accordé par les administrateurs de DevConnect.</div>
-              <div style="display:grid;gap:12px">
-                <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span class="premium-badge devplus">Dev+</span><span style="font-weight:500">Dev+</span></div><div style="font-size:13px;color:var(--text-secondary);line-height:1.6">Badge personnalisé, couleur de chat, décorations profil, commission 7%.</div></div>
-                <div style="background:var(--bg2);border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:20px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span class="premium-badge devconnectplus">DevConnect+</span><span style="font-weight:500">DevConnect+</span></div><div style="font-size:13px;color:var(--text-secondary);line-height:1.6">Tout Dev+ + décorations animées, priorité découverte, early access, commission 6%.</div></div>
-              </div>
-            </div>
-          </div>
-          <div class="settings-section" id="settings-danger">
-            <div class="settings-card danger-zone">
-              <div class="settings-card-title">Zone de danger</div>
-              <div class="settings-row"><div><div class="settings-row-label">Supprimer mon compte</div><div class="settings-row-sub">Action irréversible. Toutes tes données seront supprimées définitivement.</div></div><button class="btn btn-danger btn-sm" onclick="showToast('Suppression non disponible en bêta. Contacte un admin.','error')">Supprimer</button></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+                    <div class="settings-section" id="settings-notifs">
+            <div class="settings-page-title">Notifications</div>
+            <div class="settings-page-sub">Choisis comment et quand tu veux être notifié.</div>
 
+            <div class="settings-block">
+              <div class="settings-block-title">Activité</div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">Mentions</div><div class="settings-row-sub">Quand quelqu'un te mentionne dans un message</div></div>
+                <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">Messages directs</div><div class="settings-row-sub">Nouvelles conversations et messages</div></div>
+                <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">Likes sur mes posts</div><div class="settings-row-sub">Quand quelqu'un like ton contenu</div></div>
+                <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">Nouveaux follows</div><div class="settings-row-sub">Quand quelqu'un commence à te suivre</div></div>
+                <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+              </div>
+            </div>
+
+            <div class="settings-block">
+              <div class="settings-block-title">Plateforme</div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">Nouveaux challenges</div><div class="settings-row-sub">Quand un nouveau challenge est disponible</div></div>
+                <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">Offres de recrutement</div><div class="settings-row-sub">Nouvelles offres correspondant à ton profil</div></div>
+                <button class="toggle" onclick="this.classList.toggle('on')"></button>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">Mises à jour DevConnect</div><div class="settings-row-sub">Nouvelles fonctionnalités et annonces</div></div>
+                <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+              </div>
+            </div>
+          </div>
+                    <div class="settings-section" id="settings-securite">
+            <div class="settings-page-title">Sécurité & confidentialité</div>
+            <div class="settings-page-sub">Contrôle la sécurité de ton compte et ta visibilité sur la plateforme.</div>
+
+            <div class="settings-block">
+              <div class="settings-block-title">Sécurité</div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">Authentification 2FA<span class="settings-badge-coming">Bientôt</span></div><div class="settings-row-sub">Sécurise ton compte avec une app d'authentification (Google Authenticator, etc.)</div></div>
+                <button class="btn btn-ghost btn-sm" onclick="showToast('La 2FA sera disponible prochainement.','info')">Activer</button>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">Sessions actives<span class="settings-badge-coming">Bientôt</span></div><div class="settings-row-sub">Voir et révoquer les appareils connectés à ton compte</div></div>
+                <button class="btn btn-ghost btn-sm" onclick="showToast('Gestion des sessions disponible prochainement.','info')">Voir</button>
+              </div>
+            </div>
+
+            <div class="settings-block">
+              <div class="settings-block-title">Confidentialité</div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">Profil visible publiquement</div><div class="settings-row-sub">Ton profil est indexable dans la Découverte</div></div>
+                <button class="toggle on" id="toggle-public-profile" onclick="togglePrivacySetting(this,'is_public')"></button>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">Bloquer les messages directs</div><div class="settings-row-sub">Empêche les autres membres de t'envoyer des DMs</div></div>
+                <button class="toggle" id="toggle-block-dms" onclick="togglePrivacySetting(this,'block_dms')"></button>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">Masquer mon XP</div><div class="settings-row-sub">Ton score n'apparaîtra pas dans le classement</div></div>
+                <button class="toggle" id="toggle-hide-xp" onclick="togglePrivacySetting(this,'hide_xp')"></button>
+              </div>
+            </div>
+          </div>
+                    <div class="settings-section" id="settings-premium-s">
+            <div class="settings-page-title">Premium</div>
+            <div class="settings-page-sub">Le premium est attribué par les administrateurs de DevConnect.</div>
+
+            <div class="premium-status-card" id="premium-status-card">
+              <div class="premium-status-icon">⬡</div>
+              <div class="premium-status-info">
+                <div class="premium-status-name" id="premium-status-name">Membre standard</div>
+                <div class="premium-status-desc" id="premium-status-desc">Aucun abonnement premium actif.</div>
+              </div>
+            </div>
+
+            <div class="settings-block">
+              <div class="settings-block-title">Dev+ — Avantages</div>
+              <div class="settings-row"><div class="settings-row-left"><div class="settings-row-label">Bannière de profil personnalisée</div><div class="settings-row-sub">Ajoute une image ou une couleur derrière ton profil</div></div></div>
+              <div class="settings-row"><div class="settings-row-left"><div class="settings-row-label">Couleur de fond du profil</div><div class="settings-row-sub">Personnalise la couleur de ta carte profil</div></div></div>
+              <div class="settings-row"><div class="settings-row-left"><div class="settings-row-label">Commission recrutement réduite</div><div class="settings-row-sub">7% au lieu de 10% sur les transactions</div></div></div>
+            </div>
+
+            <div class="settings-block">
+              <div class="settings-block-title">DevConnect+ — Avantages</div>
+              <div class="settings-row"><div class="settings-row-left"><div class="settings-row-label">Tout Dev+ inclus</div><div class="settings-row-sub">Tous les avantages Dev+ sont inclus</div></div></div>
+              <div class="settings-row"><div class="settings-row-left"><div class="settings-row-label">Statut & emoji personnalisé</div><div class="settings-row-sub">Affiche un statut et un emoji custom sur ton profil</div></div></div>
+              <div class="settings-row"><div class="settings-row-left"><div class="settings-row-label">Widgets de profil</div><div class="settings-row-sub">Stats, badges, activité et disponibilité sur ton profil</div></div></div>
+              <div class="settings-row"><div class="settings-row-left"><div class="settings-row-label">Commission 6%</div><div class="settings-row-sub">Commission réduite à 6% sur les transactions</div></div></div>
+              <div class="settings-row"><div class="settings-row-left"><div class="settings-row-label">Priorité dans la Découverte</div><div class="settings-row-sub">Ton profil est mis en avant dans les recherches</div></div></div>
+            </div>
+          </div>
+                    <div class="settings-section" id="settings-danger">
+            <div class="settings-page-title">Zone de danger</div>
+            <div class="settings-page-sub">Ces actions sont irréversibles. Procède avec extrême précaution.</div>
+
+            <div class="danger-block">
+              <div class="danger-block-title">Supprimer mon compte</div>
+              <div class="danger-block-sub">Cette action supprime définitivement ton compte, tes posts, tes messages et toutes tes données. Aucune récupération possible après confirmation.</div>
+              <button class="btn btn-danger btn-sm" onclick="showToast('Suppression de compte disponible prochainement. Contacte un admin.','error')">Supprimer mon compte</button>
+            </div>
+
+            <div class="danger-block">
+              <div class="danger-block-title">Se déconnecter de partout</div>
+              <div class="danger-block-sub">Révoque toutes les sessions actives sur tous tes appareils.</div>
+              <button class="btn btn-danger btn-sm" onclick="handleLogout();showToast('Déconnecté de toutes les sessions.','info')">Se déconnecter partout</button>
+            </div>
+          </div>
+
+        </div><!-- end settings-content-inner -->
+        </div><!-- end settings-content -->
+        
     <!-- ADMIN -->
     <div class="app-section" id="section-admin">
       <div class="admin-layout">
@@ -1640,6 +1780,32 @@ function toggleWidgetSubfield(name){
   document.getElementById('w-'+name+'-field').style.display=on?'block':'none';
 }
 
+function updatePremiumStatus(){
+  if(!currentProfile)return;
+  const p=currentProfile;
+  const nameEl=document.getElementById('premium-status-name');
+  const descEl=document.getElementById('premium-status-desc');
+  const cardEl=document.getElementById('premium-status-card');
+  if(p.premium_tier==='devconnect-plus'){
+    if(nameEl)nameEl.innerHTML='<span class="premium-badge devconnectplus">DevConnect+</span> Actif';
+    if(descEl)descEl.textContent='Tu bénéficies de tous les avantages DevConnect+.';
+    if(cardEl)cardEl.style.borderColor='var(--accent-dim)';
+  } else if(p.is_premium){
+    if(nameEl)nameEl.innerHTML='<span class="premium-badge devplus">Dev+</span> Actif';
+    if(descEl)descEl.textContent='Tu bénéficies des avantages Dev+.';
+  } else {
+    if(nameEl)nameEl.textContent='Membre standard';
+    if(descEl)descEl.textContent='Aucun abonnement premium actif.';
+  }
+}
+
+async function togglePrivacySetting(btn, field){
+  btn.classList.toggle('on');
+  const val=btn.classList.contains('on');
+  await db.from('profiles').update({[field]:val}).eq('id',currentUser.id);
+  showToast('Préférence mise à jour.','success');
+}
+
 function updateSettingsSection(){
   if(!currentProfile)return;
   const p=currentProfile;
@@ -1647,6 +1813,10 @@ function updateSettingsSection(){
   setVal('s-github',p.github_url||'');setVal('s-linkedin',p.linkedin_url||'');setVal('s-portfolio',p.portfolio_url||'');
   setEl('s-email-display',currentUser.email||'—');
   setEl('s-since',new Date(p.created_at).toLocaleDateString('fr-FR',{year:'numeric',month:'long',day:'numeric'}));
+  setEl('s-userid',currentUser.id||'—');
+  setEl('s-avatar-username',p.username||'—');
+  setEl('s-avatar-role',ROLE_LABELS[p.role]||p.role||'Membre');
+  updatePremiumStatus();
 
   const init=(p.username||'DC').substring(0,2).toUpperCase();
   document.getElementById('s-avatar-preview').innerHTML=avatarHtml(p.avatar_url,init);
@@ -2649,7 +2819,7 @@ function switchAdmin(el,section){
 }
 
 // SETTINGS & TABS
-function switchSettings(el,s){document.querySelectorAll('.settings-nav-item').forEach(n=>n.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.settings-section').forEach(x=>x.classList.remove('active'));document.getElementById('settings-'+s)?.classList.add('active');}
+function switchSettings(el,s){document.querySelectorAll('.settings-nav-item').forEach(n=>n.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.settings-section').forEach(x=>x.classList.remove('active'));document.getElementById('settings-'+s)?.classList.add('active');if(s==='premium-s')updatePremiumStatus();}
 function switchProfileTab(tab,el){document.querySelectorAll('.profile-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.profile-tab-content').forEach(c=>c.classList.remove('active'));document.getElementById('tab-'+tab)?.classList.add('active');}
 
 // SEARCH
