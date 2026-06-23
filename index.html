@@ -715,9 +715,292 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .badge-desc{font-size:10px;color:var(--text-muted);line-height:1.4;}
 .theme-toggle-btn{display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:13px;background:var(--bg2);color:var(--text);transition:all .15s;}
 .theme-toggle-btn:hover{border-color:var(--border-light);}
+
+
+
+/* ============================================================
+   BACKGROUND & DÉCOS GLOBALES — DevConnect
+   ============================================================ */
+
+/* Orbes de fond animées — visibles dans toute l'app */
+#app-bg-layer{
+  position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+}
+.app-orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
+.app-orb-1{
+  width:600px;height:600px;
+  top:-10%;left:-8%;
+  background:radial-gradient(circle,rgba(200,200,216,.06),transparent 70%);
+  animation:orbDrift1 18s ease-in-out infinite;
+}
+.app-orb-2{
+  width:500px;height:500px;
+  bottom:-5%;right:-5%;
+  background:radial-gradient(circle,rgba(160,160,200,.05),transparent 70%);
+  animation:orbDrift2 22s ease-in-out infinite;
+}
+.app-orb-3{
+  width:350px;height:350px;
+  top:40%;left:45%;
+  background:radial-gradient(circle,rgba(200,200,216,.04),transparent 70%);
+  animation:orbDrift3 15s ease-in-out infinite;
+}
+
+@keyframes orbDrift1{
+  0%,100%{transform:translate(0,0) scale(1);}
+  33%{transform:translate(60px,-40px) scale(1.08);}
+  66%{transform:translate(-30px,50px) scale(.95);}
+}
+@keyframes orbDrift2{
+  0%,100%{transform:translate(0,0) scale(1);}
+  40%{transform:translate(-70px,30px) scale(1.05);}
+  70%{transform:translate(40px,-60px) scale(.92);}
+}
+@keyframes orbDrift3{
+  0%,100%{transform:translate(0,0) scale(1);opacity:.6;}
+  50%{transform:translate(-40px,30px) scale(1.1);opacity:1;}
+}
+
+/* Grain/noise subtle sur tout le site */
+#app-noise{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  opacity:.018;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:180px;
+}
+
+/* Décos SVG flottantes dans l'app (pas sur la landing) */
+#app-deco-layer{
+  position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+}
+.app-deco{position:absolute;opacity:0;pointer-events:none;}
+#page-app.active ~ #app-deco-layer .app-deco,
+.app-deco.show{opacity:1;}
+
+/* Petites formes géométriques décoratives */
+.geo-shape{
+  position:absolute;pointer-events:none;
+  animation:geoFloat 12s ease-in-out infinite;
+}
+.geo-1{top:12%;right:3%;animation-delay:0s;animation-duration:14s;}
+.geo-2{top:55%;left:2%;animation-delay:3s;animation-duration:11s;}
+.geo-3{bottom:18%;right:4%;animation-delay:6s;animation-duration:16s;}
+.geo-4{top:72%;right:22%;animation-delay:1.5s;animation-duration:13s;}
+.geo-5{top:28%;left:1.5%;animation-delay:4.5s;animation-duration:10s;}
+
+@keyframes geoFloat{
+  0%,100%{transform:translateY(0) rotate(0deg);opacity:.18;}
+  50%{transform:translateY(-14px) rotate(8deg);opacity:.32;}
+}
+
+/* Landing : réduire les décos flottantes existantes */
+.deco-float{opacity:.45;}
+.hero-float-items{opacity:.8;}
+
+/* Ligne décorative subtile en haut de chaque section app */
+.app-section::before{
+  content:'';
+  display:block;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+  opacity:.4;
+  margin-bottom:0;
+}
+
+/* Vignette sur les bords de l'app */
+#app-vignette{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 0% 0%,rgba(0,0,0,.3),transparent 50%),
+    radial-gradient(ellipse at 100% 100%,rgba(0,0,0,.25),transparent 50%),
+    radial-gradient(ellipse at 100% 0%,rgba(0,0,0,.2),transparent 40%),
+    radial-gradient(ellipse at 0% 100%,rgba(0,0,0,.2),transparent 40%);
+}
+
+/* === DÉCOS LANDING SVG FLOTTANTES === */
+.deco-float{position:absolute;pointer-events:none;filter:drop-shadow(0 8px 24px rgba(0,0,0,.5));opacity:.65;transition:opacity .3s;}
+.deco-float:hover{opacity:.85;}
+
+.deco-float-1{top:24%;left:6%;animation:decoFloat1 8s ease-in-out infinite;}
+.deco-float-2{top:15%;right:10%;animation:decoFloat2 7s ease-in-out infinite;}
+.deco-float-3{bottom:20%;right:8%;animation:decoFloat3 9s ease-in-out infinite;}
+.deco-float-4{bottom:28%;left:10%;animation:decoFloat4 7.5s ease-in-out infinite;}
+
+@keyframes decoFloat1{
+  0%,100%{transform:translateY(0) rotate(-3deg);}
+  50%{transform:translateY(-16px) rotate(2deg);}
+}
+@keyframes decoFloat2{
+  0%,100%{transform:translateY(0) rotate(4deg);}
+  50%{transform:translateY(-20px) rotate(-2deg);}
+}
+@keyframes decoFloat3{
+  0%,100%{transform:translateY(0) rotate(-2deg);}
+  50%{transform:translateY(-12px) rotate(3deg);}
+}
+@keyframes decoFloat4{
+  0%,100%{transform:translateY(0) rotate(2deg);}
+  50%{transform:translateY(-18px) rotate(-3deg);}
+}
+
+/* Petits points */
+.deco-dot{position:absolute;border-radius:50%;pointer-events:none;}
+.deco-dot-1{width:5px;height:5px;background:var(--accent);top:32%;left:28%;opacity:.5;animation:dotPulse 4s ease-in-out infinite;box-shadow:0 0 10px var(--accent);}
+.deco-dot-2{width:3px;height:3px;background:var(--accent-dim);top:60%;right:28%;opacity:.4;animation:dotPulse 5.5s ease-in-out infinite 1s;}
+.deco-dot-3{width:4px;height:4px;background:var(--border-light);bottom:38%;left:38%;opacity:.35;animation:dotPulse 6s ease-in-out infinite .5s;}
+.deco-dot-4{width:3px;height:3px;background:var(--accent);top:72%;right:42%;opacity:.3;animation:dotPulse 7s ease-in-out infinite 2s;}
+
+@keyframes dotPulse{
+  0%,100%{transform:scale(1);opacity:.4;}
+  50%{transform:scale(1.8);opacity:.9;}
+}
+
+/* Responsive : cacher sur petit écran */
+@media(max-width:768px){
+  .deco-float{display:none;}
+  .deco-dot{display:none;}
+}
+
+/* === LANDING 3D ENHANCED === */
+
+/* Éléments flottants hero */
+.hero-float-items{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.float-card{position:absolute;background:rgba(13,13,26,.85);border:1px solid var(--border-light);border-radius:12px;padding:12px 16px;backdrop-filter:blur(12px);box-shadow:0 20px 60px -20px rgba(0,0,0,.7),0 0 0 1px rgba(200,200,216,.06) inset;font-size:12px;color:var(--text-secondary);font-family:var(--font-mono);white-space:nowrap;}
+.float-card .fc-title{font-size:11px;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em;}
+.float-card .fc-val{font-size:18px;font-weight:700;color:var(--text);font-family:var(--font-display);}
+.float-card .fc-sub{font-size:10px;color:var(--accent-dim);margin-top:2px;}
+.float-card-1{top:22%;left:5%;animation:floatCardA 7s ease-in-out infinite;}
+.float-card-2{top:35%;right:6%;animation:floatCardB 8.5s ease-in-out infinite;}
+.float-card-3{bottom:22%;left:8%;animation:floatCardC 6.5s ease-in-out infinite;}
+.float-card-4{top:18%;right:18%;animation:floatCardA 9s ease-in-out infinite reverse;}
+.float-dot{position:absolute;border-radius:50%;pointer-events:none;}
+.float-dot-1{width:6px;height:6px;background:var(--accent);top:28%;left:22%;animation:floatDot 5s ease-in-out infinite;box-shadow:0 0 12px var(--accent);}
+.float-dot-2{width:4px;height:4px;background:var(--accent-dim);top:65%;right:24%;animation:floatDot 7s ease-in-out infinite reverse;}
+.float-dot-3{width:5px;height:5px;background:var(--border-light);bottom:35%;left:45%;animation:floatDot 6s ease-in-out infinite 1s;}
+.float-line{position:absolute;background:linear-gradient(90deg,transparent,var(--border),transparent);height:1px;pointer-events:none;}
+.float-line-1{width:120px;top:42%;left:16%;transform:rotate(-15deg);animation:floatLine 8s ease-in-out infinite;}
+.float-line-2{width:80px;bottom:42%;right:18%;transform:rotate(20deg);animation:floatLine 6s ease-in-out infinite reverse;}
+
+@keyframes floatCardA{0%,100%{transform:translateY(0) rotate(-1deg);}50%{transform:translateY(-18px) rotate(1deg);}}
+@keyframes floatCardB{0%,100%{transform:translateY(0) rotate(1.5deg);}50%{transform:translateY(-22px) rotate(-1deg);}}
+@keyframes floatCardC{0%,100%{transform:translateY(0) rotate(.5deg);}50%{transform:translateY(-14px) rotate(-1.5deg);}}
+@keyframes floatDot{0%,100%{transform:translateY(0) scale(1);opacity:.8;}50%{transform:translateY(-12px) scale(1.3);opacity:1;}}
+@keyframes floatLine{0%,100%{opacity:.2;transform:rotate(-15deg) scaleX(1);}50%{opacity:.5;transform:rotate(-15deg) scaleX(1.3);}}
+
+/* Feature cards 3D tilt */
+.feature-card{
+  background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:28px;transition:all .4s cubic-bezier(.16,1,.3,1);
+  position:relative;overflow:hidden;cursor:default;
+  transform-style:preserve-3d;transform:perspective(800px) rotateX(0) rotateY(0);
+}
+.feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--border-light),transparent);opacity:0;transition:opacity .4s;}
+.feature-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(200,200,216,.06),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none;}
+.feature-card:hover{border-color:var(--border-light);box-shadow:0 24px 60px -24px rgba(0,0,0,.7),0 0 0 1px rgba(200,200,216,.08) inset;transform:perspective(800px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(8px);}
+.feature-card:hover::before,.feature-card:hover::after{opacity:1;}
+.feature-icon{font-size:22px;margin-bottom:14px;display:block;transition:transform .4s cubic-bezier(.16,1,.3,1);}
+.feature-card:hover .feature-icon{transform:translateZ(16px) scale(1.15);}
+.feature-name{font-family:var(--font-display);font-size:16px;font-weight:600;margin-bottom:8px;transition:transform .4s;}
+.feature-card:hover .feature-name{transform:translateZ(10px);}
+.feature-desc{font-size:13px;color:var(--text-secondary);line-height:1.6;transition:transform .4s;}
+.feature-card:hover .feature-desc{transform:translateZ(6px);}
+
+/* Ref cards morphing border */
+.ref-card{
+  background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:28px;position:relative;overflow:hidden;
+  transition:all .4s cubic-bezier(.16,1,.3,1);
+}
+.ref-card::before{content:'';position:absolute;top:0;left:-100%;width:200%;height:100%;background:linear-gradient(105deg,transparent 40%,rgba(200,200,216,.04) 50%,transparent 60%);transition:left .6s ease;}
+.ref-card:hover{border-color:var(--border-light);transform:translateY(-4px);box-shadow:0 24px 60px -24px rgba(0,0,0,.6);}
+.ref-card:hover::before{left:100%;}
+
+/* Parallax mouse effect hero orbit */
+.hero-orbit{transition:transform .1s ease-out;}
+
+/* Scroll reveal sections */
+.reveal-up{opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);}
+.reveal-up.visible{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);}
+.reveal-right.visible{opacity:1;transform:translateX(0);}
+
+/* Stagger delays */
+.reveal-up:nth-child(1){transition-delay:.05s;}
+.reveal-up:nth-child(2){transition-delay:.12s;}
+.reveal-up:nth-child(3){transition-delay:.19s;}
+.reveal-up:nth-child(4){transition-delay:.26s;}
+.reveal-up:nth-child(5){transition-delay:.33s;}
+.reveal-up:nth-child(6){transition-delay:.40s;}
+
+/* Glow pulsing CTA */
+.btn-primary{position:relative;overflow:hidden;}
+.btn-primary::after{content:'';position:absolute;inset:-2px;border-radius:inherit;background:linear-gradient(135deg,rgba(200,200,216,.3),transparent,rgba(200,200,216,.15));opacity:0;transition:opacity .3s;}
+.btn-primary:hover::after{opacity:1;}
+
+/* Noise texture overlay */
+.hero-noise{position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;}
+
+/* Stats counter animation */
+.stat-counter{display:inline-block;font-variant-numeric:tabular-nums;}
+
+/* Morphing gradient badge */
+.hero-eyebrow{animation:eyebrowPulse 4s ease-in-out infinite;}
+@keyframes eyebrowPulse{0%,100%{box-shadow:0 0 0 0 rgba(200,200,216,0);}50%{box-shadow:0 0 16px 2px rgba(200,200,216,.08);}}
+
+/* Code snippet flottant */
+.float-code{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);line-height:1.7;}
+.float-code .c-kw{color:#8a8ac8;}
+.float-code .c-fn{color:#c8c8d8;}
+.float-code .c-str{color:#7a9ab8;}
+.float-code .c-num{color:#9a8ac8;}
+
 </style>
 </head>
 <body>
+
+<!-- BACKGROUND LAYERS -->
+<div id="app-bg-layer" aria-hidden="true">
+  <div class="app-orb app-orb-1"></div>
+  <div class="app-orb app-orb-2"></div>
+  <div class="app-orb app-orb-3"></div>
+</div>
+<div id="app-noise" aria-hidden="true"></div>
+<div id="app-vignette" aria-hidden="true"></div>
+
+<!-- FORMES GÉO DÉCORATIVES APP (visibles seulement dans l'app) -->
+<div id="app-deco-layer" aria-hidden="true">
+  <!-- Hexagone fin top right -->
+  <svg class="geo-shape geo-1" width="48" height="56" viewBox="0 0 48 56" fill="none" opacity=".22">
+    <polygon points="24,2 46,14 46,42 24,54 2,42 2,14" stroke="var(--border-light)" stroke-width="1" fill="none"/>
+    <polygon points="24,10 38,18 38,38 24,46 10,38 10,18" stroke="var(--border)" stroke-width=".6" fill="none"/>
+    <circle cx="24" cy="28" r="3" fill="var(--accent-dim)" opacity=".5"/>
+  </svg>
+  <!-- Cercle concentrique bas left -->
+  <svg class="geo-shape geo-2" width="50" height="50" viewBox="0 0 50 50" fill="none" opacity=".18">
+    <circle cx="25" cy="25" r="22" stroke="var(--border-light)" stroke-width="1" stroke-dasharray="3 6"/>
+    <circle cx="25" cy="25" r="15" stroke="var(--border)" stroke-width=".8"/>
+    <circle cx="25" cy="25" r="4" fill="var(--accent-dim)" opacity=".5"/>
+  </svg>
+  <!-- Losange bas right -->
+  <svg class="geo-shape geo-3" width="40" height="40" viewBox="0 0 40 40" fill="none" opacity=".2">
+    <polygon points="20,2 38,20 20,38 2,20" stroke="var(--border-light)" stroke-width="1" fill="none"/>
+    <polygon points="20,10 30,20 20,30 10,20" stroke="var(--border)" stroke-width=".7" fill="none"/>
+    <circle cx="20" cy="20" r="2.5" fill="var(--accent)" opacity=".4"/>
+  </svg>
+  <!-- Croix/plus mid right -->
+  <svg class="geo-shape geo-4" width="28" height="28" viewBox="0 0 28 28" fill="none" opacity=".15">
+    <line x1="14" y1="2" x2="14" y2="26" stroke="var(--border-light)" stroke-width="1"/>
+    <line x1="2" y1="14" x2="26" y2="14" stroke="var(--border-light)" stroke-width="1"/>
+    <circle cx="14" cy="14" r="3" stroke="var(--border-light)" stroke-width=".8" fill="none"/>
+  </svg>
+  <!-- Triangle top left -->
+  <svg class="geo-shape geo-5" width="36" height="32" viewBox="0 0 36 32" fill="none" opacity=".15">
+    <polygon points="18,2 34,30 2,30" stroke="var(--border-light)" stroke-width="1" fill="none"/>
+    <polygon points="18,10 26,24 10,24" stroke="var(--border)" stroke-width=".7" fill="none"/>
+  </svg>
+</div>
 
 <!-- LANDING PAGE -->
 <div id="page-landing" class="page active">
@@ -739,6 +1022,72 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   </nav>
   <section class="landing-hero">
     <div class="hero-aura"></div>
+    <div class="hero-noise"></div>
+    <div class="hero-float-items">
+      <!-- SVG Terminal flottant gauche -->
+      <div class="deco-float deco-float-1">
+        <svg width="72" height="56" viewBox="0 0 72 56" fill="none">
+          <rect width="72" height="56" rx="10" fill="var(--bg1)" stroke="var(--border-light)" stroke-width="1"/>
+          <rect x="8" y="8" width="6" height="6" rx="3" fill="var(--accent-dim)" opacity=".6"/>
+          <rect x="18" y="8" width="6" height="6" rx="3" fill="var(--border-light)" opacity=".4"/>
+          <rect x="28" y="8" width="6" height="6" rx="3" fill="var(--border-light)" opacity=".3"/>
+          <rect x="8" y="22" width="14" height="2" rx="1" fill="var(--accent)" opacity=".7"/>
+          <rect x="26" y="22" width="26" height="2" rx="1" fill="var(--border-light)" opacity=".35"/>
+          <rect x="8" y="30" width="8" height="2" rx="1" fill="var(--accent-dim)" opacity=".5"/>
+          <rect x="20" y="30" width="32" height="2" rx="1" fill="var(--border)" opacity=".5"/>
+          <rect x="8" y="38" width="20" height="2" rx="1" fill="var(--border-light)" opacity=".3"/>
+          <rect x="32" y="38" width="16" height="2" rx="1" fill="var(--accent-dim)" opacity=".35"/>
+          <rect x="8" y="46" width="4" height="4" rx="1" fill="var(--accent)" opacity=".8"/>
+        </svg>
+      </div>
+
+      <!-- SVG Bouclier flottant droite haut -->
+      <div class="deco-float deco-float-2">
+        <svg width="52" height="60" viewBox="0 0 52 60" fill="none">
+          <path d="M26 2L4 12V30C4 43 15 54 26 58C37 54 48 43 48 30V12L26 2Z" fill="var(--bg2)" stroke="var(--border-light)" stroke-width="1.2"/>
+          <path d="M26 8L10 16V30C10 40 18 49 26 52C34 49 42 40 42 30V16L26 8Z" fill="var(--bg1)" stroke="var(--border)" stroke-width=".8"/>
+          <path d="M18 29L23 34L34 23" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <!-- SVG Badge/Award flottant droite bas -->
+      <div class="deco-float deco-float-3">
+        <svg width="58" height="64" viewBox="0 0 58 64" fill="none">
+          <circle cx="29" cy="24" r="20" fill="var(--bg2)" stroke="var(--border-light)" stroke-width="1.2"/>
+          <circle cx="29" cy="24" r="14" fill="var(--bg1)" stroke="var(--border)" stroke-width=".8"/>
+          <path d="M29 16L31.5 21.5H37.5L32.5 25L34.5 31L29 27.5L23.5 31L25.5 25L20.5 21.5H26.5L29 16Z" fill="var(--accent-dim)" opacity=".6"/>
+          <path d="M22 43L20 56L29 51L38 56L36 43" fill="var(--bg2)" stroke="var(--border)" stroke-width="1"/>
+          <path d="M22 43C22 43 24 46 29 46C34 46 36 43 36 43" fill="var(--accent-dim)" opacity=".3"/>
+        </svg>
+      </div>
+
+      <!-- SVG Hexagone / nœud réseau bas gauche -->
+      <div class="deco-float deco-float-4">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+          <polygon points="32,4 56,18 56,46 32,60 8,46 8,18" fill="var(--bg2)" stroke="var(--border-light)" stroke-width="1.2"/>
+          <polygon points="32,14 46,22 46,42 32,50 18,42 18,22" fill="var(--bg1)" stroke="var(--border)" stroke-width=".8"/>
+          <circle cx="32" cy="32" r="4" fill="var(--accent)" opacity=".7"/>
+          <circle cx="32" cy="22" r="2" fill="var(--accent-dim)" opacity=".5"/>
+          <circle cx="40" cy="27" r="2" fill="var(--accent-dim)" opacity=".4"/>
+          <circle cx="40" cy="37" r="2" fill="var(--accent-dim)" opacity=".4"/>
+          <circle cx="32" cy="42" r="2" fill="var(--accent-dim)" opacity=".5"/>
+          <circle cx="24" cy="37" r="2" fill="var(--accent-dim)" opacity=".4"/>
+          <circle cx="24" cy="27" r="2" fill="var(--accent-dim)" opacity=".4"/>
+          <line x1="32" y1="28" x2="32" y2="22" stroke="var(--border-light)" stroke-width=".8" opacity=".6"/>
+          <line x1="32" y1="28" x2="38" y2="27" stroke="var(--border-light)" stroke-width=".8" opacity=".5"/>
+          <line x1="32" y1="36" x2="38" y2="37" stroke="var(--border-light)" stroke-width=".8" opacity=".5"/>
+          <line x1="32" y1="36" x2="32" y2="42" stroke="var(--border-light)" stroke-width=".8" opacity=".6"/>
+          <line x1="32" y1="36" x2="26" y2="37" stroke="var(--border-light)" stroke-width=".8" opacity=".5"/>
+          <line x1="32" y1="28" x2="26" y2="27" stroke="var(--border-light)" stroke-width=".8" opacity=".5"/>
+        </svg>
+      </div>
+
+      <!-- Petits points lumineux -->
+      <div class="deco-dot deco-dot-1"></div>
+      <div class="deco-dot deco-dot-2"></div>
+      <div class="deco-dot deco-dot-3"></div>
+      <div class="deco-dot deco-dot-4"></div>
+    </div>
     <div class="hero-orbit" id="hero-orbit">
       <svg viewBox="0 0 560 560" fill="none">
         <g class="ring-outer">
@@ -780,12 +1129,12 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <h2 class="section-title">Tout l'écosystème tech,<br>dans une seule app.</h2>
     <p class="section-sub">Fini les 6 onglets ouverts en même temps. DevConnect centralise ce dont chaque développeur a besoin.</p>
     <div class="features-grid">
-      <div class="feature-card"><span class="feature-icon">◈</span><div class="feature-name">Profil & Portfolio</div><div class="feature-desc">Ton CV, tes projets et tes compétences sur un seul profil public. Référençable, partageable, professionnel.</div></div>
-      <div class="feature-card"><span class="feature-icon">◉</span><div class="feature-name">Messagerie</div><div class="feature-desc">DMs privés, espaces thématiques par domaine tech, réactions, threads et clavier de caractères spéciaux.</div></div>
-      <div class="feature-card"><span class="feature-icon">◆</span><div class="feature-name">Découverte & Recrutement</div><div class="feature-desc">Moteur de recherche avec filtres avancés, suggestions IA, matching et paiement sécurisé en escrow.</div></div>
-      <div class="feature-card"><span class="feature-icon">◇</span><div class="feature-name">Challenges & Apprentissage</div><div class="feature-desc">Défis pratiques générés par IA (anti-triche) en dev, cyber, data, DevOps. Classement, XP et progression visible.</div></div>
-      <div class="feature-card"><span class="feature-icon">⬡</span><div class="feature-name">Éditeur de Code + IA</div><div class="feature-desc">Éditeur intégré style VS Code avec assistant IA : debug, suggestions, détection d'erreurs en temps réel.</div></div>
-      <div class="feature-card"><span class="feature-icon">⬢</span><div class="feature-name">Events & Hackathons</div><div class="feature-desc">Des événements organisés directement sur la plateforme — hackathons, workshops, conférences tech.</div></div>
+      <div class="feature-card reveal-up"><span class="feature-icon">◈</span><div class="feature-name">Profil & Portfolio</div><div class="feature-desc">Ton CV, tes projets et tes compétences sur un seul profil public. Référençable, partageable, professionnel.</div></div>
+      <div class="feature-card reveal-up"><span class="feature-icon">◉</span><div class="feature-name">Messagerie</div><div class="feature-desc">DMs privés, espaces thématiques par domaine tech, réactions, threads et clavier de caractères spéciaux.</div></div>
+      <div class="feature-card reveal-up"><span class="feature-icon">◆</span><div class="feature-name">Découverte & Recrutement</div><div class="feature-desc">Moteur de recherche avec filtres avancés, suggestions IA, matching et paiement sécurisé en escrow.</div></div>
+      <div class="feature-card reveal-up"><span class="feature-icon">◇</span><div class="feature-name">Challenges & Apprentissage</div><div class="feature-desc">Défis pratiques générés par IA (anti-triche) en dev, cyber, data, DevOps. Classement, XP et progression visible.</div></div>
+      <div class="feature-card reveal-up"><span class="feature-icon">⬡</span><div class="feature-name">Éditeur de Code + IA</div><div class="feature-desc">Éditeur intégré style VS Code avec assistant IA : debug, suggestions, détection d'erreurs en temps réel.</div></div>
+      <div class="feature-card reveal-up"><span class="feature-icon">⬢</span><div class="feature-name">Events & Hackathons</div><div class="feature-desc">Des événements organisés directement sur la plateforme — hackathons, workshops, conférences tech.</div></div>
     </div>
   </section>
   <div class="divider"></div>
@@ -794,10 +1143,10 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <h2 class="section-title">Ce que tu connais,<br>repensé pour la tech.</h2>
     <p class="section-sub">DevConnect n'invente pas la roue — il assemble les meilleures expériences en une seule.</p>
     <div class="refs-row">
-      <div class="ref-card"><div class="ref-card-name">Portfolio + LinkedIn</div><div class="ref-card-what">Profil professionnel complet</div><div class="ref-card-desc">CV, expériences, projets et compétences sur un seul profil — sans ouvrir deux onglets.</div></div>
-      <div class="ref-card"><div class="ref-card-name">Discord</div><div class="ref-card-what">Communauté & messagerie</div><div class="ref-card-desc">Espaces thématiques, DMs, décorations de profil et système premium inspiré de Nitro.</div></div>
-      <div class="ref-card"><div class="ref-card-name">Root-Me</div><div class="ref-card-what">Challenges pratiques</div><div class="ref-card-desc">Des défis réels pour tous les domaines tech, avec un classement basé sur la vraie compétence.</div></div>
-      <div class="ref-card"><div class="ref-card-name">VS Code</div><div class="ref-card-what">Éditeur de code intégré</div><div class="ref-card-desc">Code directement dans l'app avec un assistant IA qui t'aide à déboguer et progresser.</div></div>
+      <div class="ref-card reveal-up"><div class="ref-card-name">Portfolio + LinkedIn</div><div class="ref-card-what">Profil professionnel complet</div><div class="ref-card-desc">CV, expériences, projets et compétences sur un seul profil — sans ouvrir deux onglets.</div></div>
+      <div class="ref-card reveal-up"><div class="ref-card-name">Discord</div><div class="ref-card-what">Communauté & messagerie</div><div class="ref-card-desc">Espaces thématiques, DMs, décorations de profil et système premium inspiré de Nitro.</div></div>
+      <div class="ref-card reveal-up"><div class="ref-card-name">Root-Me</div><div class="ref-card-what">Challenges pratiques</div><div class="ref-card-desc">Des défis réels pour tous les domaines tech, avec un classement basé sur la vraie compétence.</div></div>
+      <div class="ref-card reveal-up"><div class="ref-card-name">VS Code</div><div class="ref-card-what">Éditeur de code intégré</div><div class="ref-card-desc">Code directement dans l'app avec un assistant IA qui t'aide à déboguer et progresser.</div></div>
     </div>
   </section>
   <div class="divider"></div>
@@ -2403,6 +2752,94 @@ async function handleLogout(){
 
 function certifBadge(){return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="display:inline;vertical-align:middle;margin-left:3px" title="Membre certifié"><path d="M12 2L14.4 8.26L21 9.27L16.5 13.64L17.76 20.23L12 17L6.24 20.23L7.5 13.64L3 9.27L9.6 8.26L12 2Z" fill="#c8c8d8" stroke="#e8e8f0" stroke-width="0.5"/><path d="M9 12L11 14L15 10" stroke="#0d0d1a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';}
 
+
+// ============================================================
+// LANDING 3D INTERACTIONS
+// ============================================================
+
+// Mouse parallax sur l'orbite
+(function(){
+  const orbit = document.getElementById('hero-orbit');
+  const hero = document.querySelector('.landing-hero');
+  if(!orbit || !hero) return;
+  hero.addEventListener('mousemove', e => {
+    const rect = hero.getBoundingClientRect();
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const dx = (e.clientX - rect.left - cx) / cx;
+    const dy = (e.clientY - rect.top - cy) / cy;
+    orbit.style.transform = `translateX(-50%) rotateX(${-dy * 8}deg) rotateY(${dx * 8}deg)`;
+  });
+  hero.addEventListener('mouseleave', () => {
+    orbit.style.transform = 'translateX(-50%)';
+    orbit.style.transition = 'transform .6s ease-out';
+  });
+  hero.addEventListener('mouseenter', () => {
+    orbit.style.transition = 'transform .1s ease-out';
+  });
+})();
+
+// Tilt 3D feature cards
+document.querySelectorAll('.feature-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const dx = (e.clientX - rect.left - cx) / cx;
+    const dy = (e.clientY - rect.top - cy) / cy;
+    const rx = -dy * 8;
+    const ry = dx * 8;
+    card.style.setProperty('--rx', rx + 'deg');
+    card.style.setProperty('--ry', ry + 'deg');
+    card.style.setProperty('--mx', ((e.clientX - rect.left) / rect.width * 100) + '%');
+    card.style.setProperty('--my', ((e.clientY - rect.top) / rect.height * 100) + '%');
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.setProperty('--rx', '0deg');
+    card.style.setProperty('--ry', '0deg');
+  });
+});
+
+// Scroll reveal
+(function(){
+  const els = document.querySelectorAll('.reveal-up,.reveal-left,.reveal-right,.reveal');
+  if(!els.length) return;
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add('visible','in-view');
+        io.unobserve(e.target);
+      }
+    });
+  }, {threshold: 0.12});
+  els.forEach(el => io.observe(el));
+})();
+
+// Compteur animé
+(function(){
+  function animateCounter(el, target, duration){
+    const start = performance.now();
+    const update = now => {
+      const p = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.floor(ease * target).toLocaleString('fr-FR');
+      if(p < 1) requestAnimationFrame(update);
+    };
+    requestAnimationFrame(update);
+  }
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        const target = parseInt(e.target.dataset.target || '0');
+        animateCounter(e.target, target, 1800);
+        io.unobserve(e.target);
+      }
+    });
+  }, {threshold: 0.5});
+  document.querySelectorAll('.stat-counter').forEach(el => io.observe(el));
+})();
+
+// ============================================================
 // NAVIGATION
 function navigate(section) {
   document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
