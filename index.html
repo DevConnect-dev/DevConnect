@@ -800,31 +800,27 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .live-dot{width:7px;height:7px;border-radius:50%;background:#6ab87a;display:inline-block;animation:livePulse 2s ease-in-out infinite;box-shadow:0 0 8px rgba(106,184,122,.7);}
 @keyframes livePulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 
-/* Stats anciens */
-.admin-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:28px;}
-.admin-stat{background:rgba(13,13,26,.8);border:1px solid rgba(200,200,216,.08);border-radius:var(--radius-lg);padding:20px;position:relative;overflow:hidden;}
-.admin-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(200,200,216,.12),transparent);}
-.admin-stat-num{font-family:var(--font-display);font-size:28px;font-weight:600;margin-bottom:4px;}
-.admin-stat-label{font-size:12px;color:var(--text-muted);font-family:var(--font-mono);}
-.admin-section{display:none;}
-.admin-section.active{display:block;}
-.admin-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:28px;}
-.admin-stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;position:relative;overflow:hidden;}
-.admin-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--border-light),transparent);}
-.admin-stat-num{font-family:var(--font-display);font-size:28px;font-weight:600;margin-bottom:4px;}
-.admin-stat-label{font-size:12px;color:var(--text-muted);font-family:var(--font-mono);}
+/* Tableaux & badges */
 .admin-table{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;}
-.admin-table-header{display:grid;padding:10px 16px;background:var(--bg2);border-bottom:1px solid var(--border);font-size:11px;color:var(--text-muted);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.06em;}
-.admin-table-row{display:grid;padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;align-items:center;transition:background .15s;}
-.admin-table-row:last-child{border-bottom:none;}
-.admin-table-row:hover{background:var(--bg2);}
-.users-grid{grid-template-columns:1fr 1fr 120px 100px 100px;}
-.ticket-grid{grid-template-columns:1fr 100px 100px 120px 100px;}
-.status-badge{padding:2px 8px;border-radius:100px;font-size:10px;font-family:var(--font-mono);border:1px solid;display:inline-block;}
-.status-open{border-color:#9a5a5a;color:#9a5a5a;}
-.status-claimed{border-color:#9a9a5a;color:#9a9a5a;}
-.status-resolved{border-color:#5a9a6a;color:#5a9a6a;}
-.action-btns{display:flex;gap:6px;}
+.status-badge{padding:2px 9px 2px 7px;border-radius:100px;font-size:10px;font-family:var(--font-mono);border:1px solid;display:inline-flex;align-items:center;gap:5px;}
+.status-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;}
+.status-open{border-color:#5a3030;color:#d98a8a;background:rgba(217,138,138,.06);}
+.status-claimed{border-color:#5a5430;color:#d9c98a;background:rgba(217,201,138,.06);}
+.status-resolved{border-color:#305a3a;color:#8ad9a0;background:rgba(138,217,160,.06);}
+.action-btns{display:flex;gap:6px;flex-wrap:wrap;}
+.admin-load-more{display:block;width:100%;padding:12px;text-align:center;background:var(--bg2);border:none;color:var(--text-secondary);font-size:12px;cursor:pointer;transition:all .2s;font-family:var(--font-mono);}
+.admin-load-more:hover{background:var(--bg3);color:var(--text);}
+.admin-row-avatar{transition:border-color .2s;}
+tr:hover .admin-row-avatar{border-color:var(--border-light);}
+.announcement-item{background:var(--bg0);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;transition:border-color .2s;}
+.announcement-item:hover{border-color:var(--border-light);}
+.announcement-item.inactive{opacity:.45;}
+.feed-banner{background:linear-gradient(100deg,var(--bg1),var(--bg2));border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:16px;display:flex;align-items:flex-start;gap:12px;position:relative;overflow:hidden;}
+.feed-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}
+.feed-banner-icon{font-size:16px;color:var(--accent);flex-shrink:0;margin-top:1px;}
+.feed-banner-text{flex:1;font-size:13px;color:var(--text-secondary);line-height:1.5;}
+.feed-banner-close{background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:16px;padding:2px;flex-shrink:0;transition:color .2s;}
+.feed-banner-close:hover{color:var(--text);}
 
 /* PREMIUM BADGES */
 .premium-badge{display:inline-flex;align-items:center;gap:3px;padding:1px 6px;border-radius:100px;font-size:9px;font-family:var(--font-mono);font-weight:500;}
@@ -1518,6 +1514,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="app-section active" id="section-home">
       <div class="home-layout">
         <div>
+          <div id="feed-banner-slot"></div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
             <div class="feed-title">Fil d'actualité</div>
             <button class="btn btn-ghost btn-sm">Récents</button>
@@ -2283,6 +2280,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
           </div>
 
           <div class="admin-section-label">Gestion</div>
+          <div class="admin-nav-item" onclick="switchAdmin(this,'announce');loadAdminAnnouncements()">
+            <span class="admin-nav-icon">📣</span>Annonces
+          </div>
           <div class="admin-nav-item" id="admin-nav-premium" onclick="switchAdmin(this,'premium-a')">
             <span class="admin-nav-icon">✦</span>Premium
           </div>
@@ -2385,9 +2385,12 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
             <div class="admin-card">
               <div class="admin-card-header">
                 <div class="admin-card-title">Liste des membres</div>
-                <div style="display:flex;align-items:center;gap:8px;background:rgba(200,200,216,.05);border:1px solid rgba(200,200,216,.08);border-radius:var(--radius);padding:7px 12px">
-                  <span style="color:var(--text-muted);font-size:13px">⌕</span>
-                  <input style="background:transparent;border:none;outline:none;color:var(--text);font-size:13px;width:180px" placeholder="Rechercher..." id="admin-user-search" oninput="searchAdminUsers(this.value)">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="display:flex;align-items:center;gap:8px;background:rgba(200,200,216,.05);border:1px solid rgba(200,200,216,.08);border-radius:var(--radius);padding:7px 12px">
+                    <span style="color:var(--text-muted);font-size:13px">⌕</span>
+                    <input style="background:transparent;border:none;outline:none;color:var(--text);font-size:13px;width:180px" placeholder="Rechercher..." id="admin-user-search" oninput="searchAdminUsers(this.value)">
+                  </div>
+                  <button class="btn btn-ghost btn-sm" onclick="exportAdminUsersCsv()">⭳ CSV</button>
                 </div>
               </div>
               <div style="overflow-x:auto">
@@ -2421,6 +2424,23 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
                   <tbody id="admin-tickets-list"><tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px">Aucun ticket.</td></tr></tbody>
                 </table>
               </div>
+            </div>
+          </div>
+
+          <!-- ANNONCES -->
+          <div class="admin-section" id="admin-announce">
+            <div class="admin-page-header">
+              <div class="admin-page-title">Annonces</div>
+              <div class="admin-page-sub">Affichées en banderole en haut du fil d'actualité pour tous les membres</div>
+            </div>
+            <div class="admin-form-card" style="max-width:600px">
+              <div class="admin-form-title">📣 Nouvelle annonce</div>
+              <div class="form-group"><label class="form-label">Message</label><textarea class="form-input" id="announce-text" rows="3" placeholder="Maintenance prévue ce soir à 22h..."></textarea></div>
+              <button class="btn btn-primary btn-sm" onclick="createAnnouncement()">Publier l'annonce</button>
+            </div>
+            <div class="admin-card" style="margin-top:16px">
+              <div class="admin-card-header"><div class="admin-card-title">Annonces existantes</div></div>
+              <div class="admin-card-body" id="admin-announce-list"><div style="text-align:center;color:var(--text-muted);font-size:13px;padding:16px">Chargement...</div></div>
             </div>
           </div>
 
@@ -2668,10 +2688,10 @@ window.addEventListener('load',async()=>{
   const _sg=localStorage.getItem('dc_site_gradient');
   if(_sg){try{const g=JSON.parse(_sg);applySiteGradient(g[0],g[1],g[2]);}catch(e){}}
   const{data:{session}}=await db.auth.getSession();
-  if(session){currentUser=session.user;await loadProfile();showPage('app');loadFeed();loadSidebarLeaderboard();}
+  if(session){currentUser=session.user;await loadProfile();showPage('app');loadFeed();loadSidebarLeaderboard();loadActiveAnnouncementBanner();}
   else showPage('landing');
   db.auth.onAuthStateChange(async(event,session)=>{
-    if(event==='SIGNED_IN'){currentUser=session.user;await loadProfile();showPage('app');loadFeed();loadSidebarLeaderboard();}
+    if(event==='SIGNED_IN'){currentUser=session.user;await loadProfile();showPage('app');loadFeed();loadSidebarLeaderboard();loadActiveAnnouncementBanner();}
     else if(event==='SIGNED_OUT'){currentUser=null;currentProfile=null;showPage('landing');}
   });
   document.addEventListener('keydown',e=>{
@@ -3225,7 +3245,7 @@ function navigate(section) {
   if (section === 'admin') loadAdminData();
   if (section === 'messages') loadMessages();
   if (section === 'profile') updateProfileSection();
-  if (section === 'home') { loadFeed(); loadSidebarLeaderboard(); }
+  if (section === 'home') { loadFeed(); loadSidebarLeaderboard(); loadActiveAnnouncementBanner(); }
   if (section === 'ranking') loadRanking();
   if (section === 'discover') loadDiscover();
   if (section === 'recruit') loadJobs();
@@ -4251,39 +4271,130 @@ async function sendEditorAI(){
 }
 
 // ADMIN
-async function loadAdminData(){loadAdminStats();loadAdminUsers();loadAdminTickets();loadAdminLogs();}
+async function loadAdminData(){
+  loadAdminStats();loadAdminUsers();loadAdminTickets();loadAdminLogs();
+  loadAdminRecentUsers();loadAdminRecentLogsOverview();loadAdminBottomStats();
+  if(currentProfile)setEl('admin-welcome-role',ROLE_LABELS[currentProfile.role]||currentProfile.role||'Admin');
+}
+
+function trendHtml(n,label){
+  if(n==null)return`<span style="color:var(--text-muted)">—</span>`;
+  if(n===0)return`+0 ${label}`;
+  return n>0?`▲ +${n} ${label}`:`▼ ${n} ${label}`;
+}
+
 async function loadAdminStats(){
-  const[u,m,p,t]=await Promise.all([
+  const weekAgo=new Date(Date.now()-7*86400000).toISOString();
+  const[u,m,p,t,uWeek,mWeek,pWeek,tWeekClosed]=await Promise.all([
     db.from('profiles').select('id',{count:'exact',head:true}),
     db.from('messages').select('id',{count:'exact',head:true}),
     db.from('profiles').select('id',{count:'exact',head:true}).eq('is_premium',true),
-    db.from('report_tickets').select('id',{count:'exact',head:true}).eq('status','open')
+    db.from('report_tickets').select('id',{count:'exact',head:true}).eq('status','open'),
+    db.from('profiles').select('id',{count:'exact',head:true}).gte('created_at',weekAgo),
+    db.from('messages').select('id',{count:'exact',head:true}).gte('created_at',weekAgo),
+    db.from('profiles').select('id',{count:'exact',head:true}).eq('is_premium',true).gte('premium_since',weekAgo),
+    db.from('report_tickets').select('id',{count:'exact',head:true}).eq('status','resolved').gte('resolved_at',weekAgo)
   ]);
   setEl('stat-users',u.count??'—');setEl('stat-messages',m.count??'—');setEl('stat-premium',p.count??'—');setEl('stat-tickets',t.count??'—');
+  setEl('stat-users-trend',trendHtml(uWeek.count,'cette semaine'));
+  setEl('stat-msg-trend',trendHtml(mWeek.count,'cette semaine'));
+  setEl('stat-prem-trend',trendHtml(pWeek.count,'cette semaine'));
+  setEl('stat-tick-trend',trendHtml(tWeekClosed.count!=null?-tWeekClosed.count:null,'résolus (7j)'));
+  document.getElementById('stat-users-trend')?.classList.toggle('down',uWeek.count===0);
+  document.getElementById('stat-msg-trend')?.classList.toggle('up',mWeek.count>0);
+  setEl('admin-badge-users',u.count??'—');
+  setEl('admin-badge-tickets',t.count??'—');
+  const tbadge=document.getElementById('admin-badge-tickets');
+  if(tbadge)tbadge.style.color=t.count>0?'#d98a8a':'';
 }
 
-async function loadAdminUsers(search=''){
-  let q=db.from('profiles').select('id,username,email,specialty,role,is_premium,premium_tier,is_banned,is_certified,is_muted').order('created_at',{ascending:false}).limit(50);
-  if(search)q=q.ilike('username',`%${search}%`);
-  const{data}=await q;
-  const cont=document.getElementById('admin-users-list');
-  if(!data||!data.length){cont.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun utilisateur trouvé.</div>';return;}
-  const smap={web_dev:'Dev Web',mobile_dev:'Mobile',backend_dev:'Backend',fullstack_dev:'Fullstack',cybersecurity:'Cyber',devops:'DevOps',data:'Data',ai_ml:'IA/ML',designer_ux:'Design',recruiter:'Recruteur'};
-  cont.innerHTML=data.map(u=>`<div class="admin-table-row users-grid">
-    <div>
-      <strong>${esc(u.username||'—')}</strong>${u.is_certified?'<span style="color:#c8c8d8;font-size:11px"> ✦</span>':''}
-      <div style="font-size:11px;color:var(--text-muted)">${esc(u.email||'')}</div>
-    </div>
-    <div style="font-size:11px;font-family:var(--font-mono);color:var(--accent-dim)">${ROLE_LABELS[u.role]||u.role||'—'}</div>
-    <div>${u.premium_tier?`<span class="premium-badge ${u.premium_tier==='devconnect-plus'?'devconnectplus':'devplus'}">${u.premium_tier}</span>`:'<span style="color:var(--text-muted);font-size:12px">—</span>'}</div>
-    <div>
-      <span class="status-badge ${u.is_banned?'status-open':u.is_muted?'status-claimed':'status-resolved'}">${u.is_banned?'Banni':u.is_muted?'Muté':'Actif'}</span>
-    </div>
-    <div class="action-btns">
-      <button class="btn btn-ghost btn-sm" onclick="banUser('${esc(u.id)}','${esc(u.username)}',${!u.is_banned})">${u.is_banned?'Débannir':'Bannir'}</button>
-      <button class="btn btn-ghost btn-sm" style="color:#e05a5a" onclick="deleteUserById('${esc(u.id)}','${esc(u.username)}')">Supprimer</button>
-    </div>
+async function loadAdminRecentUsers(){
+  const{data}=await db.from('profiles').select('username,role,created_at').order('created_at',{ascending:false}).limit(6);
+  const cont=document.getElementById('admin-recent-users');
+  if(!cont)return;
+  if(!data||!data.length){cont.innerHTML='<tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:20px;font-size:13px">Aucun utilisateur.</td></tr>';return;}
+  cont.innerHTML=data.map(u=>`<tr>
+    <td><strong>${esc(u.username||'—')}</strong></td>
+    <td style="font-family:var(--font-mono);font-size:11px;color:var(--accent-dim)">${ROLE_LABELS[u.role]||u.role||'—'}</td>
+    <td style="color:var(--text-muted);font-size:12px">${timeAgo(u.created_at)}</td>
+  </tr>`).join('');
+}
+
+async function loadAdminRecentLogsOverview(){
+  const{data}=await db.from('admin_logs').select('*,admin:profiles!admin_logs_admin_id_fkey(username)').order('created_at',{ascending:false}).limit(6);
+  const cont=document.getElementById('admin-recent-logs');
+  if(!cont)return;
+  if(!data||!data.length){cont.innerHTML='<div style="text-align:center;color:var(--text-muted);font-size:13px;padding:16px">Aucune activité récente.</div>';return;}
+  cont.innerHTML=data.map(l=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px">
+    <span>${esc(l.action||'—')}</span>
+    <span style="color:var(--text-muted);font-family:var(--font-mono);font-size:11px;white-space:nowrap">${timeAgo(l.created_at)} · @${esc(l.admin?.username||'?')}</span>
   </div>`).join('');
+}
+
+async function loadAdminBottomStats(){
+  const[posts,xp,certified]=await Promise.all([
+    db.from('posts').select('id',{count:'exact',head:true}),
+    db.from('profiles').select('xp'),
+    db.from('profiles').select('id',{count:'exact',head:true}).eq('is_certified',true)
+  ]);
+  setEl('stat-posts',posts.count??'—');
+  const totalXp=(xp.data||[]).reduce((s,p)=>s+(p.xp||0),0);
+  setEl('stat-xp-total',totalXp.toLocaleString('fr-FR'));
+  setEl('stat-certified',certified.count??'—');
+}
+
+let adminUserPage=0,adminUserSearch='';
+async function loadAdminUsers(search=adminUserSearch,append=false){
+  adminUserSearch=search;
+  if(!append)adminUserPage=0;
+  const pageSize=50;
+  let q=db.from('profiles').select('id,username,email,specialty,role,is_premium,premium_tier,is_banned,is_certified,is_muted,xp',{count:'exact'}).order('created_at',{ascending:false}).range(adminUserPage*pageSize,adminUserPage*pageSize+pageSize-1);
+  if(search)q=q.ilike('username',`%${search}%`);
+  const{data,count}=await q;
+  const cont=document.getElementById('admin-users-list');
+  if(!data||!data.length){
+    if(!append)cont.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:24px">Aucun utilisateur trouvé.</td></tr>';
+    return;
+  }
+  const rowsHtml=data.map(u=>`<tr>
+    <td>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="admin-row-avatar" style="width:28px;height:28px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-family:var(--font-mono);color:var(--accent-dim);flex-shrink:0">${esc((u.username||'?')[0].toUpperCase())}</div>
+        <div>
+          <strong>${esc(u.username||'—')}</strong>${u.is_certified?'<span style="color:#c8c8d8;font-size:11px"> ✦</span>':''}
+          <div style="font-size:11px;color:var(--text-muted)">${esc(u.email||'')}</div>
+        </div>
+      </div>
+    </td>
+    <td style="font-size:11px;font-family:var(--font-mono);color:var(--accent-dim)">${ROLE_LABELS[u.role]||u.role||'—'}</td>
+    <td>${u.premium_tier?`<span class="premium-badge ${u.premium_tier==='devconnect-plus'?'devconnectplus':'devplus'}">${u.premium_tier}</span>`:'<span style="color:var(--text-muted);font-size:12px">—</span>'}</td>
+    <td><span class="status-badge ${u.is_banned?'status-open':u.is_muted?'status-claimed':'status-resolved'}">${u.is_banned?'Banni':u.is_muted?'Muté':'Actif'}</span></td>
+    <td style="font-family:var(--font-mono);font-size:12px;color:var(--text-secondary)">${u.xp||0}</td>
+    <td>
+      <div class="action-btns">
+        <button class="btn btn-ghost btn-sm" onclick="banUser('${esc(u.id)}','${esc(u.username)}',${!u.is_banned})">${u.is_banned?'Débannir':'Bannir'}</button>
+        <button class="btn btn-ghost btn-sm" style="color:#e05a5a" onclick="deleteUserById('${esc(u.id)}','${esc(u.username)}')">Supprimer</button>
+      </div>
+    </td>
+  </tr>`).join('');
+  if(append)cont.innerHTML+=rowsHtml;else cont.innerHTML=rowsHtml;
+  const existingBtn=document.getElementById('admin-users-loadmore-row');
+  if(existingBtn)existingBtn.remove();
+  const hasMore=count!=null&&(adminUserPage+1)*pageSize<count;
+  if(hasMore){
+    const tr=document.createElement('tr');tr.id='admin-users-loadmore-row';
+    tr.innerHTML=`<td colspan="6" style="text-align:center;padding:0"><button class="admin-load-more" style="width:100%;border:none" onclick="adminUserPage++;loadAdminUsers(adminUserSearch,true)">Charger plus d'utilisateurs</button></td>`;
+    cont.parentElement.appendChild(tr);
+  }
+}
+function exportAdminUsersCsv(){
+  db.from('profiles').select('username,email,specialty,role,is_premium,premium_tier,is_banned,is_muted,is_certified,xp').then(({data})=>{
+    if(!data||!data.length){showToast('Aucune donnée à exporter.','error');return;}
+    const headers=Object.keys(data[0]);
+    const csv=[headers.join(',')].concat(data.map(r=>headers.map(h=>`"${String(r[h]??'').replace(/"/g,'""')}"`).join(','))).join('\n');
+    const blob=new Blob([csv],{type:'text/csv'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='devconnect_users.csv';a.click();
+  });
 }
 
 async function deleteUserById(id,username){
@@ -4298,6 +4409,11 @@ async function deleteUserById(id,username){
 function searchAdminUsers(v){clearTimeout(window._st);window._st=setTimeout(()=>loadAdminUsers(v),300);}
 
 async function banUser(id,username,ban){
+  if(!id){
+    const{data:found}=await db.from('profiles').select('id').eq('username',username).maybeSingle();
+    if(!found){showToast('Utilisateur introuvable.','error');return;}
+    id=found.id;
+  }
   // Vérif hiérarchie
   const{data:target}=await db.from('profiles').select('role').eq('id',id).maybeSingle();
   if(!checkHierarchy(username, target?.role, 'bannir'))return;
@@ -4404,21 +4520,23 @@ async function loadAdminTickets(){
   if(_ticketFilter!=='all')q=q.eq('status',_ticketFilter);
   const{data}=await q;
   if(!data||data.length===0){
-    cont.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun ticket pour l\'instant.</div>';
+    cont.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px">Aucun ticket pour l\'instant.</td></tr>';
     return;
   }
   const statusClass={open:'status-open',claimed:'status-claimed',resolved:'status-resolved',dismissed:'status-resolved'};
-  cont.innerHTML=data.map(t=>`<div class="admin-table-row ticket-grid">
-    <div><strong style="font-size:13px">${esc(t.reason||'—')}</strong><div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">Par @${esc(t.reporter?.username||'?')} → @${esc(t.target?.username||'?')}</div></div>
-    <div style="font-size:12px;font-family:var(--font-mono);color:var(--text-secondary)">${esc(t.category||'—')}</div>
-    <div style="font-size:12px;font-family:var(--font-mono);color:var(--text-secondary)">${esc(t.priority||'—')}</div>
-    <div><span class="status-badge ${statusClass[t.status]||'status-open'}">${t.status}</span></div>
-    <div class="action-btns">
-      ${t.status==='open'?`<button class="btn btn-ghost btn-sm" onclick="claimTicket('${t.id}')">Prendre</button>`:''}
-      ${t.status!=='resolved'&&t.status!=='dismissed'?`<button class="btn btn-ghost btn-sm" onclick="resolveTicket('${t.id}')">Résoudre</button>`:''}
-      ${t.status!=='dismissed'&&t.status!=='resolved'?`<button class="btn btn-ghost btn-sm" style="color:var(--text-muted)" onclick="dismissTicket('${t.id}')">Rejeter</button>`:''}
-    </div>
-  </div>`).join('');
+  cont.innerHTML=data.map(t=>`<tr>
+    <td><strong style="font-size:13px">${esc(t.reason||'—')}</strong><div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">${esc(t.category||'—')} · ${esc(t.priority||'—')}</div></td>
+    <td style="font-size:12px">@${esc(t.reporter?.username||'?')}</td>
+    <td style="font-size:12px">@${esc(t.target?.username||'?')}</td>
+    <td><span class="status-badge ${statusClass[t.status]||'status-open'}">${t.status}</span></td>
+    <td>
+      <div class="action-btns">
+        ${t.status==='open'?`<button class="btn btn-ghost btn-sm" onclick="claimTicket('${t.id}')">Prendre</button>`:''}
+        ${t.status!=='resolved'&&t.status!=='dismissed'?`<button class="btn btn-ghost btn-sm" onclick="resolveTicket('${t.id}')">Résoudre</button>`:''}
+        ${t.status!=='dismissed'&&t.status!=='resolved'?`<button class="btn btn-ghost btn-sm" style="color:var(--text-muted)" onclick="dismissTicket('${t.id}')">Rejeter</button>`:''}
+      </div>
+    </td>
+  </tr>`).join('');
 }
 
 async function claimTicket(id){
@@ -4454,6 +4572,53 @@ async function loadAdminLogs(){
   </div>`).join('');
 }
 
+async function createAnnouncement(){
+  const text=getVal('announce-text').trim();
+  if(!text){showToast('Écris un message.','error');return;}
+  const{error}=await db.from('announcements').insert({content:text,created_by:currentUser.id,active:true});
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  setVal('announce-text','');
+  await writeAdminLog('Nouvelle annonce publiée','general');
+  showToast('Annonce publiée !','success');
+  loadAdminAnnouncements();
+}
+async function loadAdminAnnouncements(){
+  const cont=document.getElementById('admin-announce-list');
+  if(!cont)return;
+  const{data,error}=await db.from('announcements').select('*,author:profiles!announcements_created_by_fkey(username)').order('created_at',{ascending:false}).limit(20);
+  if(error){cont.innerHTML='<div style="text-align:center;color:var(--text-muted);font-size:13px;padding:16px">Table "announcements" introuvable — crée-la dans Supabase.</div>';return;}
+  if(!data||!data.length){cont.innerHTML='<div style="text-align:center;color:var(--text-muted);font-size:13px;padding:16px">Aucune annonce pour l\'instant.</div>';return;}
+  cont.innerHTML=data.map(a=>`<div class="announcement-item ${a.active?'':'inactive'}">
+    <div>
+      <div style="font-size:13px">${esc(a.content)}</div>
+      <div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono);margin-top:4px">${a.active?'Active':'Désactivée'} · ${timeAgo(a.created_at)} · @${esc(a.author?.username||'?')}</div>
+    </div>
+    <div class="action-btns">
+      <button class="btn btn-ghost btn-sm" onclick="toggleAnnouncement('${a.id}',${!a.active})">${a.active?'Désactiver':'Réactiver'}</button>
+      <button class="btn btn-ghost btn-sm" style="color:#e05a5a" onclick="deleteAnnouncement('${a.id}')">Supprimer</button>
+    </div>
+  </div>`).join('');
+}
+async function toggleAnnouncement(id,active){
+  await db.from('announcements').update({active}).eq('id',id);
+  loadAdminAnnouncements();
+}
+async function deleteAnnouncement(id){
+  if(!confirm('Supprimer cette annonce ?'))return;
+  await db.from('announcements').delete().eq('id',id);
+  loadAdminAnnouncements();
+}
+async function loadActiveAnnouncementBanner(){
+  const slot=document.getElementById('feed-banner-slot');
+  if(!slot)return;
+  const{data}=await db.from('announcements').select('*').eq('active',true).order('created_at',{ascending:false}).limit(1).maybeSingle();
+  if(!data||localStorage.getItem('dc_dismissed_announce')===data.id){slot.innerHTML='';return;}
+  slot.innerHTML=`<div class="feed-banner"><span class="feed-banner-icon">📣</span><div class="feed-banner-text">${esc(data.content)}</div><button class="feed-banner-close" onclick="dismissAnnouncementBanner('${data.id}')">×</button></div>`;
+}
+function dismissAnnouncementBanner(id){
+  localStorage.setItem('dc_dismissed_announce',id);
+  document.getElementById('feed-banner-slot').innerHTML='';
+}
 async function writeAdminLog(action,category='general'){
   if(!currentUser)return;
   await db.from('admin_logs').insert({admin_id:currentUser.id,action,category});
