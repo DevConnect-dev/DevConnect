@@ -2065,8 +2065,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
           <div class="admin-nav-item active" onclick="switchAdmin(this,'overview')">◈ Vue d'ensemble</div>
           <div class="admin-nav-item" onclick="switchAdmin(this,'users')">◉ Utilisateurs</div>
           <div class="admin-nav-item" onclick="switchAdmin(this,'tickets')">◆ Tickets</div>
-          <div class="admin-nav-item" onclick="switchAdmin(this,'premium-a')">✦ Premium</div>
-          <div class="admin-nav-item" onclick="switchAdmin(this,'roles-a')">⬡ Rôles</div>
+          <div class="admin-nav-item" id="admin-nav-premium" onclick="switchAdmin(this,'premium-a')">✦ Premium</div>
+          <div class="admin-nav-item" id="admin-nav-roles" onclick="switchAdmin(this,'roles-a')">⬡ Rôles</div>
           <div class="admin-nav-item" onclick="switchAdmin(this,'logs')">◇ Logs</div>
         </div>
         <div class="admin-main">
@@ -2092,7 +2092,12 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
           <div class="admin-section" id="admin-tickets">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
               <div class="feed-title">Tickets de modération</div>
-              <div style="display:flex;gap:6px"><button class="filter-chip active">Ouverts</button><button class="filter-chip">En cours</button><button class="filter-chip">Résolus</button></div>
+              <div style="display:flex;gap:6px">
+                <button class="filter-chip active" onclick="filterTickets(this,'open')">Ouverts</button>
+                <button class="filter-chip" onclick="filterTickets(this,'claimed')">En cours</button>
+                <button class="filter-chip" onclick="filterTickets(this,'resolved')">Résolus</button>
+                <button class="filter-chip" onclick="filterTickets(this,'all')">Tous</button>
+              </div>
             </div>
             <div class="admin-table">
               <div class="admin-table-header ticket-grid"><span>Détail</span><span>Catégorie</span><span>Priorité</span><span>Statut</span><span>Actions</span></div>
@@ -2288,7 +2293,7 @@ const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
 const{createClient}=supabase;
 const db=createClient(SUPABASE_URL,SUPABASE_KEY);
 
-let currentUser=null,currentProfile=null,currentSection='home',selectedSpecialty=null,selectedTags=[],currentStep=0,currentChannel='général',challengeId=null,currentDmConvId=null,currentDmUser=null,isDmMode=false,dmRealtimeSub=null;
+let currentUser=null,currentProfile=null,currentSection='home',selectedSpecialty=null,selectedTags=[],currentStep=0,currentChannel='général',challengeId=null,currentDmConvId=null,currentDmUser=null,isDmMode=false,dmRealtimeSub=null,channelRealtimeSub=null;
 
 // INIT
 window.addEventListener('load',async()=>{
@@ -2698,6 +2703,7 @@ function checkHierarchy(targetUsername, targetRole, action){
 function checkArchitect(){
   const role=currentProfile?.role;
   const isAdmin=role==='admin'||role==='architect'||role==='moderator';
+  const isFullAdmin=role==='admin'||role==='architect';
   const adminNav=document.getElementById('nav-admin');
   const badge=document.getElementById('profile-role-badge');
   if(isAdmin){
@@ -2707,6 +2713,11 @@ function checkArchitect(){
     if(adminNav)adminNav.style.display='none';
     if(badge)badge.style.display='none';
   }
+  // Premium & Rôles : réservés à admin/architect, pas aux modérateurs
+  const navPremium=document.getElementById('admin-nav-premium');
+  const navRoles=document.getElementById('admin-nav-roles');
+  if(navPremium)navPremium.style.display=isFullAdmin?'flex':'none';
+  if(navRoles)navRoles.style.display=isFullAdmin?'flex':'none';
   setEl('admin-welcome-role',ROLE_LABELS[role]||'Admin');
 }
 
@@ -3213,6 +3224,7 @@ async function openDmConv(convId, username){
   currentDmConvId=convId;
   currentDmUser=username;
   isDmMode=true;
+  unsubscribeChannelRealtime();
   // Update UI
   document.querySelectorAll('.dm-item').forEach(d=>d.classList.remove('active'));
   event?.currentTarget?.classList.add('active');
@@ -3319,6 +3331,7 @@ async function startDm(targetId, targetUsername){
 async function loadMessages(){
   const{data:chan}=await db.from('channels').select('id').eq('name',currentChannel).maybeSingle();
   if(!chan){document.getElementById('chat-messages').innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Ce canal n\'existe pas encore en base.</div>';return;}
+  subscribeChannelRealtime(chan.id);
   const{data:msgs}=await db.from('messages').select('*,profiles(username,is_premium,premium_tier)').eq('channel_id',chan.id).eq('is_dm',false).order('created_at',{ascending:true}).limit(50);
   if(msgs&&msgs.length>0){
     const c=document.getElementById('chat-messages');
@@ -3335,6 +3348,23 @@ async function loadMessages(){
   }else{
     document.getElementById('chat-messages').innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun message dans ce canal. Sois le premier !</div>';
   }
+}
+
+// Realtime sur le salon actif — sans ça, les autres utilisateurs
+// ne voient jamais les nouveaux messages sans recharger la page.
+let _subscribedChannelId=null;
+function subscribeChannelRealtime(channelId){
+  if(_subscribedChannelId===channelId&&channelRealtimeSub)return; // déjà abonné à ce salon
+  if(channelRealtimeSub){db.removeChannel(channelRealtimeSub);channelRealtimeSub=null;}
+  _subscribedChannelId=channelId;
+  channelRealtimeSub=db.channel('channel-'+channelId)
+    .on('postgres_changes',{event:'*',schema:'public',table:'messages',filter:`channel_id=eq.${channelId}`},()=>{
+      if(!isDmMode)loadMessages();
+    })
+    .subscribe();
+}
+function unsubscribeChannelRealtime(){
+  if(channelRealtimeSub){db.removeChannel(channelRealtimeSub);channelRealtimeSub=null;_subscribedChannelId=null;}
 }
 
 async function sendMessage(){
@@ -3997,21 +4027,32 @@ async function assignRole(){
 }
 
 // TICKETS DE MODÉRATION (vrais)
+let _ticketFilter='open';
+function filterTickets(el,status){
+  document.querySelectorAll('#admin-tickets .filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  _ticketFilter=status;
+  loadAdminTickets();
+}
 async function loadAdminTickets(){
   const cont=document.getElementById('admin-tickets-list');
-  const{data}=await db.from('report_tickets').select('*,reporter:profiles!report_tickets_reporter_id_fkey(username),target:profiles!report_tickets_target_id_fkey(username)').order('created_at',{ascending:false}).limit(30);
+  let q=db.from('report_tickets').select('*,reporter:profiles!report_tickets_reporter_id_fkey(username),target:profiles!report_tickets_target_id_fkey(username)').order('created_at',{ascending:false}).limit(30);
+  if(_ticketFilter!=='all')q=q.eq('status',_ticketFilter);
+  const{data}=await q;
   if(!data||data.length===0){
     cont.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun ticket pour l\'instant.</div>';
     return;
   }
+  const statusClass={open:'status-open',claimed:'status-claimed',resolved:'status-resolved',dismissed:'status-resolved'};
   cont.innerHTML=data.map(t=>`<div class="admin-table-row ticket-grid">
     <div><strong style="font-size:13px">${esc(t.reason||'—')}</strong><div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">Par @${esc(t.reporter?.username||'?')} → @${esc(t.target?.username||'?')}</div></div>
     <div style="font-size:12px;font-family:var(--font-mono);color:var(--text-secondary)">${esc(t.category||'—')}</div>
     <div style="font-size:12px;font-family:var(--font-mono);color:var(--text-secondary)">${esc(t.priority||'—')}</div>
-    <div><span class="status-badge ${t.status==='open'?'status-open':t.status==='claimed'?'status-claimed':'status-resolved'}">${t.status}</span></div>
+    <div><span class="status-badge ${statusClass[t.status]||'status-open'}">${t.status}</span></div>
     <div class="action-btns">
       ${t.status==='open'?`<button class="btn btn-ghost btn-sm" onclick="claimTicket('${t.id}')">Prendre</button>`:''}
-      ${t.status!=='resolved'?`<button class="btn btn-ghost btn-sm" onclick="resolveTicket('${t.id}')">Résoudre</button>`:''}
+      ${t.status!=='resolved'&&t.status!=='dismissed'?`<button class="btn btn-ghost btn-sm" onclick="resolveTicket('${t.id}')">Résoudre</button>`:''}
+      ${t.status!=='dismissed'&&t.status!=='resolved'?`<button class="btn btn-ghost btn-sm" style="color:var(--text-muted)" onclick="dismissTicket('${t.id}')">Rejeter</button>`:''}
     </div>
   </div>`).join('');
 }
@@ -4026,6 +4067,12 @@ async function resolveTicket(id){
   await db.from('report_tickets').update({status:'resolved',resolved_at:new Date().toISOString()}).eq('id',id);
   await writeAdminLog(`Ticket ${id} résolu`,'moderation');
   showToast('Ticket résolu.','success');loadAdminTickets();loadAdminStats();
+}
+
+async function dismissTicket(id){
+  await db.from('report_tickets').update({status:'dismissed',resolved_at:new Date().toISOString()}).eq('id',id);
+  await writeAdminLog(`Ticket ${id} rejeté`,'moderation');
+  showToast('Ticket rejeté.','info');loadAdminTickets();loadAdminStats();
 }
 
 // LOGS ADMIN (vrais)
@@ -4186,7 +4233,7 @@ function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
  * ║   Toute copie, reproduction ou distribution est interdite    ║
  * ╚══════════════════════════════════════════════════════════════╝
  *
- * Créateur  : Cover / Cover .dev
+ * Créateur  : Cover / Cover.dev
  * Projet    : DevConnect — Plateforme communautaire pour devs
  * Version   : DC-2026-v2.0
  * Build     : 2026-06-22T21:41:35
