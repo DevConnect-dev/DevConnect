@@ -339,6 +339,7 @@ function updateSettingsSection(){
   tog('toggle-public-profile',currentProfile.is_public!==false);
   tog('toggle-block-dms',!!currentProfile.block_dms);
   tog('toggle-hide-xp',!!currentProfile.hide_xp);
+  tog('toggle-pairing',!!currentProfile.available_for_pairing);
   // Sync notif prefs (saved in localStorage for immediate responsiveness)
   syncNotifToggles();
 }
@@ -610,6 +611,7 @@ function navigate(section) {
   if (section === 'recruit') loadJobs();
   if (section === 'editor') renderEditorFileTree();
   if (section === 'learn') { loadLearnProgress(); renderChallenges(); }
+  if (section === 'snippets') { loadSnippets(); }
 }
 
 // CLASSEMENT RÉEL
@@ -758,6 +760,33 @@ function renderBadgesTab(p) {
   cont.innerHTML = html;
 }
 
+function renderMarkdown(text){
+  if(!text)return '';
+  try{ return marked.parse(esc(text)); }catch(e){ return esc(text); }
+}
+
+function parseGithubUrl(url){
+  if(!url)return null;
+  const m=url.match(/github\.com\/([^\/\s]+)\/([^\/\s#?]+?)(?:\.git)?\/?(?:[#?].*)?$/i);
+  return m?{owner:m[1],repo:m[2]}:null;
+}
+
+async function fetchGithubStats(owner,repo){
+  const key=`gh_stats_${owner}_${repo}`;
+  try{
+    const cached=JSON.parse(localStorage.getItem(key)||'null');
+    if(cached&&Date.now()-cached.ts<3600000)return cached.data;
+  }catch(e){}
+  try{
+    const res=await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+    if(!res.ok)return null;
+    const d=await res.json();
+    const stats={stars:d.stargazers_count||0,forks:d.forks_count||0,lang:d.language||'',pushed_at:d.pushed_at};
+    localStorage.setItem(key,JSON.stringify({ts:Date.now(),data:stats}));
+    return stats;
+  }catch(e){return null;}
+}
+
 async function renderProjectsTab() {
   const cont = document.getElementById('projects-list');
   if(!cont || !currentUser) return;
@@ -766,14 +795,220 @@ async function renderProjectsTab() {
     cont.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun projet ajouté. Clique sur + pour commencer !</div>';
     return;
   }
-  cont.innerHTML = data.map(p => `<div class="project-card">
+  cont.innerHTML = data.map(p => `<div class="project-card" data-project-id="${esc(p.id)}">
     <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
-      <div class="project-name">${esc(p.name||'')}</div>
-      <div style="display:flex;gap:6px">${p.github_url?`<a href="${esc(p.github_url)}" target="_blank" class="btn btn-ghost btn-sm">GitHub</a>`:''}</div>
+      <div class="project-name">${esc(p.name||'')} ${p.looking_for_collab?'<span class="badge-inline" style="margin-left:6px">🤝 Cherche collaborateurs</span>':''}</div>
+      <div style="display:flex;gap:6px;flex-shrink:0">
+        ${p.github_url?`<a href="${esc(p.github_url)}" target="_blank" class="btn btn-ghost btn-sm">GitHub</a>`:''}
+        <button class="btn btn-ghost btn-sm" onclick="editProject('${esc(p.id)}')">Modifier</button>
+        <button class="btn btn-ghost btn-sm" style="color:#e08080" onclick="deleteProject('${esc(p.id)}')">Suppr.</button>
+      </div>
     </div>
-    <div class="project-desc">${esc(p.description||'')}</div>
-    ${p.stack?`<div class="project-stack">${(p.stack||[]).map(s=>`<span class="stack-tag">${esc(s)}</span>`).join('')}</div>`:''}
+    <div class="project-desc markdown-body">${renderMarkdown(p.description)}</div>
+    ${p.stack&&p.stack.length?`<div class="project-stack">${p.stack.map(s=>`<span class="stack-tag">${esc(s)}</span>`).join('')}</div>`:''}
+    <div class="project-gh-stats" id="gh-stats-${esc(p.id)}" style="font-size:11px;color:var(--text-muted);margin-top:8px;font-family:var(--font-mono)"></div>
   </div>`).join('');
+  cont.querySelectorAll('pre code').forEach(b=>{try{hljs.highlightElement(b);}catch(e){}});
+  data.forEach(async p=>{
+    if(!p.github_url)return;
+    const parsed=parseGithubUrl(p.github_url);
+    if(!parsed)return;
+    const stats=await fetchGithubStats(parsed.owner,parsed.repo);
+    const el=document.getElementById(`gh-stats-${p.id}`);
+    if(el&&stats)el.innerHTML=`★ ${stats.stars} · ⑂ ${stats.forks}${stats.lang?' · '+esc(stats.lang):''} · maj ${timeAgo(stats.pushed_at)}`;
+  });
+}
+
+let editingProjectId=null;
+function openAddProjectModal(){
+  editingProjectId=null;
+  setEl('project-modal-title','Ajouter un projet');
+  setVal('proj-name','');setVal('proj-desc','');setVal('proj-github','');setVal('proj-stack','');
+  document.getElementById('proj-collab').classList.remove('on');
+  document.getElementById('project-modal').classList.add('show');
+}
+function closeProjectModal(){document.getElementById('project-modal').classList.remove('show');}
+
+async function editProject(id){
+  const {data:p,error}=await db.from('projects').select('*').eq('id',id).maybeSingle();
+  if(error||!p){showToast('Projet introuvable.','error');return;}
+  editingProjectId=id;
+  setEl('project-modal-title','Modifier le projet');
+  setVal('proj-name',p.name||'');setVal('proj-desc',p.description||'');setVal('proj-github',p.github_url||'');
+  setVal('proj-stack',(p.stack||[]).join(', '));
+  document.getElementById('proj-collab').classList.toggle('on',!!p.looking_for_collab);
+  document.getElementById('project-modal').classList.add('show');
+}
+
+async function saveProject(){
+  if(!currentUser)return;
+  const name=getVal('proj-name').trim();
+  const description=getVal('proj-desc').trim();
+  const github_url=getVal('proj-github').trim();
+  const stack=getVal('proj-stack').split(',').map(s=>s.trim()).filter(Boolean);
+  const looking_for_collab=document.getElementById('proj-collab').classList.contains('on');
+  if(!name){showToast('Le nom du projet est obligatoire.','error');return;}
+  const payload={name,description,github_url:github_url||null,stack,looking_for_collab};
+  let error;
+  if(editingProjectId){
+    ({error}=await db.from('projects').update(payload).eq('id',editingProjectId));
+  }else{
+    payload.user_id=currentUser.id;
+    ({error}=await db.from('projects').insert(payload));
+  }
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  closeProjectModal();
+  showToast(editingProjectId?'Projet mis à jour !':'Projet publié !','success');
+  await renderProjectsTab();
+}
+
+async function deleteProject(id){
+  if(!confirm('Supprimer ce projet ?'))return;
+  const {error}=await db.from('projects').delete().eq('id',id);
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  showToast('Projet supprimé.','success');
+  await renderProjectsTab();
+}
+
+async function expressProjectInterest(projectId,ownerId,projectName){
+  if(!currentUser){showToast('Connecte-toi pour manifester ton intérêt.','error');return;}
+  if(ownerId===currentUser.id){showToast('C\'est ton propre projet !','error');return;}
+  await notifyUser(ownerId,'project_interest',`@${currentProfile.username} est intéressé(e) par collaborer sur "${projectName}".`,'discover');
+  showToast('Ton intérêt a été envoyé au créateur du projet !','success');
+}
+
+// ============================================================
+// SNIPPETS LIBRARY
+// ============================================================
+let activeSnippetLang='all';
+
+function openAddSnippetModal(){
+  if(!currentUser){showToast('Connecte-toi pour publier un snippet.','error');return;}
+  setVal('snip-title','');setVal('snip-code','');setVal('snip-desc','');setVal('snip-tags','');
+  setVal('snip-lang','javascript');
+  document.getElementById('snippet-modal').classList.add('show');
+}
+function closeSnippetModal(){document.getElementById('snippet-modal').classList.remove('show');}
+
+async function saveSnippet(){
+  if(!currentUser)return;
+  const title=getVal('snip-title').trim();
+  const code=getVal('snip-code').trim();
+  const language=getVal('snip-lang');
+  const description=getVal('snip-desc').trim();
+  const tags=getVal('snip-tags').split(',').map(t=>t.trim()).filter(Boolean);
+  if(!title||!code){showToast('Titre et code sont obligatoires.','error');return;}
+  const{error}=await db.from('snippets').insert({user_id:currentUser.id,title,code,language,description,tags,likes_count:0});
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  closeSnippetModal();
+  showToast('Snippet publié !','success');
+  await loadSnippets();
+}
+
+function setSnippetLangFilter(el,lang){
+  document.querySelectorAll('#snippet-lang-filters .filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  activeSnippetLang=lang;
+  loadSnippets();
+}
+
+async function loadSnippets(){
+  const cont=document.getElementById('snippets-list');
+  if(!cont)return;
+  cont.innerHTML='<div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement...</div>';
+  let q=db.from('snippets').select('*,profiles(username,avatar_url)').order('created_at',{ascending:false}).limit(50);
+  if(activeSnippetLang!=='all')q=q.eq('language',activeSnippetLang);
+  const{data,error}=await q;
+  if(error||!data||data.length===0){
+    cont.innerHTML='<div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Aucun snippet pour l\'instant. Sois le premier à en publier !</div>';
+    return;
+  }
+  let myLikes=new Set();
+  if(currentUser){
+    const{data:lk}=await db.from('snippet_likes').select('snippet_id').eq('user_id',currentUser.id);
+    if(lk)lk.forEach(l=>myLikes.add(l.snippet_id));
+  }
+  const langLabels={javascript:'JavaScript',python:'Python',css:'CSS',html:'HTML',sql:'SQL',other:'Autre'};
+  cont.innerHTML=data.map(s=>{
+    const prof=s.profiles||{};
+    const name=prof.username||'Inconnu';
+    const liked=myLikes.has(s.id);
+    const codeEscaped=esc(s.code||'');
+    return`<div class="project-card" style="margin-bottom:12px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px">
+        <div>
+          <div class="project-name">${esc(s.title||'')}</div>
+          <div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono);margin-top:2px">par <span style="cursor:pointer" onclick="openProfile('${esc(name)}')">@${esc(name)}</span> · ${esc(langLabels[s.language]||s.language||'')} · ${timeAgo(s.created_at)}</div>
+        </div>
+      </div>
+      ${s.description?`<div class="project-desc" style="margin-bottom:8px">${esc(s.description)}</div>`:''}
+      <pre style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:12px;overflow-x:auto;margin:0 0 8px"><code class="language-${esc(s.language||'')}">${codeEscaped}</code></pre>
+      ${s.tags&&s.tags.length?`<div class="project-stack" style="margin-bottom:8px">${s.tags.map(t=>`<span class="stack-tag">${esc(t)}</span>`).join('')}</div>`:''}
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="post-action ${liked?'post-liked':''}" onclick="toggleSnippetLike('${esc(s.id)}',this)">◆ <span class="like-count">${s.likes_count||0}</span></button>
+        <button class="btn btn-ghost btn-sm" onclick="copySnippetCode(this)" data-code="${esc(s.code||'')}">⧉ Copier</button>
+        <button class="post-action" onclick="toggleSnippetComments('${esc(s.id)}')">💬 Code review</button>
+      </div>
+      <div class="snippet-comments" id="snip-comments-${esc(s.id)}" style="display:none;margin-top:10px;border-top:1px solid var(--border);padding-top:10px"></div>
+    </div>`;
+  }).join('');
+  cont.querySelectorAll('pre code').forEach(b=>{try{hljs.highlightElement(b);}catch(e){}});
+}
+
+async function toggleSnippetComments(snippetId){
+  const el=document.getElementById('snip-comments-'+snippetId);
+  if(!el)return;
+  const isHidden=el.style.display==='none';
+  el.style.display=isHidden?'block':'none';
+  if(isHidden)await loadSnippetComments(snippetId);
+}
+
+async function loadSnippetComments(snippetId){
+  const el=document.getElementById('snip-comments-'+snippetId);
+  if(!el)return;
+  el.innerHTML='<div style="font-size:12px;color:var(--text-muted)">Chargement...</div>';
+  const{data,error}=await db.from('snippet_comments').select('*,profiles(username)').eq('snippet_id',snippetId).order('created_at',{ascending:true}).limit(50);
+  const list=(!error&&data)?data.map(c=>{
+    const name=c.profiles?.username||'Inconnu';
+    return`<div style="margin-bottom:8px;font-size:12px"><span style="cursor:pointer;font-weight:500;color:var(--text)" onclick="openProfile('${esc(name)}')">@${esc(name)}</span> <span style="color:var(--text-muted);font-size:10px">${timeAgo(c.created_at)}</span><div style="color:var(--text-secondary);margin-top:2px">${esc(c.content)}</div></div>`;
+  }).join(''):'';
+  el.innerHTML=(list||'<div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Aucun commentaire. Sois le premier à proposer une revue !</div>')+
+    (currentUser?`<div style="display:flex;gap:6px;margin-top:8px"><input type="text" class="form-input" id="snip-comment-input-${esc(snippetId)}" placeholder="Propose une amélioration, signale un bug..." style="font-size:12px" onkeydown="if(event.key==='Enter')submitSnippetComment('${esc(snippetId)}')"><button class="btn btn-primary btn-sm" onclick="submitSnippetComment('${esc(snippetId)}')">Envoyer</button></div>`:'');
+}
+
+async function submitSnippetComment(snippetId){
+  if(!currentUser){showToast('Connecte-toi pour commenter.','error');return;}
+  const input=document.getElementById('snip-comment-input-'+snippetId);
+  const content=input.value.trim();
+  if(!content)return;
+  const{error}=await db.from('snippet_comments').insert({snippet_id:snippetId,user_id:currentUser.id,content});
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  input.value='';
+  await loadSnippetComments(snippetId);
+}
+
+async function toggleSnippetLike(snippetId,btn){
+  if(!currentUser){showToast('Connecte-toi pour liker.','error');return;}
+  const liked=btn.classList.contains('post-liked');
+  const countEl=btn.querySelector('.like-count');
+  if(liked){
+    btn.classList.remove('post-liked');
+    countEl.textContent=Math.max(0,parseInt(countEl.textContent)-1);
+    await db.from('snippet_likes').delete().eq('snippet_id',snippetId).eq('user_id',currentUser.id);
+    await db.rpc('decrement_snippet_likes',{snippet_id_input:snippetId}).catch(()=>{});
+  }else{
+    btn.classList.add('post-liked');
+    countEl.textContent=parseInt(countEl.textContent)+1;
+    await db.from('snippet_likes').insert({snippet_id:snippetId,user_id:currentUser.id});
+    await db.rpc('increment_snippet_likes',{snippet_id_input:snippetId}).catch(()=>{});
+  }
+}
+
+function copySnippetCode(btn){
+  const code=btn.dataset.code||'';
+  navigator.clipboard.writeText(code).then(()=>{
+    showToast('Code copié dans le presse-papier !','success');
+  }).catch(()=>{showToast('Impossible de copier.','error');});
 }
 
 async function renderStatsTab() {
@@ -784,6 +1019,8 @@ async function renderStatsTab() {
   setEl('stats-challenges', challengeCount || 0);
   const {count: postCount} = await db.from('posts').select('*',{count:'exact',head:true}).eq('user_id', currentUser.id);
   setEl('stats-posts', postCount || 0);
+  const heatEl=document.getElementById('stats-github-heatmap');
+  if(heatEl)heatEl.innerHTML=githubHeatmapHtml(currentProfile.github_url);
 }
 
 function switchProfileTab(tab, el) {
@@ -1084,6 +1321,16 @@ async function startDm(targetId, targetUsername){
   await openDmConv(convId,targetUsername);
 }
 
+async function requestPairingSession(targetId,targetUsername){
+  closeProfileModal();
+  await startDm(targetId,targetUsername);
+  const input=document.getElementById('chat-input');
+  if(input){
+    input.value=`Salut ! Je vois que tu es dispo pour du pair programming, ça te dirait qu'on fasse une session ensemble ? 🤝`;
+    input.focus();
+  }
+}
+
 // ============================================================
 
 // MESSAGES
@@ -1280,7 +1527,7 @@ let discoverFilter = 'all', discoverSubFilters = [], discoverSearch = '';
 async function loadDiscover() {
   const cont = document.getElementById('dev-results');
   cont.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement...</div>';
-  let q = db.from('profiles').select('username,avatar_url,specialty,tech_stack,title,is_premium,premium_tier,xp').eq('is_banned', false).order('xp', { ascending: false }).limit(40);
+  let q = db.from('profiles').select('username,avatar_url,specialty,tech_stack,title,is_premium,premium_tier,xp,available_for_pairing').eq('is_banned', false).order('xp', { ascending: false }).limit(40);
   if (discoverFilter !== 'all') q = q.eq('specialty', discoverFilter);
   if (discoverSearch) q = q.ilike('username', `%${discoverSearch}%`);
   const { data } = await q;
@@ -1314,6 +1561,7 @@ async function loadDiscover() {
         <div class="dev-name">${esc(name)} ${prem}</div>
         <div class="dev-title">${esc(sub)}</div>
         <div class="dev-stack">${stack}</div>
+        ${u.available_for_pairing?'<div class="badge-inline" style="margin-top:4px">🤝 Dispo pair programming</div>':''}
       </div>
       <div class="dev-actions">
         <div class="dev-rate" style="font-size:11px;color:var(--text-muted)">${u.xp || 0} XP</div>
@@ -1385,6 +1633,17 @@ async function loadJobs(){
     return`<div class="job-card"><div class="job-header"><div><div class="job-title">${esc(j.title)}</div><div class="job-company">${esc(j.company||'')} ${author?'· '+author:''}</div></div><div class="job-budget">${esc(j.budget||'')}</div></div><div class="job-desc">${esc(j.description)}</div><div class="job-tags">${tags}</div></div>`;
   }).join('');
 }
+function githubUsernameFromUrl(url){
+  if(!url)return null;
+  const m=url.match(/github\.com\/([^\/\s#?]+)/i);
+  return m?m[1]:null;
+}
+function githubHeatmapHtml(githubUrl){
+  const u=githubUsernameFromUrl(githubUrl);
+  if(!u)return '';
+  return `<div style="margin-top:10px"><div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono);margin-bottom:4px">Activité GitHub</div><img src="https://ghchart.rshah.org/8a8ac8/${esc(u)}" alt="GitHub activity" style="width:100%;border-radius:var(--radius);border:1px solid var(--border)" loading="lazy"></div>`;
+}
+
 async function openProfile(username){
   if(!username)return;
   const modal=document.getElementById('view-profile-modal');
@@ -1414,12 +1673,35 @@ async function openProfile(username){
     </div>
     ${stack?`<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:10px">${stack}</div>`:''}
     ${links?`<div class="profile-links" style="justify-content:center">${links}</div>`:''}
+    ${p.available_for_pairing?'<div class="badge-inline" style="margin-top:8px">🤝 Dispo pour pair programming</div>':''}
+    ${githubHeatmapHtml(p.github_url)}
+    <div id="view-profile-projects" style="text-align:left;margin-top:14px"></div>
     ${currentUser&&p.id!==currentUser?.id?`<button class="btn btn-primary w-full" style="margin-top:14px" id="follow-btn" onclick="toggleFollow('${esc(p.id)}')">Suivre</button>`:''}
     ${currentUser&&p.id!==currentUser?.id?`<button class="btn btn-ghost w-full" style="margin-top:8px" onclick="closeProfileModal();startDm('${esc(p.id)}','${esc(p.username||'')}')">✉ Message direct</button>`:''}
+    ${currentUser&&p.id!==currentUser?.id&&p.available_for_pairing?`<button class="btn btn-ghost w-full" style="margin-top:8px" onclick="requestPairingSession('${esc(p.id)}','${esc(p.username||'')}')">🤝 Demander une session de pair programming</button>`:''}
     ${currentUser&&p.id!==currentUser?.id?`<button class="btn btn-ghost w-full" style="margin-top:8px;color:#e05a5a" onclick="closeProfileModal();openReportModal('${esc(p.id)}','${esc(p.username||'')}')">⚠ Signaler ce profil</button>`:''}
   `;
   loadFollowCounts(p.id);
   if(currentUser&&p.id!==currentUser.id)checkFollowState(p.id);
+  loadProfileModalProjects(p.id,p.username);
+}
+
+async function loadProfileModalProjects(profileId,username){
+  const cont=document.getElementById('view-profile-projects');
+  if(!cont)return;
+  const{data}=await db.from('projects').select('*').eq('user_id',profileId).order('created_at',{ascending:false}).limit(5);
+  if(!data||data.length===0)return;
+  cont.innerHTML=`<div style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Projets</div>`+
+    data.map(p=>`<div class="project-card" style="margin-bottom:8px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+        <div class="project-name" style="font-size:13px">${esc(p.name||'')} ${p.looking_for_collab?'<span class="badge-inline" style="margin-left:4px">🤝</span>':''}</div>
+        ${p.github_url?`<a href="${esc(p.github_url)}" target="_blank" class="btn btn-ghost btn-sm">GitHub</a>`:''}
+      </div>
+      <div class="project-desc markdown-body" style="font-size:12px">${renderMarkdown(p.description)}</div>
+      ${p.stack&&p.stack.length?`<div class="project-stack">${p.stack.map(s=>`<span class="stack-tag">${esc(s)}</span>`).join('')}</div>`:''}
+      ${p.looking_for_collab&&currentUser&&currentUser.id!==profileId?`<button class="btn btn-ghost btn-sm" style="margin-top:6px" onclick="expressProjectInterest('${esc(p.id)}','${esc(profileId)}','${esc(p.name||'')}')">🤝 Je suis intéressé(e)</button>`:''}
+    </div>`).join('');
+  cont.querySelectorAll('pre code').forEach(b=>{try{hljs.highlightElement(b);}catch(e){}});
 }
 
 async function loadFollowCounts(profileId){
@@ -1718,6 +2000,28 @@ function downloadEditorFile(){
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
+
+function runEditorPreview(){
+  const names=Object.keys(editorFiles);
+  const htmlFile=names.find(n=>n.toLowerCase().endsWith('.html'));
+  const cssFiles=names.filter(n=>n.toLowerCase().endsWith('.css'));
+  const jsFiles=names.filter(n=>n.toLowerCase().endsWith('.js'));
+  const cssBlock=cssFiles.map(n=>`<style>${editorFiles[n]}</style>`).join('\n');
+  const jsBlock=jsFiles.map(n=>`<script>${editorFiles[n]}</script>`).join('\n');
+  let doc;
+  if(htmlFile){
+    doc=editorFiles[htmlFile];
+    if(doc.includes('</head>'))doc=doc.replace('</head>',cssBlock+'</head>');
+    else doc=cssBlock+doc;
+    if(doc.includes('</body>'))doc=doc.replace('</body>',jsBlock+'</body>');
+    else doc=doc+jsBlock;
+  }else{
+    doc=`<!DOCTYPE html><html><head>${cssBlock}</head><body>${jsFiles.length?'':'<p style="font-family:sans-serif;color:#888;padding:20px">Aucun fichier HTML — exécution du JS uniquement, voir la console.</p>'}${jsBlock}</body></html>`;
+  }
+  document.getElementById('preview-iframe').srcdoc=doc;
+  document.getElementById('preview-modal').classList.add('show');
+}
+function closePreviewModal(){document.getElementById('preview-modal').classList.remove('show');}
 
 async function sendEditorAI(){
   if(!currentUser){showToast('Connecte-toi pour utiliser l\'IA.','error');return;}

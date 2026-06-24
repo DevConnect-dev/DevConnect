@@ -48,7 +48,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github-dark.min.css">
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/highlight.min.js"></script>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -386,6 +389,7 @@
       <a class="nav-item" onclick="navigate('ranking')" data-section="ranking"><span class="nav-item-icon">◇</span>Classement</a>
       <a class="nav-item" onclick="navigate('recruit')" data-section="recruit"><span class="nav-item-icon">⬡</span>Recrutement</a>
       <a class="nav-item" onclick="navigate('editor')" data-section="editor"><span class="nav-item-icon">⬢</span>Éditeur</a>
+      <a class="nav-item" onclick="navigate('snippets')" data-section="snippets"><span class="nav-item-icon">❖</span>Snippets</a>
       <a class="nav-item" id="nav-admin" onclick="navigate('admin')" data-section="admin" style="display:none"><span class="nav-item-icon">⬟</span>Admin</a>
     </div>
     <div class="topnav-right">
@@ -508,6 +512,7 @@
               <div class="sidebar-widget"><div class="widget-title">Streak</div><div style="font-family:var(--font-display);font-size:32px;font-weight:600" id="stats-streak">0 jours</div></div>
               <div class="sidebar-widget"><div class="widget-title">Posts publiés</div><div style="font-family:var(--font-display);font-size:32px;font-weight:600" id="stats-posts">0</div></div>
             </div>
+            <div id="stats-github-heatmap"></div>
           </div>
         </div>
       </div>
@@ -668,6 +673,27 @@
       </div>
     </div>
 
+    <!-- SNIPPETS -->
+    <div class="app-section" id="section-snippets">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div>
+          <div class="feed-title">Bibliothèque de Snippets</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:4px">Du code réutilisable partagé par la communauté</div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openAddSnippetModal()">+ Publier un snippet</button>
+      </div>
+      <div class="filter-chips" id="snippet-lang-filters" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="filter-chip active" onclick="setSnippetLangFilter(this,'all')">Tous</button>
+        <button class="filter-chip" onclick="setSnippetLangFilter(this,'javascript')">JavaScript</button>
+        <button class="filter-chip" onclick="setSnippetLangFilter(this,'python')">Python</button>
+        <button class="filter-chip" onclick="setSnippetLangFilter(this,'css')">CSS</button>
+        <button class="filter-chip" onclick="setSnippetLangFilter(this,'html')">HTML</button>
+        <button class="filter-chip" onclick="setSnippetLangFilter(this,'sql')">SQL</button>
+        <button class="filter-chip" onclick="setSnippetLangFilter(this,'other')">Autre</button>
+      </div>
+      <div id="snippets-list"><div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement...</div></div>
+    </div>
+
     <!-- ÉDITEUR -->
     <div class="app-section" id="section-editor">
       <div class="editor-layout">
@@ -675,6 +701,7 @@
           <div class="editor-sidebar-header" style="display:flex;align-items:center;justify-content:space-between">
             <span>Explorateur</span>
             <span style="display:flex;gap:6px">
+              <button title="Aperçu en direct" onclick="runEditorPreview()" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:13px">▶</button>
               <button title="Nouveau fichier" onclick="createEditorFile()" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:14px">+</button>
               <button title="Importer un fichier" onclick="document.getElementById('file-import-input').click()" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:13px">⇪</button>
               <button title="Télécharger le fichier actif" onclick="downloadEditorFile()" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:13px">⇩</button>
@@ -1036,6 +1063,10 @@
               <div class="settings-row">
                 <div class="settings-row-left"><div class="settings-row-label">Masquer mon XP</div><div class="settings-row-sub">Ton score n'apparaîtra pas dans le classement</div></div>
                 <button class="toggle" id="toggle-hide-xp" onclick="togglePrivacySetting(this,'hide_xp')"></button>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left"><div class="settings-row-label">🤝 Disponible pour pair programming</div><div class="settings-row-sub">Affiche un badge "dispo" sur ton profil et dans Découverte</div></div>
+                <button class="toggle" id="toggle-pairing" onclick="togglePrivacySetting(this,'available_for_pairing')"></button>
               </div>
             </div>
           </div>
@@ -1542,6 +1573,67 @@
       <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="job-desc" rows="4" placeholder="Décris la mission..."></textarea></div>
       <div class="form-group"><label class="form-label">Tags (séparés par des virgules)</label><input type="text" class="form-input" id="job-tags" placeholder="React, TypeScript, Remote"></div>
       <button class="btn btn-primary w-full" onclick="publishJob()">Publier l'offre</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD SNIPPET MODAL -->
+<div class="modal-overlay" id="snippet-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Publier un snippet</div>
+      <button class="modal-close" onclick="closeSnippetModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Titre</label><input type="text" class="form-input" id="snip-title" placeholder="Debounce function réutilisable"></div>
+      <div class="form-group"><label class="form-label">Langage</label>
+        <select class="form-input" id="snip-lang">
+          <option value="javascript">JavaScript</option>
+          <option value="python">Python</option>
+          <option value="css">CSS</option>
+          <option value="html">HTML</option>
+          <option value="sql">SQL</option>
+          <option value="other">Autre</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Code</label><textarea class="form-input" id="snip-code" rows="8" style="font-family:var(--font-mono);font-size:12px" placeholder="Colle ton code ici..."></textarea></div>
+      <div class="form-group"><label class="form-label">Description (optionnel)</label><textarea class="form-input" id="snip-desc" rows="2" placeholder="À quoi ça sert ?"></textarea></div>
+      <div class="form-group"><label class="form-label">Tags (séparés par des virgules)</label><input type="text" class="form-input" id="snip-tags" placeholder="utils, performance, react"></div>
+      <button class="btn btn-primary w-full" onclick="saveSnippet()">Publier</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDITOR PREVIEW MODAL -->
+<div class="modal-overlay" id="preview-modal">
+  <div class="modal" style="max-width:900px;width:90vw">
+    <div class="modal-header">
+      <div class="modal-title">Aperçu en direct</div>
+      <button class="modal-close" onclick="closePreviewModal()">×</button>
+    </div>
+    <div class="modal-body" style="padding:0">
+      <iframe id="preview-iframe" style="width:100%;height:65vh;border:none;border-radius:0 0 var(--radius-lg) var(--radius-lg);background:#fff"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- ADD PROJECT MODAL -->
+<div class="modal-overlay" id="project-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="project-modal-title">Ajouter un projet</div>
+      <button class="modal-close" onclick="closeProjectModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Nom du projet</label><input type="text" class="form-input" id="proj-name" placeholder="Mon super projet"></div>
+      <div class="form-group"><label class="form-label">Description (Markdown supporté : **gras**, \`code\`, listes...)</label><textarea class="form-input" id="proj-desc" rows="5" placeholder="Décris ton projet..."></textarea></div>
+      <div class="form-group"><label class="form-label">Lien GitHub (optionnel)</label><input type="text" class="form-input" id="proj-github" placeholder="https://github.com/user/repo"></div>
+      <div class="form-group"><label class="form-label">Stack technique (séparée par des virgules)</label><input type="text" class="form-input" id="proj-stack" placeholder="React, Node.js, PostgreSQL"></div>
+      <div class="form-group" style="display:flex;align-items:center;gap:10px">
+        <button class="toggle" id="proj-collab" onclick="this.classList.toggle('on')"></button>
+        <span style="font-size:13px;color:var(--text-secondary)">Je cherche des collaborateurs sur ce projet</span>
+      </div>
+      <button class="btn btn-primary w-full" id="proj-save-btn" onclick="saveProject()">Publier le projet</button>
     </div>
   </div>
 </div>
