@@ -420,12 +420,23 @@
       <div class="home-layout">
         <div>
           <div id="feed-banner-slot"></div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+          <div class="home-greeting" id="home-greeting">
+            <div class="home-greeting-avatar" id="home-greeting-avatar">DC</div>
+            <div class="home-greeting-text">
+              <div class="home-greeting-title" id="home-greeting-title">Salut 👋</div>
+              <div class="home-greeting-sub">Quoi de neuf dans la communauté aujourd'hui ?</div>
+            </div>
+            <div class="home-greeting-stats" id="home-greeting-stats"></div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
             <div class="feed-title">Fil d'actualité</div>
             <button class="btn btn-ghost btn-sm">Récents</button>
           </div>
           <div class="composer">
-            <textarea class="composer-input" id="post-composer" placeholder="Partage quelque chose avec la communauté..."></textarea>
+            <div class="composer-row">
+              <div class="composer-avatar" id="composer-avatar">DC</div>
+              <textarea class="composer-input" id="post-composer" placeholder="Partage quelque chose avec la communauté..."></textarea>
+            </div>
             <div class="composer-actions">
               <div class="composer-tools">
                 <button class="composer-tool" onclick="insertTag('code')">{ code }</button>
@@ -435,21 +446,21 @@
             </div>
           </div>
           <div id="feed-posts">
-            <div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement du fil...</div>
+            <div class="empty-state"><div class="empty-state-icon">◆</div><div class="empty-state-text">Chargement du fil...</div></div>
           </div>
         </div>
         <div>
           <div class="sidebar-widget">
-            <div class="widget-title">Top cette semaine</div>
+            <div class="widget-title">★ Top cette semaine</div>
             <div id="sidebar-leaderboard"><div style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono)">Chargement...</div></div>
           </div>
           <div class="sidebar-widget">
-            <div class="widget-title">Events à venir</div>
+            <div class="widget-title">◷ Events à venir</div>
             <div style="font-size:13px;padding:8px 0;border-bottom:1px solid var(--border)"><div style="font-weight:500;margin-bottom:3px">Hackathon IA #3</div><div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">28 janv. · En ligne</div></div>
             <div style="font-size:13px;padding:8px 0"><div style="font-weight:500;margin-bottom:3px">CTF Cybersec Night</div><div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">3 fév. · En ligne</div></div>
           </div>
           <div class="sidebar-widget">
-            <div class="widget-title">Compétences populaires</div>
+            <div class="widget-title">⌨ Compétences populaires</div>
             <div style="display:flex;flex-wrap:wrap;gap:5px">
               <span class="tag-item" style="cursor:default">Python</span><span class="tag-item" style="cursor:default">React</span><span class="tag-item" style="cursor:default">Docker</span><span class="tag-item" style="cursor:default">Pentest</span><span class="tag-item" style="cursor:default">Rust</span><span class="tag-item" style="cursor:default">K8s</span><span class="tag-item" style="cursor:default">LLM</span>
             </div>
@@ -654,21 +665,35 @@
     <div class="app-section" id="section-recruit">
       <div class="recruit-layout">
         <div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+          <div class="recruit-hero">
+            <div class="recruit-hero-icon">⬡</div>
+            <div>
+              <div class="recruit-hero-title">Recrute ou trouve ta prochaine mission</div>
+              <div class="recruit-hero-sub">Des devs vérifiés, des paiements sécurisés par escrow, zéro mauvaise surprise.</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
             <div class="feed-title">Offres disponibles</div>
             <button class="btn btn-primary btn-sm" onclick="openJobModal()">+ Publier une offre</button>
           </div>
-          <div id="job-list"><div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement...</div></div>
+          <div id="job-list">
+            <div class="empty-state"><div class="empty-state-icon">⬡</div><div class="empty-state-text">Aucune offre pour l'instant.</div><div class="empty-state-sub">Sois le premier à publier une mission !</div></div>
+          </div>
         </div>
         <div>
           <div class="sidebar-widget">
-            <div class="widget-title">Commission DevConnect</div>
-            <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:12px">Toutes les transactions passent par notre système d'escrow sécurisé.</div>
+            <div class="widget-title">◆ Comment ça marche</div>
+            <div class="how-it-works-step"><span class="hiw-num">1</span><div><div class="hiw-title">Publie ou postule</div><div class="hiw-sub">Décris la mission ou ton profil</div></div></div>
+            <div class="how-it-works-step"><span class="hiw-num">2</span><div><div class="hiw-title">Échangez en DM</div><div class="hiw-sub">Discutez des détails directement</div></div></div>
+            <div class="how-it-works-step"><span class="hiw-num">3</span><div><div class="hiw-title">Paiement sécurisé</div><div class="hiw-sub">Les fonds passent par notre escrow</div></div></div>
+          </div>
+          <div class="sidebar-widget">
+            <div class="widget-title">⬡ Commission DevConnect</div>
             <div style="font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Standard</span><span class="font-mono">10%</span></div>
             <div style="font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between"><span><span class="premium-badge devplus">Dev+</span></span><span class="font-mono">7%</span></div>
             <div style="font-size:13px;padding:8px 0;display:flex;justify-content:space-between"><span><span class="premium-badge devconnectplus">DevConnect+</span></span><span class="font-mono">6%</span></div>
           </div>
-          <div class="sidebar-widget"><div class="widget-title">Mes transactions</div><div style="font-size:13px;color:var(--text-secondary)">Aucune transaction pour l'instant.</div></div>
+          <div class="sidebar-widget"><div class="widget-title">⌘ Mes transactions</div><div style="font-size:13px;color:var(--text-secondary)">Aucune transaction pour l'instant.</div></div>
         </div>
       </div>
     </div>
@@ -1662,10 +1687,10 @@
       <div class="form-group"><label class="form-label">Catégorie</label>
         <select class="form-input" id="report-category">
           <option value="spam">Spam / publicité</option>
-          <option value="harcelement">Harcèlement / insultes</option>
-          <option value="contenu_illegal">Contenu illégal</option>
-          <option value="usurpation">Usurpation d'identité</option>
-          <option value="autre">Autre</option>
+          <option value="harassment">Harcèlement / insultes</option>
+          <option value="illegal_content">Contenu illégal</option>
+          <option value="impersonation">Usurpation d'identité</option>
+          <option value="other">Autre</option>
         </select>
       </div>
       <div class="form-group"><label class="form-label">Priorité</label>

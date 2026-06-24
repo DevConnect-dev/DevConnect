@@ -1444,15 +1444,33 @@ function switchKeyboardTab(el,tab){document.querySelectorAll('.keyboard-tab').fo
 function insertChar(char){const i=document.getElementById('chat-input');if(!i)return;const p=i.selectionStart,v=i.value;i.value=v.substring(0,p)+char+v.substring(p);i.selectionStart=i.selectionEnd=p+char.length;i.focus();}
 
 // FEED
+function populateHomeGreeting(){
+  if(!currentProfile)return;
+  const name=currentProfile.username||'là';
+  const init=(currentProfile.username||'DC').substring(0,2).toUpperCase();
+  const avatarH=currentProfile.avatar_url?`<img src="${esc(currentProfile.avatar_url)}" alt="avatar">`:init;
+  setHtmlSafe('home-greeting-avatar',avatarH);
+  setHtmlSafe('composer-avatar',avatarH);
+  setEl('home-greeting-title',`Salut, @${name} 👋`);
+  const stats=document.getElementById('home-greeting-stats');
+  if(stats){
+    stats.innerHTML=`
+      <div class="hgs-item"><div class="hgs-num">${currentProfile.xp||0}</div><div class="hgs-label">XP</div></div>
+      <div class="hgs-item"><div class="hgs-num">${currentProfile.streak||0}</div><div class="hgs-label">Streak</div></div>`;
+  }
+}
+function setHtmlSafe(id,html){const el=document.getElementById(id);if(el)el.innerHTML=html;}
+
 async function loadFeed() {
   const cont = document.getElementById('feed-posts');
+  populateHomeGreeting();
   const { data: posts, error } = await db
     .from('posts')
     .select('*, profiles(username, avatar_url, specialty, is_premium, premium_tier, title)')
     .order('created_at', { ascending: false })
     .limit(30);
   if (error || !posts || posts.length === 0) {
-    cont.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Aucun post pour l\'instant. Sois le premier à publier !</div>';
+    cont.innerHTML = '<div class="empty-state"><div class="empty-state-icon">◆</div><div class="empty-state-text">Aucun post pour l\'instant.</div><div class="empty-state-sub">Sois le premier à publier !</div></div>';
     return;
   }
   // Charger les likes du user connecté pour savoir quels posts il a likés
@@ -1484,11 +1502,19 @@ async function loadFeed() {
       <div class="post-content">${esc(p.content).replace(/`([^`]+)`/g, '<code>$1</code>')}</div>
       <div class="post-actions">
         <button class="post-action ${liked ? 'post-liked' : ''}" onclick="toggleLike('${esc(p.id)}',this)">◆ <span class="like-count">${p.likes_count || 0}</span></button>
-        <button class="post-action">◇ Commenter</button>
-        <button class="post-action">⬡ Partager</button>
+        <button class="post-action" onclick="showToast('Les commentaires arrivent bientôt 👀','info')">◇ Commenter</button>
+        <button class="post-action" onclick="sharePost('${esc(p.id)}')">⬡ Partager</button>
       </div>
     </div>`;
   }).join('');
+}
+function sharePost(postId){
+  const url=window.location.origin+window.location.pathname+'#post-'+postId;
+  navigator.clipboard?.writeText(url).then(()=>{
+    showToast('Lien du post copié !','success');
+  }).catch(()=>{
+    showToast('Impossible de copier le lien.','error');
+  });
 }
 
 async function toggleLike(postId, btn) {
@@ -1626,7 +1652,7 @@ async function loadJobs(){
   const cont=document.getElementById('job-list');
   if(!cont)return;
   const{data,error}=await db.from('job_posts').select('*,profiles(username)').order('created_at',{ascending:false}).limit(30);
-  if(error||!data||data.length===0){cont.innerHTML='<div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Aucune offre pour l\'instant. Sois le premier à publier !</div>';return;}
+  if(error||!data||data.length===0){cont.innerHTML='<div class="empty-state"><div class="empty-state-icon">⬡</div><div class="empty-state-text">Aucune offre pour l\'instant.</div><div class="empty-state-sub">Sois le premier à publier une mission !</div></div>';return;}
   cont.innerHTML=data.map(j=>{
     const tags=(j.tags||[]).map(t=>`<span class="stack-tag">${esc(t)}</span>`).join('');
     const author=j.profiles?.username?`<span style="cursor:pointer" onclick="event.stopPropagation();openProfile('${esc(j.profiles.username)}')">par @${esc(j.profiles.username)}</span>`:'';
