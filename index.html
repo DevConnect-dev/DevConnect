@@ -3584,15 +3584,20 @@ async function loadDmList(){
   if(!currentUser)return;
   const cont=document.getElementById('dm-list');
   if(!cont)return;
-  // Récupère toutes les convs où l'user est user1 ou user2
-  const{data:convs1}=await db.from('dm_conversations').select('id,user2_id,profiles!dm_conversations_user2_id_fkey(username,avatar_url)').eq('user1_id',currentUser.id);
-  const{data:convs2}=await db.from('dm_conversations').select('id,user1_id,profiles!dm_conversations_user1_id_fkey(username,avatar_url)').eq('user2_id',currentUser.id);
+  const{data:convs1,error:e1}=await db.from('dm_conversations').select('id,user2_id').eq('user1_id',currentUser.id);
+  const{data:convs2,error:e2}=await db.from('dm_conversations').select('id,user1_id').eq('user2_id',currentUser.id);
+  if(e1)console.error('Erreur DM list (1):',e1);
+  if(e2)console.error('Erreur DM list (2):',e2);
   const all=[];
-  (convs1||[]).forEach(c=>all.push({id:c.id,otherUser:c.profiles}));
-  (convs2||[]).forEach(c=>all.push({id:c.id,otherUser:c.profiles}));
+  (convs1||[]).forEach(c=>all.push({id:c.id,otherId:c.user2_id}));
+  (convs2||[]).forEach(c=>all.push({id:c.id,otherId:c.user1_id}));
   if(all.length===0){cont.innerHTML='<div style="font-size:12px;color:var(--text-muted);padding:4px 10px">Aucune conversation.</div>';return;}
+  const otherIds=[...new Set(all.map(c=>c.otherId))];
+  const{data:profs,error:e3}=await db.from('profiles').select('id,username,avatar_url').in('id',otherIds);
+  if(e3)console.error('Erreur DM list profils:',e3);
+  const pmap={};(profs||[]).forEach(p=>pmap[p.id]=p);
   cont.innerHTML=all.map(c=>{
-    const u=c.otherUser||{};
+    const u=pmap[c.otherId]||{};
     const name=u.username||'Inconnu';
     const init=name.substring(0,2).toUpperCase();
     const avatarH=u.avatar_url?`<img src="${esc(u.avatar_url)}" alt="avatar">`:`${init}`;
@@ -3631,22 +3636,32 @@ async function openDmConv(convId, username){
 async function loadDmMessages(){
   if(!currentDmConvId)return;
   const c=document.getElementById('chat-messages');
-  const{data:msgs}=await db.from('messages')
-    .select('*,profiles(username,avatar_url,is_premium,premium_tier,is_certified)')
+  const{data:msgs,error:msgErr}=await db.from('messages')
+    .select('id,user_id,content,created_at')
     .eq('dm_conversation_id',currentDmConvId)
     .eq('is_dm',true)
     .order('created_at',{ascending:true})
     .limit(50);
+  if(msgErr){
+    console.error('Erreur chargement DM:',msgErr);
+    c.innerHTML=`<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Erreur de chargement : ${esc(msgErr.message)}</div>`;
+    return;
+  }
   if(!msgs||msgs.length===0){
     c.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Début de la conversation. Dis bonjour ! 👋</div>';
     return;
   }
+  const userIds=[...new Set(msgs.map(m=>m.user_id))];
+  const{data:profs,error:profErr}=await db.from('profiles').select('id,username,avatar_url,is_premium,premium_tier,is_certified').in('id',userIds);
+  if(profErr)console.error('Erreur chargement profils (DM):',profErr);
+  const pmap={};(profs||[]).forEach(p=>pmap[p.id]=p);
   c.innerHTML=msgs.map(m=>{
-    const name=m.profiles?.username||'Inconnu';
+    const prof=pmap[m.user_id]||{};
+    const name=prof.username||'Inconnu';
     const init=name.substring(0,2).toUpperCase();
-    const avatarH=m.profiles?.avatar_url?`<img src="${esc(m.profiles.avatar_url)}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:init;
-    const prem=m.profiles?.premium_tier==='devconnect-plus'?'<span class="premium-badge devconnectplus">DevConnect+</span>':m.profiles?.is_premium?'<span class="premium-badge devplus">Dev+</span>':'';
-    const certif=m.profiles?.is_certified?certifBadge():'';
+    const avatarH=prof.avatar_url?`<img src="${esc(prof.avatar_url)}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:init;
+    const prem=prof.premium_tier==='devconnect-plus'?'<span class="premium-badge devconnectplus">DevConnect+</span>':prof.is_premium?'<span class="premium-badge devplus">Dev+</span>':'';
+    const certif=prof.is_certified?certifBadge():'';
     const time=new Date(m.created_at).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
     const isMe=m.user_id===currentUser?.id;
     return`<div class="chat-msg" style="${isMe?'flex-direction:row-reverse;text-align:right':''}">
@@ -3713,17 +3728,24 @@ async function startDm(targetId, targetUsername){
 
 // MESSAGES
 async function loadMessages(){
-  const{data:chan}=await db.from('channels').select('id').eq('name',currentChannel).maybeSingle();
+  const{data:chan,error:chanErr}=await db.from('channels').select('id').eq('name',currentChannel).maybeSingle();
+  if(chanErr)console.error('Erreur chargement canal:',chanErr);
   if(!chan){document.getElementById('chat-messages').innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Ce canal n\'existe pas encore en base.</div>';return;}
   subscribeChannelRealtime(chan.id);
-  const{data:msgs}=await db.from('messages').select('*,profiles(username,is_premium,premium_tier)').eq('channel_id',chan.id).eq('is_dm',false).order('created_at',{ascending:true}).limit(50);
+  const{data:msgs,error:msgErr}=await db.from('messages').select('id,user_id,content,created_at').eq('channel_id',chan.id).eq('is_dm',false).order('created_at',{ascending:true}).limit(50);
+  if(msgErr){console.error('Erreur chargement messages:',msgErr);document.getElementById('chat-messages').innerHTML=`<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Erreur de chargement : ${esc(msgErr.message)}</div>`;return;}
   if(msgs&&msgs.length>0){
+    const userIds=[...new Set(msgs.map(m=>m.user_id))];
+    const{data:profs,error:profErr}=await db.from('profiles').select('id,username,is_premium,premium_tier,is_certified').in('id',userIds);
+    if(profErr)console.error('Erreur chargement profils:',profErr);
+    const pmap={};(profs||[]).forEach(p=>pmap[p.id]=p);
     const c=document.getElementById('chat-messages');
     c.innerHTML=msgs.map(m=>{
-      const name=m.profiles?.username||'Inconnu';
+      const prof=pmap[m.user_id]||{};
+      const name=prof.username||'Inconnu';
       const init=name.substring(0,2).toUpperCase();
-      const prem=m.profiles?.premium_tier==='devconnect-plus'?'<span class="premium-badge devconnectplus">DevConnect+</span>':m.profiles?.is_premium?'<span class="premium-badge devplus">Dev+</span>':'';
-      const certif=m.profiles?.is_certified?certifBadge():'';
+      const prem=prof.premium_tier==='devconnect-plus'?'<span class="premium-badge devconnectplus">DevConnect+</span>':prof.is_premium?'<span class="premium-badge devplus">Dev+</span>':'';
+      const certif=prof.is_certified?certifBadge():'';
       const time=new Date(m.created_at).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
       const reportIcon=(currentUser&&m.user_id!==currentUser.id)?`<span style="cursor:pointer;opacity:.4;font-size:11px;margin-left:6px" title="Signaler" onclick="event.stopPropagation();openReportModal('${esc(m.user_id)}','${esc(name)}')">⚠</span>`:'';
       return`<div class="chat-msg"><div class="chat-msg-avatar" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${init}</div><div class="chat-msg-body"><div class="chat-msg-header"><span class="chat-msg-name" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${esc(name)}</span>${certif}${prem}<span class="chat-msg-time">${time}</span>${reportIcon}</div><div class="chat-msg-content">${esc(m.content)}</div></div></div>`;
