@@ -1705,26 +1705,22 @@ tr:hover .admin-row-avatar{border-color:var(--border-light);}
           <div class="learn-cat" onclick="setLearnCat(this,'data')"><span class="learn-cat-icon">◇</span>Data</div>
           <div class="learn-cat" onclick="setLearnCat(this,'ai_ml')"><span class="learn-cat-icon">⬟</span>IA / ML</div>
           <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
-            <div class="widget-title">Ta progression</div>
-            <div style="font-size:13px;color:var(--text-secondary);margin-top:8px">0 challenges résolus</div>
-            <div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono);margin-top:4px">0 XP gagnés</div>
+            <div class="widget-title" style="margin-bottom:10px">Ta progression</div>
+            <div id="learn-progress"><div style="font-size:12px;color:var(--text-muted)">Connecte-toi pour voir ta progression.</div></div>
           </div>
         </div>
         <div>
           <div class="learn-header">
             <div class="feed-title">Challenges</div>
             <div class="difficulty-filters">
-              <button class="diff-btn easy active" onclick="this.classList.toggle('active')">Facile</button>
-              <button class="diff-btn medium active" onclick="this.classList.toggle('active')">Moyen</button>
-              <button class="diff-btn hard active" onclick="this.classList.toggle('active')">Hard</button>
-              <button class="diff-btn extreme active" onclick="this.classList.toggle('active')">Extrême</button>
+              <button class="diff-btn easy active" onclick="toggleDiff(this,'easy')">Facile</button>
+              <button class="diff-btn medium active" onclick="toggleDiff(this,'medium')">Moyen</button>
+              <button class="diff-btn hard active" onclick="toggleDiff(this,'hard')">Hard</button>
+              <button class="diff-btn extreme active" onclick="toggleDiff(this,'extreme')">Extrême</button>
             </div>
           </div>
           <div id="challenges-list">
-            <div class="challenge-card" onclick="openChallenge('sql-injection')"><div class="challenge-header"><div class="challenge-title">SQL Injection — Bypass d'authentification</div><span class="diff-badge hard">Hard</span></div><div class="challenge-desc">Une application web possède un formulaire de connexion vulnérable. Trouve le payload permettant de te connecter sans connaître le mot de passe.</div><div class="challenge-meta"><span>⬡ Cybersécurité</span><span>◆ 150 XP</span><span>◈ 234 tentatives</span><span>◉ Généré par IA</span></div></div>
-            <div class="challenge-card" onclick="openChallenge('react-perf')"><div class="challenge-header"><div class="challenge-title">React — Optimisation de rendu</div><span class="diff-badge medium">Moyen</span></div><div class="challenge-desc">Ce composant React re-render trop souvent. Identifie les causes et propose une solution optimisée.</div><div class="challenge-meta"><span>⬡ Dev Web</span><span>◆ 80 XP</span><span>◈ 156 tentatives</span><span>◉ Généré par IA</span></div></div>
-            <div class="challenge-card" onclick="openChallenge('docker-escape')"><div class="challenge-header"><div class="challenge-title">Docker — Container Escape</div><span class="diff-badge extreme">Extrême</span></div><div class="challenge-desc">Tu es dans un container Docker mal configuré. Objectif : sortir du container et accéder au système hôte.</div><div class="challenge-meta"><span>⬡ DevOps · Cyber</span><span>◆ 300 XP</span><span>◈ 89 tentatives</span><span>◉ Généré par IA</span></div></div>
-            <div class="challenge-card" onclick="openChallenge('algo-sort')"><div class="challenge-header"><div class="challenge-title">Algorithme — Tri en O(n log n) sans sort()</div><span class="diff-badge easy">Facile</span></div><div class="challenge-desc">Quel algorithme de tri classique garantit O(n log n) en tous cas et est stable par nature ?</div><div class="challenge-meta"><span>⬡ Algorithmes</span><span>◆ 50 XP</span><span>◈ 512 tentatives</span><span>◉ Généré par IA</span></div></div>
+            <div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement...</div>
           </div>
         </div>
       </div>
@@ -2078,19 +2074,19 @@ tr:hover .admin-row-avatar{border-color:var(--border-light);}
               <div class="settings-block-title">Activité</div>
               <div class="settings-row">
                 <div class="settings-row-left"><div class="settings-row-label">Mentions</div><div class="settings-row-sub">Quand quelqu'un te mentionne dans un message</div></div>
-                <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+                <button class="toggle on" id="notif-mentions" onclick="toggleNotifPref(this,'mentions')"></button>
               </div>
               <div class="settings-row">
                 <div class="settings-row-left"><div class="settings-row-label">Messages directs</div><div class="settings-row-sub">Nouvelles conversations et messages</div></div>
-                <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+                <button class="toggle on" id="notif-dms" onclick="toggleNotifPref(this,'dms')"></button>
               </div>
               <div class="settings-row">
                 <div class="settings-row-left"><div class="settings-row-label">Likes sur mes posts</div><div class="settings-row-sub">Quand quelqu'un like ton contenu</div></div>
-                <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+                <button class="toggle on" id="notif-likes" onclick="toggleNotifPref(this,'likes')"></button>
               </div>
               <div class="settings-row">
                 <div class="settings-row-left"><div class="settings-row-label">Nouveaux follows</div><div class="settings-row-sub">Quand quelqu'un commence à te suivre</div></div>
-                <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+                <button class="toggle on" id="notif-follows" onclick="toggleNotifPref(this,'follows')"></button>
               </div>
             </div>
 
@@ -2098,15 +2094,15 @@ tr:hover .admin-row-avatar{border-color:var(--border-light);}
               <div class="settings-block-title">Plateforme</div>
               <div class="settings-row">
                 <div class="settings-row-left"><div class="settings-row-label">Nouveaux challenges</div><div class="settings-row-sub">Quand un nouveau challenge est disponible</div></div>
-                <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+                <button class="toggle on" id="notif-challenges" onclick="toggleNotifPref(this,'challenges')"></button>
               </div>
               <div class="settings-row">
                 <div class="settings-row-left"><div class="settings-row-label">Offres de recrutement</div><div class="settings-row-sub">Nouvelles offres correspondant à ton profil</div></div>
-                <button class="toggle" onclick="this.classList.toggle('on')"></button>
+                <button class="toggle" id="notif-recruit" onclick="toggleNotifPref(this,'recruit')"></button>
               </div>
               <div class="settings-row">
                 <div class="settings-row-left"><div class="settings-row-label">Mises à jour DevConnect</div><div class="settings-row-sub">Nouvelles fonctionnalités et annonces</div></div>
-                <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+                <button class="toggle on" id="notif-updates" onclick="toggleNotifPref(this,'updates')"></button>
               </div>
             </div>
           </div>
@@ -2291,6 +2287,9 @@ tr:hover .admin-row-avatar{border-color:var(--border-light);}
           </div>
           <div class="admin-nav-item" onclick="switchAdmin(this,'moderation')">
             <span class="admin-nav-icon">🛡</span>Modération
+          </div>
+          <div class="admin-nav-item" onclick="switchAdmin(this,'content-mod');loadContentMod()">
+            <span class="admin-nav-icon">◈</span>Contenu
           </div>
 
           <div class="admin-sidebar-sep"></div>
@@ -2533,6 +2532,50 @@ tr:hover .admin-row-avatar{border-color:var(--border-light);}
                 <div style="display:flex;gap:8px;flex-wrap:wrap">
                   <button class="btn btn-ghost btn-sm" style="border-color:rgba(200,80,80,.25);color:#e08080" onclick="document.getElementById('mod-username').value=document.getElementById('danger-username').value;banUser(null,document.getElementById('danger-username').value,true)">Bannir</button>
                   <button class="btn btn-danger btn-sm" onclick="document.getElementById('mod-username').value=document.getElementById('danger-username').value;deleteUserAccount()">Supprimer le compte</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MODÉRATION DU CONTENU -->
+          <div class="admin-section" id="admin-content-mod">
+            <div class="admin-page-header">
+              <div class="admin-page-title">Modération du contenu</div>
+              <div class="admin-page-sub">Supprimer des messages, posts ou signalements</div>
+            </div>
+            <div style="display:grid;gap:20px">
+              <div class="admin-card">
+                <div class="admin-card-header">
+                  <div class="admin-card-title">◉ Posts récents</div>
+                  <button class="btn btn-ghost btn-sm" onclick="loadContentMod()">↻ Rafraîchir</button>
+                </div>
+                <div class="admin-card-body">
+                  <table style="width:100%;border-collapse:collapse">
+                    <thead><tr style="font-size:11px;font-family:var(--font-mono);color:var(--text-muted);text-transform:uppercase;border-bottom:1px solid var(--border)">
+                      <th style="text-align:left;padding:8px 12px">Auteur</th>
+                      <th style="text-align:left;padding:8px 12px">Contenu</th>
+                      <th style="text-align:left;padding:8px 12px">Date</th>
+                      <th style="text-align:right;padding:8px 12px">Action</th>
+                    </tr></thead>
+                    <tbody id="admin-posts-list"><tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:20px;font-size:13px">Chargement...</td></tr></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="admin-card">
+                <div class="admin-card-header">
+                  <div class="admin-card-title">◇ Messages chat récents</div>
+                  <button class="btn btn-ghost btn-sm" onclick="loadContentMod()">↻ Rafraîchir</button>
+                </div>
+                <div class="admin-card-body">
+                  <table style="width:100%;border-collapse:collapse">
+                    <thead><tr style="font-size:11px;font-family:var(--font-mono);color:var(--text-muted);text-transform:uppercase;border-bottom:1px solid var(--border)">
+                      <th style="text-align:left;padding:8px 12px">Auteur</th>
+                      <th style="text-align:left;padding:8px 12px">Contenu</th>
+                      <th style="text-align:left;padding:8px 12px">Canal</th>
+                      <th style="text-align:right;padding:8px 12px">Action</th>
+                    </tr></thead>
+                    <tbody id="admin-messages-list"><tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:20px;font-size:13px">Chargement...</td></tr></tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -2923,8 +2966,34 @@ function updatePremiumStatus(){
 async function togglePrivacySetting(btn, field){
   btn.classList.toggle('on');
   const val=btn.classList.contains('on');
-  await db.from('profiles').update({[field]:val}).eq('id',currentUser.id);
-  showToast('Préférence mise à jour.','success');
+  const{error}=await db.from('profiles').update({[field]:val}).eq('id',currentUser.id);
+  if(error){showToast('Erreur : '+error.message,'error');}
+  else{if(currentProfile)currentProfile[field]=val;showToast('Préférence mise à jour.','success');}
+}
+
+const NOTIF_PREF_KEY='dc_notif_prefs';
+function getNotifPrefs(){
+  try{return JSON.parse(localStorage.getItem(NOTIF_PREF_KEY)||'{}');}catch(e){return{};}
+}
+function toggleNotifPref(btn,key){
+  btn.classList.toggle('on');
+  const prefs=getNotifPrefs();
+  prefs[key]=btn.classList.contains('on');
+  localStorage.setItem(NOTIF_PREF_KEY,JSON.stringify(prefs));
+  showToast('Préférence de notification mise à jour.','success');
+}
+function syncNotifToggles(){
+  const prefs=getNotifPrefs();
+  const defaults={mentions:true,dms:true,likes:true,follows:true,challenges:true,recruit:false,updates:true};
+  Object.entries(defaults).forEach(([k,def])=>{
+    const el=document.getElementById('notif-'+k);
+    if(el)el.classList.toggle('on',prefs[k]!==undefined?prefs[k]:def);
+  });
+}
+function notifPrefEnabled(key){
+  const prefs=getNotifPrefs();
+  const defaults={mentions:true,dms:true,likes:true,follows:true,challenges:true,recruit:false,updates:true};
+  return prefs[key]!==undefined?prefs[key]:defaults[key]!==false;
 }
 
 function updateSettingsSection(){
@@ -2982,6 +3051,13 @@ function updateSettingsSection(){
     if(w.available!==undefined&&w.available!==null)setVal('s-avail-status',String(w.available));
     toggleWidgetSubfield('activity');toggleWidgetSubfield('avail');
   }
+  // Sync privacy toggles with actual saved values
+  const tog=(id,val)=>{const el=document.getElementById(id);if(el){el.classList.toggle('on',!!val);}};
+  tog('toggle-public-profile',currentProfile.is_public!==false);
+  tog('toggle-block-dms',!!currentProfile.block_dms);
+  tog('toggle-hide-xp',!!currentProfile.hide_xp);
+  // Sync notif prefs (saved in localStorage for immediate responsiveness)
+  syncNotifToggles();
 }
 
 function switchSettingsByName(s){
@@ -3250,7 +3326,7 @@ function navigate(section) {
   if (section === 'discover') loadDiscover();
   if (section === 'recruit') loadJobs();
   if (section === 'editor') renderEditorFileTree();
-}
+  if (section === 'learn') { loadLearnProgress(); renderChallenges(); }
 
 // CLASSEMENT RÉEL
 let rankingPeriod='week';
@@ -4139,14 +4215,102 @@ async function loadAiSuggestions(){
 }
 
 // LEARN
-function setLearnCat(el){document.querySelectorAll('.learn-cat').forEach(c=>c.classList.remove('active'));el.classList.add('active');}
+// ── LEARN PAGE — filtres réels + rendu dynamique ─────────────────────
+let activeLearnCat='all';
+let activeDiffs=new Set(['easy','medium','hard','extreme']);
+const CAT_LABELS={all:'Tous',cybersecurity:'Cybersécurité',web_dev:'Dev Web',algorithm:'Algorithmes',devops:'DevOps',data:'Data',ai_ml:'IA / ML'};
+const DIFF_LABELS={easy:'Facile',medium:'Moyen',hard:'Hard',extreme:'Extrême'};
+let completedChallenges=new Set();
+
+function setLearnCat(el,cat){
+  document.querySelectorAll('.learn-cat').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  activeLearnCat=cat;
+  renderChallenges();
+}
+function toggleDiff(btn,diff){
+  btn.classList.toggle('active');
+  if(activeDiffs.has(diff))activeDiffs.delete(diff);else activeDiffs.add(diff);
+  renderChallenges();
+}
+function renderChallenges(){
+  const list=document.getElementById('challenges-list');if(!list)return;
+  const entries=Object.entries(challenges).filter(([id,c])=>{
+    const catOk=activeLearnCat==='all'||c.cat===activeLearnCat;
+    const diffOk=activeDiffs.has(c.diff);
+    return catOk&&diffOk;
+  });
+  if(!entries.length){
+    list.innerHTML='<div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Aucun challenge pour ces filtres.</div>';
+    return;
+  }
+  const catIcon={cybersecurity:'⬡',web_dev:'◉',algorithm:'◆',devops:'⬢',data:'◇',ai_ml:'⬟'};
+  list.innerHTML=entries.map(([id,c])=>{
+    const done=completedChallenges.has(id);
+    return`<div class="challenge-card${done?' done':''}" onclick="openChallenge('${id}')" style="${done?'opacity:.6;border-color:var(--accent-dim)':''}">
+      <div class="challenge-header">
+        <div class="challenge-title">${done?'✓ ':''} ${esc(c.title)}</div>
+        <span class="diff-badge ${c.diff}">${DIFF_LABELS[c.diff]||c.diff}</span>
+      </div>
+      <div class="challenge-desc">${esc(c.desc.substring(0,120))}…</div>
+      <div class="challenge-meta">
+        <span>${catIcon[c.cat]||'◈'} ${CAT_LABELS[c.cat]||c.cat}</span>
+        <span>◆ ${c.xp} XP</span>
+        ${done?'<span style="color:var(--accent-dim)">✓ Résolu</span>':''}
+      </div>
+    </div>`;
+  }).join('');
+}
+async function loadLearnProgress(){
+  const el=document.getElementById('learn-progress');if(!el)return;
+  if(!currentUser){el.innerHTML='<div style="font-size:12px;color:var(--text-muted)">Connecte-toi pour suivre ta progression.</div>';return;}
+  const{data}=await db.from('challenge_completions').select('challenge_id,xp_gained').eq('user_id',currentUser.id);
+  completedChallenges=new Set((data||[]).map(r=>r.challenge_id));
+  const totalXP=(data||[]).reduce((s,r)=>s+(r.xp_gained||0),0);
+  const total=Object.keys(challenges).length;
+  el.innerHTML=`
+    <div style="font-size:22px;font-weight:700;font-family:var(--font-display)">${completedChallenges.size}<span style="font-size:13px;color:var(--text-muted);font-weight:400"> / ${total}</span></div>
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px">challenges résolus</div>
+    <div style="font-size:18px;font-weight:600;color:var(--accent-dim)">+${totalXP} XP</div>
+    <div style="font-size:11px;color:var(--text-muted)">gagnés sur cette section</div>
+    <div style="margin-top:12px;height:4px;background:var(--bg2);border-radius:2px;overflow:hidden">
+      <div style="height:100%;width:${Math.round(completedChallenges.size/total*100)}%;background:var(--accent-dim);border-radius:2px;transition:width .4s"></div>
+    </div>`;
+  renderChallenges();
+}
 
 // CHALLENGES
 const challenges={
-  'sql-injection':{title:"SQL Injection — Bypass d'authentification",desc:"Une application web possède un formulaire de connexion vulnérable. Trouve le payload permettant de te connecter sans connaître le mot de passe. L'objectif est de bypasser la vérification via une injection SQL classique.",meta:'Cybersécurité · Hard · 150 XP',answer:"' OR '1'='1",hint:"Pense aux caractères qui terminent une chaîne SQL et permettent d'ajouter une condition toujours vraie."},
-  'react-perf':{title:'React — Optimisation de rendu',desc:"Ce composant React re-render à chaque changement d'état parent même si ses props n'ont pas changé. Quelle fonction React native permet de mémoïser le composant ?",meta:'Dev Web · Moyen · 80 XP',answer:'React.memo',hint:"C'est une fonction de mémoïsation spécifique aux composants fonctionnels React."},
-  'docker-escape':{title:'Docker — Container Escape',desc:"Tu es dans un container Docker lancé avec --privileged. Quel périphérique du système hôte peux-tu monter pour accéder au filesystem complet de l'hôte ?",meta:'DevOps · Cyber · Extrême · 300 XP',answer:'/dev/sda1',hint:"En mode privileged, tu as accès aux périphériques de l'hôte. Regarde dans /dev/."},
-  'algo-sort':{title:'Algorithme — Tri en O(n log n) sans sort()',desc:"Quel algorithme de tri classique (dont le nom évoque la fusion de sous-tableaux) garantit O(n log n) en tous cas et est stable ?",meta:'Algorithmes · Facile · 50 XP',answer:'merge sort',hint:"Divise pour mieux régner — le tableau est divisé récursivement puis fusionné."}
+  /* ── CYBERSÉCURITÉ ─────────────────────────────────────────────── */
+  'sql-injection':{cat:'cybersecurity',diff:'hard',xp:150,title:"SQL Injection — Bypass d'authentification",desc:"Une application web a un formulaire de connexion vulnérable. Trouve le payload permettant de te connecter sans connaître le mot de passe en injectant directement dans la requête SQL.",meta:'Cybersécurité · Hard · 150 XP',answer:"' OR '1'='1",hint:"Pense aux caractères qui terminent une chaîne SQL et permettent d'ajouter une condition toujours vraie."},
+  'xss-reflected':{cat:'cybersecurity',diff:'medium',xp:100,title:'XSS Réfléchi — Injection de script',desc:"Une page affiche le paramètre GET `q` directement dans le HTML sans encodage. Quel tag HTML minimal permet d'exécuter du JS arbitraire via l'URL ?",meta:'Cybersécurité · Moyen · 100 XP',answer:'script',hint:"Le tag qui délimite un bloc JavaScript dans une page HTML… (réponds juste avec le nom du tag, sans < >)"},
+  'hash-crack':{cat:'cybersecurity',diff:'easy',xp:50,title:'Hash cracking — MD5 faible',desc:"Le hash MD5 `5f4dcc3b5aa765d61d8327deb882cf99` correspond à un mot de passe ultra-courant. Lequel ?",meta:'Cybersécurité · Facile · 50 XP',answer:'password',hint:"C'est littéralement le mot de passe le plus utilisé au monde."},
+  'docker-escape':{cat:'cybersecurity',diff:'extreme',xp:300,title:'Docker — Container Escape',desc:"Tu es dans un container Docker lancé avec --privileged. Quel périphérique du système hôte peux-tu monter pour accéder au filesystem complet de l'hôte ?",meta:'Cybersécurité · DevOps · Extrême · 300 XP',answer:'/dev/sda1',hint:"En mode privileged, tu as accès aux périphériques de l'hôte. Regarde dans /dev/."},
+  'csrf-token':{cat:'cybersecurity',diff:'medium',xp:90,title:'CSRF — Quel en-tête protège ?',desc:"Pour se défendre contre une attaque CSRF (Cross-Site Request Forgery) côté serveur sans utiliser de token de formulaire, quel en-tête HTTP faut-il vérifier ?",meta:'Cybersécurité · Moyen · 90 XP',answer:'origin',hint:"Cet en-tête indique l'origine de la requête et est automatiquement envoyé par le navigateur."},
+  /* ── DEV WEB ────────────────────────────────────────────────────── */
+  'react-perf':{cat:'web_dev',diff:'medium',xp:80,title:'React — Mémoïsation de composant',desc:"Ce composant fonctionnel React re-render à chaque changement d'état parent même si ses props n'ont pas changé. Quelle fonction React native permet de mémoïser le composant entier ?",meta:'Dev Web · Moyen · 80 XP',answer:'React.memo',hint:"C'est une fonction de mémoïsation spécifique aux composants fonctionnels React."},
+  'css-specificity':{cat:'web_dev',diff:'easy',xp:40,title:'CSS — Spécificité sélecteur',desc:"Quel sélecteur CSS a la plus haute spécificité ? `#id`, `.class`, `element`, ou `*` ?",meta:'Dev Web · Facile · 40 XP',answer:'#id',hint:"La spécificité suit l'ordre : inline > ID > class > element."},
+  'js-closure':{cat:'web_dev',diff:'medium',xp:90,title:'JavaScript — La puissance des closures',desc:"Une fonction retourne une autre fonction qui a accès à ses variables locales même après son exécution. Comment s'appelle ce mécanisme fondamental du JS ?",meta:'Dev Web · Moyen · 90 XP',answer:'closure',hint:"C'est le fait qu'une fonction 'se souvient' de l'environnement dans lequel elle a été créée."},
+  'http-method':{cat:'web_dev',diff:'easy',xp:40,title:'HTTP — Méthode idempotente',desc:"En REST, quelle méthode HTTP est idempotente ET utilisée pour remplacer complètement une ressource existante (pas juste une mise à jour partielle) ?",meta:'Dev Web · Facile · 40 XP',answer:'PUT',hint:"Elle remplace la ressource en entier, contrairement à PATCH qui la modifie partiellement."},
+  'async-await':{cat:'web_dev',diff:'hard',xp:130,title:'JS Async — Promise.all vs Promise.allSettled',desc:"Tu veux appeler 3 APIs en parallèle et récupérer TOUS les résultats même si l'une d'elles échoue. Quelle méthode utilises-tu ?",meta:'Dev Web · Hard · 130 XP',answer:'Promise.allSettled',hint:"Contrairement à Promise.all, elle ne rejette pas au premier échec."},
+  /* ── ALGORITHMES ────────────────────────────────────────────────── */
+  'algo-sort':{cat:'algorithm',diff:'easy',xp:50,title:'Algorithme — Tri O(n log n) stable',desc:"Quel algorithme de tri classique garantit O(n log n) dans tous les cas ET est stable par nature ? (Son nom évoque la fusion de sous-tableaux.)",meta:'Algorithmes · Facile · 50 XP',answer:'merge sort',hint:"Divise pour mieux régner — le tableau est divisé récursivement puis fusionné."},
+  'binary-search':{cat:'algorithm',diff:'easy',xp:45,title:'Binary Search — Complexité',desc:"Sur un tableau de 1 000 000 d'éléments trié, combien de comparaisons au maximum fait une recherche dichotomique (binary search) ? Répondre en log2(1000000) arrondi.",meta:'Algorithmes · Facile · 45 XP',answer:'20',hint:"log2(1000000) ≈ 19.93 → arrondi à 20."},
+  'dynamic-prog':{cat:'algorithm',diff:'hard',xp:160,title:'DP — Problème du sac à dos',desc:"Quelle technique algorithmique consiste à décomposer un problème en sous-problèmes et mémoriser leurs solutions pour éviter de les recalculer ? (Nom en anglais, 2 mots)",meta:'Algorithmes · Hard · 160 XP',answer:'dynamic programming',hint:"Mémoïsation + récursion ou tableau ascendant."},
+  'big-o-hash':{cat:'algorithm',diff:'easy',xp:40,title:"Big O — Accès dans une HashMap",desc:"Quelle est la complexité temporelle moyenne d'un accès (get/put) dans une table de hachage (HashMap) bien implémentée ?",meta:'Algorithmes · Facile · 40 XP',answer:'O(1)',hint:"Avec une bonne fonction de hachage et peu de collisions, l'accès est quasi-instantané."},
+  /* ── DEVOPS ─────────────────────────────────────────────────────── */
+  'yaml-indent':{cat:'devops',diff:'easy',xp:35,title:'YAML — Erreur de syntaxe classique',desc:"YAML est sensible à un caractère très précis pour l'indentation. Tabulations ou espaces — lequel est interdit dans un fichier YAML valide ?",meta:'DevOps · Facile · 35 XP',answer:'tabulations',hint:"YAML n'accepte que les espaces pour l'indentation, jamais les tabs."},
+  'k8s-pod':{cat:'devops',diff:'medium',xp:110,title:'Kubernetes — Unité de déploiement minimale',desc:"Dans Kubernetes, quelle est l'unité de déploiement la plus petite qui peut contenir un ou plusieurs containers partageant le même réseau et stockage ?",meta:'DevOps · Moyen · 110 XP',answer:'pod',hint:"C'est l'abstraction de base dans Kubernetes, un cran au-dessus du container."},
+  'ci-cd-stage':{cat:'devops',diff:'medium',xp:80,title:'CI/CD — Ordre des étapes',desc:"Dans un pipeline CI/CD classique, dans quel ordre ces étapes se succèdent-elles ? Réponds avec les initiales dans l'ordre : Build, Test, Deploy. (ex: B-T-D)",meta:'DevOps · Moyen · 80 XP',answer:'B-T-D',hint:"On construit d'abord, on valide ensuite, on livre en dernier."},
+  /* ── DATA ───────────────────────────────────────────────────────── */
+  'sql-join':{cat:'data',diff:'easy',xp:50,title:'SQL — JOIN retournant uniquement les correspondances',desc:"Quel type de JOIN en SQL retourne uniquement les lignes qui ont une correspondance dans les DEUX tables (aucune valeur NULL introduite) ?",meta:'Data · Facile · 50 XP',answer:'INNER JOIN',hint:"Parmi INNER, LEFT, RIGHT, FULL OUTER — lequel est le plus restrictif ?"},
+  'pandas-groupby':{cat:'data',diff:'medium',xp:90,title:'Pandas — Agrégation par groupe',desc:"En Python Pandas, quelle méthode utilises-tu pour regrouper les lignes d'un DataFrame selon une colonne, puis appliquer une fonction d'agrégation (sum, mean...) ?",meta:'Data · Moyen · 90 XP',answer:'groupby',hint:"C'est la méthode analogue à GROUP BY en SQL, directement sur un DataFrame."},
+  'null-sql':{cat:'data',diff:'easy',xp:40,title:"SQL — Comparer avec NULL",desc:"En SQL, `SELECT * FROM users WHERE email = NULL` ne retourne jamais de résultats, même si des NULLs existent. Quelle clause faut-il utiliser à la place ?",meta:'Data · Facile · 40 XP',answer:'IS NULL',hint:"NULL ne peut pas être comparé avec = ou !=, il faut un opérateur dédié."},
+  /* ── IA / ML ────────────────────────────────────────────────────── */
+  'overfitting':{cat:'ai_ml',diff:'easy',xp:50,title:'ML — Trop parfait pour être vrai',desc:"Un modèle obtient 99% de précision sur les données d'entraînement mais seulement 60% sur les données de test. Quel phénomène cela illustre-t-il ?",meta:'IA · Facile · 50 XP',answer:'overfitting',hint:"Le modèle a trop 'appris par cœur' les données d'entraînement."},
+  'transformer-attention':{cat:'ai_ml',diff:'hard',xp:170,title:'Transformers — Mécanisme clé',desc:"Le mécanisme central des architectures Transformer (BERT, GPT…), qui permet à chaque token de s'appuyer sur les autres tokens du contexte, s'appelle comment ?",meta:'IA · Hard · 170 XP',answer:'attention',hint:"'Attention is all you need' — c'est littéralement le titre du papier fondateur."},
+  'prompt-injection':{cat:'ai_ml',diff:'medium',xp:100,title:'Prompt Injection — Vecteur d\'attaque LLM',desc:"Un utilisateur malveillant insère des instructions dans un champ de texte pour faire ignorer à un LLM ses instructions système. Comment s'appelle cette attaque ?",meta:'IA · Moyen · 100 XP',answer:'prompt injection',hint:"Analogue à l'injection SQL, mais pour les modèles de langage."},
+  'activation-fn':{cat:'ai_ml',diff:'medium',xp:85,title:'Réseaux de neurones — Activation populaire',desc:"Quelle fonction d'activation est la plus utilisée dans les couches cachées des réseaux de neurones modernes car elle évite le problème du vanishing gradient (contrairement à sigmoid) ?",meta:'IA · Moyen · 85 XP',answer:'relu',hint:"Rectified Linear Unit — f(x) = max(0, x)."},
 };
 
 function openChallenge(id){
@@ -4172,7 +4336,7 @@ function submitChallenge(){
   fb.style.display='block';
   if(ok){
     fb.style.color='#5a9a6a';
-    const xpGain=parseInt(c.meta.match(/(\d+) XP/)?.[1]||'0');
+    const xpGain=c.xp||0;
     fb.textContent='✓ Correct ! Challenge résolu. +'+xpGain+' XP';
     awardXP(challengeId, xpGain);
     showSolutions();showToast('Challenge résolu ! 🎉','success');
@@ -4181,21 +4345,19 @@ function submitChallenge(){
 
 async function awardXP(cid, xpGain) {
   if(!currentUser||!xpGain)return;
-  // Vérifier si déjà complété
   const{data:existing}=await db.from('challenge_completions').select('id').eq('user_id',currentUser.id).eq('challenge_id',cid).maybeSingle();
-  if(existing)return; // déjà résolu, pas de double gain
-  // Enregistrer la complétion
+  if(existing)return;
   await db.from('challenge_completions').insert({user_id:currentUser.id,challenge_id:cid,xp_gained:xpGain});
-  // XP via fonction serveur sécurisée
   await db.rpc('add_xp', {user_id:currentUser.id, amount:xpGain, action_label:'challenge_completed'});
   await loadProfile();
+  loadLearnProgress();
   showToast(`+${xpGain} XP ajoutés à ton profil !`,'success');
 }
 
 function showSolutions(){
-  const sols=["' OR '1'='1 -- (classique)","admin'-- (commentaire de la requête)","' OR 1=1 -- (variante)","' OR 'x'='x (toujours vrai)","') OR ('1'='1 (avec parenthèses)"];
+  const c=challenges[challengeId];if(!c)return;
   document.getElementById('solutions-area').style.display='block';
-  document.getElementById('solutions-list').innerHTML=sols.map(s=>`<div class="solution-item">${esc(s)}</div>`).join('');
+  document.getElementById('solutions-list').innerHTML=`<div class="solution-item"><strong>Réponse :</strong> ${esc(c.answer)}</div><div style="margin-top:8px;font-size:12px;color:var(--text-muted)">${esc(c.hint)}</div>`;
 }
 
 // EDITOR AI
@@ -4506,6 +4668,68 @@ async function deleteMessage(msgId){
   await writeAdminLog(`Message ${msgId} supprimé`,'moderation');
   showToast('Message supprimé.','success');
   loadMessages();
+}
+
+// ── CONTENT MODERATION (admin) ─────────────────────────────────────
+async function loadContentMod(){
+  // Posts
+  const postsTbody=document.getElementById('admin-posts-list');
+  if(postsTbody)postsTbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:16px;font-size:13px">Chargement...</td></tr>';
+  const{data:posts,error:pe}=await db.from('posts').select('id,content,created_at,user_id').order('created_at',{ascending:false}).limit(30);
+  if(pe||!posts){if(postsTbody)postsTbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:16px;font-size:13px">Erreur : '+(pe?.message||'')+'</td></tr>';return;}
+  const postUserIds=[...new Set(posts.map(p=>p.user_id))];
+  const{data:pu}=postUserIds.length?await db.from('profiles').select('id,username').in('id',postUserIds):{data:[]};
+  const puMap=Object.fromEntries((pu||[]).map(u=>[u.id,u]));
+  if(postsTbody)postsTbody.innerHTML=posts.map(p=>{
+    const u=puMap[p.user_id]||{};
+    const snippet=p.content?(p.content.substring(0,60)+(p.content.length>60?'…':'')):'—';
+    const dt=new Date(p.created_at).toLocaleDateString('fr-FR',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    return`<tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:10px 12px;font-size:12px;font-family:var(--font-mono);color:var(--accent-dim)">@${esc(u.username||'?')}</td>
+      <td style="padding:10px 12px;font-size:12px;color:var(--text-secondary);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(snippet)}</td>
+      <td style="padding:10px 12px;font-size:11px;color:var(--text-muted)">${dt}</td>
+      <td style="padding:10px 12px;text-align:right"><button class="btn btn-ghost btn-sm" style="border-color:rgba(200,80,80,.3);color:#e08080;font-size:11px" onclick="adminDeletePost('${p.id}')">Supprimer</button></td>
+    </tr>`;
+  }).join('');
+
+  // Messages chat (non-DM seulement)
+  const msgsTbody=document.getElementById('admin-messages-list');
+  if(msgsTbody)msgsTbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:16px;font-size:13px">Chargement...</td></tr>';
+  const{data:msgs,error:me}=await db.from('messages').select('id,content,created_at,user_id,channel_id').eq('is_dm',false).order('created_at',{ascending:false}).limit(30);
+  if(me||!msgs){if(msgsTbody)msgsTbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:16px;font-size:13px">Erreur : '+(me?.message||'')+'</td></tr>';return;}
+  const msgUserIds=[...new Set(msgs.map(m=>m.user_id))];
+  const{data:mu}=msgUserIds.length?await db.from('profiles').select('id,username').in('id',msgUserIds):{data:[]};
+  const muMap=Object.fromEntries((mu||[]).map(u=>[u.id,u]));
+  const chanIds=[...new Set(msgs.map(m=>m.channel_id).filter(Boolean))];
+  const{data:chans}=chanIds.length?await db.from('channels').select('id,name').in('id',chanIds):{data:[]};
+  const chanMap=Object.fromEntries((chans||[]).map(c=>[c.id,c]));
+  if(msgsTbody)msgsTbody.innerHTML=msgs.map(m=>{
+    const u=muMap[m.user_id]||{};
+    const chan=chanMap[m.channel_id]||{};
+    const snippet=m.content?(m.content.substring(0,60)+(m.content.length>60?'…':'')):'—';
+    return`<tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:10px 12px;font-size:12px;font-family:var(--font-mono);color:var(--accent-dim)">@${esc(u.username||'?')}</td>
+      <td style="padding:10px 12px;font-size:12px;color:var(--text-secondary);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(snippet)}</td>
+      <td style="padding:10px 12px;font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">#${esc(chan.name||'?')}</td>
+      <td style="padding:10px 12px;text-align:right"><button class="btn btn-ghost btn-sm" style="border-color:rgba(200,80,80,.3);color:#e08080;font-size:11px" onclick="adminDeleteMsg('${m.id}')">Supprimer</button></td>
+    </tr>`;
+  }).join('');
+}
+async function adminDeletePost(id){
+  if(!confirm('Supprimer ce post définitivement ?'))return;
+  const{error}=await db.from('posts').delete().eq('id',id);
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  await writeAdminLog(`Post ${id} supprimé (modération contenu)`,'moderation');
+  showToast('Post supprimé.','success');
+  loadContentMod();
+}
+async function adminDeleteMsg(id){
+  if(!confirm('Supprimer ce message définitivement ?'))return;
+  const{error}=await db.from('messages').delete().eq('id',id);
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  await writeAdminLog(`Message chat ${id} supprimé (modération contenu)`,'moderation');
+  showToast('Message supprimé.','success');
+  loadContentMod();
 }
 
 async function assignRole(){
