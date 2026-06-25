@@ -609,7 +609,7 @@ function navigate(section) {
   if (section === 'ranking') loadRanking();
   if (section === 'discover') loadDiscover();
   if (section === 'recruit') loadJobs();
-  if (section === 'editor') loadEditorFiles();
+  if (section === 'editor') { loadEditorFiles(); checkAiKeyBanner(); }
   if (section === 'learn') { loadLearnProgress(); renderChallenges(); }
   if (section === 'snippets') { loadSnippets(); }
 }
@@ -2107,22 +2107,58 @@ function runEditorPreview(){
 }
 function closePreviewModal(){document.getElementById('preview-modal').classList.remove('show');}
 
+function getAiKey(){return localStorage.getItem('dc_openrouter_key')||'';}
+function promptAiKey(){
+  const current=getAiKey();
+  const key=prompt('Colle ta clé API OpenRouter (openrouter.ai) :\n\nElle sera stockée uniquement dans ton navigateur.',current||'');
+  if(key===null)return;
+  if(key.trim()){localStorage.setItem('dc_openrouter_key',key.trim());showToast('Clé API enregistrée ✓','success');document.getElementById('editor-ai-key-banner').style.display='none';}
+  else{localStorage.removeItem('dc_openrouter_key');showToast('Clé supprimée','info');}
+}
+function checkAiKeyBanner(){
+  const banner=document.getElementById('editor-ai-key-banner');
+  if(banner)banner.style.display=getAiKey()?'none':'flex';
+}
+
 async function sendEditorAI(){
   if(!currentUser){showToast('Connecte-toi pour utiliser l\'IA.','error');return;}
+  const key=getAiKey();
+  if(!key){
+    document.getElementById('editor-ai-key-banner').style.display='flex';
+    promptAiKey();
+    return;
+  }
   const input=document.getElementById('editor-ai-input');
   const msg=input.value.trim();if(!msg)return;
   input.value='';
+  input.disabled=true;
   const c=document.getElementById('editor-ai-messages');
-  c.innerHTML+=`<div class="ai-msg user">${esc(msg)}</div><div class="ai-msg ai" id="ai-typing">Analyse en cours...</div>`;
+  c.innerHTML+=`<div class="ai-msg user">${esc(msg)}</div><div class="ai-msg ai" id="ai-typing"><span class="ai-thinking">●●●</span></div>`;
   c.scrollTop=c.scrollHeight;
   const code=document.getElementById('code-editor').value;
+  const systemPrompt=`Tu es un assistant de code expert intégré dans DevConnect, une plateforme pour développeurs. Tu aides à déboguer, optimiser et expliquer du code. Réponds en français, de manière concise et précise. Utilise des backticks pour le code inline. Pas de markdown avec ##, juste du texte clair.`;
+  const userContent=code.trim()
+    ?`Code actuel dans l'éditeur :\n\`\`\`\n${code.substring(0,3000)}\n\`\`\`\n\nQuestion : ${msg}`
+    :msg;
   try{
-    const{data,error}=await db.functions.invoke('editor-ai',{body:{code,question:msg}});
-    if(error)throw error;
-    const text=data?.reply||'Erreur de réponse.';
+    const res=await fetch('https://openrouter.ai/api/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`,'HTTP-Referer':'https://devconnect-dev.github.io','X-Title':'DevConnect Editor'},
+      body:JSON.stringify({model:'qwen/qwen3-235b-a22b:free',messages:[{role:'system',content:systemPrompt},{role:'user',content:userContent}],max_tokens:600,temperature:0.3})
+    });
+    if(!res.ok){
+      const err=await res.json().catch(()=>({}));
+      if(res.status===401){localStorage.removeItem('dc_openrouter_key');document.getElementById('editor-ai-key-banner').style.display='flex';throw new Error('Clé API invalide — reconfigure-la.');}
+      throw new Error(err?.error?.message||`Erreur ${res.status}`);
+    }
+    const data=await res.json();
+    const text=data?.choices?.[0]?.message?.content||'Pas de réponse.';
     const el=document.getElementById('ai-typing');
     if(el){el.innerHTML=esc(text).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\n/g,'<br>');el.removeAttribute('id');}
-  }catch(e){const el=document.getElementById('ai-typing');if(el){el.textContent='Erreur de connexion à l\'IA. (Edge Function "editor-ai" non déployée ?)';el.removeAttribute('id');}}
+  }catch(e){
+    const el=document.getElementById('ai-typing');
+    if(el){el.innerHTML=`<span style="color:#e06a6a">⚠ ${esc(e.message||'Erreur de connexion.')}</span>`;el.removeAttribute('id');}
+  }finally{input.disabled=false;input.focus();}
   c.scrollTop=c.scrollHeight;
 }
 
