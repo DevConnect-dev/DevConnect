@@ -170,17 +170,17 @@ function updateProfileSection(){
   setEl('profile-xp',p.xp||0);
   setEl('profile-streak',p.streak||0);
   if(p.specialty)setEl('profile-specialty-badge',specLabels[p.specialty]||p.specialty);
-  if(p.github_url){const el=document.getElementById('profile-github-link');if(el){el.href=p.github_url;el.style.display='inline-flex';}}
-  if(p.linkedin_url){const el=document.getElementById('profile-linkedin-link');if(el){el.href=p.linkedin_url;el.style.display='inline-flex';}}
-  if(p.portfolio_url){const el=document.getElementById('profile-portfolio-link');if(el){el.href=p.portfolio_url;el.style.display='inline-flex';}}
+  if(p.github_url){const el=document.getElementById('profile-github-link');if(el){el.href=safeUrl(p.github_url);el.style.display='inline-flex';}}
+  if(p.linkedin_url){const el=document.getElementById('profile-linkedin-link');if(el){el.href=safeUrl(p.linkedin_url);el.style.display='inline-flex';}}
+  if(p.portfolio_url){const el=document.getElementById('profile-portfolio-link');if(el){el.href=safeUrl(p.portfolio_url);el.style.display='inline-flex';}}
 
   const init=(p.username||'DC').substring(0,2).toUpperCase();
   document.getElementById('profile-avatar-big').innerHTML=avatarHtml(p.avatar_url,init);
 
   const banner=document.getElementById('profile-banner');
-  if(isDevPlus()&&p.banner_url){banner.style.background=`url('${p.banner_url}') center/cover no-repeat`;}
-  else if(isDevPlus()&&p.banner_gradient){banner.style.background=p.banner_gradient;}
-  else if(isDevPlus()&&p.profile_color){banner.style.background=p.profile_color;}
+  if(isDevPlus()&&p.banner_url){banner.style.background=`url('${safeUrl(p.banner_url)}') center/cover no-repeat`;}
+  else if(isDevPlus()&&p.banner_gradient){const g=String(p.banner_gradient||'');if(/^linear-gradient\(/.test(g)||/^radial-gradient\(/.test(g))banner.style.background=g;}
+  else if(isDevPlus()&&p.profile_color){const c=safeCssColor(p.profile_color);if(c)banner.style.background=c;}
   else{banner.style.background='linear-gradient(135deg,var(--bg3),var(--bg2))';}
 
   // Pronoms
@@ -316,7 +316,7 @@ function updateSettingsSection(){
 
   if(devPlus){
     const bPrev=document.getElementById('s-banner-preview');
-    if(bPrev)bPrev.style.background=p.banner_url?`url('${p.banner_url}') center/cover`:'var(--bg2)';
+    if(bPrev)bPrev.style.background=p.banner_url?`url('${safeUrl(p.banner_url)}') center/cover`:'var(--bg2)';
   }
   // Init gradient
   const savedGrad=localStorage.getItem('dc_site_gradient');
@@ -1395,6 +1395,7 @@ async function sendMessage(){
   const input=document.getElementById('chat-input');
   const content=input.value.trim();
   if(!content)return;
+  if(content.length>2000){showToast('Message trop long (max 2000 caractères).','error');return;}
 
   if(isDmMode){
     if(!currentDmConvId){showToast('Aucune conversation ouverte.','error');return;}
@@ -2120,7 +2121,7 @@ async function sendEditorAI(){
     if(error)throw error;
     const text=data?.reply||'Erreur de réponse.';
     const el=document.getElementById('ai-typing');
-    if(el){el.innerHTML=text.replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\n/g,'<br>');el.removeAttribute('id');}
+    if(el){el.innerHTML=esc(text).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\n/g,'<br>');el.removeAttribute('id');}
   }catch(e){const el=document.getElementById('ai-typing');if(el){el.textContent='Erreur de connexion à l\'IA. (Edge Function "editor-ai" non déployée ?)';el.removeAttribute('id');}}
   c.scrollTop=c.scrollHeight;
 }
@@ -2692,7 +2693,11 @@ function showToast(msg,type='info'){const c=document.getElementById('toast-conta
 function setEl(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
 function setVal(id,v){const el=document.getElementById(id);if(el)el.value=v;}
 function getVal(id){return document.getElementById(id)?.value||'';}
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;');}
+// Bloque les URLs javascript: data: vbscript: (XSS via href)
+function safeUrl(url){if(!url)return'';const u=String(url).trim().toLowerCase();if(u.startsWith('javascript:')||u.startsWith('data:')||u.startsWith('vbscript:'))return'';return url;}
+// Valide qu'une couleur CSS est inoffensive (hex, rgb, hsl, var() seulement)
+function safeCssColor(val){if(!val)return'';const v=String(val).trim();if(/^#[0-9a-fA-F]{3,8}$/.test(v))return v;if(/^rgb\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\)$/.test(v))return v;if(/^hsl\(\s*\d+\s*,\s*[\d.]+%\s*,\s*[\d.]+%\s*\)$/.test(v))return v;if(/^var\(--[\w-]+\)$/.test(v))return v;return'';}
 
 /*
  * ╔══════════════════════════════════════════════════════════════╗
