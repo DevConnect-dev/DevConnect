@@ -609,7 +609,7 @@ function navigate(section) {
   if (section === 'ranking') loadRanking();
   if (section === 'discover') loadDiscover();
   if (section === 'recruit') loadJobs();
-  if (section === 'editor') renderEditorFileTree();
+  if (section === 'editor') loadEditorFiles();
   if (section === 'learn') { loadLearnProgress(); renderChallenges(); }
   if (section === 'snippets') { loadSnippets(); }
 }
@@ -934,19 +934,28 @@ async function loadSnippets(){
     const name=prof.username||'Inconnu';
     const liked=myLikes.has(s.id);
     const codeEscaped=esc(s.code||'');
-    return`<div class="project-card" style="margin-bottom:12px">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px">
-        <div>
-          <div class="project-name">${esc(s.title||'')}</div>
-          <div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono);margin-top:2px">par <span style="cursor:pointer" onclick="openProfile('${esc(name)}')">@${esc(name)}</span> · ${esc(langLabels[s.language]||s.language||'')} · ${timeAgo(s.created_at)}</div>
+    const avatarHtml=prof.avatar_url?`<img src="${esc(prof.avatar_url)}" alt="">`:`<span>${esc(name.charAt(0).toUpperCase())}</span>`;
+    const langLabel=langLabels[s.language]||s.language||'Code';
+    return`<div class="snippet-card">
+      <div class="snippet-card-header">
+        <div class="snippet-card-avatar">${avatarHtml}</div>
+        <div class="snippet-card-meta">
+          <div class="snippet-card-title">${esc(s.title||'')}</div>
+          <div class="snippet-card-by">par <span style="cursor:pointer;color:var(--accent-dim)" onclick="openProfile('${esc(name)}')">@${esc(name)}</span> · ${timeAgo(s.created_at)}</div>
         </div>
+        <span class="snippet-lang-badge">${esc(langLabel)}</span>
       </div>
-      ${s.description?`<div class="project-desc" style="margin-bottom:8px">${esc(s.description)}</div>`:''}
-      <pre style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:12px;overflow-x:auto;margin:0 0 8px"><code class="language-${esc(s.language||'')}">${codeEscaped}</code></pre>
-      ${s.tags&&s.tags.length?`<div class="project-stack" style="margin-bottom:8px">${s.tags.map(t=>`<span class="stack-tag">${esc(t)}</span>`).join('')}</div>`:''}
-      <div style="display:flex;gap:8px;align-items:center">
+      ${s.description?`<div class="snippet-card-desc">${esc(s.description)}</div>`:''}
+      <div class="snippet-code-block">
+        <div class="snippet-code-bar">
+          <span>${esc(s.language||'code')}</span>
+          <button class="snippet-copy-btn" onclick="copySnippetCode(this)" data-code="${esc(s.code||'')}">⧉ Copier</button>
+        </div>
+        <pre><code class="language-${esc(s.language||'')}">${codeEscaped}</code></pre>
+      </div>
+      ${s.tags&&s.tags.length?`<div class="project-stack" style="margin-top:10px">${s.tags.map(t=>`<span class="stack-tag">${esc(t)}</span>`).join('')}</div>`:''}
+      <div class="snippet-card-actions">
         <button class="post-action ${liked?'post-liked':''}" onclick="toggleSnippetLike('${esc(s.id)}',this)">◆ <span class="like-count">${s.likes_count||0}</span></button>
-        <button class="btn btn-ghost btn-sm" onclick="copySnippetCode(this)" data-code="${esc(s.code||'')}">⧉ Copier</button>
         <button class="post-action" onclick="toggleSnippetComments('${esc(s.id)}')">💬 Code review</button>
       </div>
       <div class="snippet-comments" id="snip-comments-${esc(s.id)}" style="display:none;margin-top:10px;border-top:1px solid var(--border);padding-top:10px"></div>
@@ -1956,13 +1965,58 @@ function showSolutions(){
 // ÉDITEUR — VRAI SYSTÈME DE FICHIERS (en mémoire, par session)
 let editorFiles={'main.js':'// Bienvenue dans l\'éditeur DevConnect\n// Utilise l\'IA à droite pour déboguer ton code\n\nconsole.log("Hello DevConnect !");'};
 let activeEditorFile='main.js';
+let _editorSaveTimer=null;
+let _editorUnsaved=false;
+
+async function loadEditorFiles(){
+  if(!currentUser){renderEditorFileTree();return;}
+  const{data,error}=await db.from('editor_files').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:true});
+  if(error){console.error('loadEditorFiles:',error);renderEditorFileTree();return;}
+  if(data&&data.length>0){
+    editorFiles={};
+    data.forEach(f=>{editorFiles[f.filename]=f.content||'';});
+    activeEditorFile=Object.keys(editorFiles)[0];
+  }
+  renderEditorFileTree();
+}
+
+async function persistEditorFile(filename,content){
+  if(!currentUser)return;
+  setEditorSaveStatus('saving');
+  const{error}=await db.from('editor_files').upsert({user_id:currentUser.id,filename,content,updated_at:new Date().toISOString()},{onConflict:'user_id,filename'});
+  if(error){console.error('persistEditorFile:',error);setEditorSaveStatus('error');}
+  else{setEditorSaveStatus('saved');_editorUnsaved=false;renderEditorFileTree();}
+}
+
+async function deleteEditorFilePersist(filename){
+  if(!currentUser)return;
+  await db.from('editor_files').delete().eq('user_id',currentUser.id).eq('filename',filename);
+}
+
+function setEditorSaveStatus(state){
+  const el=document.getElementById('editor-save-status');
+  if(!el)return;
+  if(state==='saving'){el.textContent='⟳ Enregistrement...';el.style.color='var(--text-muted)';}
+  else if(state==='saved'){el.textContent='✓ Enregistré';el.style.color='var(--accent-dim)';setTimeout(()=>{if(el)el.textContent='';},2500);}
+  else if(state==='unsaved'){el.textContent='● Non enregistré';el.style.color='#e0a05a';}
+  else{el.textContent='';}}
+
+function scheduleEditorSave(){
+  _editorUnsaved=true;
+  setEditorSaveStatus('unsaved');
+  if(_editorSaveTimer)clearTimeout(_editorSaveTimer);
+  _editorSaveTimer=setTimeout(()=>{persistEditorFile(activeEditorFile,editorFiles[activeEditorFile]||'');},1500);
+}
 
 function fileIconFor(name){
-  if(name.endsWith('.css'))return'◇';
-  if(name.endsWith('.md'))return'◆';
-  if(name.endsWith('.json'))return'◈';
-  if(name.endsWith('.html'))return'⬡';
-  return'◉';
+  if(name.endsWith('.css'))return'<span style="color:#5a9fd4">◇</span>';
+  if(name.endsWith('.html'))return'<span style="color:#e06a3a">⬡</span>';
+  if(name.endsWith('.json'))return'<span style="color:#5abf78">◈</span>';
+  if(name.endsWith('.md'))return'<span style="color:#a57de0">◆</span>';
+  if(name.endsWith('.ts'))return'<span style="color:#5a9fd4">◉</span>';
+  if(name.endsWith('.py'))return'<span style="color:#f7d65a">◉</span>';
+  if(name.endsWith('.sql'))return'<span style="color:#e0a05a">◉</span>';
+  return'<span style="color:#e0c45a">◉</span>';
 }
 function langFor(name){
   if(name.endsWith('.css'))return'CSS';
@@ -1985,7 +2039,7 @@ function renderEditorFileTree(){
 }
 
 function switchEditorFile(name){activeEditorFile=name;renderEditorFileTree();}
-function onEditorEdit(){editorFiles[activeEditorFile]=document.getElementById('code-editor').value;}
+function onEditorEdit(){editorFiles[activeEditorFile]=document.getElementById('code-editor').value;scheduleEditorSave();}
 
 function createEditorFile(){
   const name=prompt('Nom du nouveau fichier (ex: utils.js) :');
@@ -1993,12 +2047,14 @@ function createEditorFile(){
   if(editorFiles[name]){showToast('Ce fichier existe déjà.','error');return;}
   editorFiles[name]='';
   activeEditorFile=name;
+  persistEditorFile(name,'');
   renderEditorFileTree();
 }
 
 function deleteEditorFile(name){
   if(Object.keys(editorFiles).length<=1){showToast('Il doit rester au moins un fichier.','error');return;}
   delete editorFiles[name];
+  deleteEditorFilePersist(name);
   if(activeEditorFile===name)activeEditorFile=Object.keys(editorFiles)[0];
   renderEditorFileTree();
 }
@@ -2009,6 +2065,7 @@ function importEditorFile(input){
   reader.onload=()=>{
     editorFiles[file.name]=reader.result;
     activeEditorFile=file.name;
+    persistEditorFile(file.name,reader.result);
     renderEditorFileTree();
     showToast(`Fichier "${file.name}" importé.`,'success');
   };
@@ -2119,13 +2176,20 @@ async function loadAdminRecentUsers(){
 }
 
 async function loadAdminRecentLogsOverview(){
-  const{data}=await db.from('admin_logs').select('*,admin:profiles!admin_logs_admin_id_fkey(username)').order('created_at',{ascending:false}).limit(6);
   const cont=document.getElementById('admin-recent-logs');
   if(!cont)return;
+  const{data,error}=await db.from('admin_logs').select('*').order('created_at',{ascending:false}).limit(6);
+  if(error){console.error('loadAdminRecentLogsOverview:',error);cont.innerHTML='<div style="text-align:center;color:var(--text-muted);font-size:13px;padding:16px">Erreur de chargement des logs.</div>';return;}
   if(!data||!data.length){cont.innerHTML='<div style="text-align:center;color:var(--text-muted);font-size:13px;padding:16px">Aucune activité récente.</div>';return;}
+  const adminIds=[...new Set(data.map(l=>l.admin_id).filter(Boolean))];
+  let adminMap={};
+  if(adminIds.length){
+    const{data:profiles}=await db.from('profiles').select('id,username').in('id',adminIds);
+    if(profiles)profiles.forEach(p=>{adminMap[p.id]=p.username;});
+  }
   cont.innerHTML=data.map(l=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px">
     <span>${esc(l.action||'—')}</span>
-    <span style="color:var(--text-muted);font-family:var(--font-mono);font-size:11px;white-space:nowrap">${timeAgo(l.created_at)} · @${esc(l.admin?.username||'?')}</span>
+    <span style="color:var(--text-muted);font-family:var(--font-mono);font-size:11px;white-space:nowrap">${timeAgo(l.created_at)} · @${esc(adminMap[l.admin_id]||'?')}</span>
   </div>`).join('');
 }
 
@@ -2376,18 +2440,25 @@ function filterTickets(el,status){
 }
 async function loadAdminTickets(){
   const cont=document.getElementById('admin-tickets-list');
-  let q=db.from('report_tickets').select('*,reporter:profiles!report_tickets_reporter_id_fkey(username),target:profiles!report_tickets_target_id_fkey(username)').order('created_at',{ascending:false}).limit(30);
+  let q=db.from('report_tickets').select('*').order('created_at',{ascending:false}).limit(30);
   if(_ticketFilter!=='all')q=q.eq('status',_ticketFilter);
-  const{data}=await q;
+  const{data,error}=await q;
+  if(error){console.error('loadAdminTickets:',error);}
   if(!data||data.length===0){
     cont.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px">Aucun ticket pour l\'instant.</td></tr>';
     return;
   }
+  const userIds=[...new Set([...data.map(t=>t.reporter_id),...data.map(t=>t.target_id)].filter(Boolean))];
+  let userMap={};
+  if(userIds.length){
+    const{data:profiles}=await db.from('profiles').select('id,username').in('id',userIds);
+    if(profiles)profiles.forEach(p=>{userMap[p.id]=p.username;});
+  }
   const statusClass={open:'status-open',claimed:'status-claimed',resolved:'status-resolved',dismissed:'status-resolved'};
   cont.innerHTML=data.map(t=>`<tr>
     <td><strong style="font-size:13px">${esc(t.reason||'—')}</strong><div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">${esc(t.category||'—')} · ${esc(t.priority||'—')}</div></td>
-    <td style="font-size:12px">@${esc(t.reporter?.username||'?')}</td>
-    <td style="font-size:12px">@${esc(t.target?.username||'?')}</td>
+    <td style="font-size:12px">@${esc(userMap[t.reporter_id]||'?')}</td>
+    <td style="font-size:12px">@${esc(userMap[t.target_id]||'?')}</td>
     <td><span class="status-badge ${statusClass[t.status]||'status-open'}">${t.status}</span></td>
     <td>
       <div class="action-btns">
@@ -2420,15 +2491,22 @@ async function dismissTicket(id){
 // LOGS ADMIN (vrais)
 async function loadAdminLogs(){
   const cont=document.getElementById('admin-logs-list');
-  const{data}=await db.from('admin_logs').select('*,admin:profiles!admin_logs_admin_id_fkey(username)').order('created_at',{ascending:false}).limit(30);
+  const{data,error}=await db.from('admin_logs').select('*').order('created_at',{ascending:false}).limit(30);
+  if(error){console.error('loadAdminLogs:',error);if(cont)cont.innerHTML=`<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Erreur : ${esc(error.message)}</div>`;return;}
   if(!data||data.length===0){
     cont.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun log pour l\'instant.</div>';
     return;
   }
+  const adminIds=[...new Set(data.map(l=>l.admin_id).filter(Boolean))];
+  let adminMap={};
+  if(adminIds.length){
+    const{data:profiles}=await db.from('profiles').select('id,username').in('id',adminIds);
+    if(profiles)profiles.forEach(p=>{adminMap[p.id]=p.username;});
+  }
   cont.innerHTML=data.map(l=>`<div class="admin-table-row" style="grid-template-columns:1fr 120px 140px">
     <div style="font-size:13px">${esc(l.action||'—')}</div>
     <div style="font-size:11px;font-family:var(--font-mono);color:var(--accent-dim)">${esc(l.category||'—')}</div>
-    <div style="font-size:11px;font-family:var(--font-mono);color:var(--text-muted)">${timeAgo(l.created_at)} · @${esc(l.admin?.username||'?')}</div>
+    <div style="font-size:11px;font-family:var(--font-mono);color:var(--text-muted)">${timeAgo(l.created_at)} · @${esc(adminMap[l.admin_id]||'?')}</div>
   </div>`).join('');
 }
 
@@ -2594,7 +2672,8 @@ async function markAllNotifsRead(){
 }
 async function notifyUser(userId,type,content,link){
   if(!userId||userId===currentUser?.id)return;
-  await db.from('notifications').insert({user_id:userId,type,content,link,is_read:false});
+  const{error}=await db.from('notifications').insert({user_id:userId,type,content,link,is_read:false});
+  if(error)console.error('notifyUser:',error);
 }
 function subscribeNotifications(){
   if(!currentUser)return;
