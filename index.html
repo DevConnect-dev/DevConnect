@@ -741,7 +741,10 @@
           <div class="editor-statusbar"><span id="editor-lang-label">JavaScript</span><span>UTF-8</span><span>Ln 1, Col 1</span><span id="editor-save-status" style="margin-left:auto;font-family:var(--font-mono);font-size:11px;transition:color .3s"></span></div>
         </div>
         <div class="editor-ai-panel">
-          <div class="editor-ai-header"><div class="ai-dot"></div>Assistant IA</div>
+          <div class="editor-ai-header"><div class="ai-dot"></div>Assistant IA <span style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono);margin-left:auto">Qwen · OpenRouter</span></div>
+          <div id="editor-ai-key-banner" style="display:none;padding:8px 10px;background:rgba(224,160,90,.08);border-bottom:1px solid rgba(224,160,90,.2);font-size:11px;font-family:var(--font-mono);color:#e0a05a">
+            🔑 <span>Clé API requise — </span><button onclick="promptAiKey()" style="background:none;border:none;color:#e0a05a;cursor:pointer;font-family:var(--font-mono);font-size:11px;text-decoration:underline;padding:0">Configurer</button>
+          </div>
           <div class="editor-ai-messages" id="editor-ai-messages">
             <div class="ai-msg ai">Bonjour ! Je suis ton assistant de code. Je peux t'aider à déboguer, suggérer des améliorations ou expliquer du code.<br><br>Pose-moi une question sur ton code ou colle un extrait à analyser.</div>
           </div>
