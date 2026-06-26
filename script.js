@@ -2152,7 +2152,8 @@ async function sendEditorAI(){
       throw new Error(err?.error?.message||`Erreur ${res.status}`);
     }
     const data=await res.json();
-    const text=data?.choices?.[0]?.message?.content||'Pas de réponse.';
+    const raw=data?.choices?.[0]?.message?.content||'Pas de réponse.';
+    const text=raw.replace(/<pad>/gi,'').replace(/User Safety:\s*\w+/gi,'').replace(/^\s*[\n\r]+/,'').trim();
     const el=document.getElementById('ai-typing');
     if(el){el.innerHTML=esc(text).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\n/g,'<br>');el.removeAttribute('id');}
   }catch(e){
