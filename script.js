@@ -2527,9 +2527,45 @@ async function loadAdminTickets(){
 }
 
 async function claimTicket(id){
-  await db.from('report_tickets').update({status:'claimed',claimed_by:currentUser.id}).eq('id',id);
+  const{data:ticket,error:ticketErr}=await db.from('report_tickets').select('*').eq('id',id).maybeSingle();
+  if(ticketErr||!ticket){showToast('Erreur : ticket introuvable.','error');return;}
+  const{error}=await db.from('report_tickets').update({status:'claimed',claimed_by:currentUser.id}).eq('id',id);
+  if(error){showToast('Erreur : '+error.message,'error');return;}
   await writeAdminLog(`Ticket ${id} pris en charge`,'moderation');
-  showToast('Ticket pris en charge.','info');loadAdminTickets();loadAdminStats();
+  showToast('Ticket pris en charge.','info');
+  loadAdminTickets();loadAdminStats();
+  await openTicketVerificationDm(ticket);
+}
+
+// Ouvre une conversation privée avec la personne qui a signalé, pour vérification (preuves, détails...)
+async function openTicketVerificationDm(ticket){
+  if(!currentUser||!ticket?.reporter_id)return;
+  if(ticket.reporter_id===currentUser.id){showToast("Tu es à l'origine de ce signalement, impossible d'ouvrir une conversation avec toi-même.",'error');return;}
+  const[{data:reporterProfile},{data:targetProfile}]=await Promise.all([
+    db.from('profiles').select('username').eq('id',ticket.reporter_id).maybeSingle(),
+    ticket.target_id?db.from('profiles').select('username').eq('id',ticket.target_id).maybeSingle():Promise.resolve({data:null})
+  ]);
+  const reporterName=reporterProfile?.username||'utilisateur';
+  const targetName=targetProfile?.username||'?';
+  let convId=null;
+  const{data:c1}=await db.from('dm_conversations').select('id').eq('user1_id',currentUser.id).eq('user2_id',ticket.reporter_id).maybeSingle();
+  const{data:c2}=await db.from('dm_conversations').select('id').eq('user1_id',ticket.reporter_id).eq('user2_id',currentUser.id).maybeSingle();
+  if(c1)convId=c1.id;
+  else if(c2)convId=c2.id;
+  else{
+    const{data:newConv,error}=await db.from('dm_conversations').insert({user1_id:currentUser.id,user2_id:ticket.reporter_id}).select().maybeSingle();
+    if(error){showToast("Erreur lors de l'ouverture de la conversation : "+error.message,'error');return;}
+    convId=newConv.id;
+  }
+  navigate('messages');
+  await loadDmList();
+  await openDmConv(convId,reporterName);
+  const input=document.getElementById('chat-input');
+  if(input){
+    input.value=`Bonjour ! Je m'occupe de ton signalement contre @${targetName} (catégorie : ${ticket.category||'—'}). Peux-tu me donner plus de détails ou des preuves (captures d'écran, liens, messages...) pour qu'on puisse vérifier ça ensemble ? 🔍`;
+    input.focus();
+  }
+  showToast(`Conversation ouverte avec @${reporterName} pour vérification.`,'success');
 }
 
 async function resolveTicket(id){
