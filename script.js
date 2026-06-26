@@ -2144,7 +2144,7 @@ async function sendEditorAI(){
     const res=await fetch('https://openrouter.ai/api/v1/chat/completions',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`,'HTTP-Referer':'https://devconnect-dev.github.io','X-Title':'DevConnect Editor'},
-      body:JSON.stringify({model:'meta-llama/llama-4-scout:free',messages:[{role:'system',content:systemPrompt},{role:'user',content:userContent}],max_tokens:600,temperature:0.3})
+      body:JSON.stringify({model:'qwen/qwen3-coder:free',models:['qwen/qwen3-coder:free','openrouter/free'],messages:[{role:'system',content:systemPrompt},{role:'user',content:userContent}],max_tokens:600,temperature:0.3})
     });
     if(!res.ok){
       const err=await res.json().catch(()=>({}));
