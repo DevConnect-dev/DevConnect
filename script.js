@@ -2120,6 +2120,15 @@ function checkAiKeyBanner(){
   if(banner)banner.style.display=getAiKey()?'none':'flex';
 }
 
+// Historique de conversation IA (mémoire entre les messages)
+let _aiHistory=[];
+
+function clearAiHistory(){
+  _aiHistory=[];
+  const c=document.getElementById('editor-ai-messages');
+  if(c)c.innerHTML='<div class="ai-msg ai">Conversation réinitialisée. Comment puis-je t\'aider ?</div>';
+}
+
 async function sendEditorAI(){
   if(!currentUser){showToast('Connecte-toi pour utiliser l\'IA.','error');return;}
   const key=getAiKey();
@@ -2137,14 +2146,19 @@ async function sendEditorAI(){
   c.scrollTop=c.scrollHeight;
   const code=document.getElementById('code-editor').value;
   const systemPrompt=`Tu es un assistant de code expert intégré dans DevConnect, une plateforme pour développeurs. Tu aides à déboguer, optimiser et expliquer du code. Réponds en français, de manière concise et précise. Utilise des backticks pour le code inline. Pas de markdown avec ##, juste du texte clair.`;
-  const userContent=code.trim()
-    ?`Code actuel dans l'éditeur :\n\`\`\`\n${code.substring(0,3000)}\n\`\`\`\n\nQuestion : ${msg}`
+  // Contenu utilisateur : inclut le code seulement au premier message ou si changé
+  const userContent=code.trim()&&_aiHistory.length===0
+    ?`Code actuel dans l'éditeur :\n\`\`\`\n${code.substring(0,2000)}\n\`\`\`\n\nQuestion : ${msg}`
     :msg;
+  // Ajoute le message à l'historique
+  _aiHistory.push({role:'user',content:userContent});
+  // Garde max 10 échanges (20 messages) pour éviter de dépasser les tokens
+  if(_aiHistory.length>20)_aiHistory=_aiHistory.slice(-20);
   try{
     const res=await fetch('https://openrouter.ai/api/v1/chat/completions',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`,'HTTP-Referer':'https://devconnect-dev.github.io','X-Title':'DevConnect Editor'},
-      body:JSON.stringify({model:'qwen/qwen3-coder:free',models:['qwen/qwen3-coder:free','openrouter/free'],messages:[{role:'system',content:systemPrompt},{role:'user',content:userContent}],max_tokens:600,temperature:0.3})
+      body:JSON.stringify({model:'qwen/qwen3-coder:free',models:['qwen/qwen3-coder:free','openrouter/free'],messages:[{role:'system',content:systemPrompt},..._aiHistory],max_tokens:600,temperature:0.3})
     });
     if(!res.ok){
       const err=await res.json().catch(()=>({}));
@@ -2154,9 +2168,13 @@ async function sendEditorAI(){
     const data=await res.json();
     const raw=data?.choices?.[0]?.message?.content||'Pas de réponse.';
     const text=raw.replace(/<pad>/gi,'').replace(/User Safety:\s*\w+/gi,'').replace(/^\s*[\n\r]+/,'').trim();
+    // Ajoute la réponse IA à l'historique
+    _aiHistory.push({role:'assistant',content:text});
     const el=document.getElementById('ai-typing');
     if(el){el.innerHTML=esc(text).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\n/g,'<br>');el.removeAttribute('id');}
   }catch(e){
+    // En cas d'erreur, retire le dernier message user de l'historique
+    _aiHistory.pop();
     const el=document.getElementById('ai-typing');
     if(el){el.innerHTML=`<span style="color:#e06a6a">⚠ ${esc(e.message||'Erreur de connexion.')}</span>`;el.removeAttribute('id');}
   }finally{input.disabled=false;input.focus();}
