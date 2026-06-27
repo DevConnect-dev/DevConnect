@@ -466,13 +466,6 @@ function checkArchitect(){
   }
   setEl('admin-welcome-role',ROLE_LABELS[role]||'Admin');
 }
-  // Premium & Rôles : réservés à admin/architect, pas aux modérateurs
-  const navPremium=document.getElementById('admin-nav-premium');
-  const navRoles=document.getElementById('admin-nav-roles');
-  if(navPremium)navPremium.style.display=isFullAdmin?'flex':'none';
-  if(navRoles)navRoles.style.display=isFullAdmin?'flex':'none';
-  setEl('admin-welcome-role',ROLE_LABELS[role]||'Admin');
-}
 
 let currentSkills=[];
 function renderSkillTags(){
@@ -2489,15 +2482,6 @@ async function assignRole(){
   }
   const{data:user}=await db.from('profiles').select('id,role').eq('username',username).maybeSingle();
   if(!user){showToast('Utilisateur introuvable.','error');return;}
-  if(!checkHierarchy(username, user.role, 'modifier le rôle de'))return;
-  const{error}=await db.from('profiles').update({role}).eq('id',user.id);
-  if(error){showToast('Erreur lors de la mise à jour.','error');return;}
-  await writeAdminLog(`Rôle "${ROLE_LABELS[role]||role}" attribué à @${username}`,'role');
-  showToast(`Rôle "${ROLE_LABELS[role]||role}" attribué à @${username} !`,'success');
-}
-  const{data:user}=await db.from('profiles').select('id,role').eq('username',username).maybeSingle();
-  if(!user){showToast('Utilisateur introuvable.','error');return;}
-  // Vérif : ne peut pas agir sur un user de rang >= au sien
   if(!checkHierarchy(username, user.role, 'modifier le rôle de'))return;
   const{error}=await db.from('profiles').update({role}).eq('id',user.id);
   if(error){showToast('Erreur lors de la mise à jour.','error');return;}
