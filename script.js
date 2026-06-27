@@ -146,7 +146,7 @@ async function loadProfile(){
     if(error){showToast('Impossible de charger ton profil. Contacte un admin.','error');return;}
     data=created;
   }
-  if(data){currentProfile=data;updateNavAvatar();updateProfileSection();updateSettingsSection();checkArchitect();updateNotifBadge();subscribeNotifications();}
+  if(data){currentProfile=data;updateNavAvatar();updateProfileSection();updateSettingsSection();checkArchitect();updateNotifBadge();subscribeNotifications();subscribeDmListRealtime();}
 }
 
 function isDevPlus(){return!!(currentProfile?.is_premium||currentProfile?.premium_tier==='devconnect-plus');}
@@ -164,7 +164,7 @@ function updateProfileSection(){
   if(!currentProfile)return;
   const p=currentProfile;
   const specLabels={web_dev:'Dev Web',mobile_dev:'Dev Mobile',backend_dev:'Dev Backend',fullstack_dev:'Fullstack',cybersecurity:'Cybersécurité',devops:'DevOps',data:'Data',ai_ml:'IA / ML',designer_ux:'Designer UX',recruiter:'Recruteur tech'};
-  setEl('profile-display-name',p.username||'Utilisateur');
+  setEl('profile-display-name',p.display_name||p.username||'Utilisateur');
   setEl('profile-username-display','@'+(p.username||''));
   setEl('profile-bio-display',p.bio||'Aucune bio renseignée.');
   setEl('profile-xp',p.xp||0);
@@ -247,11 +247,17 @@ function updatePremiumStatus(){
 }
 
 async function togglePrivacySetting(btn, field){
+  const prevOn=btn.classList.contains('on');
   btn.classList.toggle('on');
   const val=btn.classList.contains('on');
   const{error}=await db.from('profiles').update({[field]:val}).eq('id',currentUser.id);
-  if(error){showToast('Erreur : '+error.message,'error');}
-  else{if(currentProfile)currentProfile[field]=val;showToast('Préférence mise à jour.','success');}
+  if(error){
+    btn.classList.toggle('on',prevOn); // on remet l'état précédent si ça échoue
+    showToast('Erreur lors de la sauvegarde : '+error.message,'error');
+    return;
+  }
+  if(currentProfile)currentProfile[field]=val;
+  showToast('Préférence mise à jour.','success');
 }
 
 const NOTIF_PREF_KEY='dc_notif_prefs';
@@ -283,6 +289,7 @@ function updateSettingsSection(){
   if(!currentProfile)return;
   const p=currentProfile;
   setVal('s-username',p.username||'');setVal('s-bio',p.bio||'');setVal('s-title',p.title||'');
+  setVal('s-displayname',p.display_name||p.username||'');
   setVal('s-github',p.github_url||'');setVal('s-linkedin',p.linkedin_url||'');setVal('s-portfolio',p.portfolio_url||'');
   setVal('s-pronouns',p.pronouns||'');
   setVal('s-specialty',p.specialty||'web_dev');
@@ -484,7 +491,7 @@ function removeSkillTag(i){currentSkills.splice(i,1);renderSkillTags();}
 
 async function saveProfile(){
   if(!currentUser)return;
-  const{error}=await db.from('profiles').update({username:getVal('s-username'),bio:getVal('s-bio'),title:getVal('s-title'),github_url:getVal('s-github'),linkedin_url:getVal('s-linkedin'),portfolio_url:getVal('s-portfolio'),specialty:getVal('s-specialty'),tech_stack:currentSkills,updated_at:new Date().toISOString()}).eq('id',currentUser.id);
+  const{error}=await db.from('profiles').update({username:getVal('s-username'),display_name:getVal('s-displayname').trim()||getVal('s-username'),bio:getVal('s-bio'),title:getVal('s-title'),github_url:getVal('s-github'),linkedin_url:getVal('s-linkedin'),portfolio_url:getVal('s-portfolio'),specialty:getVal('s-specialty'),tech_stack:currentSkills,updated_at:new Date().toISOString()}).eq('id',currentUser.id);
   if(error){showToast('Erreur lors de la sauvegarde.','error');return;}
   await loadProfile();showToast('Profil mis à jour !','success');
 }
@@ -1046,7 +1053,7 @@ function switchProfileTab(tab, el) {
 // APERÇU LIVE PROFIL
 // ============================================================
 function updateLivePreview() {
-  const name = getVal('s-username') || currentProfile?.username || '—';
+  const name = getVal('s-displayname') || currentProfile?.display_name || getVal('s-username') || currentProfile?.username || '—';
   const bio = getVal('s-bio') || 'Aucune bio renseignée.';
   const pronouns = getVal('s-pronouns') || '';
   setEl('preview-name', name);
@@ -1493,7 +1500,8 @@ async function loadFeed() {
   cont.innerHTML = posts.map(p => {
     const prof = p.profiles || {};
     const name = prof.username || 'Inconnu';
-    const init = name.substring(0, 2).toUpperCase();
+    const displayName = prof.display_name || name; // texte affiché
+    const init = displayName.substring(0, 2).toUpperCase();
     const avatarHtmlPost = prof.avatar_url ? `<img src="${esc(prof.avatar_url)}" alt="avatar">` : init;
     const prem = prof.premium_tier === 'devconnect-plus' ? '<span class="premium-badge devconnectplus">DevConnect+</span>' : prof.is_premium ? '<span class="premium-badge devplus">Dev+</span>' : '';
     const spec = prof.specialty ? `<span class="badge-inline">${esc(specLabels[prof.specialty] || prof.specialty)}</span>` : '';
@@ -1504,7 +1512,7 @@ async function loadFeed() {
       <div class="post-header">
         <div class="post-avatar" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${avatarHtmlPost}</div>
         <div class="post-meta">
-          <div class="post-name" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${esc(name)} ${spec} ${prem}</div>
+          <div class="post-name" style="cursor:pointer" onclick="openProfile('${esc(name)}')">${esc(displayName)} ${spec} ${prem}</div>
           <div class="post-role">${esc(sub)}</div>
         </div>
         <div class="post-time">${timeStr}</div>
@@ -2774,6 +2782,19 @@ function subscribeNotifications(){
       updateNotifBadge();
       if(document.getElementById('notif-dropdown').classList.contains('show'))loadNotifications();
     }).subscribe();
+}
+let dmListRealtimeSub=null;
+function subscribeDmListRealtime(){
+  if(!currentUser)return;
+  if(dmListRealtimeSub)db.removeChannel(dmListRealtimeSub);
+  dmListRealtimeSub=db.channel('dm-list-'+currentUser.id)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'dm_conversations',filter:`user2_id=eq.${currentUser.id}`},()=>{
+      if(currentSection==='messages')loadDmList();
+    })
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'is_dm=eq.true'},()=>{
+      if(currentSection==='messages')loadDmList();
+    })
+    .subscribe();
 }
 document.addEventListener('click',e=>{const dd=document.getElementById('profile-dropdown');if(dd&&!e.target.closest('.topnav-right'))dd.classList.remove('show');});
 
