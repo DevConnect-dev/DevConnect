@@ -2807,7 +2807,26 @@ function setVal(id,v){const el=document.getElementById(id);if(el)el.value=v;}
 function getVal(id){return document.getElementById(id)?.value||'';}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;');}
 // Bloque les URLs javascript: data: vbscript: (XSS via href)
-function safeUrl(url){if(!url)return'';const u=String(url).trim().toLowerCase();if(u.startsWith('javascript:')||u.startsWith('data:')||u.startsWith('vbscript:'))return'';return url;}
+function safeUrl(url){
+  if(!url)return'';
+  const u=String(url).trim().toLowerCase();
+  if(u.startsWith('javascript:')||u.startsWith('data:')||u.startsWith('vbscript:')||u.startsWith('blob:')||u.startsWith('//')){
+    logSecurityEvent('unsafe_url_blocked',{url:String(url).substring(0,200)});
+    return'';
+  }
+  return url;
+}
+
+async function logSecurityEvent(eventType,details={}){
+  if(!currentUser)return;
+  try{
+    await db.from('security_logs').insert({
+      user_id:currentUser.id,
+      event_type:eventType,
+      details:details
+    });
+  }catch(e){/* silencieux */}
+}
 // Valide qu'une couleur CSS est inoffensive (hex, rgb, hsl, var() seulement)
 function safeCssColor(val){if(!val)return'';const v=String(val).trim();if(/^#[0-9a-fA-F]{3,8}$/.test(v))return v;if(/^rgb\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\)$/.test(v))return v;if(/^hsl\(\s*\d+\s*,\s*[\d.]+%\s*,\s*[\d.]+%\s*\)$/.test(v))return v;if(/^var\(--[\w-]+\)$/.test(v))return v;return'';}
 
