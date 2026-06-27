@@ -610,7 +610,7 @@ function navigate(section) {
   document.querySelector(`[data-section="${section}"]`)?.classList.add('active');
   currentSection = section;
   if (section === 'admin') loadAdminData();
-  if (section === 'messages') loadMessages();
+  if (section === 'messages') { loadMessages(); loadDmList(); }
   if (section === 'profile') updateProfileSection();
   if (section === 'home') { loadFeed(); loadSidebarLeaderboard(); loadActiveAnnouncementBanner(); }
   if (section === 'ranking') loadRanking();
@@ -2724,13 +2724,7 @@ function toggleProfileDropdown(){document.getElementById('profile-dropdown').cla
 // ============================================================
 // NOTIFICATIONS
 // ============================================================
-function timeAgo(dateStr){
-  const diff=(Date.now()-new Date(dateStr).getTime())/1000;
-  if(diff<60)return 'à l\'instant';
-  if(diff<3600)return Math.floor(diff/60)+' min';
-  if(diff<86400)return Math.floor(diff/3600)+' h';
-  return Math.floor(diff/86400)+' j';
-}
+
 const NOTIF_ICONS={mention:'@',dm:'✉',follow:'★',like:'♥',report:'⚠'};
 function toggleNotifDropdown(){
   const dd=document.getElementById('notif-dropdown');
@@ -2755,9 +2749,9 @@ async function loadNotifications(){
 }
 async function updateNotifBadge(){
   if(!currentUser)return;
-  const{count}=await db.from('notifications').select('*',{count:'exact',head:true}).eq('user_id',currentUser.id).eq('is_read',false);
+  const{count,error}=await db.from('notifications').select('*',{count:'exact',head:true}).eq('user_id',currentUser.id).eq('is_read',false);
   const badge=document.getElementById('notif-badge');
-  if(badge)badge.style.display=count>0?'block':'none';
+  if(badge)badge.style.display=(!error&&count>0)?'block':'none';
 }
 async function openNotif(id,link){
   await db.from('notifications').update({is_read:true}).eq('id',id);
