@@ -420,19 +420,19 @@ async function saveAppearanceExtras(){
 }
 
 const ROLE_LABELS={
-  architect:'Architect',admin:'Admin',moderator:'Modérateur',
-  core_dev:'Core Dev',designer_team:'Designer UI/UX',security_team:'Security',devops_team:'DevOps',community_manager:'Community Manager',
+  architect:'Architect',admin:'Administrateur',
+  responsable_modo:'Responsable Modération',moderator_senior:'Modérateur Senior',moderator:'Modérateur',moderator_junior:'Modérateur Junior',
+  community_manager:'Gestionnaire Communauté',content_manager:'Gestionnaire Contenu',staff:'Staff',
+  core_dev:'Core Dev',designer_team:'Designer UI/UX',security_team:'Security',devops_team:'DevOps',data_analyst:'Data Analyst',
   web_dev:'Dev Web',mobile_dev:'Dev Mobile',backend_dev:'Dev Backend',fullstack_dev:'Fullstack',
   cybersecurity:'Cybersécurité',devops:'DevOps',data:'Data',ai_ml:'IA / ML',designer_ux:'Designer UX',recruiter:'Recruteur tech'
 };
 
-// Hiérarchie des rôles — plus le chiffre est élevé, plus le rôle est puissant
 const ROLE_HIERARCHY={
-  architect:100,
-  admin:80,
-  moderator:60,
-  community_manager:40,
-  core_dev:30,designer_team:30,security_team:30,devops_team:30,
+  architect:100,admin:90,
+  responsable_modo:75,moderator_senior:65,moderator:55,moderator_junior:45,
+  community_manager:40,content_manager:38,staff:20,
+  core_dev:30,designer_team:30,security_team:30,devops_team:30,data_analyst:30,
   web_dev:10,mobile_dev:10,backend_dev:10,fullstack_dev:10,
   cybersecurity:10,devops:10,data:10,ai_ml:10,designer_ux:10,recruiter:10
 };
@@ -453,8 +453,8 @@ function checkHierarchy(targetUsername, targetRole, action){
 
 function checkArchitect(){
   const role=currentProfile?.role;
-  const isAdmin=role==='admin'||role==='architect'||role==='moderator';
-  const isFullAdmin=role==='admin'||role==='architect';
+  const adminRoles=['architect','admin','responsable_modo','moderator_senior','moderator','moderator_junior','community_manager','content_manager','staff'];
+  const isAdmin=adminRoles.includes(role);
   const adminNav=document.getElementById('nav-admin');
   const badge=document.getElementById('profile-role-badge');
   if(isAdmin){
@@ -464,6 +464,8 @@ function checkArchitect(){
     if(adminNav)adminNav.style.display='none';
     if(badge)badge.style.display='none';
   }
+  setEl('admin-welcome-role',ROLE_LABELS[role]||'Admin');
+}
   // Premium & Rôles : réservés à admin/architect, pas aux modérateurs
   const navPremium=document.getElementById('admin-nav-premium');
   const navRoles=document.getElementById('admin-nav-roles');
@@ -2477,13 +2479,22 @@ async function adminDeleteMsg(id){
 async function assignRole(){
   const username=getVal('role-username').trim();
   const role=getVal('role-select');
+  const modoRoles=['responsable_modo','moderator_senior','moderator','moderator_junior','community_manager','content_manager','staff'];
   if(!username){showToast('Entre un pseudo.','error');return;}
-  // Vérif : ne peut pas assigner un rôle supérieur ou égal au sien
+  if(!modoRoles.includes(role)){showToast('Rôle invalide pour ce panel.','error');return;}
   const myLevel=getRoleLevel(currentProfile?.role);
   const targetLevel=getRoleLevel(role);
   if(targetLevel>=myLevel&&currentProfile?.role!=='architect'){
     showToast(`Tu ne peux pas attribuer un rôle supérieur ou égal au tien.`,'error');return;
   }
+  const{data:user}=await db.from('profiles').select('id,role').eq('username',username).maybeSingle();
+  if(!user){showToast('Utilisateur introuvable.','error');return;}
+  if(!checkHierarchy(username, user.role, 'modifier le rôle de'))return;
+  const{error}=await db.from('profiles').update({role}).eq('id',user.id);
+  if(error){showToast('Erreur lors de la mise à jour.','error');return;}
+  await writeAdminLog(`Rôle "${ROLE_LABELS[role]||role}" attribué à @${username}`,'role');
+  showToast(`Rôle "${ROLE_LABELS[role]||role}" attribué à @${username} !`,'success');
+}
   const{data:user}=await db.from('profiles').select('id,role').eq('username',username).maybeSingle();
   if(!user){showToast('Utilisateur introuvable.','error');return;}
   // Vérif : ne peut pas agir sur un user de rang >= au sien
