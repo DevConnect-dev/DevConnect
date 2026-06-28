@@ -44,8 +44,8 @@
   }
 }
 </script>
-<meta name="theme-color" content="#080810">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 34 34' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='14' y='6' width='16' height='20' rx='4' fill='%2312121f'/%3E%3Crect x='9' y='4' width='16' height='20' rx='4' fill='%233a3a58'/%3E%3Crect x='4' y='2' width='16' height='20' rx='4' fill='%23c8c8d8'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#080808">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 34 34' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='fg' x1='8.5' y1='6' x2='21.5' y2='26' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0%25' stop-color='%23ffd76a'/%3E%3Cstop offset='32%25' stop-color='%23ff9a5c'/%3E%3Cstop offset='58%25' stop-color='%23ff6f9e'/%3E%3Cstop offset='82%25' stop-color='%239a6cff'/%3E%3Cstop offset='100%25' stop-color='%235e7dff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='34' height='34' rx='8.5' fill='%230a0a0a'/%3E%3Crect x='17.5' y='9' width='11' height='16.5' rx='3' fill='%233a2c1f' opacity='0.55' transform='rotate(11 23 17.25)'/%3E%3Crect x='13' y='7.5' width='11' height='17.5' rx='3' fill='%231d1611' opacity='0.75' transform='rotate(-5 18.5 16.25)'/%3E%3Crect x='8' y='6' width='13' height='20' rx='3.6' fill='url(%23fg)'/%3E%3Crect x='10.3' y='8.4' width='7.8' height='4.2' rx='1.7' fill='rgba(255,255,255,.34)'/%3E%3Crect x='10.3' y='20.2' width='7.8' height='1.7' rx='0.85' fill='rgba(255,255,255,.4)'/%3E%3Crect x='10.3' y='23.2' width='5.2' height='1.7' rx='0.85' fill='rgba(255,255,255,.28)'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -102,9 +102,16 @@
 <div id="page-landing" class="page active">
   <nav class="landing-nav">
     <a href="#" class="logo"><div class="logo-mark"><svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect x="14" y="6" width="16" height="20" rx="4" fill="#12121f"/>
-  <rect x="9" y="4" width="16" height="20" rx="4" fill="#3a3a58"/>
-  <rect x="4" y="2" width="16" height="20" rx="4" fill="#c8c8d8"/>
+  <defs><linearGradient id="lgGrad1" x1="8.5" y1="6" x2="21.5" y2="26" gradientUnits="userSpaceOnUse">
+    <stop offset="0%" stop-color="#ffd76a"/><stop offset="32%" stop-color="#ff9a5c"/><stop offset="58%" stop-color="#ff6f9e"/><stop offset="82%" stop-color="#9a6cff"/><stop offset="100%" stop-color="#5e7dff"/>
+  </linearGradient></defs>
+  <rect width="34" height="34" rx="8.5" fill="#0a0a0a"/>
+  <rect x="17.5" y="9" width="11" height="16.5" rx="3" fill="#3a2c1f" opacity="0.55" transform="rotate(11 23 17.25)"/>
+  <rect x="13" y="7.5" width="11" height="17.5" rx="3" fill="#1d1611" opacity="0.75" transform="rotate(-5 18.5 16.25)"/>
+  <rect x="8" y="6" width="13" height="20" rx="3.6" fill="url(#lgGrad1)"/>
+  <rect x="10.3" y="8.4" width="7.8" height="4.2" rx="1.7" fill="rgba(255,255,255,.34)"/>
+  <rect x="10.3" y="20.2" width="7.8" height="1.7" rx="0.85" fill="rgba(255,255,255,.4)"/>
+  <rect x="10.3" y="23.2" width="5.2" height="1.7" rx="0.85" fill="rgba(255,255,255,.28)"/>
 </svg></div>DevConnect</a>
     <ul class="landing-nav-links">
       <li><a href="#features">Fonctionnalités</a></li>
@@ -273,9 +280,16 @@
   </div>
   <footer class="landing-footer">
     <div class="logo"><div class="logo-mark"><svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect x="14" y="6" width="16" height="20" rx="4" fill="#12121f"/>
-  <rect x="9" y="4" width="16" height="20" rx="4" fill="#3a3a58"/>
-  <rect x="4" y="2" width="16" height="20" rx="4" fill="#c8c8d8"/>
+  <defs><linearGradient id="lgGrad2" x1="8.5" y1="6" x2="21.5" y2="26" gradientUnits="userSpaceOnUse">
+    <stop offset="0%" stop-color="#ffd76a"/><stop offset="32%" stop-color="#ff9a5c"/><stop offset="58%" stop-color="#ff6f9e"/><stop offset="82%" stop-color="#9a6cff"/><stop offset="100%" stop-color="#5e7dff"/>
+  </linearGradient></defs>
+  <rect width="34" height="34" rx="8.5" fill="#0a0a0a"/>
+  <rect x="17.5" y="9" width="11" height="16.5" rx="3" fill="#3a2c1f" opacity="0.55" transform="rotate(11 23 17.25)"/>
+  <rect x="13" y="7.5" width="11" height="17.5" rx="3" fill="#1d1611" opacity="0.75" transform="rotate(-5 18.5 16.25)"/>
+  <rect x="8" y="6" width="13" height="20" rx="3.6" fill="url(#lgGrad2)"/>
+  <rect x="10.3" y="8.4" width="7.8" height="4.2" rx="1.7" fill="rgba(255,255,255,.34)"/>
+  <rect x="10.3" y="20.2" width="7.8" height="1.7" rx="0.85" fill="rgba(255,255,255,.4)"/>
+  <rect x="10.3" y="23.2" width="5.2" height="1.7" rx="0.85" fill="rgba(255,255,255,.28)"/>
 </svg></div>DevConnect</div>
     <div class="footer-copy">© 2026 DevConnect — Tous droits réservés</div>
     <div style="font-size:12px;color:var(--text-muted)">Construit pour la communauté tech 🛠</div>
@@ -287,9 +301,16 @@
   <div class="auth-container">
     <div class="auth-box">
       <div class="auth-logo"><div class="logo-mark"><svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect x="14" y="6" width="16" height="20" rx="4" fill="#12121f"/>
-  <rect x="9" y="4" width="16" height="20" rx="4" fill="#3a3a58"/>
-  <rect x="4" y="2" width="16" height="20" rx="4" fill="#c8c8d8"/>
+  <defs><linearGradient id="lgGrad3" x1="8.5" y1="6" x2="21.5" y2="26" gradientUnits="userSpaceOnUse">
+    <stop offset="0%" stop-color="#ffd76a"/><stop offset="32%" stop-color="#ff9a5c"/><stop offset="58%" stop-color="#ff6f9e"/><stop offset="82%" stop-color="#9a6cff"/><stop offset="100%" stop-color="#5e7dff"/>
+  </linearGradient></defs>
+  <rect width="34" height="34" rx="8.5" fill="#0a0a0a"/>
+  <rect x="17.5" y="9" width="11" height="16.5" rx="3" fill="#3a2c1f" opacity="0.55" transform="rotate(11 23 17.25)"/>
+  <rect x="13" y="7.5" width="11" height="17.5" rx="3" fill="#1d1611" opacity="0.75" transform="rotate(-5 18.5 16.25)"/>
+  <rect x="8" y="6" width="13" height="20" rx="3.6" fill="url(#lgGrad3)"/>
+  <rect x="10.3" y="8.4" width="7.8" height="4.2" rx="1.7" fill="rgba(255,255,255,.34)"/>
+  <rect x="10.3" y="20.2" width="7.8" height="1.7" rx="0.85" fill="rgba(255,255,255,.4)"/>
+  <rect x="10.3" y="23.2" width="5.2" height="1.7" rx="0.85" fill="rgba(255,255,255,.28)"/>
 </svg></div><span style="font-family:var(--font-display);font-weight:600;font-size:16px">DevConnect</span></div>
       <!-- LOGIN -->
       <div id="auth-login">
@@ -378,9 +399,16 @@
 <div id="page-app" class="page">
   <nav class="topnav">
     <a href="#" class="topnav-logo" onclick="navigate('home');return false"><div class="logo-mark"><svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect x="14" y="6" width="16" height="20" rx="4" fill="#12121f"/>
-  <rect x="9" y="4" width="16" height="20" rx="4" fill="#3a3a58"/>
-  <rect x="4" y="2" width="16" height="20" rx="4" fill="#c8c8d8"/>
+  <defs><linearGradient id="lgGrad4" x1="8.5" y1="6" x2="21.5" y2="26" gradientUnits="userSpaceOnUse">
+    <stop offset="0%" stop-color="#ffd76a"/><stop offset="32%" stop-color="#ff9a5c"/><stop offset="58%" stop-color="#ff6f9e"/><stop offset="82%" stop-color="#9a6cff"/><stop offset="100%" stop-color="#5e7dff"/>
+  </linearGradient></defs>
+  <rect width="34" height="34" rx="8.5" fill="#0a0a0a"/>
+  <rect x="17.5" y="9" width="11" height="16.5" rx="3" fill="#3a2c1f" opacity="0.55" transform="rotate(11 23 17.25)"/>
+  <rect x="13" y="7.5" width="11" height="17.5" rx="3" fill="#1d1611" opacity="0.75" transform="rotate(-5 18.5 16.25)"/>
+  <rect x="8" y="6" width="13" height="20" rx="3.6" fill="url(#lgGrad4)"/>
+  <rect x="10.3" y="8.4" width="7.8" height="4.2" rx="1.7" fill="rgba(255,255,255,.34)"/>
+  <rect x="10.3" y="20.2" width="7.8" height="1.7" rx="0.85" fill="rgba(255,255,255,.4)"/>
+  <rect x="10.3" y="23.2" width="5.2" height="1.7" rx="0.85" fill="rgba(255,255,255,.28)"/>
 </svg></div>DevConnect</a>
     <div class="nav-items">
       <a class="nav-item active" onclick="navigate('home')" data-section="home"><span class="nav-item-icon">⌂</span>Accueil</a>
@@ -1216,7 +1244,7 @@
         <div class="admin-sidebar">
           <div class="admin-sidebar-header">
             <div class="admin-sidebar-logo">
-              <svg width="22" height="22" viewBox="0 0 34 34" fill="none"><rect x="14" y="6" width="16" height="20" rx="4" fill="#0d0d1e"/><rect x="9" y="4" width="16" height="20" rx="4" fill="#2a2a48"/><rect x="4" y="2" width="16" height="20" rx="4" fill="#c8c8d8"/></svg>
+              <svg width="22" height="22" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg"> <defs><linearGradient id="lgGradAdmin" x1="8.5" y1="6" x2="21.5" y2="26" gradientUnits="userSpaceOnUse">   <stop offset="0%" stop-color="#ffd76a"/><stop offset="32%" stop-color="#ff9a5c"/><stop offset="58%" stop-color="#ff6f9e"/><stop offset="82%" stop-color="#9a6cff"/><stop offset="100%" stop-color="#5e7dff"/> </linearGradient></defs> <rect width="34" height="34" rx="8.5" fill="#0a0a0a"/> <rect x="17.5" y="9" width="11" height="16.5" rx="3" fill="#3a2c1f" opacity="0.55" transform="rotate(11 23 17.25)"/> <rect x="13" y="7.5" width="11" height="17.5" rx="3" fill="#1d1611" opacity="0.75" transform="rotate(-5 18.5 16.25)"/> <rect x="8" y="6" width="13" height="20" rx="3.6" fill="url(#lgGradAdmin)"/> <rect x="10.3" y="8.4" width="7.8" height="4.2" rx="1.7" fill="rgba(255,255,255,.34)"/> <rect x="10.3" y="20.2" width="7.8" height="1.7" rx="0.85" fill="rgba(255,255,255,.4)"/> <rect x="10.3" y="23.2" width="5.2" height="1.7" rx="0.85" fill="rgba(255,255,255,.28)"/> </svg>
               <div><div class="admin-sidebar-title">Admin Panel</div><div class="admin-sidebar-role" id="admin-welcome-role">Architect</div></div>
             </div>
             <div class="admin-live-indicator"><span class="live-dot"></span> Temps réel</div>
