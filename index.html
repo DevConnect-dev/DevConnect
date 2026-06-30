@@ -4236,21 +4236,44 @@ async function handleLogin(){
   err.classList.remove('show');
   if(!email||!pass){err.textContent='Remplis tous les champs.';err.classList.add('show');return;}
 
-  // NEXUS — tracking pré-login
+  // NEXUS — compteur local UNIQUEMENT pour l'UX (avertir l'utilisateur après
+  // plusieurs échecs). Le vrai brute force est désormais détecté de façon
+  // fiable côté serveur par l'Auth Hook (étape 10) sur de vraies lignes en
+  // base, donc on n'écrit plus 'brute_force_detected' depuis ici — c'était
+  // redondant ET trivialement contournable (juste rafraîchir la page vide
+  // ce compteur en mémoire).
   nexusTrackLoginAttempt(email);
 
   const{error,data}=await db.auth.signInWithPassword({email,password:pass});
   if(error){
-    await nexusLog('login_failed',null,{email:email.substring(0,80)});
-    // Brute force : si ≥5 échecs sur cet email en session → escalade
-    const attempts=nexusGetLoginAttempts(email);
-    if(attempts>=5){
-      await nexusLog('brute_force_detected',null,{email:email.substring(0,80),attempts,window:'session'});
+    const msgLower=error.message?.toLowerCase()||'';
+    const isUnconfirmed=msgLower.includes('email not confirmed')||msgLower.includes('not confirmed');
+    // ÉTAPE 14 — le Password Verification Hook (étape 10) peut rejeter la
+    // connexion AVANT même que Supabase ne réponde, avec un message custom
+    // ("Ce compte a été banni."). Avant ce fix, ce message était ignoré et
+    // remplacé par le générique "Email ou mot de passe incorrect" : un
+    // compte banni n'avait aucun moyen de savoir pourquoi ça ne marchait
+    // plus, et retentait en boucle.
+    const isBanned=msgLower.includes('banni')||msgLower.includes('banned');
+
+    // ÉTAPE 14 — event renommé (plus 'login_failed'). Le client ne peut pas
+    // savoir si l'email correspond à un vrai compte (Supabase renvoie le
+    // même message dans les deux cas, anti-énumération) : 'login_failed'
+    // est désormais réservé à la signature SERVEUR fiable posée par l'Auth
+    // Hook pour les comptes qui existent vraiment. On garde un signal
+    // distinct, en sévérité 'info', pour ne pas fausser les seuils des
+    // règles qui ciblent 'login_failed'.
+    if(!isBanned){
+      await nexusLog('login_attempt_client_signal',null,{email:email.substring(0,80),unconfirmed:isUnconfirmed});
     }
-    const isUnconfirmed=error.message?.toLowerCase().includes('email not confirmed')||error.message?.toLowerCase().includes('not confirmed');
-    err.textContent=isUnconfirmed
-      ? 'Tu dois confirmer ton email avant de te connecter. Vérifie ta boîte mail (et tes spams).'
-      : 'Email ou mot de passe incorrect.';
+
+    if(isBanned){
+      err.textContent=error.message;
+    }else if(isUnconfirmed){
+      err.textContent='Tu dois confirmer ton email avant de te connecter. Vérifie ta boîte mail (et tes spams).';
+    }else{
+      err.textContent='Email ou mot de passe incorrect.';
+    }
     err.classList.add('show');
     return;
   }
@@ -4260,7 +4283,13 @@ async function handleLogin(){
     if(prof?.is_banned){
       await nexusLog('login_after_ban',data.user.id,{email:email.substring(0,80),username:prof.username});
     }
-    // Geo anomaly : compare le pays actuel vs dernier connu (via timezone heuristique)
+    // ÉTAPE 14 — NOTE : malgré le nom (last_login_country / 'geo'), ceci compare
+    // un FUSEAU HORAIRE déclaré par le navigateur, pas une vraie géolocalisation
+    // IP. Changer d'OS, de VPN ou simplement voyager suffit à déclencher un faux
+    // positif — à lire avec prudence côté staff. Contrairement aux détections
+    // login/messages/reports (étapes 10-12), celle-ci n'a pas encore de
+    // couverture serveur : une vraie géoloc IP nécessiterait une Edge Function
+    // (Postgres seul ne voit pas l'IP réelle derrière le pooler Supabase).
     const tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'unknown';
     if(prof?.last_login_country&&prof.last_login_country!=='unknown'&&prof.last_login_country!==tz){
       await nexusLog('geo_anomaly_login',data.user.id,{prev:prof.last_login_country,current:tz,email:email.substring(0,80)});
@@ -7917,13 +7946,15 @@ async function nexusLog(eventType,userRef,details={}){
 const NEXUS_SEVERITY={
   ban:'critical',mute:'high',unsafe_url_blocked:'high',login_failed:'medium',
   spam_detected:'high',register:'info',rule_triggered:'medium',
-  xp_exploit_blocked:'critical',xp_duplicate_attempt:'high'
+  xp_exploit_blocked:'critical',xp_duplicate_attempt:'high',
+  login_attempt_client_signal:'info'
 };
 const NEXUS_LABELS={
   ban:'Bannissement',unmute:'Unmute',mute:'Mute',unsafe_url_blocked:'URL bloquée',
   login_failed:'Échec connexion',spam_detected:'Spam détecté',register:'Inscription',
   rule_triggered:'Règle déclenchée',account_deleted:'Compte supprimé',
-  xp_exploit_blocked:'Tentative de triche XP bloquée',xp_duplicate_attempt:'Double soumission XP bloquée'
+  xp_exploit_blocked:'Tentative de triche XP bloquée',xp_duplicate_attempt:'Double soumission XP bloquée',
+  login_attempt_client_signal:'Tentative de connexion (signal client)'
 };
 let nexusInitialized=false;
 let nexusLogsOffset=0;
