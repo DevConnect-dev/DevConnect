@@ -1371,6 +1371,19 @@ select.form-input{color-scheme:dark;background-color:#111;}
 @keyframes nexusPulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 .nexus-live-pulse{animation:nexusPulse 1.4s ease-in-out infinite;}
 
+/* ===== NEXUS — écran de quarantaine ===== */
+#nexus-quarantine-screen{position:fixed;inset:0;z-index:5000;background:rgba(4,4,6,.97);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:24px;animation:nqFadeIn .3s ease;}
+@keyframes nqFadeIn{from{opacity:0}to{opacity:1}}
+.nq-card{max-width:420px;width:100%;text-align:center;}
+.nq-hex{width:56px;height:56px;margin:0 auto 22px;animation:nqSpin 3.5s linear infinite;}
+@keyframes nqSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.nq-title{font-family:var(--font-display);font-size:15px;font-weight:700;letter-spacing:.12em;color:rgba(255,255,255,.92);margin-bottom:18px;}
+.nq-bar{height:2px;width:160px;margin:0 auto 22px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;position:relative;}
+.nq-bar::after{content:'';position:absolute;top:0;left:-40%;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(244,63,94,.8),transparent);animation:nqBar 1.6s ease-in-out infinite;}
+@keyframes nqBar{0%{left:-40%}100%{left:100%}}
+.nq-sub{font-family:var(--font-mono);font-size:12px;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:14px;}
+.nq-note{font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,.3);line-height:1.6;}
+
 /* ===== APP SHELL — TOPNAV (manquant) ===== */
 .topnav{display:flex;align-items:center;gap:24px;padding:13px 28px;border-bottom:1px solid var(--border);background:rgba(8,8,8,.72);backdrop-filter:blur(14px);position:sticky;top:0;z-index:60;}
 .topnav-logo{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-weight:700;font-size:16px;color:var(--text);text-decoration:none;flex-shrink:0;}
@@ -3053,6 +3066,7 @@ select.form-input{color-scheme:dark;background-color:#111;}
           <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-threats');loadNexusThreatIntel()"><span class="nexus-nav-icon">&#9888;</span>Threat Intel<span class="nexus-nav-badge alert" id="nexus-threats-badge" style="display:none">!</span></div>
           <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-incidents');loadNexusIncidents()"><span class="nexus-nav-icon">&#9760;</span>Incidents<span class="nexus-nav-badge" id="nexus-incidents-badge">0</span></div>
           <div class="nexus-sec-label">Systeme</div>
+          <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-audit');loadNexusAudit()"><span class="nexus-nav-icon">&#9776;</span>Audit moteur</div>
           <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-tests');initNexusTests()"><span class="nexus-nav-icon">&#9874;</span>Tests</div>
           <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-settings')"><span class="nexus-nav-icon">&#11041;</span>Parametres</div>
         </div>
@@ -3125,7 +3139,7 @@ select.form-input{color-scheme:dark;background-color:#111;}
 
           <div class="nexus-section" id="nexus-rules">
             <div class="nexus-page-title">&#9670; Regles automatiques</div>
-            <div class="nexus-page-sub">Si X alors Y &mdash; Nexus execute sans intervention manuelle (cote client, tant que le panel Nexus est ouvert)</div>
+            <div class="nexus-page-sub">Si X alors Y &mdash; Nexus execute sans intervention manuelle, cote serveur (trigger Postgres), 24/7 meme sans panel ouvert</div>
             <div class="nexus-card" style="margin-bottom:20px">
               <div class="nexus-card-head"><div class="nexus-card-title">Regles configurees</div></div>
               <div style="padding:12px 8px" id="nexus-rules-list"><div style="text-align:center;padding:24px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">Aucune regle pour l'instant.</div></div>
@@ -3349,6 +3363,22 @@ select.form-input{color-scheme:dark;background-color:#111;}
             <div class="nexus-card">
               <div class="nexus-card-head"><div class="nexus-card-title">Console de test</div><button class="btn btn-ghost btn-sm" onclick="clearTestLog()" style="font-size:11px">Effacer</button></div>
               <div id="nexus-test-console" class="nexus-test-log" style="margin:12px 18px 16px"><span class="info">» Prêt. Lance un scénario pour commencer.</span></div>
+            </div>
+          </div>
+
+          <div class="nexus-section" id="nexus-audit">
+            <div class="nexus-page-title">&#9776; Audit moteur</div>
+            <div class="nexus-page-sub">Chaque décision que Nexus a prise tout seul, cote serveur &middot; pourquoi, sur quel event, avec quel résultat</div>
+            <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+              <button class="filter-chip active" onclick="nexusFilterAudit(this,'all')">Tous</button>
+              <button class="filter-chip" onclick="nexusFilterAudit(this,'rules')">Règles</button>
+              <button class="filter-chip" onclick="nexusFilterAudit(this,'risk')">Risque (warn/mute/quarantaine)</button>
+              <button class="filter-chip" onclick="nexusFilterAudit(this,'ingest')">Ingestion rejetée</button>
+              <button class="btn btn-ghost btn-sm" onclick="loadNexusAudit()" style="font-size:11px;margin-left:auto">&#8635;</button>
+            </div>
+            <div class="nexus-card">
+              <div class="nexus-card-head"><div class="nexus-card-title">Décisions <span class="nexus-tag" id="nexus-audit-count" style="margin-left:6px">&mdash;</span></div></div>
+              <div style="overflow-x:auto"><table class="nexus-log-table"><thead><tr><th style="width:20px"></th><th>Heure</th><th>Moteur</th><th>Décision</th><th>Utilisateur</th><th>Détails</th></tr></thead><tbody id="nexus-audit-tbody"><tr><td colspan="6" style="text-align:center;padding:32px;color:rgba(255,255,255,.2)">Chargement...</td></tr></tbody></table></div>
             </div>
           </div>
 
@@ -4350,7 +4380,45 @@ async function loadProfile(){
     if(error){showToast('Impossible de charger ton profil. Contacte un admin.','error');return;}
     data=created;
   }
-  if(data){currentProfile=data;updateNavAvatar();updateProfileSection();updateSettingsSection();checkArchitect();updateNotifBadge();subscribeNotifications();subscribeDmListRealtime();openSharedSnippetFromUrl();}
+  if(data){
+    currentProfile=data;updateNavAvatar();updateProfileSection();updateSettingsSection();checkArchitect();updateNotifBadge();subscribeNotifications();subscribeDmListRealtime();openSharedSnippetFromUrl();
+    // ÉTAPE 2 — écran de quarantaine Nexus
+    if(data.is_quarantined)nexusShowQuarantineScreen(data.quarantine_reason);
+    else nexusHideQuarantineScreen();
+    subscribeOwnProfileRealtime();
+  }
+}
+
+// ── NEXUS — écran de quarantaine ────────────────────────────
+function nexusShowQuarantineScreen(reason){
+  if(document.getElementById('nexus-quarantine-screen'))return;
+  const div=document.createElement('div');
+  div.id='nexus-quarantine-screen';
+  div.innerHTML=`<div class="nq-card">
+    <svg class="nq-hex" viewBox="0 0 28 28" fill="none"><polygon points="14,2 24,8 24,20 14,26 4,20 4,8" fill="none" stroke="rgba(244,63,94,.7)" stroke-width="1.2"/><line x1="14" y1="2" x2="24" y2="20" stroke="rgba(244,63,94,.25)" stroke-width="0.6"/><line x1="24" y1="8" x2="4" y2="20" stroke="rgba(244,63,94,.25)" stroke-width="0.6"/><line x1="4" y1="8" x2="24" y2="20" stroke="rgba(244,63,94,.25)" stroke-width="0.6"/><circle cx="14" cy="14" r="3" fill="none" stroke="rgba(244,63,94,.8)" stroke-width="1"/><circle cx="14" cy="14" r="1.2" fill="rgba(244,63,94,.9)"/></svg>
+    <div class="nq-title">VÉRIFICATION BY NEXUS SYSTEM</div>
+    <div class="nq-bar"></div>
+    <div class="nq-sub">${esc(reason||'Activité suspecte détectée sur ce compte.')}</div>
+    <div class="nq-note">Accès restreint le temps qu'un membre du staff examine la situation.<br>Cette page se met à jour automatiquement dès la levée de la vérification.</div>
+  </div>`;
+  document.body.appendChild(div);
+  document.body.style.overflow='hidden';
+}
+function nexusHideQuarantineScreen(){
+  document.getElementById('nexus-quarantine-screen')?.remove();
+  document.body.style.overflow='';
+}
+let _nexusOwnProfileSub=null;
+function subscribeOwnProfileRealtime(){
+  if(!currentUser)return;
+  if(_nexusOwnProfileSub){db.removeChannel(_nexusOwnProfileSub);_nexusOwnProfileSub=null;}
+  _nexusOwnProfileSub=db.channel('nexus-own-profile-'+currentUser.id)
+    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'profiles',filter:'id=eq.'+currentUser.id},(payload)=>{
+      const row=payload.new;
+      if(row?.is_quarantined)nexusShowQuarantineScreen(row.quarantine_reason);
+      else nexusHideQuarantineScreen();
+    });
+  _nexusOwnProfileSub.subscribe();
 }
 
 function isDevPlus(){return!!(currentProfile?.is_premium||currentProfile?.premium_tier==='devconnect-plus');}
@@ -7676,7 +7744,7 @@ function toggleProfileDropdown(){document.getElementById('profile-dropdown').cla
 // NOTIFICATIONS
 // ============================================================
 
-const NOTIF_ICONS={mention:'@',dm:'✉',follow:'★',like:'♥',report:'⚠'};
+const NOTIF_ICONS={mention:'@',dm:'✉',follow:'★',like:'♥',report:'⚠',nexus_warning:'⚠',nexus_restriction:'🔇',nexus_quarantine:'🛡'};
 function toggleNotifDropdown(){
   const dd=document.getElementById('notif-dropdown');
   dd.classList.toggle('show');
@@ -7835,9 +7903,14 @@ async function nexusLog(eventType,userRef,details={}){
   // events auto-attribués (userRef === l'auteur lui-même). On ne peut pas
   // écrire le score d'un tiers depuis le client (RLS), et c'est volontaire :
   // seul le staff peut toucher au score d'un autre user via le dashboard.
-  if(currentUser&&userRef&&String(userRef)===String(currentUser.id)){
-    nexusUpdateLiveRisk(eventType).catch(()=>{});
-  }
+  // ÉTAPE 2 — désactivé : le trigger serveur nexus_evaluate_risk() met
+  // maintenant à jour le score pour TOUS les user_ref (pas seulement
+  // soi-même comme avant à cause des RLS). Si on gardait cet appel ici,
+  // le score d'un utilisateur sur ses propres events grimperait deux fois
+  // plus vite (une fois côté client, une fois côté serveur).
+  // if(currentUser&&userRef&&String(userRef)===String(currentUser.id)){
+  //   nexusUpdateLiveRisk(eventType).catch(()=>{});
+  // }
 }
 const NEXUS_SEVERITY={
   ban:'critical',mute:'high',unsafe_url_blocked:'high',login_failed:'medium',
@@ -8008,8 +8081,12 @@ async function loadNexusOverview(){
   if(healthLabel)healthLabel.textContent=score>=75?'Sain':score>=45?'Vigilance':'Critique';
   if(healthSub)healthSub.textContent=criticalCount+' événement(s) sensible(s) sur 24h';
 
-  // Vérifier les règles sur les données fraîches
-  checkNexusRules(logs24h);
+  // ÉTAPE 1 — le moteur de règles tourne désormais côté serveur (trigger
+  // Postgres sur nexus_logs, voir nexus_step1_server_rules_engine.sql).
+  // On NE rappelle plus checkNexusRules() ici pour éviter de déclencher
+  // les mêmes règles deux fois (une fois côté DB, une fois côté client).
+  // La fonction checkNexusRules() reste définie plus bas pour référence /
+  // debug manuel, mais n'est plus appelée automatiquement.
 }
 
 async function nexusFetchUsernames(ids){
@@ -8275,6 +8352,65 @@ async function clearNexusAlerts(){
   try{await db.from('nexus_alerts').delete().eq('project_id',NEXUS_PROJECT_ID);}catch(e){}
   loadNexusAlerts();
   showToast('Alertes effacées.','info');
+}
+
+// ---------- AUDIT MOTEUR (table nexus_engine_audit) ----------
+let _nexusAuditCache=[];
+let _nexusAuditFilter='all';
+const NEXUS_AUDIT_DECISION_LABELS={
+  rule_fired:'Règle déclenchée',
+  tier_warned:'Avertissement envoyé',
+  tier_restricted:'Mute automatique',
+  tier_quarantined:'Quarantaine automatique',
+  user_ref_rewritten:'Cible réécrite (anti-spoof)',
+  rejected_unauthenticated:'Rejeté (non authentifié)',
+  rejected_rate_limit:'Rejeté (rate limit)'
+};
+function nexusAuditDecisionClass(d){
+  if(!d)return'default';
+  if(d.startsWith('rejected')||d==='user_ref_rewritten')return'security';
+  if(d==='tier_quarantined')return'ban';
+  if(d==='tier_restricted')return'mute';
+  if(d==='tier_warned')return'warn';
+  if(d==='rule_fired')return'rule';
+  return'default';
+}
+async function loadNexusAudit(){
+  const{data,error}=await db.from('nexus_engine_audit').select('*').eq('project_id',NEXUS_PROJECT_ID).order('created_at',{ascending:false}).limit(100);
+  const tbody=document.getElementById('nexus-audit-tbody');
+  if(error){
+    tbody.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:32px;color:rgba(255,255,255,.2)">Table nexus_engine_audit manquante — applique nexus_step4_audit_trail.sql.</td></tr>`;
+    setEl('nexus-audit-count','0');
+    return;
+  }
+  _nexusAuditCache=data||[];
+  nexusRenderAudit();
+}
+async function nexusRenderAudit(){
+  const tbody=document.getElementById('nexus-audit-tbody');
+  let rows=_nexusAuditCache;
+  if(_nexusAuditFilter!=='all')rows=rows.filter(r=>r.engine===_nexusAuditFilter);
+  setEl('nexus-audit-count',rows.length);
+  if(!rows.length){
+    tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:32px;color:rgba(255,255,255,.2)">Aucune décision enregistrée pour ce filtre.</td></tr>';
+    return;
+  }
+  const userIds=[...new Set(rows.map(r=>r.user_ref).filter(Boolean))];
+  const userMap=await nexusFetchUsernames(userIds);
+  tbody.innerHTML=rows.map(r=>`<tr>
+    <td><span class="nexus-sev ${r.engine==='ingest'?'high':r.engine==='risk'?'medium':'info'}"></span></td>
+    <td>${new Date(r.created_at).toLocaleString('fr-FR')}</td>
+    <td><span class="nexus-tag">${esc(r.engine)}</span></td>
+    <td><span class="nexus-event ${nexusAuditDecisionClass(r.decision)}">${esc(NEXUS_AUDIT_DECISION_LABELS[r.decision]||r.decision)}</span></td>
+    <td>${r.user_ref?'@'+esc(userMap[r.user_ref]||r.user_ref.substring(0,8)+'…'):'—'}</td>
+    <td style="max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:rgba(255,255,255,.4)" title="${esc(JSON.stringify(r.details||{}))}">${esc(JSON.stringify(r.details||{}))}</td>
+  </tr>`).join('');
+}
+function nexusFilterAudit(el,filter){
+  document.querySelectorAll('#nexus-audit .filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  _nexusAuditFilter=filter;
+  nexusRenderAudit();
 }
 
 // ---------- PARAMÈTRES (colonne settings de nexus_projects) ----------
@@ -8721,15 +8857,26 @@ async function renderRiskScoring(logs){
       <div class="nexus-risk-user" style="font-size:12px">@${esc(userMap[uid]||uid.substring(0,8)+'…')}</div>
       <div class="nexus-risk-bar-wrap"><div class="nexus-risk-bar ${cls}" style="width:${score}%;background:${color}"></div></div>
       <div class="nexus-risk-score" style="color:${color}">${Math.round(raw)}</div>
+      <button class="btn btn-ghost btn-sm" onclick="nexusReleaseUser('${uid}')" title="Lever quarantaine/mute auto + réinitialiser le score" style="font-size:10px;flex-shrink:0">&#128275;</button>
     </div>`;
   }).join('');
-  // Réponse automatique graduée : ne s'exécute que dans une session staff
-  // (la seule qui passe par loadNexusThreatIntel/dashboard), jamais côté
-  // client suspect lui-même.
-  nexusEvaluateAutoResponse(topUsers.filter(([,s])=>s>=85));
+  // ÉTAPE 2 — désactivé : la réponse graduée (warn → mute → quarantaine)
+  // tourne maintenant côté serveur pour TOUS les utilisateurs, en temps
+  // réel, sans dépendre d'un admin qui regarde cette page.
+  // nexusEvaluateAutoResponse(topUsers.filter(([,s])=>s>=85));
 }
 
 let _nexusAutoActionFired=new Set();
+async function nexusReleaseUser(uid){
+  if(!confirm('Lever la quarantaine/mute auto et réinitialiser le score de risque de cet utilisateur ?'))return;
+  try{
+    await db.from('profiles').update({is_quarantined:false,quarantine_reason:null,is_muted:false}).eq('id',uid);
+    await db.from('nexus_risk_scores').update({auto_action_taken:null,score:0}).eq('project_id',NEXUS_PROJECT_ID).eq('user_ref',uid);
+    await writeAdminLog(`Libération manuelle (quarantaine/mute auto Nexus) — user ${uid}`,'moderation');
+    showToast('Utilisateur libéré.','success');
+    loadNexusThreatIntel();
+  }catch(e){showToast('Erreur lors de la libération.','error');}
+}
 async function nexusEvaluateAutoResponse(criticalUsers){
   if(!criticalUsers.length)return;
   if(!_nexusSettingsCache.auto_response)return;
@@ -9163,8 +9310,10 @@ async function runNexusTest(scenario){
     setTimeout(async()=>{
       const dayAgo=new Date(Date.now()-86400000).toISOString();
       const{data}=await db.from('nexus_logs').select('*').eq('project_id',NEXUS_PROJECT_ID).gte('created_at',dayAgo);
-      if(data)checkNexusRules(data);
-      testLog('  → Règles Nexus vérifiées sur les nouveaux events.','info');
+      // ÉTAPE 1 — plus besoin : le trigger serveur a déjà évalué les règles
+      // au moment de chaque insert dans nexus_logs (avant même que ce
+      // setTimeout ne s'exécute).
+      testLog('  → Règles Nexus déjà vérifiées côté serveur en temps réel.','info');
       if(document.getElementById('nexus-threats')?.classList.contains('active'))loadNexusThreatIntel();
     },1000);
   }
@@ -9240,8 +9389,8 @@ async function runNexusFunctionalTest(name){
   setTimeout(async()=>{
     const dayAgo=new Date(Date.now()-86400000).toISOString();
     const{data}=await db.from('nexus_logs').select('*').eq('project_id',NEXUS_PROJECT_ID).gte('created_at',dayAgo);
-    if(data)checkNexusRules(data);
-    testLog('  → Règles Nexus vérifiées sur les events générés par le vrai code.','info');
+    // ÉTAPE 1 — idem : le trigger serveur a déjà tout évalué à l'insert.
+    testLog('  → Règles Nexus déjà vérifiées côté serveur en temps réel.','info');
     if(document.getElementById('nexus-threats')?.classList.contains('active'))loadNexusThreatIntel();
   },1000);
 }
