@@ -6804,46 +6804,45 @@ function openChallenge(id){
 }
 function closeChallenge(){document.getElementById('challenge-modal').classList.remove('show');}
 
-function submitChallenge(){
+async function submitChallenge(){
   if(!currentUser){showToast('Connecte-toi pour soumettre.','error');return;}
-  const answer=document.getElementById('challenge-answer').value.trim().toLowerCase();
+  const answer=document.getElementById('challenge-answer').value.trim();
   const c=challenges[challengeId];if(!c)return;
-  const ok=answer===c.answer.toLowerCase();
+  const cid=challengeId;
   const fb=document.getElementById('challenge-feedback');
   fb.style.display='block';
-  if(ok){
-    fb.style.color='#5a9a6a';
-    const xpGain=c.xp||0;
-    fb.textContent='✓ Correct ! Challenge résolu. +'+xpGain+' XP';
-    awardXP(challengeId, xpGain);
-    showSolutions();showToast('Challenge résolu ! 🎉','success');
-  }else{fb.style.color='#9a5a5a';fb.textContent='✗ Pas tout à fait... Réessaie ou consulte l\'indice.';}
-}
+  fb.style.color='var(--text-muted)';
+  fb.textContent='Vérification...';
 
-async function awardXP(cid, xpGain) {
-  if(!currentUser||!xpGain)return;
-  // NEXUS VAGUE 3 — manipulation de score/classement (gains XP anormalement rapprochés)
-  nexusTrackXpGain(xpGain);
-  const{data:existing}=await db.from('challenge_completions').select('id').eq('user_id',currentUser.id).eq('challenge_id',cid).maybeSingle();
-  if(existing){
-    await nexusLog('xp_duplicate_attempt',currentUser.id,{challenge_id:cid,xp_attempted:xpGain});
+  // SOURCE DE VÉRITÉ = SERVEUR. Le RPC complete_challenge() valide le hash
+  // de la réponse, l'absence de doublon, et crédite l'XP de façon atomique.
+  // Le montant XP/réponse côté client (objet `challenges`) ne sert plus
+  // qu'à l'affichage (titre, desc, hint) — plus jamais de confiance.
+  const{data,error}=await db.rpc('complete_challenge',{p_challenge_id:cid,p_answer:answer});
+
+  if(error){
+    fb.style.color='#9a5a5a';
+    fb.textContent='✗ Une erreur est survenue, réessaie.';
+    await nexusLog('xp_exploit_blocked',currentUser.id,{challenge_id:cid,reason:error.message?.substring(0,120)});
     return;
   }
-  const{error:insertErr}=await db.from('challenge_completions').insert({user_id:currentUser.id,challenge_id:cid,xp_gained:xpGain});
-  if(insertErr){
-    await nexusLog('xp_exploit_blocked',currentUser.id,{challenge_id:cid,xp_attempted:xpGain,reason:insertErr.message?.substring(0,120)});
-    showToast('Action refusée.','error');
-    return;
+
+  if(data?.ok){
+    fb.style.color='#5a9a6a';
+    fb.textContent='✓ Correct ! Challenge résolu. +'+data.xp_gained+' XP';
+    nexusTrackXpGain(data.xp_gained);
+    await loadProfile();
+    loadLearnProgress();
+    showSolutions();
+    showToast(`+${data.xp_gained} XP ajoutés à ton profil !`,'success');
+  }else if(data?.reason==='already_completed'){
+    fb.style.color='#9a5a5a';
+    fb.textContent='Tu as déjà résolu ce challenge.';
+    await nexusLog('xp_duplicate_attempt',currentUser.id,{challenge_id:cid});
+  }else{
+    fb.style.color='#9a5a5a';
+    fb.textContent='✗ Pas tout à fait... Réessaie ou consulte l\'indice.';
   }
-  const{error:rpcErr}=await db.rpc('add_xp', {user_id:currentUser.id, amount:xpGain, action_label:'challenge_completed'});
-  if(rpcErr){
-    await nexusLog('xp_exploit_blocked',currentUser.id,{challenge_id:cid,xp_attempted:xpGain,reason:rpcErr.message?.substring(0,120)});
-    showToast('Action refusée.','error');
-    return;
-  }
-  await loadProfile();
-  loadLearnProgress();
-  showToast(`+${xpGain} XP ajoutés à ton profil !`,'success');
 }
 
 function showSolutions(){
