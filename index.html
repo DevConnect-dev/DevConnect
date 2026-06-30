@@ -1989,6 +1989,11 @@ select.form-input{color-scheme:dark;background-color:#111;}
           <div class="form-group"><label class="form-label">Pseudo</label><input type="text" id="reg-username" class="form-input form-input-mono" placeholder="ton_pseudo"></div>
           <div class="form-group"><label class="form-label">Email</label><input type="email" id="reg-email" class="form-input" placeholder="toi@example.com"></div>
           <div class="form-group"><label class="form-label">Mot de passe</label><input type="password" id="reg-password" class="form-input" placeholder="8 caractères minimum"></div>
+          <!-- NEXUS — honeypot anti-bot : invisible pour un humain, irrésistible pour un auto-fill -->
+          <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;overflow:hidden" aria-hidden="true">
+            <label for="reg-website">Site web (laisser vide)</label>
+            <input type="text" id="reg-website" name="website" tabindex="-1" autocomplete="off">
+          </div>
           <div id="reg-error-0" class="form-error"></div>
           <button class="btn btn-primary w-full" style="margin-top:16px;justify-content:center" onclick="nextStep(1)">Continuer →</button>
         </div>
@@ -4355,6 +4360,15 @@ async function handleRegister(){
   const level=document.getElementById('reg-level').value;
   const err=document.getElementById('reg-error-2');
   err.classList.remove('show');
+  // NEXUS — honeypot : un humain ne remplit jamais ce champ caché.
+  const honeypot=document.getElementById('reg-website')?.value||'';
+  if(honeypot.trim()!==''){
+    await nexusLog('honeypot_triggered',null,{field:'reg-website'});
+    // Pas de message distinct : on laisse le bot croire que ça a marché.
+    showToast('Compte créé ! Confirme ton email avant de te connecter.','success');
+    setTimeout(()=>switchAuthTab('login'),2500);
+    return;
+  }
   if(username.length<3||username.length>24){err.textContent='Le pseudo doit faire entre 3 et 24 caractères.';err.classList.add('show');return;}
   if(!/^[a-zA-Z0-9_.\- ]+$/.test(username)){err.textContent='Pseudo invalide (lettres, chiffres, _ . - et espace uniquement).';err.classList.add('show');return;}
   const forbidden=['architect','admin','moderator','devconnect','support','staff','system','root','bot'];
@@ -4394,6 +4408,30 @@ async function handleRegister(){
   setTimeout(()=>switchAuthTab('login'),2500);
 }
 
+// NEXUS — fingerprint léger (pas de lib externe) : combine quelques
+// signaux stables côté navigateur en un hash. Ce n'est PAS un identifiant
+// fiable à 100% (deux machines identiques peuvent matcher), donc il sert
+// uniquement de signal d'aide à la décision, jamais de preuve à lui seul.
+async function nexusComputeFingerprint(){
+  try{
+    const c=document.createElement('canvas');
+    const ctx=c.getContext('2d');
+    ctx.textBaseline='top';ctx.font='14px Arial';
+    ctx.fillText('devconnect-nexus-fp',2,2);
+    const canvasSig=c.toDataURL();
+    const raw=[
+      navigator.userAgent,navigator.language,
+      String(screen.colorDepth),`${screen.width}x${screen.height}`,
+      String(new Date().getTimezoneOffset()),
+      navigator.hardwareConcurrency||'',
+      canvasSig
+    ].join('|');
+    const enc=new TextEncoder().encode(raw);
+    const buf=await crypto.subtle.digest('SHA-256',enc);
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }catch(e){return null;}
+}
+
 // PROFILE
 const WIDGET_LABELS={stats:'📊 Stats',badges:'🏆 Badges',activity:'🎮 Activité',avail:'🌍 Disponibilité'};
 
@@ -4405,7 +4443,8 @@ async function loadProfile(){
   if(!data){
     const meta=currentUser.user_metadata||{};
     const roleDefault=meta.role||meta.specialty||'web_dev';
-    const{data:created,error}=await db.from('profiles').insert({id:currentUser.id,username:meta.username||currentUser.email.split('@')[0],email:currentUser.email,specialty:meta.specialty||null,role:roleDefault}).select().maybeSingle();
+    const fp=await nexusComputeFingerprint();
+    const{data:created,error}=await db.from('profiles').insert({id:currentUser.id,username:meta.username||currentUser.email.split('@')[0],email:currentUser.email,specialty:meta.specialty||null,role:roleDefault,device_fingerprint:fp}).select().maybeSingle();
     if(error){showToast('Impossible de charger ton profil. Contacte un admin.','error');return;}
     data=created;
   }
