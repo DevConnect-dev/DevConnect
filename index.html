@@ -7783,9 +7783,12 @@ async function markAllNotifsRead(){
   await db.from('notifications').update({is_read:true}).eq('user_id',currentUser.id).eq('is_read',false);
   loadNotifications();
 }
-async function notifyUser(userId,type,content,link){
+async function notifyUser(userId,type,content,link,title){
   if(!userId||userId===currentUser?.id)return;
-  const{error}=await db.from('notifications').insert({user_id:userId,type,content,link,is_read:false});
+  // FIX : `title` est NOT NULL sur `notifications` — sans valeur, l'insert
+  // échouait silencieusement (juste un console.error, jamais vu par
+  // personne) et donc AUCUNE notif normale de l'app n'arrivait jamais.
+  const{error}=await db.from('notifications').insert({user_id:userId,type,title:title||NEXUS_LABELS[type]||'Notification',content,link,is_read:false});
   if(error)console.error('notifyUser:',error);
 }
 let _notifChannel=null;
