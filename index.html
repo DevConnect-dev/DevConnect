@@ -3058,7 +3058,7 @@ select.form-input{color-scheme:dark;background-color:#111;}
       <div class="nexus-layout">
         <div class="nexus-sidebar">
           <div class="nexus-sidebar-head">
-            <div class="nexus-brand"><svg class="nexus-logo-hex" viewBox="0 0 28 28" fill="none"><polygon points="14,2 24,8 24,20 14,26 4,20 4,8" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.2"/><line x1="14" y1="2" x2="24" y2="20" stroke="rgba(255,255,255,.2)" stroke-width="0.6"/><line x1="24" y1="8" x2="4" y2="20" stroke="rgba(255,255,255,.2)" stroke-width="0.6"/><line x1="4" y1="8" x2="24" y2="20" stroke="rgba(255,255,255,.2)" stroke-width="0.6"/><circle cx="14" cy="14" r="3" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1"/><circle cx="14" cy="14" r="1.2" fill="rgba(255,255,255,.9)"/><circle cx="14" cy="2" r="1.5" fill="rgba(255,255,255,.7)"/><circle cx="24" cy="8" r="1.5" fill="rgba(255,255,255,.5)"/><circle cx="24" cy="20" r="1.5" fill="rgba(255,255,255,.5)"/><circle cx="14" cy="26" r="1.5" fill="rgba(255,255,255,.7)"/><circle cx="4" cy="20" r="1.5" fill="rgba(255,255,255,.5)"/><circle cx="4" cy="8" r="1.5" fill="rgba(255,255,255,.5)"/></svg><div><div class="nexus-brand-name">Nexus</div><div class="nexus-brand-by">by DevConnect</div></div></div>
+            <div class="nexus-brand"><svg class="nexus-logo-hex" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="0.5"/><polygon points="14,2 24,8 24,20 14,26 4,20 4,8" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1"/><polygon points="14,4.5 20.7,8.5 20.7,19.5 14,23.5 7.3,19.5 7.3,8.5" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="0.6"/><circle cx="14" cy="14" r="3" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="0.8"/><circle cx="14" cy="14" r="1.3" fill="rgba(255,255,255,.9)"/></svg><div><div class="nexus-brand-name">Nexus</div><div class="nexus-brand-by">by DevConnect</div></div></div>
             <div class="nexus-status"><span class="live-dot"></span>Actif · temps reel</div>
           </div>
           <div class="nexus-sec-label">Vue d'ensemble</div>
@@ -3070,6 +3070,7 @@ select.form-input{color-scheme:dark;background-color:#111;}
           <div class="nexus-sec-label">Cyber Defense</div>
           <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-threats');loadNexusThreatIntel()"><span class="nexus-nav-icon">&#9888;</span>Threat Intel<span class="nexus-nav-badge alert" id="nexus-threats-badge" style="display:none">!</span></div>
           <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-incidents');loadNexusIncidents()"><span class="nexus-nav-icon">&#9760;</span>Incidents<span class="nexus-nav-badge" id="nexus-incidents-badge">0</span></div>
+          <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-blocks');loadNexusBlocks()"><span class="nexus-nav-icon">&#9939;</span>Blocages<span class="nexus-nav-badge alert" id="nexus-blocks-badge" style="display:none">!</span></div>
           <div class="nexus-sec-label">Systeme</div>
           <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-audit');loadNexusAudit()"><span class="nexus-nav-icon">&#9776;</span>Audit moteur</div>
           <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-tests');initNexusTests()"><span class="nexus-nav-icon">&#9874;</span>Tests</div>
@@ -3078,7 +3079,7 @@ select.form-input{color-scheme:dark;background-color:#111;}
 
         <div class="nexus-main">
           <div class="nexus-section active" id="nexus-overview">
-            <div class="nexus-page-title"><svg width="22" height="22" viewBox="0 0 28 28" fill="none"><polygon points="14,2 24,8 24,20 14,26 4,20 4,8" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.2"/><line x1="14" y1="2" x2="24" y2="20" stroke="rgba(255,255,255,.2)" stroke-width="0.6"/><line x1="24" y1="8" x2="4" y2="20" stroke="rgba(255,255,255,.2)" stroke-width="0.6"/><line x1="4" y1="8" x2="24" y2="20" stroke="rgba(255,255,255,.2)" stroke-width="0.6"/><circle cx="14" cy="14" r="3" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1"/><circle cx="14" cy="14" r="1.2" fill="rgba(255,255,255,.9)"/><circle cx="14" cy="2" r="1.5" fill="rgba(255,255,255,.7)"/><circle cx="24" cy="8" r="1.5" fill="rgba(255,255,255,.5)"/><circle cx="24" cy="20" r="1.5" fill="rgba(255,255,255,.5)"/><circle cx="14" cy="26" r="1.5" fill="rgba(255,255,255,.7)"/><circle cx="4" cy="20" r="1.5" fill="rgba(255,255,255,.5)"/><circle cx="4" cy="8" r="1.5" fill="rgba(255,255,255,.5)"/></svg> Dashboard Nexus <span class="live-dot" style="margin-left:4px"></span></div>
+            <div class="nexus-page-title"><svg width="22" height="22" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="0.5"/><polygon points="14,2 24,8 24,20 14,26 4,20 4,8" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1"/><polygon points="14,4.5 20.7,8.5 20.7,19.5 14,23.5 7.3,19.5 7.3,8.5" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="0.6"/><circle cx="14" cy="14" r="3" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="0.8"/><circle cx="14" cy="14" r="1.3" fill="rgba(255,255,255,.9)"/></svg> Dashboard Nexus <span class="live-dot" style="margin-left:4px"></span></div>
             <div class="nexus-page-sub">Surveillance automatisee de DevConnect &middot; <span id="nexus-last-refresh">&mdash;</span></div>
             <div class="nexus-stats-row">
               <div class="nexus-stat"><div class="nexus-stat-val" id="ns-total">&mdash;</div><div class="nexus-stat-label">Events (24h)</div><div class="nexus-stat-delta neutral" id="ns-total-d">chargement...</div></div>
@@ -3293,6 +3294,22 @@ select.form-input{color-scheme:dark;background-color:#111;}
                   <button class="btn btn-primary" onclick="createIncident()">Créer</button>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <!-- ===== BLOCAGES (architect only) ===== -->
+          <div class="nexus-section" id="nexus-blocks">
+            <div class="nexus-page-title">&#9939; Blocages &amp; appels <span class="live-dot" style="margin-left:4px"></span></div>
+            <div class="nexus-page-sub">Comptes bloqués définitivement (2e infraction) et appels en attente &middot; réservé à l'architect</div>
+
+            <div class="nexus-card" style="margin-bottom:16px">
+              <div class="nexus-card-head"><div class="nexus-card-title">&#9939; Comptes bloqués définitivement</div><button class="btn btn-ghost btn-sm" onclick="loadNexusBlocks()" style="font-size:11px">&#8635;</button></div>
+              <div id="nexus-blocked-list"><div style="text-align:center;padding:32px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">Chargement...</div></div>
+            </div>
+
+            <div class="nexus-card">
+              <div class="nexus-card-head"><div class="nexus-card-title">&#9993; Appels en attente</div><button class="btn btn-ghost btn-sm" onclick="loadNexusBlocks()" style="font-size:11px">&#8635;</button></div>
+              <div id="nexus-appeals-list"><div style="text-align:center;padding:32px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">Chargement...</div></div>
             </div>
           </div>
 
@@ -4463,7 +4480,7 @@ function nexusShowQuarantineScreen(reason){
   const div=document.createElement('div');
   div.id='nexus-quarantine-screen';
   div.innerHTML=`<div class="nq-card">
-    <svg class="nq-hex" viewBox="0 0 28 28" fill="none"><polygon points="14,2 24,8 24,20 14,26 4,20 4,8" fill="none" stroke="rgba(244,63,94,.7)" stroke-width="1.2"/><line x1="14" y1="2" x2="24" y2="20" stroke="rgba(244,63,94,.25)" stroke-width="0.6"/><line x1="24" y1="8" x2="4" y2="20" stroke="rgba(244,63,94,.25)" stroke-width="0.6"/><line x1="4" y1="8" x2="24" y2="20" stroke="rgba(244,63,94,.25)" stroke-width="0.6"/><circle cx="14" cy="14" r="3" fill="none" stroke="rgba(244,63,94,.8)" stroke-width="1"/><circle cx="14" cy="14" r="1.2" fill="rgba(244,63,94,.9)"/></svg>
+    <svg class="nq-hex" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" fill="none" stroke="rgba(244,63,94,.2)" stroke-width="0.5"/><polygon points="14,2 24,8 24,20 14,26 4,20 4,8" fill="none" stroke="rgba(244,63,94,.75)" stroke-width="1.2"/><polygon points="14,4.5 20.7,8.5 20.7,19.5 14,23.5 7.3,19.5 7.3,8.5" fill="none" stroke="rgba(244,63,94,.4)" stroke-width="0.7"/><circle cx="14" cy="14" r="3" fill="none" stroke="rgba(244,63,94,.85)" stroke-width="1"/><circle cx="14" cy="14" r="1.2" fill="rgba(244,63,94,.9)"/></svg>
     <div class="nq-title">VÉRIFICATION BY NEXUS SYSTEM</div>
     <div class="nq-bar"></div>
     <div class="nq-sub">${esc(reason||'Activité suspecte détectée sur ce compte.')}</div>
@@ -9047,6 +9064,94 @@ async function loadNexusIncidents(){
       </div>
     </div>`;
   }).join('');
+}
+
+// ── NEXUS — Blocages & appels (architect only) ──────────────
+async function loadNexusBlocks(){
+  const blockedEl=document.getElementById('nexus-blocked-list');
+  const appealsEl=document.getElementById('nexus-appeals-list');
+  if(!blockedEl||!appealsEl)return;
+  blockedEl.innerHTML='<div style="text-align:center;padding:32px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">Chargement...</div>';
+  appealsEl.innerHTML='<div style="text-align:center;padding:32px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">Chargement...</div>';
+
+  const{data:blocked,error:err1}=await db.from('profiles')
+    .select('id,username,quarantine_reason,nexus_strike_count,is_muted,is_quarantined,is_shadowbanned')
+    .eq('nexus_permanent_block',true);
+
+  const{data:appeals,error:err2}=await db.from('nexus_appeals')
+    .select('id,user_id,restriction_type,message,created_at,profiles!nexus_appeals_user_id_fkey(username)')
+    .eq('status','pending')
+    .order('created_at',{ascending:false});
+
+  const badge=document.getElementById('nexus-blocks-badge');
+  const totalPending=(blocked?.length||0)+(appeals?.length||0);
+  if(badge){badge.style.display=totalPending>0?'inline-flex':'none';badge.textContent=totalPending;}
+
+  if(err1){
+    blockedEl.innerHTML='<div style="text-align:center;padding:32px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">Impossible de charger les comptes bloqués.</div>';
+  }else if(!blocked?.length){
+    blockedEl.innerHTML='<div style="text-align:center;padding:32px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">✓ Aucun compte bloqué définitivement</div>';
+  }else{
+    blockedEl.innerHTML=blocked.map(u=>`<div class="nexus-incident open" style="align-items:flex-start">
+      <span class="nexus-incident-badge open" style="background:rgba(224,112,112,.15);color:#e07070">${u.nexus_strike_count} strikes</span>
+      <div style="flex:1">
+        <div class="nexus-incident-title">@${esc(u.username)}</div>
+        <div class="nexus-incident-meta">${u.is_quarantined?'Quarantaine':''}${u.is_quarantined&&u.is_muted?' · ':''}${u.is_muted?'Sourdine':''}${u.is_shadowbanned?' · Shadowban':''}</div>
+        ${u.quarantine_reason?`<div style="font-size:11px;color:rgba(255,255,255,.3);margin-top:4px;font-family:var(--font-mono)">${esc(u.quarantine_reason.substring(0,160))}</div>`:''}
+      </div>
+      <div class="nexus-incident-actions" style="flex-direction:column;gap:6px">
+        <button class="btn btn-ghost btn-sm" onclick="nexusArchitectUnblock('${u.id}','${esc(u.username)}')" style="font-size:11px;white-space:nowrap">Débloquer</button>
+        <button class="btn btn-ghost btn-sm" onclick="nexusArchitectFullReset('${u.id}','${esc(u.username)}')" style="font-size:11px;white-space:nowrap;color:#d0c060">Reset complet</button>
+      </div>
+    </div>`).join('');
+  }
+
+  if(err2){
+    appealsEl.innerHTML='<div style="text-align:center;padding:32px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">Impossible de charger les appels.</div>';
+  }else if(!appeals?.length){
+    appealsEl.innerHTML='<div style="text-align:center;padding:32px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">✓ Aucun appel en attente</div>';
+  }else{
+    const typeLabel={mute:'Sourdine',quarantine:'Quarantaine',shadowban:'Shadowban'};
+    appealsEl.innerHTML=appeals.map(a=>`<div class="nexus-incident open" style="align-items:flex-start">
+      <span class="nexus-incident-badge open">${esc(typeLabel[a.restriction_type]||a.restriction_type)}</span>
+      <div style="flex:1">
+        <div class="nexus-incident-title">@${esc(a.profiles?.username||'inconnu')}</div>
+        <div class="nexus-incident-meta">${timeAgo(a.created_at)}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:4px;font-family:var(--font-mono)">${esc(a.message.substring(0,200))}${a.message.length>200?'…':''}</div>
+      </div>
+      <div class="nexus-incident-actions" style="flex-direction:column;gap:6px">
+        <button class="btn btn-primary btn-sm" onclick="nexusResolveAppealUI('${a.id}','accepted')" style="font-size:11px;white-space:nowrap">Accepter</button>
+        <button class="btn btn-ghost btn-sm" onclick="nexusResolveAppealUI('${a.id}','rejected')" style="font-size:11px;white-space:nowrap;color:#e08080">Rejeter</button>
+      </div>
+    </div>`).join('');
+  }
+}
+
+async function nexusArchitectUnblock(userId,username){
+  if(!confirm(`Débloquer @${username} ? La restriction sera levée mais son historique de strikes reste enregistré — une nouvelle infraction rebloquera immédiatement le compte.`))return;
+  const{error}=await db.rpc('nexus_architect_unblock',{p_user_id:userId});
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  showToast(`@${username} débloqué.`,'success');
+  loadNexusBlocks();
+}
+
+async function nexusArchitectFullReset(userId,username){
+  if(!confirm(`Reset complet pour @${username} ? Son casier Nexus (strikes, score de risque, restrictions) sera totalement effacé, comme s'il n'avait jamais rien fait.`))return;
+  const{error}=await db.rpc('nexus_architect_full_reset',{p_user_id:userId});
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  showToast(`Casier de @${username} remis à zéro.`,'success');
+  loadNexusBlocks();
+}
+
+async function nexusResolveAppealUI(appealId,decision){
+  let note=null;
+  if(decision==='rejected'){
+    note=prompt('Motif du rejet (optionnel, visible par l\'utilisateur) :')||null;
+  }
+  const{error}=await db.rpc('nexus_resolve_appeal',{p_appeal_id:appealId,p_decision:decision,p_staff_note:note});
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  showToast(decision==='accepted'?'Appel accepté, restriction levée.':'Appel rejeté.','success');
+  loadNexusBlocks();
 }
 
 function openCreateIncidentModal(){
