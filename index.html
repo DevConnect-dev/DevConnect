@@ -1416,6 +1416,21 @@ body.focus-mode #focus-exit-btn{display:flex;}
 .nexus-score-fill.warn{background:#9a9a5a;}
 .nexus-score-fill.danger{background:#9a5a5a;}
 .nexus-setting-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.nexus-switcher .cdrop-trigger{padding:8px 10px;font-size:12px;font-family:var(--font-display);background:rgba(255,255,255,.03);}
+.nexus-switcher .cdrop-menu{font-size:12px;}
+.nexus-switcher .cdrop-option{padding:8px 10px;font-size:12px;}
+.nexus-plan-badge{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:100px;font-size:10px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.05em;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.6);}
+.nexus-plan-badge.paid{border-color:rgba(106,184,122,.35);color:#8fd39c;background:rgba(106,184,122,.08);}
+.nexus-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;animation:nexusFadeIn .15s ease;}
+@keyframes nexusFadeIn{from{opacity:0;}to{opacity:1;}}
+.nexus-modal-box{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);max-width:420px;width:100%;padding:24px;}
+.nexus-modal-title{font-family:var(--font-display);font-size:17px;font-weight:700;margin-bottom:6px;}
+.nexus-modal-sub{font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.6;}
+.nexus-modal-input{width:100%;padding:11px 14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:14px;margin-bottom:16px;font-family:var(--font-body);}
+.nexus-modal-input:focus{outline:none;border-color:var(--border-bright);}
+.nexus-modal-actions{display:flex;gap:8px;}
+.nexus-modal-actions .btn{flex:1;}
+.nexus-modal-key{display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-family:var(--font-mono);font-size:12px;word-break:break-all;}
 .nexus-setting-row:last-child{border-bottom:none;}
 .nexus-setting-label{font-size:13px;font-weight:500;}
 .nexus-setting-sub{font-size:11px;color:rgba(255,255,255,.3);font-family:var(--font-mono);margin-top:2px;}
@@ -4082,7 +4097,7 @@ body.focus-mode #focus-exit-btn{display:flex;}
               <div style="padding:0 20px 6px;font-size:12px;color:var(--text-muted)">Ajoute le script, initialise avec ta clé, puis envoie des events où tu veux dans ton app.</div>
               <div style="padding:12px 20px 20px">
                 <div style="display:flex;justify-content:flex-end;margin-bottom:4px"><button class="btn btn-ghost btn-sm" style="font-size:11px" onclick="nexusCopyCode('nexus-doc-code-sdk')">Copier</button></div>
-                <pre id="nexus-doc-code-sdk" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:var(--radius);padding:14px 16px;font-family:var(--font-mono);font-size:12px;line-height:1.7;overflow-x:auto;color:var(--text-secondary)">&lt;script src="https://cdn.jsdelivr.net/gh/VOTRE_ORG/nexus-sdk/nexus-sdk.min.js"&gt;&lt;/script&gt;
+                <pre id="nexus-doc-code-sdk" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:var(--radius);padding:14px 16px;font-family:var(--font-mono);font-size:12px;line-height:1.7;overflow-x:auto;color:var(--text-secondary)">&lt;script src="https://cdn.jsdelivr.net/gh/DevConnect-dev/DevConnect@DevConnect1.0/nexus-sdk.js"&gt;&lt;/script&gt;
 &lt;script&gt;
   Nexus.init('nx_live_VOTRE_CLE');
 
@@ -9651,18 +9666,31 @@ function renderNexusProjectSwitcher(){
   if(!box){
     box=document.createElement('div');
     box.id='nexus-project-switcher';
-    box.style.cssText='margin-top:12px;display:flex;flex-direction:column;gap:6px';
+    box.style.cssText='margin-top:12px;display:flex;flex-direction:column;gap:8px';
     head.appendChild(box);
   }
   if(!nexusUserProjects.length){
-    box.innerHTML=`<button class="btn btn-primary btn-sm" style="width:100%;font-size:12px" onclick="nexusCreateProjectFlow()">+ Créer mon projet Nexus</button>`;
+    box.innerHTML=`<button class="btn btn-primary btn-sm" style="width:100%;font-size:12px" onclick="showNexusCreateProjectModal()">+ Créer mon projet Nexus</button>`;
     return;
   }
-  const options=nexusUserProjects.map(p=>`<option value="${esc(p.id)}" ${p.id===NEXUS_PROJECT_ID?'selected':''}>${esc(p.name)}${p.is_internal?' · interne':''}</option>`).join('');
+  const current=nexusUserProjects.find(p=>p.id===NEXUS_PROJECT_ID)||nexusUserProjects[0];
+  const optsHtml=nexusUserProjects.map(p=>`<div class="cdrop-option${p.id===NEXUS_PROJECT_ID?' selected':''}" data-value="${esc(p.id)}" onclick="nexusPickProject('${p.id}')">${esc(p.name)}${p.is_internal?' <span style="color:var(--text-muted)">· interne</span>':''}</div>`).join('');
   box.innerHTML=`
-    <select id="nexus-project-select" onchange="nexusSwitchProject(this.value)" style="width:100%;font-size:12px;padding:6px 8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);color:var(--text)">${options}</select>
-    <button class="btn btn-ghost btn-sm" style="width:100%;font-size:11px" onclick="nexusCreateProjectFlow()">+ Nouveau projet</button>
+    <div class="cdrop nexus-switcher" id="nexus-project-cdrop">
+      <div class="cdrop-trigger" tabindex="0" onclick="toggleCustomDropdown('nexus-project')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCustomDropdown('nexus-project')}">
+        <span class="cdrop-trigger-label">${esc(current.name)}${current.is_internal?' · interne':''}</span>
+        <span class="cdrop-trigger-arrow"></span>
+      </div>
+      <div class="cdrop-menu">${optsHtml}</div>
+    </div>
+    <button class="btn btn-ghost btn-sm" style="width:100%;font-size:11px" onclick="showNexusCreateProjectModal()">+ Nouveau projet</button>
   `;
+}
+
+function nexusPickProject(projectId){
+  const wrap=document.getElementById('nexus-project-cdrop');
+  if(wrap)wrap.classList.remove('open');
+  nexusSwitchProject(projectId);
 }
 
 function renderNexusNoProjectState(){
@@ -9683,6 +9711,7 @@ async function nexusSwitchProject(projectId){
   nexusActiveProject=proj;
   NEXUS_PROJECT_ID=projectId;
   localStorage.setItem('nexus_active_project',projectId);
+  renderNexusProjectSwitcher();
   nexusUnsubscribeRealtime();
   await nexusFetchSettings();
   await nexusFetchRules();
@@ -9693,9 +9722,59 @@ async function nexusSwitchProject(projectId){
   showToast(`Projet actif : ${proj.name}`,'info');
 }
 
-async function nexusCreateProjectFlow(){
-  const name=(prompt('Nom du nouveau projet Nexus (ex : mon-app-prod) :')||'').trim();
-  if(!name)return;
+function showNexusCreateProjectModal(){
+  document.getElementById('nexus-generic-modal-overlay')?.remove();
+  const overlay=document.createElement('div');
+  overlay.id='nexus-generic-modal-overlay';
+  overlay.className='nexus-modal-overlay';
+  overlay.innerHTML=`
+    <div class="nexus-modal-box">
+      <div class="nexus-modal-title">Nouveau projet Nexus</div>
+      <div class="nexus-modal-sub">Un projet = une clé API et un quota d'events indépendant. Tu pourras en créer d'autres plus tard.</div>
+      <input id="nexus-new-project-name" class="nexus-modal-input" type="text" placeholder="ex : mon-app-prod" maxlength="60">
+      <div class="nexus-modal-actions">
+        <button class="btn btn-primary btn-sm" onclick="nexusSubmitCreateProject()">Créer le projet</button>
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('nexus-generic-modal-overlay').remove()">Annuler</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
+  const input=document.getElementById('nexus-new-project-name');
+  input.focus();
+  input.addEventListener('keydown',e=>{if(e.key==='Enter')nexusSubmitCreateProject();});
+}
+
+function nexusSubmitCreateProject(){
+  const input=document.getElementById('nexus-new-project-name');
+  const name=(input?.value||'').trim();
+  if(!name){showToast('Donne un nom à ton projet.','error');return;}
+  document.getElementById('nexus-generic-modal-overlay')?.remove();
+  nexusCreateProjectFlow(name);
+}
+
+// Modale de confirmation générique (remplace confirm() natif du navigateur)
+function nexusConfirmModal(title,message,confirmLabel,onConfirm,danger){
+  document.getElementById('nexus-generic-modal-overlay')?.remove();
+  const overlay=document.createElement('div');
+  overlay.id='nexus-generic-modal-overlay';
+  overlay.className='nexus-modal-overlay';
+  const confirmStyle=danger?'style="background:rgba(224,80,80,.12);border:1px solid rgba(224,80,80,.4);color:#ff8a8a"':'';
+  overlay.innerHTML=`
+    <div class="nexus-modal-box">
+      <div class="nexus-modal-title">${esc(title)}</div>
+      <div class="nexus-modal-sub">${esc(message)}</div>
+      <div class="nexus-modal-actions">
+        <button class="btn btn-sm" ${confirmStyle} id="nexus-confirm-modal-yes">${esc(confirmLabel)}</button>
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('nexus-generic-modal-overlay').remove()">Annuler</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
+  document.getElementById('nexus-confirm-modal-yes').addEventListener('click',()=>{overlay.remove();onConfirm();});
+}
+
+async function nexusCreateProjectFlow(name){
+  if(!name){showNexusCreateProjectModal();return;}
   try{
     const{data,error}=await db.rpc('nexus_create_project',{p_name:name});
     if(error){showToast('Erreur création projet : '+error.message,'error');return;}
@@ -9721,22 +9800,22 @@ async function nexusCreateProjectFlow(){
 }
 
 function showNexusApiKeyModal(apiKey,projectName){
-  const existing=document.getElementById('nexus-key-modal-overlay');
-  if(existing)existing.remove();
+  document.getElementById('nexus-generic-modal-overlay')?.remove();
   const overlay=document.createElement('div');
-  overlay.id='nexus-key-modal-overlay';
-  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px';
+  overlay.id='nexus-generic-modal-overlay';
+  overlay.className='nexus-modal-overlay';
   overlay.innerHTML=`
-    <div style="background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);max-width:480px;width:100%;padding:24px">
-      <div style="font-family:var(--font-display);font-size:17px;font-weight:700;margin-bottom:6px">Projet "${esc(projectName)}" créé</div>
-      <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.6">Voici ta clé API. <strong style="color:var(--text)">Elle ne sera plus jamais affichée en clair</strong> — copie-la et stocke-la en lieu sûr maintenant.</div>
-      <div style="display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:10px 12px;font-family:var(--font-mono);font-size:12px;word-break:break-all">${esc(apiKey)}</div>
-      <div style="display:flex;gap:8px;margin-top:16px">
-        <button class="btn btn-primary btn-sm" style="flex:1" onclick="navigator.clipboard.writeText('${apiKey.replace(/'/g,"\\'")}');showToast('Clé copiée.','info')">Copier la clé</button>
-        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('nexus-key-modal-overlay').remove()">Fermer</button>
+    <div class="nexus-modal-box">
+      <div class="nexus-modal-title">Projet "${esc(projectName)}" créé</div>
+      <div class="nexus-modal-sub">Voici ta clé API. <strong style="color:var(--text)">Elle ne sera plus jamais affichée en clair</strong> — copie-la et stocke-la en lieu sûr maintenant.</div>
+      <div class="nexus-modal-key">${esc(apiKey)}</div>
+      <div class="nexus-modal-actions" style="margin-top:16px">
+        <button class="btn btn-primary btn-sm" onclick="navigator.clipboard.writeText('${apiKey.replace(/'/g,"\\'")}');showToast('Clé copiée.','info')">Copier la clé</button>
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('nexus-generic-modal-overlay').remove()">Fermer</button>
       </div>
     </div>`;
   document.body.appendChild(overlay);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
 }
 
 function renderNexusKeyPanel(){
@@ -9748,12 +9827,13 @@ function renderNexusKeyPanel(){
   }
   const p=nexusActiveProject;
   const isPaid=(p.plan||'free')!=='free';
+  const planBadge=`<span class="nexus-plan-badge${isPaid?' paid':''}">${esc(p.plan||'free')}</span>`;
   const billingBtn=isPaid
-    ?`<button class="btn btn-ghost btn-sm" disabled>Abonné · ${esc(p.plan)}</button>`
+    ?`<button class="btn btn-ghost btn-sm" disabled>Abonné</button>`
     :`<button class="btn btn-primary btn-sm" onclick="nexusSubscribe(NEXUS_PRICE_STARTER)">Passer sur Starter (9,99€/mois)</button>`;
   container.innerHTML=`
     <div style="padding:0 20px 16px">
-      <div class="nexus-setting-row"><div><div class="nexus-setting-label">Projet</div><div class="nexus-setting-sub">${esc(p.name)} · plan ${esc(p.plan||'free')}</div></div></div>
+      <div class="nexus-setting-row"><div><div class="nexus-setting-label">Projet</div><div class="nexus-setting-sub">${esc(p.name)}</div></div>${planBadge}</div>
       <div class="nexus-setting-row"><div><div class="nexus-setting-label">Clé API</div><div class="nexus-setting-sub" style="font-family:var(--font-mono)">${esc(p.key_prefix||'nx_live_····')}····</div></div></div>
       <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
         <button class="btn btn-ghost btn-sm" onclick="nexusRegenerateKey()">Régénérer la clé</button>
@@ -9765,33 +9845,35 @@ function renderNexusKeyPanel(){
 
 async function nexusRegenerateKey(){
   if(!nexusActiveProject||nexusActiveProject.is_internal)return;
-  if(!confirm('Régénérer la clé API ? L\'ancienne clé cessera immédiatement de fonctionner.'))return;
-  try{
-    const{data,error}=await db.rpc('nexus_regenerate_api_key',{p_project_id:nexusActiveProject.id});
-    if(error){showToast('Erreur : '+error.message,'error');return;}
-    if(data)showNexusApiKeyModal(data,nexusActiveProject.name);
-    await nexusLoadMyProjects();
-    renderNexusKeyPanel();
-  }catch(e){showToast('Erreur régénération clé.','error');}
+  nexusConfirmModal('Régénérer la clé API ?',"L'ancienne clé cessera immédiatement de fonctionner — toute intégration en place devra être mise à jour avec la nouvelle.",'Régénérer',async()=>{
+    try{
+      const{data,error}=await db.rpc('nexus_regenerate_api_key',{p_project_id:nexusActiveProject.id});
+      if(error){showToast('Erreur : '+error.message,'error');return;}
+      if(data)showNexusApiKeyModal(data,nexusActiveProject.name);
+      await nexusLoadMyProjects();
+      renderNexusKeyPanel();
+    }catch(e){showToast('Erreur régénération clé.','error');}
+  },true);
 }
 
 async function nexusRevokeKey(){
   if(!nexusActiveProject||nexusActiveProject.is_internal)return;
-  if(!confirm('Révoquer définitivement la clé API de ce projet ? L\'ingestion d\'events s\'arrêtera immédiatement.'))return;
-  try{
-    const{error}=await db.rpc('nexus_revoke_api_key',{p_project_id:nexusActiveProject.id});
-    if(error){showToast('Erreur : '+error.message,'error');return;}
-    showToast('Clé révoquée.','info');
-    localStorage.removeItem('nexus_active_project');
-    nexusUnsubscribeRealtime();
-    await nexusLoadMyProjects();
-    await nexusFetchSettings();
-    await nexusFetchRules();
-    applyNexusSettingsUI();
-    await loadNexusOverview();
-    renderNexusKeyPanel();
-    subscribeNexusRealtime();
-  }catch(e){showToast('Erreur révocation clé.','error');}
+  nexusConfirmModal('Révoquer la clé API ?',"L'ingestion d'events pour ce projet s'arrêtera immédiatement et définitivement. Cette action est irréversible.",'Révoquer',async()=>{
+    try{
+      const{error}=await db.rpc('nexus_revoke_api_key',{p_project_id:nexusActiveProject.id});
+      if(error){showToast('Erreur : '+error.message,'error');return;}
+      showToast('Clé révoquée.','info');
+      localStorage.removeItem('nexus_active_project');
+      nexusUnsubscribeRealtime();
+      await nexusLoadMyProjects();
+      await nexusFetchSettings();
+      await nexusFetchRules();
+      applyNexusSettingsUI();
+      await loadNexusOverview();
+      renderNexusKeyPanel();
+      subscribeNexusRealtime();
+    }catch(e){showToast('Erreur révocation clé.','error');}
+  },true);
 }
 
 function renderNexusDocs(){
