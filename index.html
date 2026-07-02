@@ -138,6 +138,117 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
   --mod-docs:#10b981;--mod-marketplace:#e879f9;
 }
 
+/* ============================================================
+   BLACK DIAMOND — Landing + Auth Premium Redesign (Phase 2)
+   Monochrome luxury: obsidian black, platinum white, cold
+   diamond-blue glint. Scoped to #page-landing / #page-auth.
+   ============================================================ */
+#page-landing, #page-auth{
+  --bg0:#07080A;--bg1:#0D0E12;--bg2:#15161B;--bg3:#1E1F26;
+  --border:rgba(255,255,255,.09);--border-light:rgba(255,255,255,.17);--border-bright:rgba(255,255,255,.28);
+  --text:#F4F5F7;--text-secondary:#9CA1AC;--text-muted:#656973;
+  --accent:#F4F5F7;--accent-dim:#656973;
+  --aurora-green:#8FB3FF;--aurora-teal:#7DD9CE;
+}
+#page-landing{
+  background:
+    radial-gradient(ellipse 55% 40% at 15% -5%, rgba(143,179,255,.09), transparent 60%),
+    radial-gradient(ellipse 45% 35% at 100% 10%, rgba(125,217,206,.06), transparent 55%),
+    radial-gradient(ellipse 60% 45% at 50% 105%, rgba(139,92,246,.06), transparent 60%),
+    linear-gradient(180deg,#08090B 0%,#07080A 45%,#050506 100%);
+}
+#page-auth{
+  background:
+    radial-gradient(ellipse 55% 45% at 20% 20%, rgba(143,179,255,.08), transparent 60%),
+    radial-gradient(ellipse 45% 40% at 85% 70%, rgba(125,217,206,.06), transparent 55%),
+    linear-gradient(180deg,#08090B 0%,#050506 100%);
+}
+/* dark-canvas fixes, reverted to obsidian tones (deeper than base app) */
+#page-landing .landing-nav.scrolled{background:rgba(6,7,9,.86);box-shadow:0 1px 0 rgba(255,255,255,.05);}
+#page-landing .tool-chip{background:rgba(255,255,255,.04);}
+#page-landing .module-badge{background:rgba(0,0,0,.4);}
+#page-landing .timeline-icon-wrap{background:rgba(255,255,255,.03);}
+#page-landing .mockup-code{background:#000103;border-top:1px solid rgba(255,255,255,.08);}
+#page-landing .mockup-code-bar{border-bottom:1px solid rgba(255,255,255,.08);}
+#page-landing .mockup-code-lines{color:#5C6472;}
+#page-auth .auth-box{background:rgba(10,11,14,.86);box-shadow:0 32px 90px -24px rgba(0,0,0,.65),0 1px 0 rgba(255,255,255,.06) inset;}
+#page-auth .form-input{background:rgba(255,255,255,.035);}
+#page-auth select.form-input{color-scheme:dark;background-color:#0D0E12;}
+#page-auth .auth-tabs{background:var(--bg0);}
+
+/* Platinum shimmer headline (replaces rainbow gradient) */
+#page-landing .hero-title .w-aurora{
+  background:linear-gradient(100deg,#F4F5F7 0%,#B9C8EE 22%,#F4F5F7 44%,#8FB3FF 66%,#F4F5F7 88%,#B9C8EE 100%);
+  background-size:220% auto;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:textShimmer 5s linear infinite;
+}
+#page-landing .hero-title .w-thin{color:rgba(244,245,247,.26);}
+
+/* ── Asymmetric hero: copy left, gem right ── */
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:center;text-align:left;position:relative;z-index:2;}
+.hero-copy{max-width:560px;}
+.hero-copy .hero-eyebrow{margin-left:0;}
+.hero-copy .hero-title{margin-bottom:26px;}
+.hero-copy .hero-subtitle{margin:0 0 40px;}
+.hero-copy .hero-cta{justify-content:flex-start;}
+.hero-visual{position:relative;display:flex;align-items:center;justify-content:center;}
+.hero-visual .scene{margin:0;width:340px;height:340px;}
+#page-landing .landing-hero{text-align:left;padding-top:160px;}
+@media(max-width:980px){
+  .hero-grid{grid-template-columns:1fr;text-align:center;gap:8px;}
+  .hero-copy{max-width:none;margin:0 auto;}
+  .hero-copy .hero-cta{justify-content:center;}
+  .hero-visual .scene{width:260px;height:260px;margin:20px auto 0;}
+  #page-landing .landing-hero{text-align:center;}
+}
+.tools-row{justify-content:flex-start;margin-top:56px;}
+@media(max-width:980px){.tools-row{justify-content:center;}}
+
+/* ── Gem-cut facet corners on all landing surfaces ── */
+#page-landing .module-card,#page-landing .bento-card,#page-landing .feature-card,#page-landing .ref-card{
+  clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px));
+  background:linear-gradient(165deg,var(--bg2),var(--bg1));
+}
+#page-landing .features-grid{background:transparent;border:none;gap:1px;}
+#page-landing .feature-card{border:1px solid var(--border);}
+
+/* ── Section label: diamond bullet instead of dash ── */
+#page-landing .section-label{position:relative;padding-left:20px;}
+#page-landing .section-label::before{
+  content:'';position:absolute;left:0;top:50%;width:8px;height:8px;
+  transform:translateY(-50%) rotate(45deg);
+  background:linear-gradient(135deg,var(--aurora-green),var(--aurora-teal));
+  border-radius:1px;
+}
+
+/* ── Timeline: staggered diamond staircase ── */
+#page-landing .timeline-track{align-items:flex-start;}
+#page-landing .timeline-track::before{display:none;}
+#page-landing .timeline-step:nth-child(odd){transform:translateY(0);}
+#page-landing .timeline-step:nth-child(even){transform:translateY(34px);}
+#page-landing .timeline-step::before{
+  content:'';position:absolute;top:36px;left:-50%;width:100%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border-bright),transparent);
+  z-index:-1;
+}
+#page-landing .timeline-step:first-child::before{display:none;}
+@media(max-width:900px){
+  #page-landing .timeline-step:nth-child(even){transform:none;}
+  #page-landing .timeline-step::before{display:none;}
+}
+
+/* ── CTA: black diamond slab ── */
+#page-landing .cta-box{
+  background:linear-gradient(165deg,#0B0C10,#050506 60%);
+  border:1px solid var(--border-bright);
+  clip-path:polygon(0 0,calc(100% - 36px) 0,100% 36px,100% 100%,36px 100%,0 calc(100% - 36px));
+}
+#page-landing .cta-box::after{
+  content:'';position:absolute;top:-30%;left:50%;width:80%;aspect-ratio:1;transform:translateX(-50%);
+  background:conic-gradient(from 0deg,rgba(143,179,255,.10),rgba(139,92,246,.08),rgba(125,217,206,.08),rgba(143,179,255,.10));
+  filter:blur(50px);pointer-events:none;
+}
+
 /* Animations aurora */
 @keyframes auroraFlow{
   0%{background-position:0% 50%;}
@@ -146,7 +257,7 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 }
 @keyframes eyebrowPulse{
   0%,100%{box-shadow:0 0 0 0 transparent;}
-  50%{box-shadow:0 0 18px 2px rgba(0,255,163,.12);}
+  50%{box-shadow:0 0 18px 2px rgba(47,99,224,.12);}
 }
 @keyframes orbGlow{
   0%,100%{opacity:.5;transform:scale(1);}
@@ -200,7 +311,7 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
   transition:all .4s var(--ease);
 }
 .landing-nav.scrolled{
-  padding:14px 52px;border-bottom:1px solid rgba(0,255,163,.08);
+  padding:14px 52px;border-bottom:1px solid rgba(47,99,224,.08);
   background:rgba(8,8,8,.88);backdrop-filter:blur(24px) saturate(160%);
 }
 .logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:18px;color:var(--text);text-decoration:none;letter-spacing:-.015em;}
@@ -219,7 +330,7 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 .btn-ghost{background:transparent;color:var(--text-secondary);border:1px solid var(--border);}
 .btn-ghost:hover{background:var(--bg2);color:var(--text);border-color:var(--border-light);transform:translateY(-1px);}
 .btn-primary{background:linear-gradient(135deg,var(--aurora-green),var(--aurora-teal));color:#080808;border:none;font-weight:700;}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px -8px rgba(0,255,163,.45),0 0 0 1px rgba(0,255,163,.2);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px -8px rgba(47,99,224,.45),0 0 0 1px rgba(47,99,224,.2);}
 .btn-primary::before{content:'';position:absolute;top:0;left:0;width:40%;height:100%;background:linear-gradient(115deg,transparent,rgba(255,255,255,.35),transparent);transform:translateX(-120%) skewX(-12deg);}
 .btn-primary:hover::before{animation:sheen .9s ease;}
 .btn-lg{padding:14px 32px;font-size:15px;}
@@ -238,16 +349,16 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 .aurora-bg{
   position:absolute;inset:0;z-index:0;pointer-events:none;
   background:
-    radial-gradient(ellipse 80% 50% at 20% 20%,rgba(0,255,163,.07) 0%,transparent 60%),
+    radial-gradient(ellipse 80% 50% at 20% 20%,rgba(47,99,224,.07) 0%,transparent 60%),
     radial-gradient(ellipse 60% 40% at 80% 10%,rgba(79,124,255,.09) 0%,transparent 55%),
     radial-gradient(ellipse 70% 50% at 50% 80%,rgba(139,92,246,.08) 0%,transparent 60%),
-    radial-gradient(ellipse 50% 40% at 70% 50%,rgba(0,212,255,.06) 0%,transparent 50%);
+    radial-gradient(ellipse 50% 40% at 70% 50%,rgba(21,154,174,.06) 0%,transparent 50%);
   animation:auroraFlow 12s ease-in-out infinite;
   background-size:300% 300%;
 }
 .aurora-orb-1{
   position:absolute;top:-10%;left:10%;width:500px;height:500px;border-radius:50%;
-  background:radial-gradient(circle,rgba(0,255,163,.12) 0%,transparent 70%);
+  background:radial-gradient(circle,rgba(47,99,224,.12) 0%,transparent 70%);
   filter:blur(60px);pointer-events:none;animation:orbGlow 8s ease-in-out infinite;z-index:0;
 }
 .aurora-orb-2{
@@ -264,8 +375,8 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 .aurora-grid{
   position:absolute;inset:0;z-index:0;pointer-events:none;
   background-image:
-    linear-gradient(rgba(0,255,163,.03) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,255,163,.03) 1px,transparent 1px);
+    linear-gradient(rgba(47,99,224,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(47,99,224,.03) 1px,transparent 1px);
   background-size:60px 60px;
   mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,black,transparent);
 }
@@ -274,9 +385,9 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 .hero-eyebrow{
   font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;
   text-transform:uppercase;margin-bottom:32px;padding:6px 18px;
-  border:1px solid rgba(0,255,163,.25);border-radius:100px;
+  border:1px solid rgba(47,99,224,.25);border-radius:100px;
   display:inline-flex;align-items:center;gap:9px;color:var(--aurora-green);
-  background:rgba(0,255,163,.06);backdrop-filter:blur(8px);
+  background:rgba(47,99,224,.06);backdrop-filter:blur(8px);
   animation:eyebrowPulse 4s ease-in-out infinite;
 }
 .hero-eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--aurora-green);box-shadow:0 0 10px var(--aurora-green);animation:shimmer 2.5s ease-in-out infinite;}
@@ -294,22 +405,22 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 .hero-title .w-white{color:#fff;}
 .hero-subtitle{font-size:18px;color:var(--text-secondary);max-width:560px;line-height:1.75;margin:0 auto 44px;}
 .hero-cta{display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:center;}
-.scroll-cue{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(0,255,163,.4);font-family:var(--font-mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;z-index:2;animation:floatY 2.4s ease-in-out infinite;}
-.scroll-cue::after{content:'';width:1px;height:28px;background:linear-gradient(rgba(0,255,163,.4),transparent);}
+.scroll-cue{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(47,99,224,.4);font-family:var(--font-mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;z-index:2;animation:floatY 2.4s ease-in-out infinite;}
+.scroll-cue::after{content:'';width:1px;height:28px;background:linear-gradient(rgba(47,99,224,.4),transparent);}
 
 /* ── CUBE 3D aurora ── */
 .scene{width:280px;height:280px;margin:52px auto 0;position:relative;perspective:900px;z-index:2;}
-.scene-glow{position:absolute;inset:-80px;border-radius:50%;background:radial-gradient(circle,rgba(0,255,163,.18),rgba(79,124,255,.08) 45%,transparent 70%);filter:blur(24px);z-index:-1;animation:glowPulse 3s ease-in-out infinite;}
-.scene-floor{position:absolute;bottom:-22px;left:50%;width:190px;height:30px;transform:translateX(-50%);background:radial-gradient(ellipse,rgba(0,255,163,.3),transparent 75%);filter:blur(6px);}
+.scene-glow{position:absolute;inset:-80px;border-radius:50%;background:radial-gradient(circle,rgba(47,99,224,.18),rgba(79,124,255,.08) 45%,transparent 70%);filter:blur(24px);z-index:-1;animation:glowPulse 3s ease-in-out infinite;}
+.scene-floor{position:absolute;bottom:-22px;left:50%;width:190px;height:30px;transform:translateX(-50%);background:radial-gradient(ellipse,rgba(47,99,224,.3),transparent 75%);filter:blur(6px);}
 .aurora-cube{width:100%;height:100%;position:relative;transform-style:preserve-3d;animation:sceneSpin 18s linear infinite;}
 .face{
   position:absolute;width:160px;height:160px;left:60px;top:60px;
-  background:linear-gradient(160deg,rgba(0,255,163,.1),rgba(79,124,255,.06));
-  border:1px solid rgba(0,255,163,.2);backdrop-filter:blur(8px);border-radius:16px;
-  box-shadow:0 0 30px -8px rgba(0,255,163,.25) inset,0 0 1px rgba(0,255,163,.15) inset;
+  background:linear-gradient(160deg,rgba(47,99,224,.1),rgba(79,124,255,.06));
+  border:1px solid rgba(47,99,224,.2);backdrop-filter:blur(8px);border-radius:16px;
+  box-shadow:0 0 30px -8px rgba(47,99,224,.25) inset,0 0 1px rgba(47,99,224,.15) inset;
   display:flex;align-items:center;justify-content:center;
 }
-.face svg{width:44px;height:44px;color:rgba(0,255,163,.9);filter:drop-shadow(0 0 10px rgba(0,255,163,.6));}
+.face svg{width:44px;height:44px;color:rgba(47,99,224,.9);filter:drop-shadow(0 0 10px rgba(47,99,224,.6));}
 .face-front{transform:translateZ(80px);}
 .face-back{transform:translateZ(-80px) rotateY(180deg);}
 .face-right{transform:rotateY(90deg) translateZ(80px);}
@@ -321,15 +432,15 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 .tools-row{position:relative;z-index:2;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:48px;}
 .tool-chip{
   display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:100px;
-  background:rgba(15,15,20,.85);border:1px solid var(--chip-color,rgba(0,255,163,.2));
+  background:rgba(15,15,20,.85);border:1px solid var(--chip-color,rgba(47,99,224,.2));
   font-size:13px;color:var(--chip-color,var(--aurora-green));
   backdrop-filter:blur(8px);transition:all .3s var(--ease);
 }
-.tool-chip:hover{transform:translateY(-3px);background:rgba(var(--chip-r,0),var(--chip-g,255),var(--chip-b,163),.1);box-shadow:0 8px 24px -8px var(--chip-color,rgba(0,255,163,.4));}
+.tool-chip:hover{transform:translateY(-3px);background:rgba(var(--chip-r,0),var(--chip-g,255),var(--chip-b,163),.1);box-shadow:0 8px 24px -8px var(--chip-color,rgba(47,99,224,.4));}
 .tool-chip svg{width:14px;height:14px;flex-shrink:0;}
 
 /* ── DIVIDER aurora ── */
-.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,163,.15),rgba(79,124,255,.15),transparent);}
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(47,99,224,.15),rgba(79,124,255,.15),transparent);}
 
 /* ── SECTIONS ── */
 .landing-section{width:100%;max-width:1200px;margin:0 auto;padding:110px 48px;}
@@ -351,24 +462,24 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 }
 .module-card::before{
   content:'';position:absolute;inset:0;
-  background:radial-gradient(circle at 50% 0%,var(--mod-color,rgba(0,255,163,.08)) 0%,transparent 70%);
+  background:radial-gradient(circle at 50% 0%,var(--mod-color,rgba(47,99,224,.08)) 0%,transparent 70%);
   opacity:0;transition:opacity .4s;
 }
 .module-card::after{
   content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,var(--mod-color,rgba(0,255,163,.4)),transparent);
+  background:linear-gradient(90deg,transparent,var(--mod-color,rgba(47,99,224,.4)),transparent);
   opacity:0;transition:opacity .4s;
 }
-.module-card:hover{transform:translateY(-6px) scale(1.01);border-color:var(--mod-color-dim,var(--border-light));box-shadow:0 20px 60px -20px var(--mod-color,rgba(0,255,163,.2));}
+.module-card:hover{transform:translateY(-6px) scale(1.01);border-color:var(--mod-color-dim,var(--border-light));box-shadow:0 20px 60px -20px var(--mod-color,rgba(47,99,224,.2));}
 .module-card:hover::before,.module-card:hover::after{opacity:1;}
 .module-card.soon{border-style:dashed;opacity:.7;}
 .module-card.soon:hover{opacity:.95;transform:translateY(-3px);}
 .module-card.soon .module-icon{filter:grayscale(.4) brightness(.85);}
 .module-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;}
 .module-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;position:relative;}
-.module-icon::after{content:'';position:absolute;inset:-4px;border-radius:16px;background:radial-gradient(circle,var(--mod-color,rgba(0,255,163,.2)),transparent 70%);opacity:.6;filter:blur(6px);}
+.module-icon::after{content:'';position:absolute;inset:-4px;border-radius:16px;background:radial-gradient(circle,var(--mod-color,rgba(47,99,224,.2)),transparent 70%);opacity:.6;filter:blur(6px);}
 .module-name{font-family:var(--font-display);font-size:16px;font-weight:700;margin-bottom:8px;color:var(--text);}
-.module-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:100px;font-size:10px;font-family:var(--font-mono);letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--mod-color-dim,rgba(0,255,163,.2));color:var(--mod-color,var(--aurora-green));background:rgba(0,0,0,.3);}
+.module-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:100px;font-size:10px;font-family:var(--font-mono);letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--mod-color-dim,rgba(47,99,224,.2));color:var(--mod-color,var(--aurora-green));background:rgba(0,0,0,.3);}
 .module-badge.soon{color:var(--text-muted);border-color:var(--border-light);background:rgba(255,255,255,.03);}
 .module-badge .dot{width:5px;height:5px;border-radius:50%;background:currentColor;box-shadow:0 0 6px currentColor;animation:glowPulse 2s ease-in-out infinite;}
 .module-badge.soon .dot{animation:none;box-shadow:none;}
@@ -381,8 +492,8 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
   background:var(--bg1);padding:32px 28px;position:relative;overflow:hidden;
   transition:all .35s var(--ease);
 }
-.feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,163,.2),transparent);opacity:0;transition:opacity .3s;}
-.feature-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(0,255,163,.05),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none;}
+.feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(47,99,224,.2),transparent);opacity:0;transition:opacity .3s;}
+.feature-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(47,99,224,.05),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none;}
 .feature-card:hover{background:var(--bg2);}
 .feature-card:hover::before,.feature-card:hover::after{opacity:1;}
 .feature-icon{font-size:22px;display:block;margin-bottom:16px;transition:all .3s;color:var(--aurora-teal);}
@@ -399,8 +510,8 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
   border:1px solid var(--border);
 }
 .ref-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--aurora-green),var(--aurora-teal),var(--aurora-blue));opacity:0;transition:opacity .4s;}
-.ref-card::after{content:'';position:absolute;top:-60%;left:50%;width:200%;height:200%;background:radial-gradient(circle,rgba(0,255,163,.04),transparent 60%);opacity:0;transition:opacity .4s;transform:translateX(-50%);}
-.ref-card:hover{border-color:rgba(0,255,163,.2);transform:translateY(-6px);box-shadow:0 24px 60px -20px rgba(0,255,163,.15);}
+.ref-card::after{content:'';position:absolute;top:-60%;left:50%;width:200%;height:200%;background:radial-gradient(circle,rgba(47,99,224,.04),transparent 60%);opacity:0;transition:opacity .4s;transform:translateX(-50%);}
+.ref-card:hover{border-color:rgba(47,99,224,.2);transform:translateY(-6px);box-shadow:0 24px 60px -20px rgba(47,99,224,.15);}
 .ref-card:hover::before,.ref-card:hover::after{opacity:1;}
 .ref-card-name{font-family:var(--font-mono);font-size:11px;color:var(--aurora-green);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;}
 .ref-card-what{font-size:16px;font-weight:600;margin-bottom:8px;}
@@ -411,17 +522,17 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 .cta-box{
   max-width:680px;margin:0 auto;border-radius:var(--radius-xl);padding:80px 60px;
   position:relative;overflow:hidden;
-  background:linear-gradient(160deg,rgba(0,255,163,.05),rgba(79,124,255,.05),rgba(139,92,246,.04));
-  border:1px solid rgba(0,255,163,.15);
+  background:linear-gradient(160deg,rgba(47,99,224,.05),rgba(79,124,255,.05),rgba(139,92,246,.04));
+  border:1px solid rgba(47,99,224,.15);
 }
 .cta-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--aurora-green),var(--aurora-teal),transparent);}
-.cta-box::after{content:'';position:absolute;top:-40%;left:50%;width:600px;height:400px;transform:translateX(-50%);background:radial-gradient(circle,rgba(0,255,163,.08),transparent 70%);pointer-events:none;filter:blur(20px);}
+.cta-box::after{content:'';position:absolute;top:-40%;left:50%;width:600px;height:400px;transform:translateX(-50%);background:radial-gradient(circle,rgba(47,99,224,.08),transparent 70%);pointer-events:none;filter:blur(20px);}
 .cta-box h2{font-family:var(--font-display);font-size:clamp(28px,3vw,42px);font-weight:800;margin-bottom:14px;letter-spacing:-.03em;}
 .cta-box p{color:var(--text-secondary);font-size:15px;margin-bottom:36px;}
 .cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;}
 
 /* ── FOOTER ── */
-.landing-footer{width:100%;padding:36px 52px;border-top:1px solid rgba(0,255,163,.08);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.landing-footer{width:100%;padding:36px 52px;border-top:1px solid rgba(47,99,224,.08);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
 .footer-copy{font-size:13px;color:var(--text-muted);font-family:var(--font-mono);}
 .footer-links{display:flex;gap:24px;}
 .footer-link{font-size:13px;color:var(--text-muted);text-decoration:none;transition:color .2s;}
@@ -447,19 +558,19 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
 
 /* ── AUTH PAGE ── */
 .auth-container{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;position:relative;overflow:hidden;}
-.auth-container::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 30% 40%,rgba(0,255,163,.06),transparent 60%),radial-gradient(ellipse 50% 50% at 70% 60%,rgba(79,124,255,.07),transparent 60%);pointer-events:none;}
-.auth-box{width:100%;max-width:480px;background:rgba(14,14,18,.9);border:1px solid rgba(0,255,163,.12);border-radius:var(--radius-xl);padding:40px;backdrop-filter:blur(24px);position:relative;box-shadow:0 32px 80px -24px rgba(0,0,0,.8);}
+.auth-container::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 30% 40%,rgba(47,99,224,.06),transparent 60%),radial-gradient(ellipse 50% 50% at 70% 60%,rgba(79,124,255,.07),transparent 60%);pointer-events:none;}
+.auth-box{width:100%;max-width:480px;background:rgba(14,14,18,.9);border:1px solid rgba(47,99,224,.12);border-radius:var(--radius-xl);padding:40px;backdrop-filter:blur(24px);position:relative;box-shadow:0 32px 80px -24px rgba(0,0,0,.8);}
 .auth-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--aurora-green),var(--aurora-teal),transparent);border-radius:var(--radius-xl) var(--radius-xl) 0 0;}
 .auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px;font-family:var(--font-display);font-weight:700;font-size:17px;}
 .auth-title{font-family:var(--font-display);font-size:22px;font-weight:800;margin-bottom:6px;letter-spacing:-.02em;}
 .auth-subtitle{font-size:13px;color:var(--text-muted);margin-bottom:24px;}
 .auth-tabs{display:flex;gap:4px;background:var(--bg0);border:1px solid var(--border);border-radius:var(--radius);padding:4px;margin-bottom:24px;}
 .auth-tab{flex:1;padding:8px;text-align:center;font-size:13px;font-weight:500;cursor:pointer;border-radius:6px;transition:all .2s;background:transparent;border:none;color:var(--text-muted);font-family:var(--font-body);}
-.auth-tab.active{background:linear-gradient(135deg,rgba(0,255,163,.15),rgba(79,124,255,.1));color:var(--aurora-green);border:1px solid rgba(0,255,163,.2);}
+.auth-tab.active{background:linear-gradient(135deg,rgba(47,99,224,.15),rgba(79,124,255,.1));color:var(--aurora-green);border:1px solid rgba(47,99,224,.2);}
 .form-group{margin-bottom:16px;}
 .form-label{display:block;font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:7px;font-family:var(--font-mono);letter-spacing:.04em;text-transform:uppercase;}
 .form-input{width:100%;padding:11px 14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--font-body);font-size:14px;outline:none;transition:all .25s;}
-.form-input:focus{border-color:rgba(0,255,163,.4);background:rgba(0,255,163,.04);box-shadow:0 0 0 3px rgba(0,255,163,.07);}
+.form-input:focus{border-color:rgba(47,99,224,.4);background:rgba(47,99,224,.04);box-shadow:0 0 0 3px rgba(47,99,224,.07);}
 .form-input-mono{font-family:var(--font-mono);}
 /* Fix select native dropdown illisible en thème sombre */
 select.form-input{color-scheme:dark;background-color:#111;}
@@ -468,20 +579,20 @@ select.form-input{color-scheme:dark;background-color:#111;}
 .form-hint{font-size:11px;color:var(--text-muted);margin-top:5px;}
 .step-indicator{display:flex;gap:8px;align-items:center;justify-content:center;margin-bottom:28px;}
 .step-dot{width:8px;height:8px;border-radius:50%;background:var(--border-light);transition:all .3s;}
-.step-dot.active{background:var(--aurora-green);box-shadow:0 0 10px rgba(0,255,163,.5);width:24px;border-radius:4px;}
-.step-dot.done{background:rgba(0,255,163,.4);}
+.step-dot.active{background:var(--aurora-green);box-shadow:0 0 10px rgba(47,99,224,.5);width:24px;border-radius:4px;}
+.step-dot.done{background:rgba(47,99,224,.4);}
 .onboarding-step{display:none;}
 .onboarding-step.active{display:block;}
 .step-title{font-family:var(--font-display);font-size:17px;font-weight:700;margin-bottom:18px;}
 .specialty-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
 .specialty-item{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg2);cursor:pointer;transition:all .2s;font-size:13px;color:var(--text-secondary);}
-.specialty-item:hover{border-color:rgba(0,255,163,.3);background:rgba(0,255,163,.05);color:var(--text);}
-.specialty-item.selected{border-color:rgba(0,255,163,.5);background:rgba(0,255,163,.08);color:var(--aurora-green);}
+.specialty-item:hover{border-color:rgba(47,99,224,.3);background:rgba(47,99,224,.05);color:var(--text);}
+.specialty-item.selected{border-color:rgba(47,99,224,.5);background:rgba(47,99,224,.08);color:var(--aurora-green);}
 .specialty-icon{font-size:16px;flex-shrink:0;}
 .tags-grid{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px;max-height:160px;overflow-y:auto;}
 .tag-item{padding:5px 12px;border-radius:100px;border:1px solid var(--border);background:var(--bg2);font-size:12px;font-family:var(--font-mono);cursor:pointer;transition:all .2s;color:var(--text-secondary);}
-.tag-item:hover{border-color:rgba(0,255,163,.3);color:var(--text);}
-.tag-item.selected{border-color:rgba(0,255,163,.5);background:rgba(0,255,163,.1);color:var(--aurora-green);}
+.tag-item:hover{border-color:rgba(47,99,224,.3);color:var(--text);}
+.tag-item.selected{border-color:rgba(47,99,224,.5);background:rgba(47,99,224,.1);color:var(--aurora-green);}
 .step-nav{display:flex;gap:10px;margin-top:24px;}
 .step-nav .btn{flex:1;justify-content:center;}
 .auth-divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--text-muted);font-size:12px;}
@@ -494,19 +605,19 @@ select.form-input{color-scheme:dark;background-color:#111;}
 /* ── NOUVELLES SECTIONS LANDING ── */
 .timeline-section{width:100%;max-width:1200px;margin:0 auto;padding:110px 48px;}
 .timeline-track{position:relative;display:flex;gap:0;margin-top:64px;overflow:hidden;}
-.timeline-track::before{content:'';position:absolute;top:52px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,163,.2),rgba(79,124,255,.2),rgba(139,92,246,.2),transparent);}
+.timeline-track::before{content:'';position:absolute;top:52px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(47,99,224,.2),rgba(79,124,255,.2),rgba(139,92,246,.2),transparent);}
 .timeline-step{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;padding:0 12px;}
-.timeline-icon-wrap{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:20px;position:relative;flex-shrink:0;font-size:26px;border:2px solid var(--step-color,rgba(0,255,163,.3));background:rgba(0,0,0,.5);box-shadow:0 0 24px -8px var(--step-color,rgba(0,255,163,.4));transition:all .4s;}
-.timeline-icon-wrap::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px solid var(--step-color,rgba(0,255,163,.15));animation:glowPulse 3s ease-in-out infinite;}
-.timeline-step:hover .timeline-icon-wrap{transform:translateY(-8px) scale(1.1);box-shadow:0 16px 40px -12px var(--step-color,rgba(0,255,163,.5));}
+.timeline-icon-wrap{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:20px;position:relative;flex-shrink:0;font-size:26px;border:2px solid var(--step-color,rgba(47,99,224,.3));background:rgba(0,0,0,.5);box-shadow:0 0 24px -8px var(--step-color,rgba(47,99,224,.4));transition:all .4s;}
+.timeline-icon-wrap::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px solid var(--step-color,rgba(47,99,224,.15));animation:glowPulse 3s ease-in-out infinite;}
+.timeline-step:hover .timeline-icon-wrap{transform:translateY(-8px) scale(1.1);box-shadow:0 16px 40px -12px var(--step-color,rgba(47,99,224,.5));}
 .timeline-step-label{font-family:var(--font-mono);font-size:10px;color:var(--step-color,var(--aurora-green));letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;}
 .timeline-step-title{font-family:var(--font-display);font-size:15px;font-weight:700;margin-bottom:6px;}
 .timeline-step-desc{font-size:12px;color:var(--text-muted);line-height:1.6;}
 
 .bento-grid{display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:auto;gap:16px;margin-top:64px;}
 .bento-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;position:relative;transition:all .4s var(--ease);}
-.bento-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--bento-color,rgba(0,255,163,.3)),transparent);opacity:0;transition:opacity .4s;}
-.bento-card:hover{border-color:var(--bento-border,rgba(0,255,163,.2));box-shadow:0 20px 60px -20px var(--bento-shadow,rgba(0,255,163,.15));}
+.bento-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--bento-color,rgba(47,99,224,.3)),transparent);opacity:0;transition:opacity .4s;}
+.bento-card:hover{border-color:var(--bento-border,rgba(47,99,224,.2));box-shadow:0 20px 60px -20px var(--bento-shadow,rgba(47,99,224,.15));}
 .bento-card:hover::before{opacity:1;}
 .bento-large{grid-column:span 7;}
 .bento-medium{grid-column:span 5;}
@@ -521,7 +632,7 @@ select.form-input{color-scheme:dark;background-color:#111;}
 .mockup-avatar{width:22px;height:22px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;}
 .mockup-bubble{padding:6px 10px;border-radius:8px;font-size:11px;max-width:80%;line-height:1.5;}
 .mockup-msg.right{flex-direction:row-reverse;}
-.mockup-msg.right .mockup-bubble{background:rgba(0,255,163,.12);border:1px solid rgba(0,255,163,.2);color:var(--aurora-green);}
+.mockup-msg.right .mockup-bubble{background:rgba(47,99,224,.12);border:1px solid rgba(47,99,224,.2);color:var(--aurora-green);}
 .mockup-msg.left .mockup-bubble{background:var(--bg2);border:1px solid var(--border);color:var(--text-secondary);}
 .mockup-code{padding:0;font-family:var(--font-mono);font-size:11px;background:var(--bg0);border-top:1px solid var(--border);}
 .mockup-code-bar{display:flex;gap:6px;padding:8px 14px;align-items:center;border-bottom:1px solid var(--border);}
@@ -535,7 +646,7 @@ select.form-input{color-scheme:dark;background-color:#111;}
 .mockup-security{padding:14px 16px;}
 .mockup-alert{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:var(--radius);margin-bottom:8px;font-size:11px;}
 .mockup-alert.blocked{background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.2);color:rgba(244,63,94,.9);}
-.mockup-alert.ok{background:rgba(0,255,163,.06);border:1px solid rgba(0,255,163,.15);color:rgba(0,255,163,.8);}
+.mockup-alert.ok{background:rgba(47,99,224,.06);border:1px solid rgba(47,99,224,.15);color:rgba(47,99,224,.8);}
 .mockup-alert-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;background:currentColor;}
 
 @media(max-width:900px){
@@ -1084,6 +1195,14 @@ select.form-input{color-scheme:dark;background-color:#111;}
 
 /* Toast */
 .toast-container{position:fixed;bottom:20px;right:20px;z-index:1000;display:flex;flex-direction:column;gap:8px;}
+
+/* Focus mode: hide global chrome, keep only the active module content visible */
+body.focus-mode .topnav .nav-items,
+body.focus-mode .topnav-search,
+body.focus-mode .topnav-right>*:not(#focus-exit-btn){display:none!important;}
+#focus-exit-btn{display:none;position:fixed;top:14px;right:18px;z-index:1001;align-items:center;gap:6px;background:var(--bg1);border:1px solid var(--border-light);border-radius:20px;padding:7px 14px;font-size:12px;color:var(--text-secondary);cursor:pointer;font-family:var(--font-mono);}
+#focus-exit-btn:hover{border-color:var(--accent);color:var(--text);}
+body.focus-mode #focus-exit-btn{display:flex;}
 .toast{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;font-size:13px;color:var(--text);display:flex;align-items:center;gap:10px;animation:slideIn .3s ease;max-width:320px;}
 .toast.success{border-left:3px solid #5a9a6a;}
 .toast.error{border-left:3px solid #9a5a5a;}
@@ -1546,6 +1665,431 @@ select.form-input{color-scheme:dark;background-color:#111;}
 .arch-metric-val{font-family:var(--font-display);font-size:22px;font-weight:700;}
 .arch-metric-label{font-size:11px;color:var(--text-muted);margin-top:2px;}
 
+/* ============================================================
+   BLACK DIAMOND — App Shell Extension (Phase 3 → 3.1)
+   Même langage visuel que landing/auth : obsidienne, platine,
+   glint diamant-bleu froid. Scopé à #page-app. Les couleurs
+   fonctionnelles des modules (Nexus rouge, DevAI vert, etc.)
+   sont conservées telles quelles.
+   v3.1 : contraste fond/surface fortement augmenté (les cards
+   ne devaient plus se fondre dans le canvas), élévation réelle
+   (ombre + liseré haut façon verre), et couverture des éléments
+   oubliés (composer, tabs de module, tags, titres de widget).
+   ============================================================ */
+#page-app{
+  --bg0:#050608;--bg1:#161923;--bg2:#1E222E;--bg3:#282D3C;
+  --border:rgba(255,255,255,.14);--border-light:rgba(255,255,255,.24);--border-bright:rgba(255,255,255,.38);
+  --text:#F4F5F7;--text-secondary:#9CA1AC;--text-muted:#656973;
+  --accent:#F4F5F7;--accent-dim:#656973;
+  --aurora-green:#8FB3FF;--aurora-teal:#7DD9CE;
+  background:
+    radial-gradient(ellipse 50% 35% at 12% 0%, rgba(143,179,255,.07), transparent 60%),
+    radial-gradient(ellipse 40% 30% at 95% 100%, rgba(125,217,206,.05), transparent 55%),
+    linear-gradient(180deg,#07080A 0%,#050506 100%);
+  min-height:100vh;
+}
+
+/* ── Topnav : bandeau obsidienne, glint inférieur, logo intact ── */
+#page-app .topnav{
+  background:rgba(6,7,9,.9);border-bottom:1px solid var(--border);
+  backdrop-filter:blur(20px) saturate(150%);
+  box-shadow:0 1px 0 rgba(255,255,255,.04);
+}
+#page-app .nav-item.active{
+  background:rgba(143,179,255,.1);color:var(--text);
+  box-shadow:inset 0 0 0 1px rgba(143,179,255,.22);
+}
+#page-app .nav-item{position:relative;}
+#page-app .nav-item.active::after{
+  content:'';position:absolute;left:50%;bottom:-13px;width:5px;height:5px;
+  transform:translateX(-50%) rotate(45deg);
+  background:linear-gradient(135deg,var(--aurora-green),var(--aurora-teal));
+}
+#page-app .topnav-search{background:rgba(255,255,255,.04);border:1px solid var(--border);}
+#page-app .nav-avatar{background:linear-gradient(135deg,rgba(143,179,255,.3),rgba(125,217,206,.22));}
+
+/* ── Mixin d'élévation "verre taillé" : réutilisé partout ── */
+#page-app .module-card,
+#page-app .profile-card,
+#page-app .project-card,
+#page-app .snippet-card,
+#page-app .nexus-card,
+#page-app .post-card,
+#page-app .sidebar-widget,
+#page-app .settings-preview-panel,
+#page-app .arch-card,
+#page-app .arch-metric,
+#page-app .preview-profile-card,
+#page-app .profile-widget-card,
+#page-app .premium-status-card,
+#page-app .nexus-threat-card,
+#page-app .nexus-rule-card,
+#page-app .nq-card,
+#page-app .composer,
+#page-app .ranking-table,
+#page-app .nexus-log-table{
+  background:linear-gradient(165deg,var(--bg2) 0%,var(--bg1) 100%);
+  border:1px solid var(--border);
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px));
+  border-radius:0;
+  box-shadow:0 24px 48px -28px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.05);
+  transition:border-color .25s var(--ease),transform .25s var(--ease),box-shadow .25s var(--ease);
+}
+#page-app .arch-metric{clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));}
+#page-app .module-card:hover,#page-app .project-card:hover,#page-app .snippet-card:hover,
+#page-app .nexus-card:hover,#page-app .post-card:hover{
+  border-color:var(--border-bright);transform:translateY(-2px);
+  box-shadow:0 28px 56px -26px rgba(0,0,0,.7),0 0 0 1px rgba(143,179,255,.1),inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+/* ── Modal : bloc taillé, fond obsidienne ── */
+#page-app .modal-overlay{background:rgba(3,3,4,.85);backdrop-filter:blur(12px);}
+#page-app .modal{
+  background:linear-gradient(165deg,var(--bg2),var(--bg1));
+  border:1px solid var(--border-bright);
+  clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,22px 100%,0 calc(100% - 22px));
+  box-shadow:0 32px 90px -24px rgba(0,0,0,.75),0 1px 0 rgba(255,255,255,.06) inset;
+}
+#page-app .profile-dropdown{
+  background:var(--bg2);border:1px solid var(--border-bright);
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+  box-shadow:0 20px 44px -20px rgba(0,0,0,.7);
+}
+
+/* ── Nexus : sidebar bordée d'un glint diamant-bleu ── */
+#page-app .nexus-sidebar{
+  background:linear-gradient(180deg,#08090C,#0F1119);
+  border-right:1px solid var(--border);
+  box-shadow:1px 0 0 rgba(143,179,255,.08);
+}
+#page-app .nexus-nav-item.active,#page-app .nexus-nav-item:hover{
+  background:rgba(143,179,255,.08);color:var(--text);
+}
+#page-app .nexus-sidebar-head{border-bottom:1px solid var(--border);}
+
+/* ── Tables : header façon facette, liseré supérieur ── */
+#page-app .ranking-row.header{
+  background:linear-gradient(90deg,rgba(143,179,255,.07),transparent);
+  border-bottom:1px solid var(--border-bright);
+}
+#page-app .ranking-row:hover{background:rgba(255,255,255,.03);}
+
+/* ── Composer (post) : header délimité + focus glint ── */
+#page-app .composer{padding:18px;}
+#page-app .composer-avatar{background:var(--bg3);}
+#page-app .composer-actions{border-top:1px solid var(--border);}
+#page-app .composer-tool{background:var(--bg3);border:1px solid var(--border);}
+#page-app .composer-tool:hover{border-color:rgba(143,179,255,.4);color:var(--aurora-green);}
+#page-app .composer:focus-within{
+  border-color:rgba(143,179,255,.35);
+  box-shadow:0 24px 48px -28px rgba(0,0,0,.65),0 0 0 1px rgba(143,179,255,.15),inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+/* ── Tags / pills : facette fine + hover diamant ── */
+#page-app .tag-item{background:var(--bg3);border:1px solid var(--border);transition:all .2s;}
+#page-app .tag-item:hover{border-color:rgba(143,179,255,.4);color:var(--aurora-green);background:rgba(143,179,255,.06);}
+
+/* ── Sous-nav de module : onglets pilule + actif en glint diamant ── */
+#page-app .module-subnav{border-bottom:1px solid var(--border);}
+#page-app .module-subnav-tab{background:rgba(255,255,255,.03);}
+#page-app .module-subnav-tab:hover{border-color:var(--border-bright);color:var(--text);}
+#page-app .module-subnav-tab.active{
+  background:linear-gradient(135deg,var(--aurora-green),var(--aurora-teal));
+  color:#050506;border-color:transparent;font-weight:700;
+}
+
+/* ── Titres de widget : puce diamant, cohérente avec la landing ── */
+#page-app .widget-title,#page-app .feed-title{position:relative;}
+#page-app .widget-title::before{
+  content:'';display:inline-block;width:6px;height:6px;margin-right:8px;
+  transform:rotate(45deg);vertical-align:1px;
+  background:linear-gradient(135deg,var(--aurora-green),var(--aurora-teal));
+}
+
+/* ── Sidebar réglages / settings nav : indicateur diamant ── */
+#page-app .settings-nav-item.active,#page-app .settings-nav-item:hover,
+#page-app .dropdown-item:hover{
+  background:rgba(143,179,255,.08);color:var(--text);
+}
+
+/* ── Boutons : sheen platine, coin taillé sur primary ── */
+#page-app .btn-primary{
+  background:linear-gradient(135deg,var(--aurora-green),var(--aurora-teal));
+  color:#050506;
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+}
+#page-app .btn-ghost{border:1px solid var(--border);background:rgba(255,255,255,.03);}
+#page-app .btn-ghost:hover{border-color:var(--border-bright);background:var(--bg3);}
+
+/* ── Section labels & titres : puce diamant cohérente avec la landing ── */
+#page-app .section-label{color:var(--aurora-green);}
+#page-app .section-label::before{background:linear-gradient(135deg,var(--aurora-green),var(--aurora-teal));}
+#page-app .empty-state-icon{color:var(--aurora-green);}
+
+/* ── Scène / greeting : léger halo diamant en fond du header d'accueil ── */
+#page-app .home-greeting{position:relative;}
+#page-app .home-greeting::before{
+  content:'';position:absolute;top:-40%;left:-5%;width:50%;aspect-ratio:1;
+  background:radial-gradient(circle,rgba(143,179,255,.08),transparent 70%);
+  filter:blur(40px);pointer-events:none;z-index:-1;
+}
+
+@media(max-width:700px){
+  #page-app .module-card,#page-app .profile-card,#page-app .project-card,#page-app .snippet-card,
+  #page-app .nexus-card,#page-app .post-card,#page-app .sidebar-widget,#page-app .composer,#page-app .modal{
+    clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+  }
+}
+
+/* ============================================================
+   BLACK DIAMOND — Module Grid: refonte complète (Phase 4)
+   Nouvelle géométrie de card, pas un ajout par-dessus l'ancien
+   design. Icône en relief flottant (translateZ réel), facettes
+   octogonales, glow spéculaire qui suit la souris, tilt 3D.
+   Scopé uniquement à la grille des 8 modules de l'accueil app.
+   ============================================================ */
+#page-app #section-home .modules-grid{gap:20px;}
+
+#page-app #section-home .module-card{
+  background:
+    radial-gradient(circle at var(--mx,30%) var(--my,0%), var(--mod-color-dim,rgba(143,179,255,.14)), transparent 55%),
+    linear-gradient(155deg,#1C202B 0%,#12141C 55%,#0A0C11 100%);
+  border:1px solid rgba(255,255,255,.10);
+  clip-path:polygon(0 0,calc(100% - 28px) 0,100% 28px,100% 100%,28px 100%,0 calc(100% - 28px));
+  border-radius:0;padding:26px 22px 22px;min-height:222px;
+  transform-style:preserve-3d;overflow:visible;
+  transition:box-shadow .35s var(--ease),border-color .35s var(--ease);
+  box-shadow:0 30px 60px -32px rgba(0,0,0,.75),inset 0 1px 0 rgba(255,255,255,.05);
+  will-change:transform;
+}
+#page-app #section-home .module-card::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  clip-path:polygon(0 0,calc(100% - 28px) 0,100% 28px,100% 100%,28px 100%,0 calc(100% - 28px));
+  background:linear-gradient(120deg,rgba(255,255,255,.07),transparent 35%);
+}
+#page-app #section-home .module-card::after{
+  content:'';position:absolute;top:0;right:0;width:28px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--mod-color,rgba(143,179,255,.6)));
+  transform:rotate(45deg) translate(6px,-4px);transform-origin:right;
+}
+#page-app #section-home .module-card:hover{
+  border-color:var(--mod-color,rgba(143,179,255,.45));
+  box-shadow:0 44px 84px -32px var(--mod-color,rgba(143,179,255,.35)),inset 0 1px 0 rgba(255,255,255,.08);
+}
+#page-app #section-home .module-card.soon{border-style:solid;opacity:.82;}
+#page-app #section-home .module-card.soon:hover{opacity:1;}
+
+/* Icône : facette octogonale en relief, flotte devant la card */
+#page-app #section-home .module-top{margin-bottom:20px;align-items:center;}
+#page-app #section-home .module-icon{
+  width:52px;height:52px;font-size:22px;border-radius:0;
+  clip-path:polygon(20% 0,80% 0,100% 20%,100% 80%,80% 100%,20% 100%,0 80%,0 20%);
+  background:linear-gradient(150deg, color-mix(in srgb, var(--mod-color,#8FB3FF) 70%, white 20%) 0%, var(--mod-color,#8FB3FF) 45%, rgba(6,7,10,.9) 130%) !important;
+  transform:translateZ(38px);
+  box-shadow:0 18px 30px -10px var(--mod-color,rgba(143,179,255,.55)),inset 0 1px 1px rgba(255,255,255,.5),inset 0 -3px 6px rgba(0,0,0,.45);
+}
+#page-app #section-home .module-icon::after{display:none;}
+#page-app #section-home .module-card.soon .module-icon{filter:none;opacity:.75;}
+
+/* Badge : petite plaquette qui flotte légèrement au-dessus du plan */
+#page-app #section-home .module-badge{
+  transform:translateZ(20px);
+  background:rgba(5,6,8,.55);backdrop-filter:blur(6px);
+  border-radius:0;clip-path:polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px));
+}
+
+#page-app #section-home .module-name{
+  transform:translateZ(14px);font-size:17px;letter-spacing:-.01em;
+}
+#page-app #section-home .module-desc{transform:translateZ(6px);}
+#page-app #section-home .module-meta{
+  border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:7px;
+}
+#page-app #section-home .module-meta::before{
+  content:'';width:5px;height:5px;flex-shrink:0;transform:rotate(45deg);
+  background:var(--mod-color,var(--aurora-green));
+}
+
+/* ============================================================
+   BLACK DIAMOND — Feed home : podium, events, composer (Phase 5)
+   Remplace les listes plates par une vraie hiérarchie visuelle.
+   ============================================================ */
+
+/* ── Classement : podium top 3, pas une liste ── */
+#page-app .lb-podium{display:flex;align-items:flex-end;gap:6px;margin-bottom:14px;}
+#page-app .lb-podium-item{flex:1;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:transform .2s var(--ease);}
+#page-app .lb-podium-item:hover{transform:translateY(-3px);}
+#page-app .lb-podium-item.rank-1{order:2;}
+#page-app .lb-podium-item.rank-2{order:1;}
+#page-app .lb-podium-item.rank-3{order:3;}
+#page-app .lb-podium-avatar{
+  width:44px;height:44px;border-radius:50%;margin-bottom:7px;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-mono);font-size:13px;color:var(--text);background:var(--bg3);
+}
+#page-app .lb-podium-item.rank-1 .lb-podium-avatar{
+  width:58px;height:58px;font-size:16px;
+  box-shadow:0 0 0 3px var(--bg2),0 0 0 5px #C9D6F5,0 10px 24px -8px rgba(201,214,245,.5);
+}
+#page-app .lb-podium-item.rank-2 .lb-podium-avatar{
+  box-shadow:0 0 0 3px var(--bg2),0 0 0 5px #8FB3FF,0 8px 18px -8px rgba(143,179,255,.45);
+}
+#page-app .lb-podium-item.rank-3 .lb-podium-avatar{
+  box-shadow:0 0 0 3px var(--bg2),0 0 0 5px #E3A76F,0 8px 18px -8px rgba(227,167,111,.4);
+}
+#page-app .lb-podium-name{font-size:11px;font-weight:600;max-width:70px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#page-app .lb-podium-xp{font-size:9px;font-family:var(--font-mono);color:var(--aurora-green);margin-bottom:8px;}
+#page-app .lb-podium-step{
+  width:100%;display:flex;align-items:flex-start;justify-content:center;padding-top:5px;
+  font-family:var(--font-display);font-weight:800;
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%);
+}
+#page-app .lb-podium-item.rank-1 .lb-podium-step{
+  height:54px;font-size:20px;color:#F4F5F7;
+  background:linear-gradient(160deg,rgba(244,245,247,.16),rgba(244,245,247,.03));
+}
+#page-app .lb-podium-item.rank-2 .lb-podium-step{
+  height:40px;font-size:16px;color:#8FB3FF;
+  background:linear-gradient(160deg,rgba(143,179,255,.16),rgba(143,179,255,.03));
+}
+#page-app .lb-podium-item.rank-3 .lb-podium-step{
+  height:28px;font-size:16px;color:#E3A76F;
+  background:linear-gradient(160deg,rgba(227,167,111,.16),rgba(227,167,111,.03));
+}
+#page-app #sidebar-leaderboard .leaderboard-item{padding:7px 0;}
+
+/* ── Events : badge date taillé, plus une liste de texte ── */
+#page-app .event-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:transform .2s var(--ease);}
+#page-app .event-row:last-child{border-bottom:none;}
+#page-app .event-row:hover{transform:translateX(3px);}
+#page-app .event-date{
+  width:42px;height:42px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(160deg,rgba(143,179,255,.18),rgba(125,217,206,.07));
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+}
+#page-app .event-day{font-family:var(--font-display);font-size:16px;font-weight:800;color:#F4F5F7;line-height:1;}
+#page-app .event-month{font-family:var(--font-mono);font-size:8px;letter-spacing:.08em;color:var(--aurora-green);text-transform:uppercase;}
+#page-app .event-name{font-size:13px;font-weight:600;margin-bottom:2px;}
+#page-app .event-meta{font-size:11px;color:var(--text-muted);font-family:var(--font-mono);}
+
+/* ── Composer : plus une simple boîte, un vrai module de saisie ── */
+#page-app .composer{position:relative;}
+#page-app .composer-avatar{width:42px;height:42px;font-size:14px;}
+#page-app .composer-input::placeholder{color:var(--text-muted);}
+
+/* ============================================================
+   BLACK DIAMOND — Module Messages (Phase 6)
+   Sidebar canaux/DM, header de salon, bulles de message,
+   barre de saisie. Premier module applicatif entièrement repris.
+   ============================================================ */
+#page-app .messages-layout{background:var(--bg0);}
+#page-app .messages-layout > div:first-child{
+  background:linear-gradient(180deg,#08090C,#0C0E14);
+  border-right:1px solid var(--border);
+}
+#page-app .section-label-sidebar{position:relative;padding-left:18px;}
+#page-app .section-label-sidebar::before{
+  content:'';position:absolute;left:8px;top:50%;width:5px;height:5px;
+  transform:translateY(-50%) rotate(45deg);
+  background:linear-gradient(135deg,var(--aurora-green),var(--aurora-teal));
+}
+#page-app .channel-item,#page-app .dm-item{
+  position:relative;border-radius:0;
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%);
+}
+#page-app .channel-item:hover,#page-app .dm-item:hover{background:rgba(143,179,255,.06);}
+#page-app .channel-item.active,#page-app .dm-item.active{
+  background:linear-gradient(90deg,rgba(143,179,255,.12),rgba(143,179,255,.02));
+  color:var(--text);font-weight:600;
+}
+#page-app .channel-item.active::before,#page-app .dm-item.active::before{
+  content:'';position:absolute;left:0;top:3px;bottom:3px;width:2px;
+  background:linear-gradient(180deg,var(--aurora-green),var(--aurora-teal));
+}
+
+/* Chat header : liseré diamant, # accentué */
+#page-app .chat-header{
+  background:linear-gradient(180deg,#0E1017,#0A0C11);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 1px 0 rgba(143,179,255,.05);
+}
+#page-app .chat-header-name{display:flex;align-items:center;gap:6px;}
+
+/* Messages : accent au survol, avatar cerclé */
+#page-app .chat-msg{position:relative;padding:6px 10px;margin:1px 0;}
+#page-app .chat-msg:hover{background:rgba(255,255,255,.025);}
+#page-app .chat-msg-avatar{box-shadow:0 0 0 2px var(--bg0),0 0 0 3px rgba(143,179,255,.25);}
+#page-app .chat-msg-content code{background:var(--bg2);}
+
+/* Barre de saisie : coin taillé, glow au focus */
+#page-app .chat-input-area{
+  background:linear-gradient(0deg,#0A0C11,#0E1017);
+  border-top:1px solid var(--border);
+}
+#page-app .chat-input-box{
+  background:var(--bg1);border:1px solid var(--border);
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+  border-radius:0;
+}
+#page-app .chat-input-box:focus-within{
+  border-color:rgba(143,179,255,.4);
+  box-shadow:0 0 0 3px rgba(143,179,255,.08),0 12px 28px -14px rgba(143,179,255,.3);
+}
+
+/* ============================================================
+   MISE À JOUR — bordures arrondies + glow doux
+   Remplace les coins taillés façon diamant par des coins ronds
+   avec une lueur douce (halo bleu/teal), sur toute l'app.
+   ============================================================ */
+:root{--radius:12px;--radius-lg:22px;--radius-xl:32px;}
+
+/* Neutralise tous les coins facettés/taillés (clip-path diamant) */
+#page-landing .module-card,#page-landing .bento-card,#page-landing .feature-card,#page-landing .ref-card,
+#page-landing .cta-box,
+#page-app .preview-profile-card,#page-app .profile-widget-card,#page-app .premium-status-card,
+#page-app .nexus-threat-card,#page-app .nexus-rule-card,#page-app .nq-card,#page-app .composer,
+#page-app .ranking-table,#page-app .nexus-log-table,#page-app .arch-metric,#page-app .modal,
+#page-app .profile-dropdown,#page-app #section-home .module-card,#page-app #section-home .module-icon,
+#page-app #section-home .module-badge,#page-app .event-date,#page-app .channel-item,#page-app .dm-item,
+#page-app .lb-podium-step,#page-app .chat-input-box,#page-app .btn-primary,#page-app .profile-card,
+#page-app .project-card,#page-app .snippet-card,#page-app .nexus-card,#page-app .post-card,
+#page-app .sidebar-widget{
+  clip-path:none !important;
+}
+
+/* Grandes surfaces : cards, modales, tableaux, CTA — coins ronds + halo doux */
+#page-landing .module-card,#page-landing .bento-card,#page-landing .feature-card,#page-landing .ref-card,
+#page-landing .cta-box,
+#page-app .preview-profile-card,#page-app .profile-widget-card,#page-app .premium-status-card,
+#page-app .nexus-threat-card,#page-app .nexus-rule-card,#page-app .nq-card,#page-app .composer,
+#page-app .ranking-table,#page-app .nexus-log-table,#page-app .modal,#page-app .profile-dropdown,
+#page-app #section-home .module-card,#page-app .profile-card,#page-app .project-card,
+#page-app .snippet-card,#page-app .nexus-card,#page-app .post-card,#page-app .sidebar-widget,
+.module-card,.feature-card,.ref-card,.auth-box{
+  border-radius:var(--radius-lg) !important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.02),0 0 34px -12px rgba(143,179,255,.35),inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+/* Petites surfaces : badges, dates, boutons, champs, tags, onglets — coins ronds + halo léger */
+#page-app #section-home .module-icon,#page-app #section-home .module-badge,#page-app .event-date,
+#page-app .channel-item,#page-app .dm-item,#page-app .lb-podium-step,#page-app .chat-input-box,
+#page-app .btn-primary,.btn,.btn-ghost,.btn-danger,.form-input,.tag-item,.specialty-item,
+.auth-tab,.auth-tabs,.module-badge,.hero-eyebrow,#page-landing .section-label,.chip{
+  border-radius:var(--radius) !important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.02),0 0 16px -6px rgba(125,217,206,.3);
+}
+.form-input:focus,.tag-item.selected,.specialty-item.selected,.auth-tab.active{
+  box-shadow:0 0 0 3px rgba(143,179,255,.1),0 0 22px -4px rgba(143,179,255,.45);
+}
+.btn-primary{box-shadow:0 0 0 1px rgba(255,255,255,.04),0 0 24px -6px rgba(0,255,163,.4);}
+.module-card:hover,.ref-card:hover,.feature-card:hover,#page-app .nexus-card:hover,#page-app .post-card:hover,
+#page-app #section-home .module-card:hover{
+  box-shadow:0 0 0 1px rgba(255,255,255,.05),0 0 48px -10px rgba(143,179,255,.5) !important;
+}
+
+/* ── Nouveau fond : constellation de particules ── */
+#app-particles{position:fixed;inset:0;z-index:0;pointer-events:none;width:100vw;height:100vh;opacity:.55;}
+@media(prefers-reduced-motion:reduce){#app-particles{display:none;}}
 </style>
 </head>
 <body>
@@ -1558,6 +2102,7 @@ select.form-input{color-scheme:dark;background-color:#111;}
   <div class="app-orb app-orb-3"></div>
   <div class="app-orb app-orb-4"></div>
 </div>
+<canvas id="app-particles" aria-hidden="true"></canvas>
 <div id="app-noise" aria-hidden="true"></div>
 <div id="app-vignette" aria-hidden="true"></div>
 
@@ -1621,34 +2166,44 @@ select.form-input{color-scheme:dark;background-color:#111;}
     <div class="aurora-orb-3"></div>
     <div class="aurora-grid"></div>
     <div class="hero-noise"></div>
+    <div class="gem-ambient gem-1"></div>
+    <div class="gem-ambient gem-2"></div>
+    <div class="gem-ambient gem-3"></div>
+    <div class="gem-ambient gem-4"></div>
 
     <div class="hero-content">
-      <div class="hero-eyebrow">
-        <span class="dot"></span>
-        Plateforme communautaire pour développeurs
-      </div>
-      <h1 class="hero-title">
-        <span class="w-aurora">Code.</span><br>
-        <span class="w-thin">Connecte.</span><br>
-        <span class="w-aurora">Construis.</span>
-      </h1>
-      <p class="hero-subtitle">L'écosystème tout-en-un pour les développeurs — IA, cybersécurité, déploiement, collaboration et bien plus, dans un seul espace.</p>
-      <div class="hero-cta">
-        <button class="btn btn-primary btn-lg" onclick="showAuth('register')">Rejoindre la communauté</button>
-        <button class="btn btn-ghost btn-lg" onclick="smoothScroll('modules')">Découvrir les modules ↓</button>
-      </div>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="hero-eyebrow">
+            <span class="dot"></span>
+            Plateforme communautaire pour développeurs
+          </div>
+          <h1 class="hero-title">
+            <span class="w-aurora">Code.</span><br>
+            <span class="w-thin">Connecte.</span><br>
+            <span class="w-aurora">Construis.</span>
+          </h1>
+          <p class="hero-subtitle">L'écosystème tout-en-un pour les développeurs — IA, cybersécurité, déploiement, collaboration et bien plus, dans un seul espace.</p>
+          <div class="hero-cta">
+            <button class="btn btn-primary btn-lg" onclick="showAuth('register')">Rejoindre la communauté</button>
+            <button class="btn btn-ghost btn-lg" onclick="smoothScroll('modules')">Découvrir les modules ↓</button>
+          </div>
+        </div>
 
-      <!-- Cube 3D aurora -->
-      <div class="scene">
-        <div class="scene-glow"></div>
-        <div class="scene-floor"></div>
-        <div class="aurora-cube">
-          <div class="face face-front"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="1.6"/><path d="M2 17l10 5 10-5" stroke="currentColor" stroke-width="1.6"/><path d="M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.6"/></svg></div>
-          <div class="face face-back"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4v5c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V7l8-4z" stroke="currentColor" stroke-width="1.6"/></svg></div>
-          <div class="face face-right"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 20h8M12 18v2" stroke="currentColor" stroke-width="1.6"/></svg></div>
-          <div class="face face-left"><svg viewBox="0 0 24 24" fill="none"><circle cx="8" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M9 9c1-3 5-3 6 0" stroke="currentColor" stroke-width="1.6"/></svg></div>
-          <div class="face face-top"><svg viewBox="0 0 24 24" fill="none"><polyline points="16 18 22 12 16 6" stroke="currentColor" stroke-width="1.6"/><polyline points="8 6 2 12 8 18" stroke="currentColor" stroke-width="1.6"/></svg></div>
-          <div class="face face-bottom"><svg viewBox="0 0 24 24" fill="none"><path d="M3 17l5-5 4 4 9-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+        <!-- Cube 3D diamant -->
+        <div class="hero-visual">
+          <div class="scene">
+            <div class="scene-glow"></div>
+            <div class="scene-floor"></div>
+            <div class="aurora-cube">
+              <div class="face face-front"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="1.6"/><path d="M2 17l10 5 10-5" stroke="currentColor" stroke-width="1.6"/><path d="M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.6"/></svg></div>
+              <div class="face face-back"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4v5c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V7l8-4z" stroke="currentColor" stroke-width="1.6"/></svg></div>
+              <div class="face face-right"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 20h8M12 18v2" stroke="currentColor" stroke-width="1.6"/></svg></div>
+              <div class="face face-left"><svg viewBox="0 0 24 24" fill="none"><circle cx="8" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M9 9c1-3 5-3 6 0" stroke="currentColor" stroke-width="1.6"/></svg></div>
+              <div class="face face-top"><svg viewBox="0 0 24 24" fill="none"><polyline points="16 18 22 12 16 6" stroke="currentColor" stroke-width="1.6"/><polyline points="8 6 2 12 8 18" stroke="currentColor" stroke-width="1.6"/></svg></div>
+              <div class="face face-bottom"><svg viewBox="0 0 24 24" fill="none"><path d="M3 17l5-5 4 4 9-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1949,6 +2504,55 @@ select.form-input{color-scheme:dark;background-color:#111;}
   </footer>
 </div>
 
+<script>
+/* Diamond redesign — subtle 3D tilt on landing surfaces (non-invasive, additive only) */
+(function(){
+  function initTilt(){
+    var els = document.querySelectorAll('#page-landing .module-card, #page-landing .bento-card, #page-landing .ref-card, #page-landing .feature-card');
+    els.forEach(function(el){
+      el.addEventListener('mousemove', function(e){
+        var r = el.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5;
+        var py = (e.clientY - r.top) / r.height - 0.5;
+        el.style.transform = 'perspective(900px) rotateX(' + (py * -6) + 'deg) rotateY(' + (px * 8) + 'deg) translateY(-4px)';
+      });
+      el.addEventListener('mouseleave', function(){ el.style.transform = ''; });
+    });
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initTilt);
+  } else {
+    initTilt();
+  }
+})();
+
+/* Black Diamond — grille modules app : tilt 3D + reflet spéculaire */
+(function(){
+  function initAppModuleTilt(){
+    var els = document.querySelectorAll('#page-app #section-home .module-card');
+    els.forEach(function(el){
+      el.addEventListener('mousemove', function(e){
+        var r = el.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5;
+        var py = (e.clientY - r.top) / r.height - 0.5;
+        el.style.transform = 'perspective(1200px) rotateX(' + (py * -7) + 'deg) rotateY(' + (px * 9) + 'deg) translateY(-6px)';
+        el.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+        el.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+      });
+      el.addEventListener('mouseleave', function(){
+        el.style.transform = '';
+        el.style.setProperty('--mx', '30%');
+        el.style.setProperty('--my', '0%');
+      });
+    });
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initAppModuleTilt);
+  } else {
+    initAppModuleTilt();
+  }
+})();
+</script>
 
 <!-- AUTH PAGE -->
 <div id="page-auth" class="page">
@@ -1989,6 +2593,11 @@ select.form-input{color-scheme:dark;background-color:#111;}
           <div class="form-group"><label class="form-label">Pseudo</label><input type="text" id="reg-username" class="form-input form-input-mono" placeholder="ton_pseudo"></div>
           <div class="form-group"><label class="form-label">Email</label><input type="email" id="reg-email" class="form-input" placeholder="toi@example.com"></div>
           <div class="form-group"><label class="form-label">Mot de passe</label><input type="password" id="reg-password" class="form-input" placeholder="8 caractères minimum"></div>
+          <!-- NEXUS — honeypot anti-bot : invisible pour un humain, irrésistible pour un auto-fill -->
+          <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;overflow:hidden" aria-hidden="true">
+            <label for="reg-website">Site web (laisser vide)</label>
+            <input type="text" id="reg-website" name="website" tabindex="-1" autocomplete="off">
+          </div>
           <div id="reg-error-0" class="form-error"></div>
           <button class="btn btn-primary w-full" style="margin-top:16px;justify-content:center" onclick="nextStep(1)">Continuer →</button>
         </div>
@@ -2050,6 +2659,8 @@ select.form-input{color-scheme:dark;background-color:#111;}
     </div>
     <div class="topnav-right">
       <div class="topnav-search" onclick="openSearch()"><span>⌕</span><span style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono)">Rechercher...</span><span class="search-kbd">/</span></div>
+      <div class="topnav-search" onclick="openCmdk()" title="Palette de commandes"><span>⌘</span><span style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono)">Commandes...</span><span class="search-kbd">⌘K</span></div>
+      <button class="notif-btn" title="Mode focus" onclick="toggleFocusMode()">◎</button>
       <div style="position:relative">
         <button class="notif-btn" title="Notifications" onclick="toggleNotifDropdown()">🔔<div class="notif-badge" id="notif-badge" style="display:none"></div></button>
         <div class="profile-dropdown" id="notif-dropdown" style="width:300px;max-height:380px;overflow-y:auto;padding:6px">
@@ -2082,6 +2693,8 @@ select.form-input{color-scheme:dark;background-color:#111;}
         </div>
         <div class="home-greeting-stats" id="home-greeting-stats"></div>
       </div>
+      <div id="home-resume-widget" style="display:none"></div>
+      <div id="home-daily-summary" style="display:none"></div>
       <div class="modules-grid">
         <div class="module-card soon reveal-up" style="--mod-color:rgba(0,255,163,.5);--mod-color-dim:rgba(0,255,163,.2)" onclick="showToast('DevAI arrive bientôt comme extension indépendante 👀','info')">
           <div class="module-top">
@@ -2200,8 +2813,8 @@ select.form-input{color-scheme:dark;background-color:#111;}
           </div>
           <div class="sidebar-widget">
             <div class="widget-title">◷ Events à venir</div>
-            <div style="font-size:13px;padding:8px 0;border-bottom:1px solid var(--border)"><div style="font-weight:500;margin-bottom:3px">Hackathon IA #3</div><div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">28 janv. · En ligne</div></div>
-            <div style="font-size:13px;padding:8px 0"><div style="font-weight:500;margin-bottom:3px">CTF Cybersec Night</div><div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">3 fév. · En ligne</div></div>
+            <div class="event-row"><div class="event-date"><span class="event-day">28</span><span class="event-month">janv</span></div><div class="event-info"><div class="event-name">Hackathon IA #3</div><div class="event-meta">En ligne</div></div></div>
+            <div class="event-row"><div class="event-date"><span class="event-day">3</span><span class="event-month">fév</span></div><div class="event-info"><div class="event-name">CTF Cybersec Night</div><div class="event-meta">En ligne</div></div></div>
           </div>
           <div class="sidebar-widget">
             <div class="widget-title">⌨ Compétences populaires</div>
@@ -2429,6 +3042,10 @@ select.form-input{color-scheme:dark;background-color:#111;}
 
       <div class="docs-pane" id="docs-pane-saved">
         <div style="max-width:1100px;margin:0 auto;padding:0 24px 40px">
+          <div style="display:flex;gap:6px;margin-bottom:14px">
+            <button class="filter-chip active" data-docs-filter="all" onclick="setDocsFilter(this,'all')">Toutes</button>
+            <button class="filter-chip" data-docs-filter="bookmarked" onclick="setDocsFilter(this,'bookmarked')">★ Marque-pages</button>
+          </div>
           <div id="docs-saved-list"><div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement...</div></div>
         </div>
       </div>
@@ -2447,6 +3064,10 @@ select.form-input{color-scheme:dark;background-color:#111;}
           <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
             <div class="widget-title" style="margin-bottom:10px">Ta progression</div>
             <div id="learn-progress"><div style="font-size:12px;color:var(--text-muted)">Connecte-toi pour voir ta progression.</div></div>
+          </div>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+            <div class="widget-title" style="margin-bottom:10px">Badges par parcours</div>
+            <div id="learn-badges" class="badge-grid"><div style="font-size:12px;color:var(--text-muted)">Connecte-toi pour voir tes badges.</div></div>
           </div>
         </div>
         <div>
@@ -2486,9 +3107,17 @@ select.form-input{color-scheme:dark;background-color:#111;}
             <div class="insight-kpi"><div class="insight-kpi-val" id="insight-kpi-projects">—</div><div class="insight-kpi-label">Projets actifs</div></div>
             <div class="insight-kpi"><div class="insight-kpi-val" id="insight-kpi-streak">—</div><div class="insight-kpi-label">Jours d'activité (30j)</div></div>
           </div>
+          <div class="insight-chart-card" id="insight-weekly-challenge-card" style="display:none;border-color:rgba(232,169,74,.3)">
+            <div class="insight-chart-title">🔥 Défi de la semaine <span style="color:#e8a94a">+50% XP</span></div>
+            <div id="insight-weekly-challenge-body" style="font-size:13px;color:var(--text-secondary)"></div>
+          </div>
           <div class="insight-chart-card">
             <div class="insight-chart-title">Activité — 14 derniers jours</div>
             <div class="insight-chart-bars" id="insight-activity-chart"><div class="insight-empty">Chargement...</div></div>
+          </div>
+          <div class="insight-chart-card">
+            <div class="insight-chart-title">Évolution de ton classement — 30 derniers jours</div>
+            <div id="insight-rank-chart"><div class="insight-empty">Chargement...</div></div>
           </div>
           <div class="insight-chart-card">
             <div class="insight-chart-title">Langages les plus utilisés</div>
@@ -2499,10 +3128,11 @@ select.form-input{color-scheme:dark;background-color:#111;}
         <div class="insight-pane" id="insight-pane-ranking">
           <div class="ranking-header">
             <div class="feed-title">Classement</div>
-            <div style="display:flex;gap:6px">
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
               <button class="filter-chip active" onclick="setRankingPeriod(this,'week')">Cette semaine</button>
               <button class="filter-chip" onclick="setRankingPeriod(this,'month')">Ce mois</button>
               <button class="filter-chip" onclick="setRankingPeriod(this,'global')">Global</button>
+              <button class="filter-chip" id="ranking-spec-toggle" onclick="toggleRankingSpecFilter(this)">Ma spécialité uniquement</button>
             </div>
           </div>
           <div class="ranking-table">
@@ -2523,6 +3153,7 @@ select.form-input{color-scheme:dark;background-color:#111;}
         <div class="deploy-tabs">
           <span class="deploy-tab active" data-deploy-tab="deployments" onclick="switchDeployTab(this,'deployments')">Déploiements</span>
           <span class="deploy-tab" data-deploy-tab="recruit" onclick="switchDeployTab(this,'recruit')">Recrutement</span>
+          <span class="deploy-tab" data-deploy-tab="applications" onclick="switchDeployTab(this,'applications')">Candidatures</span>
         </div>
       </div>
 
@@ -2576,8 +3207,36 @@ select.form-input{color-scheme:dark;background-color:#111;}
             <div style="font-size:13px;padding:8px 0;display:flex;justify-content:space-between"><span><span class="premium-badge devconnectplus">DevConnect+</span></span><span class="font-mono">6%</span></div>
           </div>
           <div class="sidebar-widget"><div class="widget-title">⌘ Mes transactions</div><div style="font-size:13px;color:var(--text-secondary)">Aucune transaction pour l'instant.</div></div>
+          <div class="sidebar-widget">
+            <div class="widget-title">🔔 Alertes offres</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px">Sois notifié dès qu'une offre correspond à ton profil.</div>
+            <div class="form-group" style="margin-bottom:8px"><label class="form-label" style="font-size:11px">Mots-clés / stack</label><input type="text" class="form-input" id="alert-keywords" placeholder="React, Node.js, remote" style="font-size:12px"></div>
+            <div class="form-group" style="margin-bottom:8px"><label class="form-label" style="font-size:11px">Budget minimum (€)</label><input type="number" class="form-input" id="alert-min-budget" placeholder="1500" style="font-size:12px"></div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              <button class="toggle" id="alert-active-toggle" onclick="this.classList.toggle('on')"></button>
+              <span style="font-size:12px;color:var(--text-secondary)">Alertes actives</span>
+            </div>
+            <button class="btn btn-primary btn-sm w-full" onclick="saveJobAlertPrefs()">Enregistrer mes alertes</button>
+          </div>
         </div>
       </div>
+      </div>
+
+      <div class="deploy-pane" id="deploy-pane-applications">
+        <div style="max-width:1100px;margin:0 auto;padding:0 24px 40px">
+          <div class="feed-title">Mes candidatures</div>
+          <div style="font-size:12px;color:var(--text-muted);margin:4px 0 16px">Le statut avance quand le recruteur fait progresser ta candidature.</div>
+          <div class="kanban-board" id="my-applications-kanban">
+            <div class="kanban-col" data-stage="sent"><div class="kanban-col-title"><span>Envoyé</span><span id="my-app-count-sent">0</span></div><div id="my-app-list-sent"></div></div>
+            <div class="kanban-col" data-stage="interview"><div class="kanban-col-title"><span>Entretien</span><span id="my-app-count-interview">0</span></div><div id="my-app-list-interview"></div></div>
+            <div class="kanban-col" data-stage="offer"><div class="kanban-col-title"><span>Offre</span><span id="my-app-count-offer">0</span></div><div id="my-app-list-offer"></div></div>
+          </div>
+          <div class="feed-title" style="margin-top:36px">Candidatures reçues sur mes offres</div>
+          <div style="font-size:12px;color:var(--text-muted);margin:4px 0 16px">Fais avancer un candidat dans le pipeline.</div>
+          <div id="received-applications-list">
+            <div class="empty-state"><div class="empty-state-icon">📥</div><div class="empty-state-text">Aucune candidature reçue.</div></div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -3053,7 +3712,7 @@ select.form-input{color-scheme:dark;background-color:#111;}
       <div class="nexus-layout">
         <div class="nexus-sidebar">
           <div class="nexus-sidebar-head">
-            <div class="nexus-brand"><svg class="nexus-logo-hex" viewBox="0 0 28 28" fill="none"><polygon points="14,2 24,8 24,20 14,26 4,20 4,8" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.2"/><line x1="14" y1="2" x2="24" y2="20" stroke="rgba(255,255,255,.2)" stroke-width="0.6"/><line x1="24" y1="8" x2="4" y2="20" stroke="rgba(255,255,255,.2)" stroke-width="0.6"/><line x1="4" y1="8" x2="24" y2="20" stroke="rgba(255,255,255,.2)" stroke-width="0.6"/><circle cx="14" cy="14" r="3" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1"/><circle cx="14" cy="14" r="1.2" fill="rgba(255,255,255,.9)"/><circle cx="14" cy="2" r="1.5" fill="rgba(255,255,255,.7)"/><circle cx="24" cy="8" r="1.5" fill="rgba(255,255,255,.5)"/><circle cx="24" cy="20" r="1.5" fill="rgba(255,255,255,.5)"/><circle cx="14" cy="26" r="1.5" fill="rgba(255,255,255,.7)"/><circle cx="4" cy="20" r="1.5" fill="rgba(255,255,255,.5)"/><circle cx="4" cy="8" r="1.5" fill="rgba(255,255,255,.5)"/></svg><div><div class="nexus-brand-name">Nexus</div><div class="nexus-brand-by">by DevConnect</div></div></div>
+            <div class="nexus-brand"><svg class="nexus-logo-hex" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="0.5"/><polygon points="14,2 24,8 24,20 14,26 4,20 4,8" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1"/><polygon points="14,4.5 20.7,8.5 20.7,19.5 14,23.5 7.3,19.5 7.3,8.5" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="0.6"/><circle cx="14" cy="14" r="3" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="0.8"/><circle cx="14" cy="14" r="1.3" fill="rgba(255,255,255,.9)"/></svg><div><div class="nexus-brand-name">Nexus</div><div class="nexus-brand-by">by DevConnect</div></div></div>
             <div class="nexus-status"><span class="live-dot"></span>Actif · temps reel</div>
           </div>
           <div class="nexus-sec-label">Vue d'ensemble</div>
@@ -3065,15 +3724,17 @@ select.form-input{color-scheme:dark;background-color:#111;}
           <div class="nexus-sec-label">Cyber Defense</div>
           <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-threats');loadNexusThreatIntel()"><span class="nexus-nav-icon">&#9888;</span>Threat Intel<span class="nexus-nav-badge alert" id="nexus-threats-badge" style="display:none">!</span></div>
           <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-incidents');loadNexusIncidents()"><span class="nexus-nav-icon">&#9760;</span>Incidents<span class="nexus-nav-badge" id="nexus-incidents-badge">0</span></div>
+          <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-blocks');loadNexusBlocks()"><span class="nexus-nav-icon">&#9939;</span>Blocages<span class="nexus-nav-badge alert" id="nexus-blocks-badge" style="display:none">!</span></div>
           <div class="nexus-sec-label">Systeme</div>
           <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-audit');loadNexusAudit()"><span class="nexus-nav-icon">&#9776;</span>Audit moteur</div>
           <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-tests');initNexusTests()"><span class="nexus-nav-icon">&#9874;</span>Tests</div>
-          <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-settings')"><span class="nexus-nav-icon">&#11041;</span>Parametres</div>
+          <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-docs');renderNexusDocs()"><span class="nexus-nav-icon">&#10070;</span>Docs / Intégration</div>
+          <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-settings');renderNexusKeyPanel()"><span class="nexus-nav-icon">&#11041;</span>Parametres</div>
         </div>
 
         <div class="nexus-main">
           <div class="nexus-section active" id="nexus-overview">
-            <div class="nexus-page-title"><svg width="22" height="22" viewBox="0 0 28 28" fill="none"><polygon points="14,2 24,8 24,20 14,26 4,20 4,8" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.2"/><line x1="14" y1="2" x2="24" y2="20" stroke="rgba(255,255,255,.2)" stroke-width="0.6"/><line x1="24" y1="8" x2="4" y2="20" stroke="rgba(255,255,255,.2)" stroke-width="0.6"/><line x1="4" y1="8" x2="24" y2="20" stroke="rgba(255,255,255,.2)" stroke-width="0.6"/><circle cx="14" cy="14" r="3" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1"/><circle cx="14" cy="14" r="1.2" fill="rgba(255,255,255,.9)"/><circle cx="14" cy="2" r="1.5" fill="rgba(255,255,255,.7)"/><circle cx="24" cy="8" r="1.5" fill="rgba(255,255,255,.5)"/><circle cx="24" cy="20" r="1.5" fill="rgba(255,255,255,.5)"/><circle cx="14" cy="26" r="1.5" fill="rgba(255,255,255,.7)"/><circle cx="4" cy="20" r="1.5" fill="rgba(255,255,255,.5)"/><circle cx="4" cy="8" r="1.5" fill="rgba(255,255,255,.5)"/></svg> Dashboard Nexus <span class="live-dot" style="margin-left:4px"></span></div>
+            <div class="nexus-page-title"><svg width="22" height="22" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="0.5"/><polygon points="14,2 24,8 24,20 14,26 4,20 4,8" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1"/><polygon points="14,4.5 20.7,8.5 20.7,19.5 14,23.5 7.3,19.5 7.3,8.5" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="0.6"/><circle cx="14" cy="14" r="3" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="0.8"/><circle cx="14" cy="14" r="1.3" fill="rgba(255,255,255,.9)"/></svg> Dashboard Nexus <span class="live-dot" style="margin-left:4px"></span></div>
             <div class="nexus-page-sub">Surveillance automatisee de DevConnect &middot; <span id="nexus-last-refresh">&mdash;</span></div>
             <div class="nexus-stats-row">
               <div class="nexus-stat"><div class="nexus-stat-val" id="ns-total">&mdash;</div><div class="nexus-stat-label">Events (24h)</div><div class="nexus-stat-delta neutral" id="ns-total-d">chargement...</div></div>
@@ -3116,7 +3777,7 @@ select.form-input{color-scheme:dark;background-color:#111;}
           <div class="nexus-section" id="nexus-logs">
             <div class="nexus-page-title">&#9673; Logs systeme</div>
             <div class="nexus-page-sub">Historique complet des evenements de nexus_logs &middot; mis a jour en temps reel</div>
-            <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+            <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center" id="nexus-log-category-filters">
               <button class="filter-chip active" onclick="nexusFilterLogs(this,'all')">Tous</button>
               <button class="filter-chip" onclick="nexusFilterLogs(this,'security')">Securite</button>
               <button class="filter-chip" onclick="nexusFilterLogs(this,'ban')">Bans</button>
@@ -3129,6 +3790,14 @@ select.form-input{color-scheme:dark;background-color:#111;}
                 <button class="btn btn-ghost btn-sm" onclick="loadNexusLogs()" style="font-size:11px">&#8635;</button>
                 <button class="btn btn-ghost btn-sm" onclick="exportNexusLogs()" style="font-size:11px">&#11015; CSV</button>
               </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center" id="nexus-log-severity-filters">
+              <span style="font-size:11px;color:rgba(255,255,255,.3);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.04em;margin-right:2px">Sévérité :</span>
+              <button class="filter-chip active" onclick="nexusFilterSeverity(this,'all')">Toutes</button>
+              <button class="filter-chip" onclick="nexusFilterSeverity(this,'critical')"><span class="nexus-sev critical" style="margin-right:5px"></span>Critique</button>
+              <button class="filter-chip" onclick="nexusFilterSeverity(this,'high')"><span class="nexus-sev high" style="margin-right:5px"></span>Haute</button>
+              <button class="filter-chip" onclick="nexusFilterSeverity(this,'medium')"><span class="nexus-sev medium" style="margin-right:5px"></span>Moyenne</button>
+              <button class="filter-chip" onclick="nexusFilterSeverity(this,'info')"><span class="nexus-sev info" style="margin-right:5px"></span>Info</button>
             </div>
             <div class="nexus-card">
               <div class="nexus-card-head"><div class="nexus-card-title">Evenements <span class="nexus-tag" id="nexus-log-count" style="margin-left:6px">&mdash;</span></div><div style="display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,.25)"><span class="live-dot"></span>Temps reel</div></div>
@@ -3254,7 +3923,8 @@ select.form-input{color-scheme:dark;background-color:#111;}
               <button class="filter-chip" onclick="nexusFilterIncidents(this,'open')">Ouverts</button>
               <button class="filter-chip" onclick="nexusFilterIncidents(this,'investigating')">En cours</button>
               <button class="filter-chip" onclick="nexusFilterIncidents(this,'resolved')">Résolus</button>
-              <button class="btn btn-primary btn-sm" style="margin-left:auto;font-size:12px" onclick="openCreateIncidentModal()">+ Créer incident</button>
+              <button class="btn btn-ghost btn-sm" style="margin-left:auto;font-size:12px" onclick="exportIncidentsPDF()">⬇ Export PDF</button>
+              <button class="btn btn-primary btn-sm" style="font-size:12px" onclick="openCreateIncidentModal()">+ Créer incident</button>
             </div>
             <div id="nexus-incidents-list"><div style="text-align:center;padding:40px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">Chargement des incidents...</div></div>
             <!-- Modal create incident -->
@@ -3288,6 +3958,22 @@ select.form-input{color-scheme:dark;background-color:#111;}
                   <button class="btn btn-primary" onclick="createIncident()">Créer</button>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <!-- ===== BLOCAGES (architect only) ===== -->
+          <div class="nexus-section" id="nexus-blocks">
+            <div class="nexus-page-title">&#9939; Blocages &amp; appels <span class="live-dot" style="margin-left:4px"></span></div>
+            <div class="nexus-page-sub">Comptes bloqués définitivement (2e infraction) et appels en attente &middot; réservé à l'architect</div>
+
+            <div class="nexus-card" style="margin-bottom:16px">
+              <div class="nexus-card-head"><div class="nexus-card-title">&#9939; Comptes bloqués définitivement</div><button class="btn btn-ghost btn-sm" onclick="loadNexusBlocks()" style="font-size:11px">&#8635;</button></div>
+              <div id="nexus-blocked-list"><div style="text-align:center;padding:32px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">Chargement...</div></div>
+            </div>
+
+            <div class="nexus-card">
+              <div class="nexus-card-head"><div class="nexus-card-title">&#9993; Appels en attente</div><button class="btn btn-ghost btn-sm" onclick="loadNexusBlocks()" style="font-size:11px">&#8635;</button></div>
+              <div id="nexus-appeals-list"><div style="text-align:center;padding:32px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">Chargement...</div></div>
             </div>
           </div>
 
@@ -3382,9 +4068,65 @@ select.form-input{color-scheme:dark;background-color:#111;}
             </div>
           </div>
 
+          <div class="nexus-section" id="nexus-docs">
+            <div class="nexus-page-title">&#10070; Docs / Intégration</div>
+            <div class="nexus-page-sub">Envoie tes premiers events en moins de 2 minutes</div>
+
+            <div class="nexus-card">
+              <div class="nexus-card-head"><div class="nexus-card-title">1. Ton projet</div></div>
+              <div id="nexus-docs-project-info" style="padding:0 20px 16px;font-size:12px;color:var(--text-secondary);line-height:1.8">Chargement...</div>
+            </div>
+
+            <div class="nexus-card">
+              <div class="nexus-card-head"><div class="nexus-card-title">2. SDK JS (recommandé)</div></div>
+              <div style="padding:0 20px 6px;font-size:12px;color:var(--text-muted)">Ajoute le script, initialise avec ta clé, puis envoie des events où tu veux dans ton app.</div>
+              <div style="padding:12px 20px 20px">
+                <div style="display:flex;justify-content:flex-end;margin-bottom:4px"><button class="btn btn-ghost btn-sm" style="font-size:11px" onclick="nexusCopyCode('nexus-doc-code-sdk')">Copier</button></div>
+                <pre id="nexus-doc-code-sdk" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:var(--radius);padding:14px 16px;font-family:var(--font-mono);font-size:12px;line-height:1.7;overflow-x:auto;color:var(--text-secondary)">&lt;script src="https://cdn.jsdelivr.net/gh/VOTRE_ORG/nexus-sdk/nexus-sdk.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  Nexus.init('nx_live_VOTRE_CLE');
+
+  // Quand un évènement pertinent se produit dans ton app :
+  Nexus.track('login_failed', {
+    user_ref: 'user-42',
+    severity: 'medium',
+    details: { ip: '1.2.3.4' }
+  });
+&lt;/script&gt;</pre>
+              </div>
+            </div>
+
+            <div class="nexus-card">
+              <div class="nexus-card-head"><div class="nexus-card-title">3. Ou en HTTP direct (backend, curl...)</div></div>
+              <div style="padding:0 20px 6px;font-size:12px;color:var(--text-muted)">Aucun SDK requis : un simple POST JSON suffit, idéal depuis un serveur.</div>
+              <div style="padding:12px 20px 20px">
+                <div style="display:flex;justify-content:flex-end;margin-bottom:4px"><button class="btn btn-ghost btn-sm" style="font-size:11px" onclick="nexusCopyCode('nexus-doc-code-curl')">Copier</button></div>
+                <pre id="nexus-doc-code-curl" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:var(--radius);padding:14px 16px;font-family:var(--font-mono);font-size:12px;line-height:1.7;overflow-x:auto;color:var(--text-secondary)">curl -X POST https://ekezdtageniidwjlgyys.supabase.co/functions/v1/nexus-ingest \
+  -H "X-Nexus-Key: nx_live_VOTRE_CLE" \
+  -H "Content-Type: application/json" \
+  -d '{"event_type":"login_failed","user_ref":"user-42","severity":"medium","details":{"ip":"1.2.3.4"}}'</pre>
+              </div>
+            </div>
+
+            <div class="nexus-card">
+              <div class="nexus-card-head"><div class="nexus-card-title">4. Référence rapide</div></div>
+              <div style="padding:0 20px 20px;font-size:12px;color:var(--text-secondary);line-height:1.9">
+                <strong style="color:var(--text)">event_type</strong> — chaîne libre définie par toi (ex : <code>login_failed</code>, <code>signup</code>, <code>checkout_blocked</code>, <code>spam_detected</code>). Reste cohérent d'un event à l'autre pour que les règles automatiques fonctionnent.<br>
+                <strong style="color:var(--text)">user_ref</strong> — optionnel, l'identifiant de l'utilisateur concerné dans ton système (peut être n'importe quelle chaîne).<br>
+                <strong style="color:var(--text)">severity</strong> — optionnel parmi <code>info</code>, <code>medium</code>, <code>high</code>, <code>critical</code>. Si omis, Nexus l'infère depuis le type d'event.<br>
+                <strong style="color:var(--text)">details</strong> — objet JSON libre (contexte, IP, payload...), utile pour l'investigation dans les Logs.<br><br>
+                Chaque appel décrémente ton quota mensuel (voir plan ci-dessus). Au-delà, l'API répond <code>429</code> et l'event n'est pas enregistré.
+              </div>
+            </div>
+          </div>
+
           <div class="nexus-section" id="nexus-settings">
             <div class="nexus-page-title">&#11041; Parametres Nexus</div>
             <div class="nexus-page-sub">Configuration du moteur d'automatisation</div>
+            <div class="nexus-card">
+              <div class="nexus-card-head"><div class="nexus-card-title">Projet &amp; clé API</div></div>
+              <div id="nexus-key-panel"><div style="padding:14px 20px;color:rgba(255,255,255,.35);font-size:12px">Chargement...</div></div>
+            </div>
             <div class="nexus-card">
               <div class="nexus-card-head"><div class="nexus-card-title">General</div></div>
               <div style="padding:0 20px">
@@ -4012,14 +4754,15 @@ select.form-input{color-scheme:dark;background-color:#111;}
   </div>
 </div>
 
-<!-- ADD SNIPPET MODAL -->
+<!-- ADD/EDIT SNIPPET MODAL -->
 <div class="modal-overlay" id="snippet-modal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">Publier un snippet</div>
+      <div class="modal-title" id="snippet-modal-title">Publier un snippet</div>
       <button class="modal-close" onclick="closeSnippetModal()">×</button>
     </div>
     <div class="modal-body">
+      <input type="hidden" id="snip-edit-id" value="">
       <div class="form-group"><label class="form-label">Titre</label><input type="text" class="form-input" id="snip-title" placeholder="Debounce function réutilisable"></div>
       <div class="form-group"><label class="form-label">Langage</label>
         <select class="form-input" id="snip-lang">
@@ -4034,7 +4777,80 @@ select.form-input{color-scheme:dark;background-color:#111;}
       <div class="form-group"><label class="form-label">Code</label><textarea class="form-input" id="snip-code" rows="8" style="font-family:var(--font-mono);font-size:12px" placeholder="Colle ton code ici..."></textarea></div>
       <div class="form-group"><label class="form-label">Description (optionnel)</label><textarea class="form-input" id="snip-desc" rows="2" placeholder="À quoi ça sert ?"></textarea></div>
       <div class="form-group"><label class="form-label">Tags (séparés par des virgules)</label><input type="text" class="form-input" id="snip-tags" placeholder="utils, performance, react"></div>
-      <button class="btn btn-primary w-full" onclick="saveSnippet()">Publier</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" style="flex:0 0 auto" onclick="testRunSnippet()">▶ Tester</button>
+        <button class="btn btn-primary" style="flex:1" id="snippet-save-btn" onclick="saveSnippet()">Publier</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SNIPPET RUN MODAL (live execution sandbox) -->
+<div class="modal-overlay" id="snippet-run-modal">
+  <div class="modal" style="max-width:640px;width:90vw">
+    <div class="modal-header">
+      <div class="modal-title">▶ Exécution — <span id="snippet-run-title" style="font-family:var(--font-mono);font-size:14px;color:var(--text-secondary)"></span></div>
+      <button class="modal-close" onclick="closeSnippetRunModal()">×</button>
+    </div>
+    <div class="modal-body" style="padding:0">
+      <iframe id="snippet-run-iframe" sandbox="allow-scripts" style="width:100%;height:280px;border:none;background:#fff;display:block"></iframe>
+      <div style="border-top:1px solid var(--border);background:var(--bg0);padding:10px 14px">
+        <div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Console</div>
+        <div id="snippet-run-console" style="font-family:var(--font-mono);font-size:12px;max-height:160px;overflow:auto;color:var(--text-secondary)">
+          <div style="color:var(--text-muted)">En attente d'exécution...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SNIPPET SHARE MODAL -->
+<div class="modal-overlay" id="snippet-share-modal">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-header">
+      <div class="modal-title">🔗 Partager le snippet</div>
+      <button class="modal-close" onclick="closeSnippetShareModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Lien public</label>
+        <div style="display:flex;gap:8px">
+          <input type="text" class="form-input" id="snippet-share-link" readonly onclick="this.select()">
+          <button class="btn btn-primary btn-sm" style="flex:0 0 auto" onclick="copySnippetShareLink()">Copier</button>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--text-muted)">Toute personne avec ce lien pourra voir ce snippet, avec coloration syntaxique, une fois connectée.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SNIPPET VERSION HISTORY MODAL -->
+<div class="modal-overlay" id="snippet-history-modal">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-header">
+      <div class="modal-title">Historique — <span id="snippet-history-title" style="font-family:var(--font-mono);font-size:14px"></span></div>
+      <button class="modal-close" onclick="closeSnippetHistoryModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div id="snippet-history-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- DOC QUIZ MODAL -->
+<div class="modal-overlay" id="doc-quiz-modal">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-header">
+      <div class="modal-title">Quiz — <span id="doc-quiz-title" style="font-family:var(--font-mono);font-size:14px"></span></div>
+      <button class="modal-close" onclick="closeDocQuiz()">×</button>
+    </div>
+    <div class="modal-body">
+      <div id="doc-quiz-body"></div>
+      <div id="doc-quiz-result" style="display:none;margin-top:12px;padding:12px;border-radius:var(--radius);text-align:center;font-family:var(--font-mono);font-size:13px"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeDocQuiz()">Fermer</button>
+      <button class="btn btn-primary btn-sm" id="doc-quiz-submit-btn" onclick="submitDocQuiz()">Valider</button>
     </div>
   </div>
 </div>
@@ -4175,6 +4991,15 @@ select.form-input{color-scheme:dark;background-color:#111;}
   </div>
 </div>
 
+<!-- COMMAND PALETTE (⌘K) -->
+<div class="search-modal" id="cmdk-modal" onclick="if(event.target===this)closeCmdk()">
+  <div class="search-box">
+    <div class="search-input-wrap"><span>⌘</span><input class="search-main-input" id="cmdk-input" placeholder="Tape une commande ou une page..." oninput="filterCmdk(this.value)"><span class="search-kbd">Echap</span></div>
+    <div class="search-results" id="cmdk-results"></div>
+  </div>
+</div>
+
+<button id="focus-exit-btn" onclick="toggleFocusMode()">◎ Quitter le mode focus <span class="search-kbd" style="margin-left:2px">Echap</span></button>
 <div class="toast-container" id="toast-container"></div>
 <script>
 const SUPABASE_URL='https://ekezdtageniidwjlgyys.supabase.co';
@@ -4212,8 +5037,9 @@ window.addEventListener('load',async()=>{
     else if(event==='SIGNED_OUT'){currentUser=null;currentProfile=null;showPage('landing');}
   });
   document.addEventListener('keydown',e=>{
-    if(e.key==='Escape'){closeSearch();closeChallenge();}
+    if(e.key==='Escape'){closeSearch();closeChallenge();closeCmdk();if(document.body.classList.contains('focus-mode'))toggleFocusMode();}
     if(e.key==='/'&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'){e.preventDefault();openSearch();}
+    if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openCmdk();}
   });
   initKeyboard();
 });
@@ -4236,21 +5062,44 @@ async function handleLogin(){
   err.classList.remove('show');
   if(!email||!pass){err.textContent='Remplis tous les champs.';err.classList.add('show');return;}
 
-  // NEXUS — tracking pré-login
+  // NEXUS — compteur local UNIQUEMENT pour l'UX (avertir l'utilisateur après
+  // plusieurs échecs). Le vrai brute force est désormais détecté de façon
+  // fiable côté serveur par l'Auth Hook (étape 10) sur de vraies lignes en
+  // base, donc on n'écrit plus 'brute_force_detected' depuis ici — c'était
+  // redondant ET trivialement contournable (juste rafraîchir la page vide
+  // ce compteur en mémoire).
   nexusTrackLoginAttempt(email);
 
   const{error,data}=await db.auth.signInWithPassword({email,password:pass});
   if(error){
-    await nexusLog('login_failed',null,{email:email.substring(0,80)});
-    // Brute force : si ≥5 échecs sur cet email en session → escalade
-    const attempts=nexusGetLoginAttempts(email);
-    if(attempts>=5){
-      await nexusLog('brute_force_detected',null,{email:email.substring(0,80),attempts,window:'session'});
+    const msgLower=error.message?.toLowerCase()||'';
+    const isUnconfirmed=msgLower.includes('email not confirmed')||msgLower.includes('not confirmed');
+    // ÉTAPE 14 — le Password Verification Hook (étape 10) peut rejeter la
+    // connexion AVANT même que Supabase ne réponde, avec un message custom
+    // ("Ce compte a été banni."). Avant ce fix, ce message était ignoré et
+    // remplacé par le générique "Email ou mot de passe incorrect" : un
+    // compte banni n'avait aucun moyen de savoir pourquoi ça ne marchait
+    // plus, et retentait en boucle.
+    const isBanned=msgLower.includes('banni')||msgLower.includes('banned');
+
+    // ÉTAPE 14 — event renommé (plus 'login_failed'). Le client ne peut pas
+    // savoir si l'email correspond à un vrai compte (Supabase renvoie le
+    // même message dans les deux cas, anti-énumération) : 'login_failed'
+    // est désormais réservé à la signature SERVEUR fiable posée par l'Auth
+    // Hook pour les comptes qui existent vraiment. On garde un signal
+    // distinct, en sévérité 'info', pour ne pas fausser les seuils des
+    // règles qui ciblent 'login_failed'.
+    if(!isBanned){
+      await nexusLog('login_attempt_client_signal',null,{email:email.substring(0,80),unconfirmed:isUnconfirmed});
     }
-    const isUnconfirmed=error.message?.toLowerCase().includes('email not confirmed')||error.message?.toLowerCase().includes('not confirmed');
-    err.textContent=isUnconfirmed
-      ? 'Tu dois confirmer ton email avant de te connecter. Vérifie ta boîte mail (et tes spams).'
-      : 'Email ou mot de passe incorrect.';
+
+    if(isBanned){
+      err.textContent=error.message;
+    }else if(isUnconfirmed){
+      err.textContent='Tu dois confirmer ton email avant de te connecter. Vérifie ta boîte mail (et tes spams).';
+    }else{
+      err.textContent='Email ou mot de passe incorrect.';
+    }
     err.classList.add('show');
     return;
   }
@@ -4260,7 +5109,13 @@ async function handleLogin(){
     if(prof?.is_banned){
       await nexusLog('login_after_ban',data.user.id,{email:email.substring(0,80),username:prof.username});
     }
-    // Geo anomaly : compare le pays actuel vs dernier connu (via timezone heuristique)
+    // ÉTAPE 14 — NOTE : malgré le nom (last_login_country / 'geo'), ceci compare
+    // un FUSEAU HORAIRE déclaré par le navigateur, pas une vraie géolocalisation
+    // IP. Changer d'OS, de VPN ou simplement voyager suffit à déclencher un faux
+    // positif — à lire avec prudence côté staff. Contrairement aux détections
+    // login/messages/reports (étapes 10-12), celle-ci n'a pas encore de
+    // couverture serveur : une vraie géoloc IP nécessiterait une Edge Function
+    // (Postgres seul ne voit pas l'IP réelle derrière le pooler Supabase).
     const tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'unknown';
     if(prof?.last_login_country&&prof.last_login_country!=='unknown'&&prof.last_login_country!==tz){
       await nexusLog('geo_anomaly_login',data.user.id,{prev:prof.last_login_country,current:tz,email:email.substring(0,80)});
@@ -4326,6 +5181,15 @@ async function handleRegister(){
   const level=document.getElementById('reg-level').value;
   const err=document.getElementById('reg-error-2');
   err.classList.remove('show');
+  // NEXUS — honeypot : un humain ne remplit jamais ce champ caché.
+  const honeypot=document.getElementById('reg-website')?.value||'';
+  if(honeypot.trim()!==''){
+    await nexusLog('honeypot_triggered',null,{field:'reg-website'});
+    // Pas de message distinct : on laisse le bot croire que ça a marché.
+    showToast('Compte créé ! Confirme ton email avant de te connecter.','success');
+    setTimeout(()=>switchAuthTab('login'),2500);
+    return;
+  }
   if(username.length<3||username.length>24){err.textContent='Le pseudo doit faire entre 3 et 24 caractères.';err.classList.add('show');return;}
   if(!/^[a-zA-Z0-9_.\- ]+$/.test(username)){err.textContent='Pseudo invalide (lettres, chiffres, _ . - et espace uniquement).';err.classList.add('show');return;}
   const forbidden=['architect','admin','moderator','devconnect','support','staff','system','root','bot'];
@@ -4365,6 +5229,30 @@ async function handleRegister(){
   setTimeout(()=>switchAuthTab('login'),2500);
 }
 
+// NEXUS — fingerprint léger (pas de lib externe) : combine quelques
+// signaux stables côté navigateur en un hash. Ce n'est PAS un identifiant
+// fiable à 100% (deux machines identiques peuvent matcher), donc il sert
+// uniquement de signal d'aide à la décision, jamais de preuve à lui seul.
+async function nexusComputeFingerprint(){
+  try{
+    const c=document.createElement('canvas');
+    const ctx=c.getContext('2d');
+    ctx.textBaseline='top';ctx.font='14px Arial';
+    ctx.fillText('devconnect-nexus-fp',2,2);
+    const canvasSig=c.toDataURL();
+    const raw=[
+      navigator.userAgent,navigator.language,
+      String(screen.colorDepth),`${screen.width}x${screen.height}`,
+      String(new Date().getTimezoneOffset()),
+      navigator.hardwareConcurrency||'',
+      canvasSig
+    ].join('|');
+    const enc=new TextEncoder().encode(raw);
+    const buf=await crypto.subtle.digest('SHA-256',enc);
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }catch(e){return null;}
+}
+
 // PROFILE
 const WIDGET_LABELS={stats:'📊 Stats',badges:'🏆 Badges',activity:'🎮 Activité',avail:'🌍 Disponibilité'};
 
@@ -4376,12 +5264,14 @@ async function loadProfile(){
   if(!data){
     const meta=currentUser.user_metadata||{};
     const roleDefault=meta.role||meta.specialty||'web_dev';
-    const{data:created,error}=await db.from('profiles').insert({id:currentUser.id,username:meta.username||currentUser.email.split('@')[0],email:currentUser.email,specialty:meta.specialty||null,role:roleDefault}).select().maybeSingle();
+    const fp=await nexusComputeFingerprint();
+    const{data:created,error}=await db.from('profiles').insert({id:currentUser.id,username:meta.username||currentUser.email.split('@')[0],email:currentUser.email,specialty:meta.specialty||null,role:roleDefault,device_fingerprint:fp}).select().maybeSingle();
     if(error){showToast('Impossible de charger ton profil. Contacte un admin.','error');return;}
     data=created;
   }
   if(data){
     currentProfile=data;updateNavAvatar();updateProfileSection();updateSettingsSection();checkArchitect();updateNotifBadge();subscribeNotifications();subscribeDmListRealtime();openSharedSnippetFromUrl();
+    if(currentSection==='home')populateHomeGreeting();
     // ÉTAPE 2 — écran de quarantaine Nexus
     if(data.is_quarantined)nexusShowQuarantineScreen(data.quarantine_reason);
     else nexusHideQuarantineScreen();
@@ -4395,7 +5285,7 @@ function nexusShowQuarantineScreen(reason){
   const div=document.createElement('div');
   div.id='nexus-quarantine-screen';
   div.innerHTML=`<div class="nq-card">
-    <svg class="nq-hex" viewBox="0 0 28 28" fill="none"><polygon points="14,2 24,8 24,20 14,26 4,20 4,8" fill="none" stroke="rgba(244,63,94,.7)" stroke-width="1.2"/><line x1="14" y1="2" x2="24" y2="20" stroke="rgba(244,63,94,.25)" stroke-width="0.6"/><line x1="24" y1="8" x2="4" y2="20" stroke="rgba(244,63,94,.25)" stroke-width="0.6"/><line x1="4" y1="8" x2="24" y2="20" stroke="rgba(244,63,94,.25)" stroke-width="0.6"/><circle cx="14" cy="14" r="3" fill="none" stroke="rgba(244,63,94,.8)" stroke-width="1"/><circle cx="14" cy="14" r="1.2" fill="rgba(244,63,94,.9)"/></svg>
+    <svg class="nq-hex" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" fill="none" stroke="rgba(244,63,94,.2)" stroke-width="0.5"/><polygon points="14,2 24,8 24,20 14,26 4,20 4,8" fill="none" stroke="rgba(244,63,94,.75)" stroke-width="1.2"/><polygon points="14,4.5 20.7,8.5 20.7,19.5 14,23.5 7.3,19.5 7.3,8.5" fill="none" stroke="rgba(244,63,94,.4)" stroke-width="0.7"/><circle cx="14" cy="14" r="3" fill="none" stroke="rgba(244,63,94,.85)" stroke-width="1"/><circle cx="14" cy="14" r="1.2" fill="rgba(244,63,94,.9)"/></svg>
     <div class="nq-title">VÉRIFICATION BY NEXUS SYSTEM</div>
     <div class="nq-bar"></div>
     <div class="nq-sub">${esc(reason||'Activité suspecte détectée sur ce compte.')}</div>
@@ -4743,8 +5633,9 @@ function checkArchitect(){
     if(adminNav)adminNav.style.display='none';
     if(badge)badge.style.display='none';
   }
-  // Nexus et Architect sont réservés exclusivement au compte cover.dev, quel que soit le rôle.
-  if(nexusNav)nexusNav.style.display=isNexusUser?'flex':'none';
+  // Nexus est désormais ouvert à tout utilisateur connecté (produit marketplace multi-tenant).
+  // Architect reste réservé exclusivement au compte cover.dev.
+  if(nexusNav)nexusNav.style.display=currentUser?'flex':'none';
   if(architectNav)architectNav.style.display=isNexusUser?'flex':'none';
   setEl('admin-welcome-role',ROLE_LABELS[role]||'Admin');
 }
@@ -4908,8 +5799,8 @@ function navigate(section) {
     showToast('Accès Architect réservé.', 'error');
     return;
   }
-  if (section === 'nexus' && !isCoverDev) {
-    showToast('Accès Nexus réservé.', 'error');
+  if (section === 'nexus' && !currentUser) {
+    showToast('Connecte-toi pour accéder à Nexus.', 'error');
     return;
   }
   document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
@@ -4922,13 +5813,13 @@ function navigate(section) {
   if (section === 'messages') { loadMessages(); loadDmList(); }
   if (section === 'profile') updateProfileSection();
   if (section === 'feed') { loadFeed(); loadSidebarLeaderboard(); loadActiveAnnouncementBanner(); }
-  if (section === 'home') { loadActiveAnnouncementBanner(); }
-  if (section === 'ranking') loadInsightDashboard();
+  if (section === 'home') { loadActiveAnnouncementBanner(); populateHomeGreeting(); }
+  if (section === 'ranking') { loadInsightDashboard(); loadWeeklyChallengeId(); }
   if (section === 'discover') loadDiscover();
   if (section === 'team') loadTeamSection();
   if (section === 'recruit') loadDeployList();
   if (section === 'editor') { loadEditorFiles(); checkAiKeyBanner(); }
-  if (section === 'learn') { loadLearnProgress(); renderChallenges(); }
+  if (section === 'learn') { loadWeeklyChallengeId().then(renderChallenges); loadLearnProgress(); renderChallenges(); }
   if (section === 'snippets') { loadSnippets(); }
   if (section === 'nexus') { initNexus(); }
   if (section === 'architect') { loadArchitectMetrics(); }
@@ -5010,13 +5901,84 @@ async function loadInsightDashboard(){
       }).join('');
     }
   }
+
+  loadRankEvolution();
+  loadWeeklyChallengeCard();
+}
+
+// ÉVOLUTION DU CLASSEMENT PERSO — snapshot quotidien de la position réelle,
+// upserté à chaque visite du dashboard, puis tracé en courbe sur 30 jours.
+async function loadRankEvolution(){
+  const cont=document.getElementById('insight-rank-chart');
+  if(!cont||!currentUser)return;
+  const {count:betterCount}=await db.from('profiles').select('*',{count:'exact',head:true}).eq('is_banned',false).gt('xp',currentProfile?.xp||0);
+  const myRank=(betterCount||0)+1;
+  const today=new Date().toISOString().slice(0,10);
+  await db.from('rank_history').upsert({user_id:currentUser.id,snapshot_date:today,rank_position:myRank,xp_at_snapshot:currentProfile?.xp||0},{onConflict:'user_id,snapshot_date'});
+
+  const since=new Date(); since.setDate(since.getDate()-30);
+  const{data}=await db.from('rank_history').select('snapshot_date,rank_position').eq('user_id',currentUser.id).gte('snapshot_date',since.toISOString().slice(0,10)).order('snapshot_date',{ascending:true});
+  const points=data||[];
+  if(points.length<2){
+    cont.innerHTML=`<div class="insight-empty">Ton classement actuel : #${myRank}. Reviens dans quelques jours pour voir la courbe se dessiner.</div>`;
+    return;
+  }
+  const w=560,h=140,pad=24;
+  const ranks=points.map(p=>p.rank_position);
+  const minR=Math.min(...ranks),maxR=Math.max(...ranks,minR+1);
+  const stepX=(w-pad*2)/(points.length-1);
+  const coords=points.map((p,i)=>{
+    const x=pad+i*stepX;
+    const y=pad+((p.rank_position-minR)/(maxR-minR))*(h-pad*2); // rank bas (petit) = haut du graphe
+    return [x,y];
+  });
+  const path=coords.map((c,i)=>(i===0?'M':'L')+c[0].toFixed(1)+','+c[1].toFixed(1)).join(' ');
+  const last=points[points.length-1];
+  const first=points[0];
+  const trend=first.rank_position-last.rank_position;
+  const trendLabel=trend>0?`▲ +${trend} places`:trend<0?`▼ ${trend} places`:'= stable';
+  const trendColor=trend>0?'#7ac88a':trend<0?'#e08080':'var(--text-muted)';
+  cont.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <div style="font-size:12px;color:var(--text-muted)">#${first.rank_position} → #${last.rank_position} sur la période</div>
+      <div style="font-size:12px;font-family:var(--font-mono);color:${trendColor}">${trendLabel}</div>
+    </div>
+    <svg viewBox="0 0 ${w} ${h}" style="width:100%;height:140px">
+      <path d="${path}" fill="none" stroke="var(--accent-dim)" stroke-width="2"/>
+      ${coords.map(c=>`<circle cx="${c[0].toFixed(1)}" cy="${c[1].toFixed(1)}" r="2.5" fill="var(--accent-dim)"/>`).join('')}
+    </svg>`;
+}
+
+// DÉFI DE LA SEMAINE — highlight côté Insight du même défi que dans Docs/Challenges
+async function loadWeeklyChallengeCard(){
+  const card=document.getElementById('insight-weekly-challenge-card');
+  const body=document.getElementById('insight-weekly-challenge-body');
+  if(!card||!body)return;
+  const wid=await loadWeeklyChallengeId();
+  if(!wid||typeof challenges==='undefined'||!challenges[wid]){card.style.display='none';return;}
+  const c=challenges[wid];
+  const done=completedChallenges.has(wid);
+  card.style.display='block';
+  body.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+    <div>
+      <div style="font-weight:600;margin-bottom:2px">${esc(c.title)}</div>
+      <div style="font-size:11px;color:var(--text-muted)">${esc(c.meta)} · bonus +${Math.ceil(c.xp*0.5)} XP</div>
+    </div>
+    ${done?'<span style="color:var(--accent-dim);font-family:var(--font-mono);font-size:12px">✓ Complété</span>':`<button class="btn btn-primary btn-sm" onclick="navigate('learn');setTimeout(()=>openChallenge('${wid}'),150)">Voir le défi</button>`}
+  </div>`;
 }
 
 // CLASSEMENT RÉEL
 let rankingPeriod='week';
+let rankingSpecOnly=false;
 function setRankingPeriod(el,p){
-  document.querySelectorAll('#section-ranking .filter-chip').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('#section-ranking .filter-chip').forEach(c=>{if(c.id!=='ranking-spec-toggle')c.classList.remove('active');});
   el.classList.add('active');rankingPeriod=p;loadRanking();
+}
+function toggleRankingSpecFilter(el){
+  rankingSpecOnly=!rankingSpecOnly;
+  el.classList.toggle('active',rankingSpecOnly);
+  loadRanking();
 }
 
 async function loadRanking() {
@@ -5026,9 +5988,12 @@ async function loadRanking() {
   const specLabels = { web_dev: 'web dev', mobile_dev: 'mobile', backend_dev: 'backend', fullstack_dev: 'fullstack', cybersecurity: 'cybersecurity', devops: 'devops', data: 'data', ai_ml: 'ia / ml', designer_ux: 'design', recruiter: 'recruteur' };
   const medals = ['gold', 'silver', 'bronze'];
   let rows=[];
+  const mySpecialty=currentProfile?.specialty||null;
 
   if(rankingPeriod==='global'){
-    const{data}=await db.from('profiles').select('username,avatar_url,specialty,xp,is_premium,premium_tier').eq('is_banned',false).order('xp',{ascending:false}).limit(20);
+    let q=db.from('profiles').select('username,avatar_url,specialty,xp,is_premium,premium_tier').eq('is_banned',false);
+    if(rankingSpecOnly&&mySpecialty)q=q.eq('specialty',mySpecialty);
+    const{data}=await q.order('xp',{ascending:false}).limit(20);
     rows=(data||[]).map(u=>({username:u.username,avatar_url:u.avatar_url,specialty:u.specialty,is_premium:u.is_premium,premium_tier:u.premium_tier,score:u.xp||0}));
   }else{
     const since=new Date();
@@ -5038,13 +6003,15 @@ async function loadRanking() {
     const totals={};
     logs.forEach(l=>{totals[l.user_id]=(totals[l.user_id]||0)+l.amount;});
     const ids=Object.keys(totals);
-    const{data:profs}=await db.from('profiles').select('id,username,avatar_url,specialty,is_premium,premium_tier').in('id',ids).eq('is_banned',false);
+    let q=db.from('profiles').select('id,username,avatar_url,specialty,is_premium,premium_tier').in('id',ids).eq('is_banned',false);
+    if(rankingSpecOnly&&mySpecialty)q=q.eq('specialty',mySpecialty);
+    const{data:profs}=await q;
     rows=(profs||[]).map(u=>({username:u.username,avatar_url:u.avatar_url,specialty:u.specialty,is_premium:u.is_premium,premium_tier:u.premium_tier,score:totals[u.id]||0}))
       .sort((a,b)=>b.score-a.score).slice(0,20);
   }
 
   if (rows.length === 0) {
-    cont.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun membre pour l\'instant.</div>';
+    cont.innerHTML = `<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">${rankingSpecOnly?'Aucun membre de ta spécialité sur cette période.':'Aucun membre pour l\'instant.'}</div>`;
     return;
   }
   cont.innerHTML = rows.map((u, i) => {
@@ -5075,18 +6042,32 @@ async function loadSidebarLeaderboard() {
   const { data } = await db.from('profiles').select('username,avatar_url,specialty,xp').eq('is_banned', false).order('xp', { ascending: false }).limit(5);
   if (!data || data.length === 0) { cont.innerHTML = '<div style="font-size:12px;color:var(--text-muted)">Aucun membre.</div>'; return; }
   const specLabels = { web_dev: 'web dev', mobile_dev: 'mobile', backend_dev: 'backend', fullstack_dev: 'fullstack', cybersecurity: 'cybersec', devops: 'devops', data: 'data', ai_ml: 'ia/ml', designer_ux: 'design', recruiter: 'recruteur' };
-  cont.innerHTML = data.map((u, i) => {
+  const podiumHtml = data.slice(0, 3).map((u, i) => {
+    const rank = i + 1;
+    const name = u.username || 'Inconnu';
+    const init = name.substring(0, 2).toUpperCase();
+    const avatarH = u.avatar_url ? `<img src="${esc(u.avatar_url)}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : init;
+    const xpStr = (u.xp || 0) >= 1000 ? `${((u.xp || 0) / 1000).toFixed(1)}k xp` : `${u.xp || 0} xp`;
+    return `<div class="lb-podium-item rank-${rank}" onclick="openProfile('${esc(name)}')">
+      <div class="lb-podium-avatar">${avatarH}</div>
+      <div class="lb-podium-name">${esc(name)}</div>
+      <div class="lb-podium-xp">${xpStr}</div>
+      <div class="lb-podium-step">${rank}</div>
+    </div>`;
+  }).join('');
+  const restHtml = data.slice(3, 5).map((u, i) => {
     const name = u.username || 'Inconnu';
     const init = name.substring(0, 2).toUpperCase();
     const avatarH = u.avatar_url ? `<img src="${esc(u.avatar_url)}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : init;
     const xpStr = (u.xp || 0) >= 1000 ? `${((u.xp || 0) / 1000).toFixed(1)}k xp` : `${u.xp || 0} xp`;
     return `<div class="leaderboard-item" style="cursor:pointer" onclick="openProfile('${esc(name)}')">
-      <div class="lb-rank">${i + 1}</div>
+      <div class="lb-rank">${i + 4}</div>
       <div class="lb-avatar">${avatarH}</div>
       <div class="lb-info"><div class="lb-name">${esc(name)}</div><div class="lb-specialty">${esc(specLabels[u.specialty] || '—')}</div></div>
       <div class="lb-xp">${xpStr}</div>
     </div>`;
   }).join('');
+  cont.innerHTML = `<div class="lb-podium">${podiumHtml}</div>${restHtml}`;
 }
 
 // UTILITAIRE : temps relatif
@@ -5343,27 +6324,67 @@ async function expressProjectInterest(projectId,ownerId,projectName){
 // SNIPPETS LIBRARY
 // ============================================================
 let activeSnippetLang='all';
+let snippetsCache={}; // id -> snippet row, kept fresh from loadSnippets for edit/run/history lookups
 
 function openAddSnippetModal(){
   if(!currentUser){showToast('Connecte-toi pour publier un snippet.','error');return;}
+  setVal('snip-edit-id','');
   setVal('snip-title','');setVal('snip-code','');setVal('snip-desc','');setVal('snip-tags','');
   setVal('snip-lang','javascript');
+  setEl('snippet-modal-title','Publier un snippet');
+  const btn=document.getElementById('snippet-save-btn');if(btn)btn.textContent='Publier';
   document.getElementById('snippet-modal').classList.add('show');
 }
 function closeSnippetModal(){document.getElementById('snippet-modal').classList.remove('show');}
 
+function editSnippet(id){
+  const s=snippetsCache[id];
+  if(!s){showToast('Snippet introuvable.','error');return;}
+  if(!currentUser||s.user_id!==currentUser.id){showToast('Tu ne peux modifier que tes propres snippets.','error');return;}
+  trackActivity('snippet',id,s.title||'Snippet');
+  setVal('snip-edit-id',id);
+  setVal('snip-title',s.title||'');
+  setVal('snip-code',s.code||'');
+  setVal('snip-desc',s.description||'');
+  setVal('snip-tags',(s.tags||[]).join(', '));
+  setVal('snip-lang',s.language||'javascript');
+  setEl('snippet-modal-title','Modifier le snippet');
+  const btn=document.getElementById('snippet-save-btn');if(btn)btn.textContent='Enregistrer';
+  document.getElementById('snippet-modal').classList.add('show');
+}
+
 async function saveSnippet(){
   if(!currentUser)return;
+  const editId=getVal('snip-edit-id').trim();
   const title=getVal('snip-title').trim();
   const code=getVal('snip-code').trim();
   const language=getVal('snip-lang');
   const description=getVal('snip-desc').trim();
   const tags=getVal('snip-tags').split(',').map(t=>t.trim()).filter(Boolean);
   if(!title||!code){showToast('Titre et code sont obligatoires.','error');return;}
-  const{error}=await db.from('snippets').insert({user_id:currentUser.id,title,code,language,description,tags,likes_count:0});
-  if(error){showToast('Erreur : '+error.message,'error');return;}
-  closeSnippetModal();
-  showToast('Snippet publié !','success');
+
+  if(editId){
+    // Editing an existing snippet owned by the user: snapshot the current DB state
+    // into snippet_versions BEFORE overwriting it, so it can be restored later.
+    const current=snippetsCache[editId];
+    if(!current||current.user_id!==currentUser.id){showToast('Tu ne peux modifier que tes propres snippets.','error');return;}
+    const{data:existingVersions}=await db.from('snippet_versions').select('version_index').eq('snippet_id',editId).order('version_index',{ascending:false}).limit(1);
+    const nextIndex=(existingVersions&&existingVersions[0]?existingVersions[0].version_index:0)+1;
+    const{error:vErr}=await db.from('snippet_versions').insert({
+      snippet_id:editId,title:current.title,description:current.description,language:current.language,
+      code:current.code,tags:current.tags||[],version_index:nextIndex,edited_by:currentUser.id
+    });
+    if(vErr){showToast('Erreur historique : '+vErr.message,'error');return;}
+    const{error}=await db.from('snippets').update({title,code,language,description,tags}).eq('id',editId).eq('user_id',currentUser.id);
+    if(error){showToast('Erreur : '+error.message,'error');return;}
+    closeSnippetModal();
+    showToast('Snippet mis à jour !','success');
+  }else{
+    const{error}=await db.from('snippets').insert({user_id:currentUser.id,title,code,language,description,tags,likes_count:0});
+    if(error){showToast('Erreur : '+error.message,'error');return;}
+    closeSnippetModal();
+    showToast('Snippet publié !','success');
+  }
   await loadSnippets();
 }
 
@@ -5374,16 +6395,157 @@ function setSnippetLangFilter(el,lang){
   loadSnippets();
 }
 
+// ---- Public sharing (proper modal instead of the browser prompt) ----
 function shareSnippet(id){
   const url=`${location.origin}${location.pathname}?snippet=${id}`;
+  setVal('snippet-share-link',url);
+  document.getElementById('snippet-share-modal').classList.add('show');
+}
+function closeSnippetShareModal(){document.getElementById('snippet-share-modal').classList.remove('show');}
+function copySnippetShareLink(){
+  const input=document.getElementById('snippet-share-link');
+  const url=input?input.value:'';
+  if(!url)return;
   if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(url).then(()=>showToast('Lien de partage copié !','success')).catch(()=>promptShareUrl(url));
+    navigator.clipboard.writeText(url).then(()=>showToast('Lien copié !','success')).catch(()=>{input.select();document.execCommand('copy');showToast('Lien copié !','success');});
   }else{
-    promptShareUrl(url);
+    input.select();document.execCommand('copy');showToast('Lien copié !','success');
   }
 }
-function promptShareUrl(url){
-  prompt('Copie ce lien pour partager le snippet :', url);
+
+// ---- Live execution sandbox (JS / HTML / CSS) ----
+const RUNNABLE_SNIPPET_LANGS=new Set(['javascript','html','css']);
+
+function buildSnippetRunDoc(language,code){
+  const consoleBridge=`<script>
+    (function(){
+      const send=(type,args)=>{try{parent.postMessage({__snippetRun:true,type,args:args.map(a=>{try{return typeof a==='object'?JSON.stringify(a):String(a);}catch(e){return String(a);}})},'*');}catch(e){}};
+      ['log','error','warn','info'].forEach(m=>{
+        const orig=console[m].bind(console);
+        console[m]=(...args)=>{send(m,args);orig(...args);};
+      });
+      window.addEventListener('error',e=>send('error',[e.message]));
+    })();
+  <\/script>`;
+  if(language==='html'){
+    return consoleBridge+code;
+  }
+  if(language==='css'){
+    return `${consoleBridge}<!DOCTYPE html><html><head><style>${code}</style></head>
+      <body style="font-family:sans-serif;padding:20px">
+        <h1>Titre de démonstration</h1>
+        <p>Un paragraphe pour voir le style appliqué à du texte courant.</p>
+        <button>Bouton</button>
+        <div class="box" style="width:80px;height:80px;background:#8fb3ff;margin-top:12px">.box</div>
+      </body></html>`;
+  }
+  // javascript
+  return `<!DOCTYPE html><html><head>${consoleBridge}</head><body style="font-family:monospace;padding:12px;color:#333">
+    <script>try{${code}}catch(e){console.error(e.message);}<\/script>
+  </body></html>`;
+}
+
+function renderSnippetRun(language,code,title){
+  setEl('snippet-run-title',title||'');
+  const consoleEl=document.getElementById('snippet-run-console');
+  if(consoleEl)consoleEl.innerHTML='<div style="color:var(--text-muted)">Exécution en cours...</div>';
+  const iframe=document.getElementById('snippet-run-iframe');
+  if(iframe)iframe.srcdoc=buildSnippetRunDoc(language,code);
+  document.getElementById('snippet-run-modal').classList.add('show');
+}
+
+function runSnippetById(id){
+  const s=snippetsCache[id];
+  if(!s){showToast('Snippet introuvable.','error');return;}
+  if(!RUNNABLE_SNIPPET_LANGS.has(s.language)){showToast('Exécution disponible uniquement pour JS, HTML et CSS.','error');return;}
+  renderSnippetRun(s.language,s.code,s.title);
+}
+
+function testRunSnippet(){
+  const language=getVal('snip-lang');
+  const code=getVal('snip-code');
+  if(!RUNNABLE_SNIPPET_LANGS.has(language)){showToast('Exécution disponible uniquement pour JS, HTML et CSS.','error');return;}
+  if(!code.trim()){showToast('Écris du code d\u2019abord.','error');return;}
+  renderSnippetRun(language,code,getVal('snip-title')||'Test');
+}
+
+function closeSnippetRunModal(){
+  document.getElementById('snippet-run-modal').classList.remove('show');
+  const iframe=document.getElementById('snippet-run-iframe');
+  if(iframe)iframe.srcdoc='';
+}
+
+window.addEventListener('message',(e)=>{
+  const data=e.data;
+  if(!data||!data.__snippetRun)return;
+  const consoleEl=document.getElementById('snippet-run-console');
+  if(!consoleEl)return;
+  if(consoleEl.dataset.empty!=='false'){consoleEl.innerHTML='';consoleEl.dataset.empty='false';}
+  const colors={error:'#ff8080',warn:'#e0c34a',info:'#8fb3ff',log:'var(--text-secondary)'};
+  const line=document.createElement('div');
+  line.style.color=colors[data.type]||colors.log;
+  line.style.marginBottom='2px';
+  line.textContent=`[${data.type}] `+(data.args||[]).join(' ');
+  consoleEl.appendChild(line);
+});
+
+// ---- Version history ----
+function openSnippetHistory(id){
+  const s=snippetsCache[id];
+  if(!s){showToast('Snippet introuvable.','error');return;}
+  setEl('snippet-history-title',s.title||'');
+  const listEl=document.getElementById('snippet-history-list');
+  listEl.innerHTML='<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:13px">Chargement...</div>';
+  document.getElementById('snippet-history-modal').classList.add('show');
+  loadSnippetVersions(id);
+}
+function closeSnippetHistoryModal(){document.getElementById('snippet-history-modal').classList.remove('show');}
+
+async function loadSnippetVersions(id){
+  const listEl=document.getElementById('snippet-history-list');
+  const{data,error}=await db.from('snippet_versions').select('*').eq('snippet_id',id).order('version_index',{ascending:false});
+  if(error){listEl.innerHTML='<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:13px">Erreur de chargement.</div>';return;}
+  const current=snippetsCache[id];
+  const rows=[{__current:true,title:current?.title,description:current?.description,language:current?.language,code:current?.code,created_at:current?.created_at}].concat(data||[]);
+  if(rows.length<=1){
+    listEl.innerHTML='<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:13px">Aucune modification enregistrée pour l\u2019instant. Un historique se crée à chaque édition.</div>';
+    return;
+  }
+  listEl.innerHTML=rows.map((v,i)=>`<div class="docs-saved-card">
+    <div class="docs-saved-head">
+      <div class="docs-saved-title">${v.__current?'Version actuelle':'Version '+(rows.length-i)}</div>
+      <div class="docs-saved-date">${timeAgo(v.created_at)}</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-ghost btn-sm" onclick="previewSnippetVersion(${i})">Aperçu</button>
+      ${!v.__current?`<button class="btn btn-ghost btn-sm" onclick="restoreSnippetVersion('${esc(id)}',${i})">Restaurer</button>`:''}
+    </div>
+    <pre id="snippet-version-preview-${i}" style="display:none;margin-top:8px;background:var(--bg0);border:1px solid var(--border);border-radius:var(--radius);padding:10px;font-family:var(--font-mono);font-size:11px;max-height:160px;overflow:auto;white-space:pre-wrap">${esc(v.code||'')}</pre>
+  </div>`).join('');
+  window.__snippetHistoryRows=rows;
+}
+function previewSnippetVersion(i){
+  const el=document.getElementById('snippet-version-preview-'+i);
+  if(el)el.style.display=el.style.display==='none'?'block':'none';
+}
+async function restoreSnippetVersion(id,i){
+  const rows=window.__snippetHistoryRows||[];
+  const v=rows[i];
+  if(!v||!currentUser)return;
+  const current=snippetsCache[id];
+  if(!current||current.user_id!==currentUser.id){showToast('Tu ne peux modifier que tes propres snippets.','error');return;}
+  if(!confirm('Restaurer cette version ? La version actuelle sera sauvegardée dans l\u2019historique.'))return;
+  const{data:existingVersions}=await db.from('snippet_versions').select('version_index').eq('snippet_id',id).order('version_index',{ascending:false}).limit(1);
+  const nextIndex=(existingVersions&&existingVersions[0]?existingVersions[0].version_index:0)+1;
+  await db.from('snippet_versions').insert({
+    snippet_id:id,title:current.title,description:current.description,language:current.language,
+    code:current.code,tags:current.tags||[],version_index:nextIndex,edited_by:currentUser.id
+  });
+  const{error}=await db.from('snippets').update({title:v.title,description:v.description,language:v.language,code:v.code}).eq('id',id).eq('user_id',currentUser.id);
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  closeSnippetHistoryModal();
+  showToast('Version restaurée !','success');
+  await loadSnippets();
 }
 async function openSharedSnippetFromUrl(){
   const params=new URLSearchParams(location.search);
@@ -5416,13 +6578,17 @@ async function loadSnippets(){
     if(lk)lk.forEach(l=>myLikes.add(l.snippet_id));
   }
   const langLabels={javascript:'JavaScript',python:'Python',css:'CSS',html:'HTML',sql:'SQL',other:'Autre'};
+  snippetsCache={};
   cont.innerHTML=data.map(s=>{
+    snippetsCache[s.id]=s;
     const prof=s.profiles||{};
     const name=prof.username||'Inconnu';
     const liked=myLikes.has(s.id);
     const codeEscaped=esc(s.code||'');
     const avatarHtml=prof.avatar_url?`<img src="${esc(prof.avatar_url)}" alt="">`:`<span>${esc(name.charAt(0).toUpperCase())}</span>`;
     const langLabel=langLabels[s.language]||s.language||'Code';
+    const isOwner=currentUser&&s.user_id===currentUser.id;
+    const isRunnable=RUNNABLE_SNIPPET_LANGS.has(s.language);
     return`<div class="snippet-card">
       <div class="snippet-card-header">
         <div class="snippet-card-avatar">${avatarHtml}</div>
@@ -5445,6 +6611,9 @@ async function loadSnippets(){
         <button class="post-action ${liked?'post-liked':''}" onclick="toggleSnippetLike('${esc(s.id)}',this)">◆ <span class="like-count">${s.likes_count||0}</span></button>
         <button class="post-action" onclick="toggleSnippetComments('${esc(s.id)}')">💬 Code review</button>
         <button class="post-action" onclick="shareSnippet('${esc(s.id)}')">🔗 Partager</button>
+        ${isRunnable?`<button class="post-action" onclick="runSnippetById('${esc(s.id)}')">▶ Exécuter</button>`:''}
+        ${isOwner?`<button class="post-action" onclick="editSnippet('${esc(s.id)}')">✎ Modifier</button>
+        <button class="post-action" onclick="openSnippetHistory('${esc(s.id)}')">🕘 Historique</button>`:''}
       </div>
       <div class="snippet-comments" id="snip-comments-${esc(s.id)}" style="display:none;margin-top:10px;border-top:1px solid var(--border);padding-top:10px"></div>
     </div>`;
@@ -5709,6 +6878,7 @@ async function openDmConv(convId, username){
   currentDmConvId=convId;
   currentDmUser=username;
   isDmMode=true;
+  trackActivity('dm',convId,'@'+username);
   // NEXUS VAGUE 4 — realtime channel flooding (ouverture/abonnement en rafale)
   nexusTrackRealtimeChurn('dm');
   unsubscribeChannelRealtime();
@@ -5937,6 +7107,7 @@ async function notifyMentions(content,context){
 
 function switchChannel(el,name){
   isDmMode=false;currentDmConvId=null;currentDmUser=null;
+  trackActivity('channel',name,'#'+name);
   // NEXUS VAGUE 4 — realtime channel flooding
   nexusTrackRealtimeChurn('channel');
   if(dmRealtimeSub){db.removeChannel(dmRealtimeSub);dmRealtimeSub=null;}
@@ -5975,8 +7146,84 @@ function populateHomeGreeting(){
       <div class="hgs-item"><div class="hgs-num">${currentProfile.xp||0}</div><div class="hgs-label">XP</div></div>
       <div class="hgs-item"><div class="hgs-num">${currentProfile.streak||0}</div><div class="hgs-label">Streak</div></div>`;
   }
+  renderResumeWidget();
+  loadDailySummary();
 }
 function setHtmlSafe(id,html){const el=document.getElementById(id);if(el)el.innerHTML=html;}
+
+// WIDGET "REPRENDRE OÙ TU EN ÉTAIS" — mémorise la dernière chose ouverte
+// (snippet/challenge/salon/DM) en localStorage, affiché sur la Home.
+const ACTIVITY_LABELS={snippet:{icon:'💻',verb:'Reprendre le snippet',section:'editor'},challenge:{icon:'📚',verb:'Reprendre le challenge',section:'learn'},channel:{icon:'💬',verb:'Reprendre la discussion',section:'feed'},dm:{icon:'✉️',verb:'Reprendre la conversation',section:'messages'}};
+function trackActivity(type,id,label){
+  if(!currentUser)return;
+  try{
+    localStorage.setItem('dc_lastactivity_'+currentUser.id,JSON.stringify({type,id,label,ts:Date.now()}));
+  }catch(e){}
+}
+function renderResumeWidget(){
+  const el=document.getElementById('home-resume-widget');
+  if(!el||!currentUser)return;
+  let act=null;
+  try{act=JSON.parse(localStorage.getItem('dc_lastactivity_'+currentUser.id)||'null');}catch(e){}
+  if(!act||!ACTIVITY_LABELS[act.type]){el.style.display='none';return;}
+  const meta=ACTIVITY_LABELS[act.type];
+  el.style.display='block';
+  el.className='insight-chart-card';
+  el.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="font-size:20px">${meta.icon}</div>
+      <div>
+        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-family:var(--font-mono);letter-spacing:.04em">Reprendre où tu en étais</div>
+        <div style="font-size:14px;font-weight:600">${esc(act.label)}</div>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="resumeActivity()">${meta.verb} →</button>
+  </div>`;
+}
+function resumeActivity(){
+  let act=null;
+  try{act=JSON.parse(localStorage.getItem('dc_lastactivity_'+currentUser.id)||'null');}catch(e){}
+  if(!act)return;
+  const meta=ACTIVITY_LABELS[act.type];
+  if(!meta)return;
+  navigate(meta.section);
+  setTimeout(()=>{
+    if(act.type==='snippet')editSnippet(act.id);
+    if(act.type==='challenge')openChallenge(act.id);
+    if(act.type==='dm')openDmConv(act.id,act.label.replace(/^@/,''));
+    if(act.type==='channel'){
+      const chEl=[...document.querySelectorAll('.channel-item')].find(c=>c.textContent.trim().replace('#','')===act.id);
+      if(chEl)switchChannel(chEl,act.id);
+    }
+  },200);
+}
+
+// RÉSUMÉ QUOTIDIEN PERSO — notifications non lues, DMs, et activité de l'équipe (following)
+async function loadDailySummary(){
+  const el=document.getElementById('home-daily-summary');
+  if(!el||!currentUser)return;
+  const [{count:unreadDms},{count:unreadOther}] = await Promise.all([
+    db.from('notifications').select('*',{count:'exact',head:true}).eq('user_id',currentUser.id).eq('is_read',false).eq('type','dm'),
+    db.from('notifications').select('*',{count:'exact',head:true}).eq('user_id',currentUser.id).eq('is_read',false).neq('type','dm')
+  ]);
+  const since=new Date(); since.setHours(0,0,0,0);
+  const{data:following}=await db.from('follows').select('followed_id').eq('follower_id',currentUser.id);
+  const followIds=(following||[]).map(f=>f.followed_id);
+  let teamCompletions=0;
+  if(followIds.length>0){
+    const{count}=await db.from('xp_logs').select('*',{count:'exact',head:true}).in('user_id',followIds).in('action',['challenge_completed','challenge_completed_bonus']).gte('created_at',since.toISOString());
+    teamCompletions=count||0;
+  }
+  const parts=[];
+  if(unreadDms>0)parts.push(`💬 ${unreadDms} nouveau${unreadDms>1?'x':''} message${unreadDms>1?'s':''}`);
+  if(unreadOther>0)parts.push(`🔔 ${unreadOther} notification${unreadOther>1?'s':''} non lue${unreadOther>1?'s':''}`);
+  if(teamCompletions>0)parts.push(`🏆 ${teamCompletions} challenge${teamCompletions>1?'s':''} terminé${teamCompletions>1?'s':''} par ton équipe aujourd'hui`);
+  if(parts.length===0){el.style.display='none';return;}
+  el.style.display='block';
+  el.className='insight-chart-card';
+  el.innerHTML=`<div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;font-family:var(--font-mono);letter-spacing:.04em;margin-bottom:8px">Résumé du jour</div>
+    <div style="display:flex;flex-direction:column;gap:6px;font-size:13px">${parts.map(p=>`<div>${p}</div>`).join('')}</div>`;
+}
 
 async function loadFeed() {
   const cont = document.getElementById('feed-posts');
@@ -6294,6 +7541,7 @@ function switchDeployTab(el,tab){
   document.getElementById('deploy-pane-'+tab)?.classList.add('active');
   if(tab==='deployments')loadDeployList();
   if(tab==='recruit')loadJobs();
+  if(tab==='applications')loadApplicationsKanban();
 }
 
 const DEPLOY_STATE_KEY='dc_deploy_state';
@@ -6377,12 +7625,22 @@ async function publishJob(){
   const desc=getVal('job-desc').trim();
   const tags=getVal('job-tags').split(',').map(t=>t.trim()).filter(Boolean);
   if(!title||!desc){showToast('Titre et description obligatoires.','error');return;}
-  const{error}=await db.from('job_posts').insert({user_id:currentUser.id,title,company,budget,description:desc,tags});
+  const{data:inserted,error}=await db.from('job_posts').insert({user_id:currentUser.id,title,company,budget,description:desc,tags}).select().maybeSingle();
   if(error){showToast('Erreur lors de la publication : '+error.message,'error');return;}
   showToast('Offre publiée !','success');
   closeJobModal();
   document.getElementById('job-title').value='';document.getElementById('job-company').value='';document.getElementById('job-budget').value='';document.getElementById('job-desc').value='';document.getElementById('job-tags').value='';
   await loadJobs();
+  if(inserted)dispatchJobAlerts(inserted).catch(e=>console.error('dispatchJobAlerts:',e));
+}
+
+// Compatibility score between a job's tags and the current user's tech_stack.
+function jobMatchScore(jobTags){
+  const mine=(currentProfile?.tech_stack||[]).map(t=>t.toLowerCase().trim());
+  const theirs=(jobTags||[]).map(t=>t.toLowerCase().trim());
+  if(!mine.length||!theirs.length)return null;
+  const overlap=theirs.filter(t=>mine.includes(t)).length;
+  return Math.round((overlap/theirs.length)*100);
 }
 
 async function loadJobs(){
@@ -6391,11 +7649,132 @@ async function loadJobs(){
 
   const{data,error}=await db.from('job_posts').select('*,profiles(username)').order('created_at',{ascending:false}).limit(30);
   if(error||!data||data.length===0){cont.innerHTML='<div class="empty-state"><div class="empty-state-icon">⬡</div><div class="empty-state-text">Aucune offre pour l\'instant.</div><div class="empty-state-sub">Sois le premier à publier une mission !</div></div>';return;}
+
+  let myAppliedJobIds=new Set();
+  if(currentUser){
+    const{data:apps}=await db.from('job_applications').select('job_id').eq('applicant_id',currentUser.id);
+    if(apps)apps.forEach(a=>myAppliedJobIds.add(a.job_id));
+  }
+
   cont.innerHTML=data.map(j=>{
     const tags=(j.tags||[]).map(t=>`<span class="stack-tag">${esc(t)}</span>`).join('');
     const author=j.profiles?.username?`<span style="cursor:pointer" onclick="event.stopPropagation();openProfile('${esc(j.profiles.username)}')">par @${esc(j.profiles.username)}</span>`:'';
-    return`<div class="job-card"><div class="job-header"><div><div class="job-title">${esc(j.title)}</div><div class="job-company">${esc(j.company||'')} ${author?'· '+author:''}</div></div><div class="job-budget">${esc(j.budget||'')}</div></div><div class="job-desc">${esc(j.description)}</div><div class="job-tags">${tags}</div></div>`;
+    const score=jobMatchScore(j.tags);
+    const scoreColor=score===null?null:(score>=70?'#7dd9ce':score>=40?'#d0c060':'#e08080');
+    const scoreBadge=score!==null?`<span class="stack-tag" style="border-color:${scoreColor};color:${scoreColor}" title="Score de compatibilité avec ton profil">◆ ${score}% compatible</span>`:'';
+    const isOwner=currentUser&&j.user_id===currentUser.id;
+    const applied=myAppliedJobIds.has(j.id);
+    let applyBtn='';
+    if(!isOwner){
+      applyBtn=applied
+        ?`<button class="btn btn-ghost btn-sm" disabled style="margin-top:10px;opacity:.6">✓ Candidature envoyée</button>`
+        :`<button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="event.stopPropagation();applyToJob('${esc(j.id)}','${esc(j.title).replace(/'/g,"\\'")}',this)">Postuler</button>`;
+    }
+    return`<div class="job-card"><div class="job-header"><div><div class="job-title">${esc(j.title)}</div><div class="job-company">${esc(j.company||'')} ${author?'· '+author:''}</div></div><div class="job-budget">${esc(j.budget||'')}</div></div><div class="job-desc">${esc(j.description)}</div><div class="job-tags">${tags}${scoreBadge}</div>${applyBtn}</div>`;
   }).join('');
+}
+
+async function applyToJob(jobId,jobTitle,btnEl){
+  if(!currentUser){showToast('Connecte-toi pour postuler.','error');return;}
+  const{data:job}=await db.from('job_posts').select('user_id').eq('id',jobId).maybeSingle();
+  const{error}=await db.from('job_applications').insert({job_id:jobId,applicant_id:currentUser.id,message:`Candidature de @${currentProfile.username} pour "${jobTitle}"`});
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  showToast('Candidature envoyée !','success');
+  if(job?.user_id)await notifyUser(job.user_id,'recruit',`@${currentProfile.username} a postulé à "${jobTitle}".`,'recruit');
+  if(btnEl){btnEl.disabled=true;btnEl.textContent='✓ Candidature envoyée';btnEl.classList.remove('btn-primary');btnEl.classList.add('btn-ghost');btnEl.style.opacity='.6';}
+}
+
+// ---- Application kanban (Envoyé → Entretien → Offre) ----
+async function loadApplicationsKanban(){
+  if(!currentUser)return;
+  ['sent','interview','offer'].forEach(s=>{document.getElementById('my-app-list-'+s).innerHTML='';document.getElementById('my-app-count-'+s).textContent='0';});
+
+  // Mes candidatures envoyées (positionnées selon pipeline_stage, mis à jour par le recruteur)
+  const{data:mine}=await db.from('job_applications').select('*,job_posts(title,company)').eq('applicant_id',currentUser.id).order('created_at',{ascending:false});
+  (mine||[]).forEach(a=>{
+    const stage=a.pipeline_stage||'sent';
+    const listEl=document.getElementById('my-app-list-'+stage);
+    if(!listEl)return;
+    listEl.insertAdjacentHTML('beforeend',`<div class="kanban-card">
+      <div style="font-weight:600">${esc(a.job_posts?.title||'Offre')}</div>
+      <div style="font-size:11px;color:var(--text-muted)">${esc(a.job_posts?.company||'')} · ${timeAgo(a.created_at)}</div>
+    </div>`);
+    const countEl=document.getElementById('my-app-count-'+stage);
+    if(countEl)countEl.textContent=String(parseInt(countEl.textContent||'0')+1);
+  });
+  ['sent','interview','offer'].forEach(s=>{
+    const listEl=document.getElementById('my-app-list-'+s);
+    if(listEl&&!listEl.children.length)listEl.innerHTML='<div style="font-size:12px;color:var(--text-muted);padding:8px 0">Aucune</div>';
+  });
+
+  // Candidatures reçues sur mes offres, groupées par offre, avec contrôle de la stage
+  const recEl=document.getElementById('received-applications-list');
+  const{data:myJobs}=await db.from('job_posts').select('id,title').eq('user_id',currentUser.id);
+  if(!myJobs||!myJobs.length){
+    recEl.innerHTML='<div class="empty-state"><div class="empty-state-icon">📥</div><div class="empty-state-text">Aucune candidature reçue.</div></div>';
+    return;
+  }
+  const jobIds=myJobs.map(j=>j.id);
+  const jobTitleMap=Object.fromEntries(myJobs.map(j=>[j.id,j.title]));
+  const{data:received}=await db.from('job_applications').select('*,profiles(username,avatar_url)').in('job_id',jobIds).order('created_at',{ascending:false});
+  if(!received||!received.length){
+    recEl.innerHTML='<div class="empty-state"><div class="empty-state-icon">📥</div><div class="empty-state-text">Aucune candidature reçue.</div></div>';
+    return;
+  }
+  const stageLabels={sent:'Envoyé',interview:'Entretien',offer:'Offre'};
+  recEl.innerHTML=received.map(a=>{
+    const name=a.profiles?.username||'Inconnu';
+    const stage=a.pipeline_stage||'sent';
+    const nextStage=stage==='sent'?'interview':stage==='interview'?'offer':null;
+    return`<div class="job-card" style="cursor:default">
+      <div class="job-header">
+        <div><div class="job-title" style="cursor:pointer" onclick="openProfile('${esc(name)}')">@${esc(name)}</div><div class="job-company">${esc(jobTitleMap[a.job_id]||'Offre')} · ${timeAgo(a.created_at)}</div></div>
+        <span class="stack-tag">${esc(stageLabels[stage]||stage)}</span>
+      </div>
+      ${a.message?`<div class="job-desc">${esc(a.message)}</div>`:''}
+      <div style="display:flex;gap:8px;margin-top:10px">
+        ${nextStage?`<button class="btn btn-primary btn-sm" onclick="advanceApplicationStage('${esc(a.id)}','${nextStage}')">→ ${stageLabels[nextStage]}</button>`:''}
+        ${stage!=='sent'?`<button class="btn btn-ghost btn-sm" onclick="advanceApplicationStage('${esc(a.id)}','sent')">↺ Réinitialiser</button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function advanceApplicationStage(applicationId,stage){
+  const{data:app,error}=await db.from('job_applications').update({pipeline_stage:stage}).eq('id',applicationId).select('applicant_id,job_id,job_posts(title)').maybeSingle();
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  showToast('Candidature mise à jour !','success');
+  const stageLabels={sent:'Envoyé',interview:'Entretien',offer:'Offre'};
+  if(app?.applicant_id)await notifyUser(app.applicant_id,'recruit',`Ta candidature pour "${app.job_posts?.title||'une offre'}" est passée à l'étape "${stageLabels[stage]}".`,'recruit');
+  await loadApplicationsKanban();
+}
+
+// ---- Job alerts ----
+async function saveJobAlertPrefs(){
+  if(!currentUser){showToast('Connecte-toi pour configurer des alertes.','error');return;}
+  const keywords=getVal('alert-keywords').split(',').map(t=>t.trim().toLowerCase()).filter(Boolean);
+  const minBudget=getVal('alert-min-budget');
+  const active=document.getElementById('alert-active-toggle').classList.contains('on');
+  const{error}=await db.from('job_alert_prefs').upsert({
+    user_id:currentUser.id,keywords,stack:currentProfile?.tech_stack||[],
+    min_budget:minBudget?parseFloat(minBudget):null,active
+  },{onConflict:'user_id'});
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  showToast('Alertes enregistrées !','success');
+}
+
+async function dispatchJobAlerts(job){
+  const{data:prefs}=await db.from('job_alert_prefs').select('*').eq('active',true);
+  if(!prefs||!prefs.length)return;
+  const jobTags=(job.tags||[]).map(t=>t.toLowerCase().trim());
+  const jobText=`${job.title} ${job.description}`.toLowerCase();
+  for(const p of prefs){
+    if(p.user_id===currentUser.id)continue;
+    const kw=(p.keywords||[]).concat(p.stack||[]).map(t=>t.toLowerCase().trim()).filter(Boolean);
+    const matches=kw.some(k=>jobTags.includes(k)||jobText.includes(k));
+    if(!matches)continue;
+    await notifyUser(p.user_id,'recruit',`Nouvelle offre correspondant à tes alertes : "${job.title}".`,'recruit');
+  }
 }
 function githubUsernameFromUrl(url){
   if(!url)return null;
@@ -6611,7 +7990,7 @@ function generateDocFromCode(){
       }
     });
   }
-  lastGeneratedDoc={title:items[0]?items[0].name+' & autres':'Documentation', code, lang, markdown:md};
+  lastGeneratedDoc={title:items[0]?items[0].name+' & autres':'Documentation', code, lang, markdown:md, items};
   out.innerHTML=`<div class="markdown-body">${renderMarkdown(md)}</div>`;
   document.getElementById('docs-save-btn').style.display='inline-flex';
   showToast(`${items.length} élément(s) détecté(s).`,'success');
@@ -6630,28 +8009,160 @@ async function saveGeneratedDoc(){
   document.getElementById('docs-save-btn').style.display='none';
 }
 
+let activeDocsFilter='all';
+function setDocsFilter(el,f){
+  document.querySelectorAll('[data-docs-filter]').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  activeDocsFilter=f;
+  loadSavedDocs();
+}
+
 function loadSavedDocs(){
   const cont=document.getElementById('docs-saved-list');
   if(!cont)return;
   if(!currentUser){cont.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Connecte-toi pour voir tes documentations sauvegardées.</div>';return;}
-  const key='dc_docs_'+currentUser.id;
-  let saved=[];
-  try{saved=JSON.parse(localStorage.getItem(key)||'[]');}catch(e){}
+  let saved=getSavedDocsList();
+  if(activeDocsFilter==='bookmarked')saved=saved.filter(d=>d.bookmarked);
   if(saved.length===0){
-    cont.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucune documentation sauvegardée pour l\'instant.</div>';
+    cont.innerHTML=`<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">${activeDocsFilter==='bookmarked'?'Aucun marque-page pour l\'instant.':'Aucune documentation sauvegardée pour l\'instant.'}</div>`;
     return;
   }
-  cont.innerHTML=saved.map(d=>`<div class="docs-saved-card">
+  cont.innerHTML=saved.map(d=>{
+    const hasQuiz=(d.items||[]).length>0;
+    const quizLabel=d.quizBest!=null?`Quiz ✓ ${d.quizBest}%`:'Quiz';
+    return `<div class="docs-saved-card">
     <div class="docs-saved-head">
-      <div class="docs-saved-title">${esc(d.title||'Documentation')} <span style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono);text-transform:uppercase">${esc(d.lang||'')}</span></div>
+      <div class="docs-saved-title">
+        <span class="doc-bookmark-star${d.bookmarked?' active':''}" style="cursor:pointer;margin-right:4px" onclick="toggleDocBookmark('${esc(d.id)}')" title="Marque-page">${d.bookmarked?'★':'☆'}</span>
+        ${esc(d.title||'Documentation')} <span style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono);text-transform:uppercase">${esc(d.lang||'')}</span>
+      </div>
       <div class="docs-saved-date">${timeAgo(d.created_at)}</div>
     </div>
-    <div style="display:flex;gap:8px;margin-top:8px">
+    <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
       <button class="btn btn-ghost btn-sm" onclick="viewSavedDoc('${esc(d.id)}')">Voir</button>
       <button class="btn btn-ghost btn-sm" onclick="exportSavedDoc('${esc(d.id)}')">Exporter .md</button>
+      ${hasQuiz?`<button class="btn btn-ghost btn-sm" onclick="openDocQuiz('${esc(d.id)}')">📝 ${quizLabel}</button>`:''}
+      <button class="btn btn-ghost btn-sm" onclick="toggleDocNote(this,'${esc(d.id)}')">✎ Note${d.note?' •':''}</button>
       <button class="btn btn-ghost btn-sm" style="color:#e08080" onclick="deleteSavedDoc('${esc(d.id)}')">Suppr.</button>
     </div>
+    <div class="doc-note-box" id="doc-note-${esc(d.id)}" style="display:none;margin-top:8px">
+      <textarea class="docs-gen-input" style="min-height:60px;font-size:12px" placeholder="Ta note personnelle sur cette doc..." onblur="saveDocNote('${esc(d.id)}',this.value)">${esc(d.note||'')}</textarea>
+    </div>
+  </div>`;
+  }).join('');
+}
+
+function toggleDocNote(btn,id){
+  const box=document.getElementById('doc-note-'+id);
+  if(box)box.style.display=box.style.display==='none'?'block':'none';
+}
+
+function saveDocNote(id,note){
+  if(!currentUser)return;
+  const key='dc_docs_'+currentUser.id;
+  let saved=getSavedDocsList();
+  const idx=saved.findIndex(x=>x.id===id);
+  if(idx===-1)return;
+  saved[idx].note=note.trim();
+  try{localStorage.setItem(key,JSON.stringify(saved));}catch(e){}
+  showToast('Note enregistrée.','success');
+}
+
+function toggleDocBookmark(id){
+  if(!currentUser)return;
+  const key='dc_docs_'+currentUser.id;
+  let saved=getSavedDocsList();
+  const idx=saved.findIndex(x=>x.id===id);
+  if(idx===-1)return;
+  saved[idx].bookmarked=!saved[idx].bookmarked;
+  try{localStorage.setItem(key,JSON.stringify(saved));}catch(e){}
+  loadSavedDocs();
+}
+
+// QUIZ DOC — généré déterministe à partir de la structure réelle du code documenté
+let currentDocQuiz=null;
+function generateDocQuizQuestions(d){
+  const items=d.items||[];
+  const questions=[];
+  if(items.length===0)return questions;
+  questions.push({
+    q:`Combien de fonctions/classes ont été détectées dans "${d.title}" ?`,
+    options:[items.length,Math.max(0,items.length-1),items.length+1,items.length+2].sort((a,b)=>a-b).map(String),
+    answer:String(items.length)
+  });
+  const withParams=items.find(i=>i.type==='function'&&i.params&&i.params.length>0);
+  if(withParams){
+    const n=withParams.params.length;
+    questions.push({
+      q:`Combien de paramètres a la fonction \`${withParams.name}\` ?`,
+      options:[...new Set([n,Math.max(0,n-1),n+1,n+2])].map(String).slice(0,4),
+      answer:String(n)
+    });
+  }
+  if(items.length>=2){
+    const real=items[0].name;
+    const fakes=['handleData','processInput','init'].filter(f=>!items.some(i=>i.name===f));
+    questions.push({
+      q:'Lequel de ces noms fait partie de cette documentation ?',
+      options:[real,...fakes.slice(0,3)].sort(()=>0.5-Math.random()),
+      answer:real
+    });
+  }
+  return questions;
+}
+
+function openDocQuiz(id){
+  const d=getSavedDocsList().find(x=>x.id===id);
+  if(!d)return;
+  const questions=generateDocQuizQuestions(d);
+  if(questions.length===0){showToast('Pas assez de contenu pour générer un quiz.','error');return;}
+  currentDocQuiz={id,questions,selected:new Array(questions.length).fill(null)};
+  setEl('doc-quiz-title',d.title||'Documentation');
+  const body=document.getElementById('doc-quiz-body');
+  body.innerHTML=questions.map((q,qi)=>`<div style="margin-bottom:16px">
+    <div style="font-size:13px;font-weight:600;margin-bottom:8px">${qi+1}. ${esc(q.q)}</div>
+    ${q.options.map((opt,oi)=>`<label style="display:block;padding:7px 10px;margin-bottom:5px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:12px" onclick="selectDocQuizOption(${qi},${oi},this)">
+      <input type="radio" name="docquiz-${qi}" style="margin-right:6px">${esc(String(opt))}
+    </label>`).join('')}
   </div>`).join('');
+  document.getElementById('doc-quiz-result').style.display='none';
+  document.getElementById('doc-quiz-submit-btn').style.display='inline-flex';
+  document.getElementById('doc-quiz-modal').classList.add('show');
+}
+function selectDocQuizOption(qi,oi,el){
+  if(!currentDocQuiz)return;
+  currentDocQuiz.selected[qi]=el.querySelector('input').parentElement.textContent.trim();
+  const group=el.parentElement.querySelectorAll('label');
+  group.forEach(g=>g.style.borderColor='var(--border)');
+  el.style.borderColor='var(--accent-dim)';
+  el.querySelector('input').checked=true;
+}
+function submitDocQuiz(){
+  if(!currentDocQuiz)return;
+  const {questions,selected,id}=currentDocQuiz;
+  let correct=0;
+  questions.forEach((q,qi)=>{if(selected[qi]===String(q.answer))correct++;});
+  const pct=Math.round((correct/questions.length)*100);
+  const res=document.getElementById('doc-quiz-result');
+  res.style.display='block';
+  res.style.background=pct>=70?'rgba(90,154,106,.1)':'rgba(154,90,90,.1)';
+  res.style.color=pct>=70?'#7ac88a':'#e08080';
+  res.textContent=`${correct}/${questions.length} bonnes réponses — ${pct}%`;
+  document.getElementById('doc-quiz-submit-btn').style.display='none';
+  if(currentUser){
+    const key='dc_docs_'+currentUser.id;
+    let saved=getSavedDocsList();
+    const idx=saved.findIndex(x=>x.id===id);
+    if(idx!==-1){
+      saved[idx].quizBest=Math.max(saved[idx].quizBest||0,pct);
+      try{localStorage.setItem(key,JSON.stringify(saved));}catch(e){}
+    }
+  }
+}
+function closeDocQuiz(){
+  document.getElementById('doc-quiz-modal').classList.remove('show');
+  currentDocQuiz=null;
+  loadSavedDocs();
 }
 
 function getSavedDocsList(){
@@ -6724,7 +8235,8 @@ function renderChallenges(){
   const catIcon={cybersecurity:'⬡',web_dev:'◉',algorithm:'◆',devops:'⬢',data:'◇',ai_ml:'⬟'};
   list.innerHTML=entries.map(([id,c])=>{
     const done=completedChallenges.has(id);
-    return`<div class="challenge-card${done?' done':''}" onclick="openChallenge('${id}')" style="${done?'opacity:.6;border-color:var(--accent-dim)':''}">
+    const isWeekly=weeklyChallengeId===id;
+    return`<div class="challenge-card${done?' done':''}" onclick="openChallenge('${id}')" style="${done?'opacity:.6;border-color:var(--accent-dim)':''}${isWeekly&&!done?';border-color:#e8a94a':''}">
       <div class="challenge-header">
         <div class="challenge-title">${done?'✓ ':''} ${esc(c.title)}</div>
         <span class="diff-badge ${c.diff}">${DIFF_LABELS[c.diff]||c.diff}</span>
@@ -6733,10 +8245,18 @@ function renderChallenges(){
       <div class="challenge-meta">
         <span>${catIcon[c.cat]||'◈'} ${CAT_LABELS[c.cat]||c.cat}</span>
         <span>◆ ${c.xp} XP</span>
+        ${isWeekly&&!done?'<span style="color:#e8a94a">🔥 Défi de la semaine +50% XP</span>':''}
         ${done?'<span style="color:var(--accent-dim)">✓ Résolu</span>':''}
       </div>
     </div>`;
   }).join('');
+}
+let weeklyChallengeId=null;
+async function loadWeeklyChallengeId(){
+  if(weeklyChallengeId)return weeklyChallengeId;
+  const{data,error}=await db.rpc('get_weekly_challenge_id');
+  if(!error&&data)weeklyChallengeId=data;
+  return weeklyChallengeId;
 }
 async function loadLearnProgress(){
   const el=document.getElementById('learn-progress');if(!el)return;
@@ -6754,6 +8274,50 @@ async function loadLearnProgress(){
       <div style="height:100%;width:${Math.round(completedChallenges.size/total*100)}%;background:var(--accent-dim);border-radius:2px;transition:width .4s"></div>
     </div>`;
   renderChallenges();
+  loadLearnBadges();
+}
+
+// BADGES PAR PARCOURS — un badge "learning_path" par catégorie, décroché quand
+// tous les challenges de la catégorie sont résolus.
+const CAT_TO_BADGE_NAME={
+  cybersecurity:'Parcours Cybersécurité', web_dev:'Parcours Dev Web', algorithm:'Parcours Algorithmes',
+  devops:'Parcours DevOps', data:'Parcours Data', ai_ml:'Parcours IA / ML'
+};
+async function loadLearnBadges(){
+  const el=document.getElementById('learn-badges');if(!el||!currentUser)return;
+  const{data:pathBadges}=await db.from('badges').select('id,name,icon,description').eq('category','learning_path');
+  const{data:earned}=await db.from('user_badges').select('badge_id').eq('user_id',currentUser.id);
+  const earnedIds=new Set((earned||[]).map(e=>e.badge_id));
+  if(!pathBadges||pathBadges.length===0){el.innerHTML='<div style="font-size:12px;color:var(--text-muted)">Aucun badge disponible.</div>';return;}
+  el.innerHTML=pathBadges.map(b=>{
+    const unlocked=earnedIds.has(b.id);
+    return `<div class="badge-card ${unlocked?'unlocked':'locked'}" title="${esc(b.description||'')}">
+      <div class="badge-icon">${esc(b.icon||'◆')}</div>
+      <div class="badge-name">${esc(b.name)}</div>
+    </div>`;
+  }).join('');
+  await checkAndAwardPathBadges(pathBadges,earnedIds);
+}
+async function checkAndAwardPathBadges(pathBadges,earnedIds){
+  if(!currentUser)return;
+  for(const[cat,badgeName]of Object.entries(CAT_TO_BADGE_NAME)){
+    const catChallengeIds=Object.entries(challenges).filter(([id,c])=>c.cat===cat).map(([id])=>id);
+    if(catChallengeIds.length===0)continue;
+    const allDone=catChallengeIds.every(id=>completedChallenges.has(id));
+    if(!allDone)continue;
+    const badge=pathBadges.find(b=>b.name===badgeName);
+    if(!badge||earnedIds.has(badge.id))continue;
+    const{error}=await db.from('user_badges').insert({user_id:currentUser.id,badge_id:badge.id});
+    if(!error){
+      showToast(`🏆 Badge débloqué : ${badgeName} !`,'success');
+      earnedIds.add(badge.id);
+      const el=document.getElementById('learn-badges');
+      if(el){
+        const card=[...el.children].find(c=>c.querySelector('.badge-name')?.textContent===badgeName);
+        if(card)card.classList.replace('locked','unlocked');
+      }
+    }
+  }
 }
 
 // CHALLENGES
@@ -6793,6 +8357,7 @@ const challenges={
 function openChallenge(id){
   const c=challenges[id];if(!c)return;
   challengeId=id;
+  trackActivity('challenge',id,c.title);
   setEl('challenge-modal-title',c.title);
   setEl('challenge-modal-meta',c.meta);
   document.getElementById('challenge-modal-desc').textContent=c.desc;
@@ -7691,6 +9256,54 @@ function switchAdmin(el,section){
 function switchSettings(el,s){document.querySelectorAll('.settings-nav-item').forEach(n=>n.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.settings-section').forEach(x=>x.classList.remove('active'));document.getElementById('settings-'+s)?.classList.add('active');if(s==='premium-s')updatePremiumStatus();}
 // (switchProfileTab — voir définition unique plus haut, ce doublon cassait les onglets Projets/Badges/Stats)
 
+// ---- COMMAND PALETTE (⌘K) ----
+const CMDK_COMMANDS=[
+  {label:'Aller à Home',icon:'🏠',run:()=>navigate('home')},
+  {label:'Aller à Teams — Feed',icon:'💬',run:()=>navigate('feed')},
+  {label:'Aller à Teams — Messages',icon:'💬',run:()=>navigate('messages')},
+  {label:'Aller à Teams — Discover',icon:'💬',run:()=>navigate('discover')},
+  {label:'Aller à Docs (Learn)',icon:'📚',run:()=>navigate('learn')},
+  {label:'Aller à Insight (Ranking)',icon:'📊',run:()=>navigate('ranking')},
+  {label:'Aller à Deploy (Recruit)',icon:'🚀',run:()=>navigate('recruit')},
+  {label:'Aller à Code — Éditeur',icon:'💻',run:()=>navigate('editor')},
+  {label:'Aller à Code — Snippets',icon:'💻',run:()=>navigate('snippets')},
+  {label:'Aller à mon profil',icon:'◆',run:()=>navigate('profile')},
+  {label:'Publier un snippet',icon:'+',run:()=>{navigate('snippets');setTimeout(openAddSnippetModal,150);}},
+  {label:'Publier une offre',icon:'+',run:()=>{navigate('recruit');setTimeout(openJobModal,150);}},
+  {label:'Ouvrir les notifications',icon:'🔔',run:()=>toggleNotifDropdown()},
+  {label:'Basculer le mode Focus',icon:'◎',run:()=>toggleFocusMode()},
+  {label:'Rechercher (profils, projets, channels)',icon:'⌕',run:()=>openSearch()},
+];
+function openCmdk(){
+  document.getElementById('cmdk-modal').classList.add('show');
+  filterCmdk('');
+  setTimeout(()=>document.getElementById('cmdk-input').focus(),50);
+}
+function closeCmdk(){document.getElementById('cmdk-modal').classList.remove('show');document.getElementById('cmdk-input').value='';}
+function filterCmdk(q){
+  const cont=document.getElementById('cmdk-results');
+  const query=(q||'').trim().toLowerCase();
+  const matches=CMDK_COMMANDS.filter(c=>!query||c.label.toLowerCase().includes(query));
+  if(!matches.length){cont.innerHTML='<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Aucune commande trouvée.</div>';return;}
+  cont.innerHTML=matches.map((c,i)=>`<div class="search-result-item" onclick="runCmdk(${CMDK_COMMANDS.indexOf(c)})">
+    <span class="search-result-icon">${c.icon}</span>
+    <div><div class="search-result-name">${esc(c.label)}</div></div>
+  </div>`).join('');
+}
+function runCmdk(i){
+  const cmd=CMDK_COMMANDS[i];
+  closeCmdk();
+  if(cmd)cmd.run();
+}
+
+// ---- FOCUS MODE (masque tout sauf le module actif) ----
+function toggleFocusMode(){
+  document.body.classList.toggle('focus-mode');
+  const on=document.body.classList.contains('focus-mode');
+  showToast(on?'Mode Focus activé — Echap pour sortir':'Mode Focus désactivé','info');
+  try{localStorage.setItem('dc_focus_mode',on?'1':'0');}catch(e){}
+}
+
 // SEARCH
 function openSearch() {
   document.getElementById('search-modal').classList.add('show');
@@ -7883,7 +9496,10 @@ async function logSecurityEvent(eventType,details={}){
 // moteur via l'API d'ingestion (Edge Function nexus-ingest) sans
 // jamais voir les données de DevConnect.
 // ============================================================
-const NEXUS_PROJECT_ID='035851c6-16a5-41d8-af43-0504f02955f9'; // <- à remplacer par l'id renvoyé par nexus_schema.sql
+const NEXUS_DEVCONNECT_PROJECT_ID='035851c6-16a5-41d8-af43-0504f02955f9'; // projet interne DevConnect (staff/cover.dev)
+let NEXUS_PROJECT_ID=NEXUS_DEVCONNECT_PROJECT_ID; // devient dynamique : projet actif sélectionné par le client
+let nexusUserProjects=[]; // liste des projets Nexus possédés par l'utilisateur connecté
+let nexusActiveProject=null; // objet projet actif (id, name, plan, key_prefix, monthly_event_limit, is_internal)
 
 // Écrit un event à la fois dans l'ancien système (security_logs, pour
 // compat avec le code existant qui le lit encore ailleurs) et dans le
@@ -7917,18 +9533,21 @@ async function nexusLog(eventType,userRef,details={}){
 const NEXUS_SEVERITY={
   ban:'critical',mute:'high',unsafe_url_blocked:'high',login_failed:'medium',
   spam_detected:'high',register:'info',rule_triggered:'medium',
-  xp_exploit_blocked:'critical',xp_duplicate_attempt:'high'
+  xp_exploit_blocked:'critical',xp_duplicate_attempt:'high',
+  login_attempt_client_signal:'info'
 };
 const NEXUS_LABELS={
   ban:'Bannissement',unmute:'Unmute',mute:'Mute',unsafe_url_blocked:'URL bloquée',
   login_failed:'Échec connexion',spam_detected:'Spam détecté',register:'Inscription',
   rule_triggered:'Règle déclenchée',account_deleted:'Compte supprimé',
-  xp_exploit_blocked:'Tentative de triche XP bloquée',xp_duplicate_attempt:'Double soumission XP bloquée'
+  xp_exploit_blocked:'Tentative de triche XP bloquée',xp_duplicate_attempt:'Double soumission XP bloquée',
+  login_attempt_client_signal:'Tentative de connexion (signal client)'
 };
 let nexusInitialized=false;
 let nexusLogsOffset=0;
 const NEXUS_LOG_PAGE=25;
 let nexusLogsFilter='all';
+let nexusSeverityFilter='all';
 let nexusLogsSearch='';
 let nexusChannel=null;
 
@@ -7984,12 +9603,248 @@ async function nexusUpdateLiveRisk(eventType){
 async function initNexus(){
   if(nexusInitialized){loadNexusOverview();return;}
   nexusInitialized=true;
+  await nexusLoadMyProjects();
   await nexusFetchSettings();
   await nexusFetchRules();
   applyNexusSettingsUI();
   await loadNexusOverview();
+  renderNexusKeyPanel();
   subscribeNexusRealtime();
 }
+
+// ── Multi-tenant : projets Nexus du client connecté ────────────
+const isCoverDevAccount=()=>(currentProfile?.username||'').toLowerCase()==='cover.dev'||(currentProfile?.display_name||'').toLowerCase()==='cover.dev';
+
+async function nexusLoadMyProjects(){
+  nexusUserProjects=[];
+  if(isCoverDevAccount()){
+    nexusUserProjects.push({id:NEXUS_DEVCONNECT_PROJECT_ID,name:'DevConnect (interne)',plan:'internal',is_internal:true});
+  }
+  try{
+    const{data,error}=await db.rpc('nexus_list_my_projects');
+    if(!error&&Array.isArray(data)){
+      data.forEach(p=>{
+        if(p.id===NEXUS_DEVCONNECT_PROJECT_ID)return; // évite le doublon si jamais déjà présent
+        if(p.revoked)return; // clé révoquée = projet non sélectionnable depuis le switcher
+        nexusUserProjects.push({id:p.id,name:p.name,plan:p.plan,key_prefix:p.api_key_prefix,monthly_event_limit:p.monthly_event_limit,is_internal:false});
+      });
+    }
+  }catch(e){/* silencieux */}
+  if(nexusUserProjects.length===0){
+    // Nouveau client sans aucun projet : on le laisse arriver sur un état "créer mon premier projet"
+    nexusActiveProject=null;
+    renderNexusProjectSwitcher();
+    renderNexusNoProjectState();
+    return;
+  }
+  const saved=localStorage.getItem('nexus_active_project');
+  const found=nexusUserProjects.find(p=>p.id===saved);
+  nexusActiveProject=found||nexusUserProjects[0];
+  NEXUS_PROJECT_ID=nexusActiveProject.id;
+  renderNexusProjectSwitcher();
+}
+
+function renderNexusProjectSwitcher(){
+  const head=document.querySelector('#section-nexus .nexus-sidebar-head');
+  if(!head)return;
+  let box=document.getElementById('nexus-project-switcher');
+  if(!box){
+    box=document.createElement('div');
+    box.id='nexus-project-switcher';
+    box.style.cssText='margin-top:12px;display:flex;flex-direction:column;gap:6px';
+    head.appendChild(box);
+  }
+  if(!nexusUserProjects.length){
+    box.innerHTML=`<button class="btn btn-primary btn-sm" style="width:100%;font-size:12px" onclick="nexusCreateProjectFlow()">+ Créer mon projet Nexus</button>`;
+    return;
+  }
+  const options=nexusUserProjects.map(p=>`<option value="${esc(p.id)}" ${p.id===NEXUS_PROJECT_ID?'selected':''}>${esc(p.name)}${p.is_internal?' · interne':''}</option>`).join('');
+  box.innerHTML=`
+    <select id="nexus-project-select" onchange="nexusSwitchProject(this.value)" style="width:100%;font-size:12px;padding:6px 8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);color:var(--text)">${options}</select>
+    <button class="btn btn-ghost btn-sm" style="width:100%;font-size:11px" onclick="nexusCreateProjectFlow()">+ Nouveau projet</button>
+  `;
+}
+
+function renderNexusNoProjectState(){
+  const overview=document.getElementById('nexus-overview');
+  if(!overview)return;
+  overview.querySelectorAll('.nexus-empty-state').forEach(e=>e.remove());
+  const div=document.createElement('div');
+  div.className='nexus-empty-state';
+  div.style.cssText='padding:48px 24px;text-align:center;color:rgba(255,255,255,.4);font-size:13px';
+  div.innerHTML=`Tu n'as pas encore de projet Nexus.<br><br><button class="btn btn-primary btn-sm" onclick="nexusCreateProjectFlow()">Créer mon premier projet</button>`;
+  overview.appendChild(div);
+}
+
+async function nexusSwitchProject(projectId){
+  if(!projectId||projectId===NEXUS_PROJECT_ID)return;
+  const proj=nexusUserProjects.find(p=>p.id===projectId);
+  if(!proj)return;
+  nexusActiveProject=proj;
+  NEXUS_PROJECT_ID=projectId;
+  localStorage.setItem('nexus_active_project',projectId);
+  nexusUnsubscribeRealtime();
+  await nexusFetchSettings();
+  await nexusFetchRules();
+  applyNexusSettingsUI();
+  await loadNexusOverview();
+  renderNexusKeyPanel();
+  subscribeNexusRealtime();
+  showToast(`Projet actif : ${proj.name}`,'info');
+}
+
+async function nexusCreateProjectFlow(){
+  const name=(prompt('Nom du nouveau projet Nexus (ex : mon-app-prod) :')||'').trim();
+  if(!name)return;
+  try{
+    const{data,error}=await db.rpc('nexus_create_project',{p_name:name});
+    if(error){showToast('Erreur création projet : '+error.message,'error');return;}
+    const row=Array.isArray(data)?data[0]:data;
+    await nexusLoadMyProjects();
+    if(row?.project_id){
+      NEXUS_PROJECT_ID=row.project_id;
+      nexusActiveProject=nexusUserProjects.find(p=>p.id===row.project_id)||nexusActiveProject;
+      localStorage.setItem('nexus_active_project',row.project_id);
+      renderNexusProjectSwitcher();
+    }
+    if(row?.api_key){
+      showNexusApiKeyModal(row.api_key,name);
+    }
+    await nexusFetchSettings();
+    await nexusFetchRules();
+    applyNexusSettingsUI();
+    await loadNexusOverview();
+    renderNexusKeyPanel();
+    nexusUnsubscribeRealtime();
+    subscribeNexusRealtime();
+  }catch(e){showToast('Erreur création projet.','error');}
+}
+
+function showNexusApiKeyModal(apiKey,projectName){
+  const existing=document.getElementById('nexus-key-modal-overlay');
+  if(existing)existing.remove();
+  const overlay=document.createElement('div');
+  overlay.id='nexus-key-modal-overlay';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px';
+  overlay.innerHTML=`
+    <div style="background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);max-width:480px;width:100%;padding:24px">
+      <div style="font-family:var(--font-display);font-size:17px;font-weight:700;margin-bottom:6px">Projet "${esc(projectName)}" créé</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.6">Voici ta clé API. <strong style="color:var(--text)">Elle ne sera plus jamais affichée en clair</strong> — copie-la et stocke-la en lieu sûr maintenant.</div>
+      <div style="display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:10px 12px;font-family:var(--font-mono);font-size:12px;word-break:break-all">${esc(apiKey)}</div>
+      <div style="display:flex;gap:8px;margin-top:16px">
+        <button class="btn btn-primary btn-sm" style="flex:1" onclick="navigator.clipboard.writeText('${apiKey.replace(/'/g,"\\'")}');showToast('Clé copiée.','info')">Copier la clé</button>
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('nexus-key-modal-overlay').remove()">Fermer</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function renderNexusKeyPanel(){
+  const container=document.getElementById('nexus-key-panel');
+  if(!container)return;
+  if(!nexusActiveProject||nexusActiveProject.is_internal){
+    container.innerHTML=`<div style="padding:14px 20px;color:rgba(255,255,255,.35);font-size:12px">Le projet interne DevConnect n'utilise pas de clé API externe.</div>`;
+    return;
+  }
+  const p=nexusActiveProject;
+  const isPaid=(p.plan||'free')!=='free';
+  const billingBtn=isPaid
+    ?`<button class="btn btn-ghost btn-sm" disabled>Abonné · ${esc(p.plan)}</button>`
+    :`<button class="btn btn-primary btn-sm" onclick="nexusSubscribe(NEXUS_PRICE_STARTER)">Passer sur Starter (9,99€/mois)</button>`;
+  container.innerHTML=`
+    <div style="padding:0 20px 16px">
+      <div class="nexus-setting-row"><div><div class="nexus-setting-label">Projet</div><div class="nexus-setting-sub">${esc(p.name)} · plan ${esc(p.plan||'free')}</div></div></div>
+      <div class="nexus-setting-row"><div><div class="nexus-setting-label">Clé API</div><div class="nexus-setting-sub" style="font-family:var(--font-mono)">${esc(p.key_prefix||'nx_live_····')}····</div></div></div>
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" onclick="nexusRegenerateKey()">Régénérer la clé</button>
+        <button class="btn btn-ghost btn-sm" style="color:#ff6b6b" onclick="nexusRevokeKey()">Révoquer</button>
+        ${billingBtn}
+      </div>
+    </div>`;
+}
+
+async function nexusRegenerateKey(){
+  if(!nexusActiveProject||nexusActiveProject.is_internal)return;
+  if(!confirm('Régénérer la clé API ? L\'ancienne clé cessera immédiatement de fonctionner.'))return;
+  try{
+    const{data,error}=await db.rpc('nexus_regenerate_api_key',{p_project_id:nexusActiveProject.id});
+    if(error){showToast('Erreur : '+error.message,'error');return;}
+    if(data)showNexusApiKeyModal(data,nexusActiveProject.name);
+    await nexusLoadMyProjects();
+    renderNexusKeyPanel();
+  }catch(e){showToast('Erreur régénération clé.','error');}
+}
+
+async function nexusRevokeKey(){
+  if(!nexusActiveProject||nexusActiveProject.is_internal)return;
+  if(!confirm('Révoquer définitivement la clé API de ce projet ? L\'ingestion d\'events s\'arrêtera immédiatement.'))return;
+  try{
+    const{error}=await db.rpc('nexus_revoke_api_key',{p_project_id:nexusActiveProject.id});
+    if(error){showToast('Erreur : '+error.message,'error');return;}
+    showToast('Clé révoquée.','info');
+    localStorage.removeItem('nexus_active_project');
+    nexusUnsubscribeRealtime();
+    await nexusLoadMyProjects();
+    await nexusFetchSettings();
+    await nexusFetchRules();
+    applyNexusSettingsUI();
+    await loadNexusOverview();
+    renderNexusKeyPanel();
+    subscribeNexusRealtime();
+  }catch(e){showToast('Erreur révocation clé.','error');}
+}
+
+function renderNexusDocs(){
+  const box=document.getElementById('nexus-docs-project-info');
+  if(!box)return;
+  if(!nexusActiveProject){
+    box.innerHTML=`Tu n'as pas encore de projet Nexus. <a href="javascript:void(0)" onclick="nexusCreateProjectFlow()" style="color:var(--text)">Crée-en un</a> pour obtenir ta clé API.`;
+    return;
+  }
+  if(nexusActiveProject.is_internal){
+    box.innerHTML=`Le projet interne <strong style="color:var(--text)">DevConnect</strong> n'a pas de clé API — c'est le code de la plateforme elle-même qui écrit dans Nexus. Bascule sur un de tes projets clients (menu à gauche) pour voir sa clé et ses snippets d'intégration.`;
+    return;
+  }
+  const p=nexusActiveProject;
+  box.innerHTML=`Projet <strong style="color:var(--text)">${esc(p.name)}</strong> · plan <strong style="color:var(--text)">${esc(p.plan||'free')}</strong> · quota <strong style="color:var(--text)">${(p.monthly_event_limit||0).toLocaleString('fr-FR')} events/mois</strong><br>
+  Ta clé commence par <span style="font-family:var(--font-mono)">${esc(p.key_prefix||'nx_live_····')}</span> — récupère la clé complète (affichée une seule fois) dans <a href="javascript:void(0)" onclick="switchNexus(document.querySelector('[onclick*=\\'nexus-settings\\']'),'nexus-settings');renderNexusKeyPanel()" style="color:var(--text)">Paramètres</a>, ou régénère-en une nouvelle si tu l'as perdue.`;
+}
+
+function nexusCopyCode(elId){
+  const el=document.getElementById(elId);
+  if(!el)return;
+  const text=el.textContent;
+  navigator.clipboard.writeText(text).then(()=>showToast('Snippet copié.','info')).catch(()=>showToast('Copie impossible.','error'));
+}
+
+// ── Facturation Stripe ──────────────────────────────────────
+const NEXUS_PRICE_STARTER='price_1ToYXbE6vOC0QUsU7VjgpFyI';
+async function nexusSubscribe(priceId){
+  if(!nexusActiveProject||nexusActiveProject.is_internal)return;
+  const{data:sessionData}=await db.auth.getSession();
+  const token=sessionData?.session?.access_token;
+  if(!token){showToast('Session expirée, reconnecte-toi.','error');return;}
+  showToast('Redirection vers le paiement...','info');
+  try{
+    const res=await fetch('https://ekezdtageniidwjlgyys.supabase.co/functions/v1/nexus-create-checkout',{
+      method:'POST',
+      headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},
+      body:JSON.stringify({project_id:nexusActiveProject.id,price_id:priceId,origin:window.location.origin})
+    });
+    const json=await res.json();
+    if(!res.ok||!json.ok){showToast('Erreur : '+(json.error||'inconnue'),'error');return;}
+    window.location.href=json.url;
+  }catch(e){showToast('Erreur de connexion au paiement.','error');}
+}
+
+function nexusUnsubscribeRealtime(){
+  if(nexusChannel){
+    try{db.removeChannel(nexusChannel);}catch(e){}
+    nexusChannel=null;
+  }
+}
+
+
 
 function switchNexus(el,sectionId){
   document.querySelectorAll('.nexus-nav-item').forEach(n=>n.classList.remove('active'));
@@ -8000,6 +9855,7 @@ function switchNexus(el,sectionId){
 
 // ---------- OVERVIEW ----------
 async function loadNexusOverview(){
+  if(!nexusActiveProject){renderNexusNoProjectState();return;}
   setEl('nexus-last-refresh','mis à jour '+new Date().toLocaleTimeString('fr-FR'));
   const dayAgo=new Date(Date.now()-86400000).toISOString();
   const weekAgo=new Date(Date.now()-7*86400000).toISOString();
@@ -8101,9 +9957,16 @@ async function nexusFetchUsernames(ids){
 
 // ---------- LOGS ----------
 function nexusFilterLogs(el,filter){
-  document.querySelectorAll('#nexus-logs .filter-chip').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('#nexus-log-category-filters .filter-chip').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
   nexusLogsFilter=filter;
+  nexusLogsOffset=0;
+  loadNexusLogs();
+}
+function nexusFilterSeverity(el,severity){
+  document.querySelectorAll('#nexus-log-severity-filters .filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  nexusSeverityFilter=severity;
   nexusLogsOffset=0;
   loadNexusLogs();
 }
@@ -8129,6 +9992,7 @@ async function renderNexusLogs(reset){
 
   let query=db.from('nexus_logs').select('*').eq('project_id',NEXUS_PROJECT_ID).order('created_at',{ascending:false}).range(nexusLogsOffset,nexusLogsOffset+NEXUS_LOG_PAGE-1);
   if(nexusLogsFilter!=='all')query=query.ilike('event_type','%'+nexusLogsFilter+'%');
+  if(nexusSeverityFilter!=='all')query=query.eq('severity',nexusSeverityFilter);
 
   const{data,error}=await query;
   if(error){
@@ -8954,6 +10818,7 @@ async function loadNexusIncidents(){
     return;
   }
   const incidents=data||[];
+  window._nexusIncidentsCache=incidents;
   const badge=document.getElementById('nexus-incidents-badge');
   const openCount=incidents.filter(i=>i.status==='open'||i.status==='investigating').length;
   if(badge)badge.textContent=openCount||0;
@@ -8973,10 +10838,99 @@ async function loadNexusIncidents(){
       </div>
       <div class="nexus-incident-actions">
         ${inc.status!=='resolved'?`<button class="btn btn-ghost btn-sm" onclick="updateIncidentStatus('${inc.id}','${inc.status==='open'?'investigating':'resolved'}')" style="font-size:11px">${inc.status==='open'?'Investiguer':'Résoudre'}</button>`:''}
+        <button class="btn btn-ghost btn-sm" onclick="exportIncidentsPDF('${inc.id}')" style="font-size:11px">⬇ PDF</button>
         <button class="btn btn-ghost btn-sm" onclick="deleteIncident('${inc.id}')" style="font-size:11px;color:#e08080">✕</button>
       </div>
     </div>`;
   }).join('');
+}
+
+// ── NEXUS — Blocages & appels (architect only) ──────────────
+async function loadNexusBlocks(){
+  const blockedEl=document.getElementById('nexus-blocked-list');
+  const appealsEl=document.getElementById('nexus-appeals-list');
+  if(!blockedEl||!appealsEl)return;
+  blockedEl.innerHTML='<div style="text-align:center;padding:32px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">Chargement...</div>';
+  appealsEl.innerHTML='<div style="text-align:center;padding:32px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">Chargement...</div>';
+
+  const{data:blocked,error:err1}=await db.from('profiles')
+    .select('id,username,quarantine_reason,nexus_strike_count,is_muted,is_quarantined,is_shadowbanned')
+    .eq('nexus_permanent_block',true);
+
+  const{data:appeals,error:err2}=await db.from('nexus_appeals')
+    .select('id,user_id,restriction_type,message,created_at,profiles!nexus_appeals_user_id_fkey(username)')
+    .eq('status','pending')
+    .order('created_at',{ascending:false});
+
+  const badge=document.getElementById('nexus-blocks-badge');
+  const totalPending=(blocked?.length||0)+(appeals?.length||0);
+  if(badge){badge.style.display=totalPending>0?'inline-flex':'none';badge.textContent=totalPending;}
+
+  if(err1){
+    blockedEl.innerHTML='<div style="text-align:center;padding:32px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">Impossible de charger les comptes bloqués.</div>';
+  }else if(!blocked?.length){
+    blockedEl.innerHTML='<div style="text-align:center;padding:32px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">✓ Aucun compte bloqué définitivement</div>';
+  }else{
+    blockedEl.innerHTML=blocked.map(u=>`<div class="nexus-incident open" style="align-items:flex-start">
+      <span class="nexus-incident-badge open" style="background:rgba(224,112,112,.15);color:#e07070">${u.nexus_strike_count} strikes</span>
+      <div style="flex:1">
+        <div class="nexus-incident-title">@${esc(u.username)}</div>
+        <div class="nexus-incident-meta">${u.is_quarantined?'Quarantaine':''}${u.is_quarantined&&u.is_muted?' · ':''}${u.is_muted?'Sourdine':''}${u.is_shadowbanned?' · Shadowban':''}</div>
+        ${u.quarantine_reason?`<div style="font-size:11px;color:rgba(255,255,255,.3);margin-top:4px;font-family:var(--font-mono)">${esc(u.quarantine_reason.substring(0,160))}</div>`:''}
+      </div>
+      <div class="nexus-incident-actions" style="flex-direction:column;gap:6px">
+        <button class="btn btn-ghost btn-sm" onclick="nexusArchitectUnblock('${u.id}','${esc(u.username)}')" style="font-size:11px;white-space:nowrap">Débloquer</button>
+        <button class="btn btn-ghost btn-sm" onclick="nexusArchitectFullReset('${u.id}','${esc(u.username)}')" style="font-size:11px;white-space:nowrap;color:#d0c060">Reset complet</button>
+      </div>
+    </div>`).join('');
+  }
+
+  if(err2){
+    appealsEl.innerHTML='<div style="text-align:center;padding:32px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">Impossible de charger les appels.</div>';
+  }else if(!appeals?.length){
+    appealsEl.innerHTML='<div style="text-align:center;padding:32px;color:rgba(255,255,255,.2);font-size:12px;font-family:var(--font-mono)">✓ Aucun appel en attente</div>';
+  }else{
+    const typeLabel={mute:'Sourdine',quarantine:'Quarantaine',shadowban:'Shadowban'};
+    appealsEl.innerHTML=appeals.map(a=>`<div class="nexus-incident open" style="align-items:flex-start">
+      <span class="nexus-incident-badge open">${esc(typeLabel[a.restriction_type]||a.restriction_type)}</span>
+      <div style="flex:1">
+        <div class="nexus-incident-title">@${esc(a.profiles?.username||'inconnu')}</div>
+        <div class="nexus-incident-meta">${timeAgo(a.created_at)}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:4px;font-family:var(--font-mono)">${esc(a.message.substring(0,200))}${a.message.length>200?'…':''}</div>
+      </div>
+      <div class="nexus-incident-actions" style="flex-direction:column;gap:6px">
+        <button class="btn btn-primary btn-sm" onclick="nexusResolveAppealUI('${a.id}','accepted')" style="font-size:11px;white-space:nowrap">Accepter</button>
+        <button class="btn btn-ghost btn-sm" onclick="nexusResolveAppealUI('${a.id}','rejected')" style="font-size:11px;white-space:nowrap;color:#e08080">Rejeter</button>
+      </div>
+    </div>`).join('');
+  }
+}
+
+async function nexusArchitectUnblock(userId,username){
+  if(!confirm(`Débloquer @${username} ? La restriction sera levée mais son historique de strikes reste enregistré — une nouvelle infraction rebloquera immédiatement le compte.`))return;
+  const{error}=await db.rpc('nexus_architect_unblock',{p_user_id:userId});
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  showToast(`@${username} débloqué.`,'success');
+  loadNexusBlocks();
+}
+
+async function nexusArchitectFullReset(userId,username){
+  if(!confirm(`Reset complet pour @${username} ? Son casier Nexus (strikes, score de risque, restrictions) sera totalement effacé, comme s'il n'avait jamais rien fait.`))return;
+  const{error}=await db.rpc('nexus_architect_full_reset',{p_user_id:userId});
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  showToast(`Casier de @${username} remis à zéro.`,'success');
+  loadNexusBlocks();
+}
+
+async function nexusResolveAppealUI(appealId,decision){
+  let note=null;
+  if(decision==='rejected'){
+    note=prompt('Motif du rejet (optionnel, visible par l\'utilisateur) :')||null;
+  }
+  const{error}=await db.rpc('nexus_resolve_appeal',{p_appeal_id:appealId,p_decision:decision,p_staff_note:note});
+  if(error){showToast('Erreur : '+error.message,'error');return;}
+  showToast(decision==='accepted'?'Appel accepté, restriction levée.':'Appel rejeté.','success');
+  loadNexusBlocks();
 }
 
 function openCreateIncidentModal(){
@@ -9015,6 +10969,45 @@ async function updateIncidentStatus(id,status){
 }
 async function deleteIncident(id){
   try{await db.from('nexus_incidents').delete().eq('id',id);loadNexusIncidents();}catch(e){}
+}
+
+// ---- Incident report export (browser print → PDF, no external lib needed) ----
+function exportIncidentsPDF(singleId){
+  const all=window._nexusIncidentsCache||[];
+  const incidents=singleId?all.filter(i=>i.id===singleId):all;
+  if(!incidents.length){showToast('Aucun incident à exporter.','error');return;}
+  const statusLabel={open:'Ouvert',investigating:'Investigation',resolved:'Résolu'};
+  const rows=incidents.map(inc=>`
+    <div class="report-incident">
+      <div class="report-incident-head">
+        <span class="report-incident-title">${esc(inc.title||'Sans titre')}</span>
+        <span class="report-badge">${esc(statusLabel[inc.status]||inc.status||'')}</span>
+      </div>
+      <div class="report-meta">Catégorie : ${esc(inc.category||'—')} &nbsp;·&nbsp; Sévérité : ${esc(inc.severity||'—')} &nbsp;·&nbsp; Créé le ${new Date(inc.created_at).toLocaleString('fr-FR')}</div>
+      ${inc.description?`<p class="report-desc">${esc(inc.description)}</p>`:'<p class="report-desc" style="opacity:.5">Pas de description.</p>'}
+    </div>`).join('');
+  const html=`<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Rapport d'incident Nexus</title>
+  <style>
+    body{font-family:-apple-system,Segoe UI,sans-serif;color:#111;padding:40px;max-width:800px;margin:0 auto}
+    h1{font-size:20px;margin-bottom:2px}
+    .report-sub{color:#666;font-size:12px;margin-bottom:28px}
+    .report-incident{border:1px solid #ddd;border-radius:8px;padding:16px 18px;margin-bottom:14px;page-break-inside:avoid}
+    .report-incident-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+    .report-incident-title{font-weight:700;font-size:15px}
+    .report-badge{font-size:11px;border:1px solid #999;border-radius:20px;padding:2px 10px;color:#444}
+    .report-meta{font-size:11px;color:#777;margin-bottom:8px}
+    .report-desc{font-size:13px;line-height:1.5;color:#333;white-space:pre-wrap}
+    @media print{body{padding:10px}}
+  </style></head><body>
+    <h1>Rapport d'incidents — DevConnect Nexus</h1>
+    <div class="report-sub">Généré le ${new Date().toLocaleString('fr-FR')} · ${incidents.length} incident(s)</div>
+    ${rows}
+    <script>window.onload=()=>{window.print();};<\/script>
+  </body></html>`;
+  const w=window.open('','_blank');
+  if(!w){showToast('Autorise les pop-ups pour exporter le PDF.','error');return;}
+  w.document.write(html);
+  w.document.close();
 }
 
 // ── TESTS / SIMULATEUR ────────────────────────────────────────
@@ -9522,7 +11515,105 @@ async function loadArchitectMetrics(){
   }catch(e){console.warn('loadArchitectMetrics error',e);}
 }
 
+// ── Retour depuis Stripe Checkout (Nexus) ──────────────────────
+(function nexusHandleCheckoutReturn(){
+  try{
+    const params=new URLSearchParams(window.location.search);
+    const status=params.get('nexus_checkout');
+    if(!status)return;
+    params.delete('nexus_checkout');
+    const cleanUrl=window.location.pathname+(params.toString()?'?'+params.toString():'')+window.location.hash;
+    window.history.replaceState({},'',cleanUrl);
+    window.addEventListener('load',()=>{
+      if(status==='success'){
+        showToast('Abonnement activé ! Ça peut prendre quelques secondes à se refléter.','success');
+      }else if(status==='cancelled'){
+        showToast('Paiement annulé.','info');
+      }
+    });
+  }catch(e){/* silencieux */}
+})();
 
+</script>
+<script>
+(function(){
+  var canvas=document.getElementById('app-particles');
+  if(!canvas) return;
+  var ctx=canvas.getContext('2d');
+  var reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W,H,dpr=Math.min(window.devicePixelRatio||1,2);
+  var pts=[];
+  var COLORS=['143,179,255','125,217,206','139,92,246'];
+  var LINK_DIST=140;
+  function count(){
+    var area=window.innerWidth*window.innerHeight;
+    return Math.max(28,Math.min(90,Math.round(area/22000)));
+  }
+  function resize(){
+    W=window.innerWidth;H=window.innerHeight;
+    canvas.width=W*dpr;canvas.height=H*dpr;
+    canvas.style.width=W+'px';canvas.style.height=H+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  function init(){
+    resize();
+    var n=count();
+    pts=[];
+    for(var i=0;i<n;i++){
+      pts.push({
+        x:Math.random()*W,y:Math.random()*H,
+        vx:(Math.random()-0.5)*0.18,vy:(Math.random()-0.5)*0.18,
+        r:Math.random()*1.6+0.6,
+        c:COLORS[i%COLORS.length]
+      });
+    }
+  }
+  var mouse={x:-9999,y:-9999};
+  window.addEventListener('mousemove',function(e){mouse.x=e.clientX;mouse.y=e.clientY;},{passive:true});
+  window.addEventListener('mouseleave',function(){mouse.x=-9999;mouse.y=-9999;});
+  function step(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<pts.length;i++){
+      var p=pts[i];
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<-20)p.x=W+20;if(p.x>W+20)p.x=-20;
+      if(p.y<-20)p.y=H+20;if(p.y>H+20)p.y=-20;
+      var dxm=p.x-mouse.x,dym=p.y-mouse.y,dm=Math.sqrt(dxm*dxm+dym*dym);
+      if(dm<120){var f=(120-dm)/120*0.02;p.vx+=dxm/dm*f*-1;p.vy+=dym/dm*f*-1;}
+      p.vx*=0.995;p.vy*=0.995;
+    }
+    for(var i=0;i<pts.length;i++){
+      for(var j=i+1;j<pts.length;j++){
+        var a=pts[i],b=pts[j];
+        var dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<LINK_DIST){
+          var op=(1-d/LINK_DIST)*0.22;
+          ctx.strokeStyle='rgba('+a.c+','+op+')';
+          ctx.lineWidth=1;
+          ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+        }
+      }
+    }
+    for(var i=0;i<pts.length;i++){
+      var p=pts[i];
+      ctx.beginPath();
+      ctx.fillStyle='rgba('+p.c+',.85)';
+      ctx.shadowColor='rgba('+p.c+',.9)';
+      ctx.shadowBlur=6;
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fill();
+      ctx.shadowBlur=0;
+    }
+    if(!reduceMotion) requestAnimationFrame(step);
+  }
+  var resizeTimer;
+  window.addEventListener('resize',function(){
+    clearTimeout(resizeTimer);
+    resizeTimer=setTimeout(init,150);
+  });
+  init();
+  if(!reduceMotion){ requestAnimationFrame(step); } else { step(); }
+})();
 </script>
 </body>
 </html>
