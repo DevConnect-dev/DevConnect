@@ -1675,19 +1675,46 @@ body.focus-mode #focus-exit-btn{display:flex;}
 .arch-module-icon{font-size:18px;width:28px;text-align:center;}
 .arch-module-name{font-size:13px;font-weight:500;}
 .arch-module-sub{font-size:11px;color:var(--text-muted);}
-.arch-status{font-size:10px;font-family:var(--font-mono);padding:2px 8px;border-radius:100px;white-space:nowrap;}
-.arch-status.live{background:rgba(16,185,129,.1);color:#34d399;border:1px solid rgba(16,185,129,.2);}
-.arch-status.soon{background:rgba(139,92,246,.1);color:#a78bfa;border:1px solid rgba(139,92,246,.2);}
-.arch-status.wip{background:rgba(245,158,11,.1);color:#fbbf24;border:1px solid rgba(245,158,11,.2);}
+.arch-status{font-size:10px;font-family:var(--font-mono);font-weight:600;padding:2px 8px;border-radius:100px;white-space:nowrap;}
+.arch-status.live{background:rgba(16,185,129,.12);color:#0d8a5f;border:1px solid rgba(16,185,129,.28);}
+.arch-status.soon{background:rgba(139,92,246,.1);color:#7c3aed;border:1px solid rgba(139,92,246,.26);}
+.arch-status.wip{background:rgba(217,119,6,.12);color:#b45309;border:1px solid rgba(217,119,6,.26);}
 .arch-feat-count{font-size:10px;font-family:var(--font-mono);color:var(--text-muted);margin-left:6px;}
 .arch-hero{padding:20px;background:linear-gradient(135deg,rgba(139,92,246,.08),rgba(79,124,255,.06));border:1px solid rgba(139,92,246,.15);border-radius:var(--radius-lg);margin-bottom:20px;display:flex;align-items:center;gap:14px;}
 .arch-hero-icon{font-size:28px;line-height:1;}
 .arch-hero-title{font-family:var(--font-display);font-size:18px;font-weight:800;margin-bottom:2px;}
 .arch-hero-sub{font-size:12px;color:var(--text-secondary);}
-.arch-metric-row{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;}
+.arch-metric-row{display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
 .arch-metric{flex:1;min-width:100px;background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;}
 .arch-metric-val{font-family:var(--font-display);font-size:22px;font-weight:700;}
 .arch-metric-label{font-size:11px;color:var(--text-muted);margin-top:2px;}
+
+/* ── Vraie activité de la plateforme (distincte de la roadmap) ── */
+.arch-section-label{display:flex;align-items:center;gap:8px;margin:24px 0 10px;font-family:var(--font-mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);}
+.arch-section-label .line{flex:1;height:1px;background:var(--border);}
+.arch-real-stats{display:flex;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+.arch-real-stat{flex:1;min-width:110px;background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;}
+.arch-real-stat-val{font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--accent);}
+.arch-real-stat-label{font-size:11px;color:var(--text-muted);margin-top:2px;}
+
+/* ── Panels de features par module (dépliables) ── */
+.features-panel{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;}
+.features-panel-head{display:flex;align-items:center;gap:10px;padding:14px 18px;cursor:pointer;user-select:none;transition:background .15s var(--ease);}
+.features-panel-head:hover{background:rgba(27,36,25,.03);}
+.features-panel-title{font-family:var(--font-display);font-size:13px;font-weight:700;}
+.features-panel-badge{font-size:10px;font-family:var(--font-mono);color:var(--text-muted);background:var(--bg2);border:1px solid var(--border);border-radius:100px;padding:2px 9px;}
+.features-panel-toggle{margin-left:auto;font-size:11px;color:var(--text-muted);transition:transform .2s var(--ease);}
+.features-panel.open .features-panel-toggle{transform:rotate(180deg);}
+.features-grid{display:none;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-top:1px solid var(--border);}
+.features-panel.open .features-grid{display:grid;}
+@media(max-width:640px){.features-grid{grid-template-columns:1fr;}}
+.feature-item{display:flex;align-items:flex-start;gap:10px;padding:12px 18px;background:var(--bg1);}
+.feature-item-icon{font-size:15px;line-height:1.3;width:20px;text-align:center;flex-shrink:0;}
+.feature-item-name{font-size:12.5px;font-weight:600;margin-bottom:2px;}
+.feature-item-desc{font-size:11.5px;color:var(--text-muted);line-height:1.4;}
+.feature-item.live .feature-item-name{color:#0d8a5f;}
+.feature-item.wip .feature-item-name{color:#b45309;}
+
 
 /* ============================================================
    BLACK DIAMOND — App Shell Extension (Phase 3 → 3.1)
@@ -3047,17 +3074,17 @@ body.focus-mode #focus-exit-btn{display:flex;}
 #page-landing.dcf .dcf-stat-tile .l{font-size:11.5px;color:var(--ink-mute);margin-top:2px;}
 
 /* ---------- NEXUS DARK PANEL ---------- */
-#page-landing.dcf .dcf-nexus{background:var(--dark);color:var(--dark-text);padding:96px 40px;position:relative;overflow:hidden;}
-#page-landing.dcf .dcf-nexus::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 85% 15%,rgba(143,214,107,.09),transparent 60%);pointer-events:none;}
+#page-landing.dcf .dcf-nexus{background:var(--paper-dim);color:var(--ink);padding:96px 40px;position:relative;overflow:hidden;border-top:1px solid var(--paper-line);border-bottom:1px solid var(--paper-line);}
+#page-landing.dcf .dcf-nexus::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 85% 15%,rgba(111,143,69,.10),transparent 60%);pointer-events:none;}
 #page-landing.dcf .dcf-nexus-inner{max-width:1180px;margin:0 auto;position:relative;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
-#page-landing.dcf .dcf-nexus-eyebrow{font-family:var(--mono);font-size:12px;color:var(--leaf-bright);display:flex;align-items:center;gap:8px;margin-bottom:18px;}
-#page-landing.dcf .dcf-nexus-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--leaf-bright);}
-#page-landing.dcf .dcf-nexus h2{font-family:var(--serif);font-size:clamp(28px,3.2vw,38px);font-weight:600;margin-bottom:16px;color:#F2F4EA;}
-#page-landing.dcf .dcf-nexus p{font-size:15px;line-height:1.65;color:var(--dark-mute);max-width:44ch;margin-bottom:26px;}
+#page-landing.dcf .dcf-nexus-eyebrow{font-family:var(--mono);font-size:12px;color:var(--forest);display:flex;align-items:center;gap:8px;margin-bottom:18px;}
+#page-landing.dcf .dcf-nexus-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--moss-bright);}
+#page-landing.dcf .dcf-nexus h2{font-family:var(--serif);font-size:clamp(28px,3.2vw,38px);font-weight:600;margin-bottom:16px;color:var(--ink);}
+#page-landing.dcf .dcf-nexus p{font-size:15px;line-height:1.65;color:var(--ink-soft);max-width:44ch;margin-bottom:26px;}
 #page-landing.dcf .dcf-nexus-feats{display:flex;flex-direction:column;gap:10px;margin-bottom:30px;}
-#page-landing.dcf .dcf-nexus-feat{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--dark-text);}
-#page-landing.dcf .dcf-nexus-feat svg{flex-shrink:0;margin-top:2px;color:var(--leaf-bright);}
-#page-landing.dcf .dcf-nexus-panel-mock{background:var(--dark2);border:1px solid var(--dark-line);border-radius:var(--r-lg);padding:22px;font-family:var(--mono);}
+#page-landing.dcf .dcf-nexus-feat{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--ink);}
+#page-landing.dcf .dcf-nexus-feat svg{flex-shrink:0;margin-top:2px;color:var(--forest);}
+#page-landing.dcf .dcf-nexus-panel-mock{background:var(--dark2);border:1px solid var(--dark-line);border-radius:var(--r-lg);padding:22px;font-family:var(--mono);box-shadow:0 24px 60px -24px rgba(27,36,25,.35);}
 #page-landing.dcf .dcf-nexus-panel-mock .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;font-size:11px;color:var(--dark-mute);}
 #page-landing.dcf .dcf-nexus-panel-mock .row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-top:1px solid var(--dark-line);font-size:12.5px;}
 #page-landing.dcf .dcf-nexus-panel-mock .row:first-of-type{border-top:none;}
@@ -3257,14 +3284,14 @@ body.focus-mode #focus-exit-btn{display:flex;}
       <div class="dcf-mod-desc">Assistant IA spécialisé développeurs. Génère, debug, explique et optimise ton code en temps réel.</div>
     </div>
     <div class="dcf-mod">
-      <div class="dcf-mod-top"><div class="dcf-mod-icon">🛡️</div><div class="dcf-mod-badge"><span class="d"></span>Disponible</div></div>
+      <div class="dcf-mod-top"><div class="dcf-mod-icon">🛡️</div><div class="dcf-mod-badge soon"><span class="d"></span>Interne</div></div>
       <div class="dcf-mod-name">Nexus</div>
-      <div class="dcf-mod-desc">Sécurité et monitoring en temps réel. Clé API par projet, détection d'anomalies, quotas et facturation.</div>
+      <div class="dcf-mod-desc">Moteur de sécurité et de monitoring qui protège DevConnect en continu. Réservé à l'équipe — non accessible aux membres.</div>
     </div>
     <div class="dcf-mod">
       <div class="dcf-mod-top"><div class="dcf-mod-icon">🚀</div><div class="dcf-mod-badge"><span class="d"></span>Disponible</div></div>
       <div class="dcf-mod-name">Deploy</div>
-      <div class="dcf-mod-desc">Déploie tes applications en un clic. Gestion de projets, CI/CD intégré et suivi en production.</div>
+      <div class="dcf-mod-desc">Recrutement & missions freelance. Trouve ta prochaine mission ou recrute un dev, paiements sécurisés par escrow.</div>
     </div>
     <div class="dcf-mod">
       <div class="dcf-mod-top"><div class="dcf-mod-icon">📊</div><div class="dcf-mod-badge"><span class="d"></span>Disponible</div></div>
@@ -3648,14 +3675,14 @@ body.focus-mode #focus-exit-btn{display:flex;}
           <div class="module-desc">Assistant IA spécialisé développeurs. Génère, debug, explique et optimise ton code en temps réel.</div>
           <div class="module-meta">◇ Intégré à DevConnect — extension indépendante à venir</div>
         </div>
-        <div class="module-card soon reveal-up" style="--mod-color:rgba(244,63,94,.5);--mod-color-dim:rgba(244,63,94,.2)" onclick="navigate('nexus')">
+        <div class="module-card reveal-up" id="module-card-nexus" style="display:none;--mod-color:rgba(244,63,94,.5);--mod-color-dim:rgba(244,63,94,.2)" onclick="navigate('nexus')">
           <div class="module-top">
             <div class="module-icon" style="background:rgba(244,63,94,.1)">🛡️</div>
-            <div class="module-badge soon"><span class="dot"></span>Bientôt</div>
+            <div class="module-badge" style="border-color:rgba(244,63,94,.3);color:rgba(244,63,94,.9)"><span class="dot"></span>Architecte uniquement</div>
           </div>
           <div class="module-name">Nexus</div>
-          <div class="module-desc">Moteur de cybersécurité. Détecte XSS, SQL injection, CSRF et analyse les comportements suspects en temps réel.</div>
-          <div class="module-meta">◇ Intégré à DevConnect — extension indépendante à venir</div>
+          <div class="module-desc">Moteur de cybersécurité interne. Détecte XSS, SQL injection, CSRF et analyse les comportements suspects en temps réel.</div>
+          <div class="module-meta">⬡ Accès restreint — visible uniquement par toi</div>
         </div>
         <div class="module-card reveal-up" style="--mod-color:rgba(79,124,255,.5);--mod-color-dim:rgba(79,124,255,.2)" onclick="navigate('recruit')">
           <div class="module-top">
@@ -5301,6 +5328,17 @@ body.focus-mode #focus-exit-btn{display:flex;}
         <div class="arch-metric"><div class="arch-metric-val">58</div><div class="arch-metric-label">Features planifiées</div></div>
         <div class="arch-metric"><div class="arch-metric-val">8</div><div class="arch-metric-label">Features live</div></div>
       </div>
+
+      <div class="arch-section-label"><span>Activité réelle de la plateforme</span><div class="line"></div></div>
+      <div class="arch-real-stats" id="arch-real-stats">
+        <div class="arch-real-stat"><div class="arch-real-stat-val" id="arch-real-users">—</div><div class="arch-real-stat-label">Membres actifs</div></div>
+        <div class="arch-real-stat"><div class="arch-real-stat-val" id="arch-real-posts">—</div><div class="arch-real-stat-label">Posts publiés</div></div>
+        <div class="arch-real-stat"><div class="arch-real-stat-val" id="arch-real-snippets">—</div><div class="arch-real-stat-label">Snippets</div></div>
+        <div class="arch-real-stat"><div class="arch-real-stat-val" id="arch-real-jobs">—</div><div class="arch-real-stat-label">Offres Deploy</div></div>
+        <div class="arch-real-stat"><div class="arch-real-stat-val" id="arch-real-challenges">—</div><div class="arch-real-stat-label">Challenges réussis</div></div>
+      </div>
+
+      <div class="arch-section-label" style="margin-top:24px"><span>Roadmap des modules</span><div class="line"></div></div>
       <div class="arch-layout">
         <div class="arch-card">
           <div class="arch-card-title"><span>✅</span> Modules actifs</div>
@@ -5350,7 +5388,7 @@ body.focus-mode #focus-exit-btn{display:flex;}
           <span class="features-panel-badge">4 features</span>
           <span class="features-panel-toggle">▾</span>
         </div>
-        <div class="features-grid" style="display:grid">
+        <div class="features-grid">
           <div class="feature-item soon"><div class="feature-item-icon">💬</div><div><div class="feature-item-name">Chat IA dédié code</div><div class="feature-item-desc">Questions techniques avec contexte de code</div></div></div>
           <div class="feature-item soon"><div class="feature-item-icon">🔍</div><div><div class="feature-item-name">Revue de code auto</div><div class="feature-item-desc">Analyse et suggestions sur ton code</div></div></div>
           <div class="feature-item soon"><div class="feature-item-icon">🧪</div><div><div class="feature-item-name">Génération de tests</div><div class="feature-item-desc">Tests unitaires générés automatiquement</div></div></div>
@@ -5366,7 +5404,7 @@ body.focus-mode #focus-exit-btn{display:flex;}
           <span class="features-panel-badge">4 features</span>
           <span class="features-panel-toggle">▾</span>
         </div>
-        <div class="features-grid" style="display:grid">
+        <div class="features-grid">
           <div class="feature-item soon"><div class="feature-item-icon">🔬</div><div><div class="feature-item-name">Scanner de vulnérabilités</div><div class="feature-item-desc">Analyse repo ou URL pour détecter les failles</div></div></div>
           <div class="feature-item soon"><div class="feature-item-icon">📄</div><div><div class="feature-item-name">Rapport de sécurité</div><div class="feature-item-desc">Export PDF du rapport d'analyse</div></div></div>
           <div class="feature-item soon"><div class="feature-item-icon">⚔️</div><div><div class="feature-item-name">Simulation d'attaque</div><div class="feature-item-desc">Mini pentest en sandbox sécurisée</div></div></div>
@@ -5382,7 +5420,7 @@ body.focus-mode #focus-exit-btn{display:flex;}
           <span class="features-panel-badge">4 features</span>
           <span class="features-panel-toggle">▾</span>
         </div>
-        <div class="features-grid" style="display:grid">
+        <div class="features-grid">
           <div class="feature-item soon"><div class="feature-item-icon">💎</div><div><div class="feature-item-name">Vente templates/snippets</div><div class="feature-item-desc">Monétise tes templates et snippets premium</div></div></div>
           <div class="feature-item soon"><div class="feature-item-icon">🎨</div><div><div class="feature-item-name">Thèmes de profil</div><div class="feature-item-desc">Personnalise l'apparence de ton profil</div></div></div>
           <div class="feature-item soon"><div class="feature-item-icon">🔌</div><div><div class="feature-item-name">Plugins éditeur</div><div class="feature-item-desc">Extensions pour enrichir l'éditeur de code</div></div></div>
@@ -5423,6 +5461,10 @@ body.focus-mode #focus-exit-btn{display:flex;}
           </div>
           <div class="admin-nav-item" onclick="switchAdmin(this,'announce')">
             <span class="admin-nav-icon">◎</span>Annonces
+          </div>
+          <div class="admin-nav-item" onclick="switchAdmin(this,'academy-feedback');loadAcademyFeedback()">
+            <span class="admin-nav-icon">🌿</span>Avis Academy
+            <span class="admin-nav-badge" id="admin-badge-academy-feedback">—</span>
           </div>
 
           <div class="admin-sidebar-sep"></div>
@@ -5573,6 +5615,23 @@ body.focus-mode #focus-exit-btn{display:flex;}
             <div class="admin-card" style="margin-top:16px">
               <div class="admin-card-header"><div class="admin-card-title">Annonces existantes</div></div>
               <div class="admin-card-body" id="admin-announce-list"><div style="text-align:center;color:var(--text-muted);font-size:13px;padding:16px">Chargement...</div></div>
+            </div>
+          </div>
+
+          <!-- AVIS ACADEMY -->
+          <div class="admin-section" id="admin-academy-feedback">
+            <div class="admin-page-header">
+              <div class="admin-page-title">Avis Academy <span class="live-dot"></span></div>
+              <div class="admin-page-sub">Retours envoyés depuis le prototype Academy (terrarium nocturne)</div>
+            </div>
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <div class="admin-card-title">Retours reçus</div>
+                <button class="btn btn-ghost btn-sm" onclick="loadAcademyFeedback()" style="font-size:11px">↻ Rafraîchir</button>
+              </div>
+              <div class="admin-card-body" id="admin-academy-feedback-list" style="max-height:600px;overflow-y:auto">
+                <div style="text-align:center;color:var(--text-muted);font-size:13px;padding:20px">Chargement...</div>
+              </div>
             </div>
           </div>
 
@@ -5917,8 +5976,58 @@ body.focus-mode #focus-exit-btn{display:flex;}
 <script>
 const SUPABASE_URL='https://ekezdtageniidwjlgyys.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVrZXpkdGFnZW5paWR3amxneXlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwMTg3NDgsImV4cCI6MjA5NDU5NDc0OH0.aolWqRWGp2sJyHsm3vFNx6wVEyt1uEc7rM5i4fDgb88';
-const{createClient}=supabase;
-const db=createClient(SUPABASE_URL,SUPABASE_KEY);
+
+// ── Stub hors-ligne : si le CDN Supabase est bloqué (test file://, réseau restreint, etc.)
+// on ne laisse jamais l'app planter au chargement. Toutes les chaînes db.xxx().yyy() renvoient
+// une réponse vide au lieu de lever une exception.
+function makeOfflineDb(){
+  const offlineResult=()=>({data:null,error:{message:'DevConnect fonctionne en mode dégradé (Supabase indisponible).',offline:true}});
+  const offlineListResult=()=>({data:[],error:{message:'DevConnect fonctionne en mode dégradé (Supabase indisponible).',offline:true}});
+  function makeChain(isList){
+    const target=function(){};
+    return new Proxy(target,{
+      get(_t,prop){
+        if(prop==='then'){const p=Promise.resolve(isList?offlineListResult():offlineResult());return p.then.bind(p);}
+        if(prop==='catch'){const p=Promise.resolve(isList?offlineListResult():offlineResult());return p.catch.bind(p);}
+        if(prop==='finally'){const p=Promise.resolve(isList?offlineListResult():offlineResult());return p.finally.bind(p);}
+        if(prop==='single'||prop==='maybeSingle')return()=>makeChain(false);
+        return(...args)=>makeChain(isList);
+      },
+      apply(){return makeChain(isList);}
+    });
+  }
+  const noopSub={unsubscribe(){},subscribe(cb){cb&&cb('CLOSED');return this;},on(){return this;}};
+  return{
+    auth:{
+      getSession:async()=>({data:{session:null},error:null}),
+      getUser:async()=>({data:{user:null},error:null}),
+      signOut:async()=>({error:null}),
+      signInWithPassword:async()=>offlineResult(),
+      signUp:async()=>offlineResult(),
+      resetPasswordForEmail:async()=>offlineResult(),
+      updateUser:async()=>offlineResult(),
+      onAuthStateChange:()=>({data:{subscription:{unsubscribe(){}}}}),
+    },
+    from(){return makeChain(true);},
+    rpc(){return makeChain(false);},
+    channel(){return noopSub;},
+    removeChannel(){},
+    storage:{from:()=>({
+      upload:async()=>offlineResult(),
+      remove:async()=>offlineResult(),
+      getPublicUrl:()=>({data:{publicUrl:''}}),
+      list:async()=>offlineListResult(),
+    })},
+  };
+}
+let db;
+try{
+  if(typeof supabase==='undefined'||!supabase.createClient)throw new Error('SDK Supabase non chargé (CDN bloqué ou hors-ligne).');
+  db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+}catch(e){
+  console.error('[DevConnect] Supabase indisponible, passage en mode dégradé :',e);
+  db=makeOfflineDb();
+}
 
 let currentUser=null,currentProfile=null,currentSection='home',selectedSpecialty=null,selectedTags=[],currentStep=0,currentChannel='général',challengeId=null,currentDmConvId=null,currentDmUser=null,isDmMode=false,dmRealtimeSub=null,channelRealtimeSub=null;
 
@@ -6540,10 +6649,12 @@ function checkArchitect(){
   }else{
     if(badge)badge.style.display='none';
   }
-  // Nexus est désormais ouvert à tout utilisateur connecté (produit marketplace multi-tenant).
+  // Nexus est un moteur interne réservé exclusivement au compte architecte (cover.dev).
   // Architect (qui inclut désormais le panneau admin) reste réservé exclusivement au compte cover.dev.
-  if(nexusNav)nexusNav.style.display=currentUser?'flex':'none';
+  if(nexusNav)nexusNav.style.display=isNexusUser?'flex':'none';
   if(architectNav)architectNav.style.display=isNexusUser?'flex':'none';
+  const nexusCard=document.getElementById('module-card-nexus');
+  if(nexusCard)nexusCard.style.display=isNexusUser?'':'none';
   setEl('admin-welcome-role','Architect');
 }
 
@@ -6706,8 +6817,8 @@ function navigate(section) {
     showToast('Accès Architect réservé.', 'error');
     return;
   }
-  if (section === 'nexus' && !currentUser) {
-    showToast('Connecte-toi pour accéder à Nexus.', 'error');
+  if (section === 'nexus' && !isCoverDev) {
+    showToast('Nexus est réservé à l\'architecte de DevConnect.', 'error');
     return;
   }
   document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
@@ -6728,7 +6839,7 @@ function navigate(section) {
   if (section === 'learn') { loadWeeklyChallengeId().then(renderChallenges); loadLearnProgress(); renderChallenges(); }
   if (section === 'snippets') { loadSnippets(); }
   if (section === 'nexus') { initNexus(); }
-  if (section === 'architect') { loadArchitectMetrics(); loadAdminData(); }
+  if (section === 'architect') { loadArchitectMetrics(); loadAdminData(); loadAcademyFeedback(); }
 }
 
 // INSIGHT — Dashboard analytics
@@ -10280,6 +10391,33 @@ async function loadAdminLogs(){
   </div>`).join('');
 }
 
+async function loadAcademyFeedback(){
+  const cont=document.getElementById('admin-academy-feedback-list');
+  const{data,error,count}=await db.from('academy_feedback').select('*',{count:'exact'}).order('created_at',{ascending:false}).limit(50);
+  const badge=document.getElementById('admin-badge-academy-feedback');
+  if(error){
+    console.error('loadAcademyFeedback:',error);
+    if(cont)cont.innerHTML=`<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Erreur : ${esc(error.message)}<br><span style="font-size:11px">La table "academy_feedback" existe-t-elle bien dans Supabase ?</span></div>`;
+    if(badge)badge.textContent='!';
+    return;
+  }
+  if(badge)badge.textContent=count||0;
+  if(!data||data.length===0){
+    if(cont)cont.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun avis reçu pour l\'instant.</div>';
+    return;
+  }
+  if(cont)cont.innerHTML=data.map(f=>`<div style="padding:14px 16px;border-bottom:1px solid var(--border)">
+    <div style="font-size:13.5px;line-height:1.6;margin-bottom:8px">${esc(f.message||'')}</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;font-size:11px;font-family:var(--font-mono);color:var(--text-muted)">
+      <span>${timeAgo(f.created_at)}</span>
+      <span>·</span>
+      <span>${f.completed_level_1?'✓ a fini le niveau 1':'niveau 1 non terminé'}</span>
+      <span>·</span>
+      <span>${f.xp_at_submission||0} XP au moment de l'envoi</span>
+    </div>
+  </div>`).join('');
+}
+
 async function createAnnouncement(){
   const text=getVal('announce-text').trim();
   if(!text){showToast('Écris un message.','error');return;}
@@ -12654,34 +12792,17 @@ async function loadArchitectMetrics(){
       db.from('job_posts').select('*',{count:'exact',head:true}),
       db.from('challenge_completions').select('*',{count:'exact',head:true}),
     ]);
-    const stats=[
-      {label:'Membres actifs',val:users||0},
-      {label:'Posts publiés',val:posts||0},
-      {label:'Snippets',val:snippets||0},
-      {label:'Offres Deploy',val:jobs||0},
-      {label:'Challenges réussis',val:challenges||0},
-    ];
-    // Met à jour les métriques dans la vue architect si les éléments existent
-    const metricRow=document.querySelector('#section-architect .arch-metric-row');
-    if(metricRow){
-      const existing=metricRow.querySelectorAll('.arch-metric');
-      existing.forEach((el,i)=>{
-        if(stats[i]){
-          const v=el.querySelector('.arch-metric-val');
-          const l=el.querySelector('.arch-metric-label');
-          if(v)v.textContent=stats[i].val;
-          if(l)l.textContent=stats[i].label;
-        }
-      });
-      // Ajoute les métriques manquantes
-      stats.slice(existing.length).forEach(s=>{
-        const d=document.createElement('div');
-        d.className='arch-metric';
-        d.innerHTML=`<div class="arch-metric-val">${s.val}</div><div class="arch-metric-label">${s.label}</div>`;
-        metricRow.appendChild(d);
-      });
-    }
+    setEl('arch-real-users',users||0);
+    setEl('arch-real-posts',posts||0);
+    setEl('arch-real-snippets',snippets||0);
+    setEl('arch-real-jobs',jobs||0);
+    setEl('arch-real-challenges',challenges||0);
   }catch(e){console.warn('loadArchitectMetrics error',e);}
+}
+
+function toggleFeaturesPanel(id){
+  const panel=document.getElementById(id);
+  if(panel)panel.classList.toggle('open');
 }
 
 // ── Retour depuis Stripe Checkout (Nexus) ──────────────────────
