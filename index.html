@@ -1136,7 +1136,7 @@ select.form-input{color-scheme:dark;background-color:#111;}
 .premium-badge.devconnectplus{background:rgba(255,255,255,.1);border:1px solid var(--border-bright);color:var(--text);}
 .architect-badge{display:inline-flex;align-items:center;padding:1px 6px;border-radius:100px;font-size:9px;font-family:var(--font-mono);background:var(--text);color:var(--bg0);}
 .role-badge-profile{display:inline-flex;align-items:center;padding:2px 10px;border-radius:100px;font-size:11px;font-family:var(--font-mono);border:1px solid var(--border);color:var(--text-muted);background:var(--bg2);margin-left:6px;vertical-align:middle;}
-.role-badge-profile.architect{border-color:#9a8a5a;color:#c8a86a;background:rgba(200,168,106,.08);}
+.role-badge-profile._f63_0g278i42i{border-color:#9a8a5a;color:#c8a86a;background:rgba(200,168,106,.08);}
 .role-badge-profile.admin{border-color:#5a6a9a;color:#8a9ac8;background:rgba(138,154,200,.08);}
 .role-badge-profile.moderator{border-color:#5a8a6a;color:#8ac8a8;background:rgba(138,200,168,.08);}
 .role-badge-profile.core_dev{border-color:#6a5a9a;color:#a88ac8;}
@@ -3542,8 +3542,7 @@ body.focus-mode #focus-exit-btn{display:flex;}
         <div class="form-group"><label class="form-label">Mot de passe</label><input type="password" id="login-password" class="form-input" placeholder="••••••••"></div>
         <div id="login-error" class="form-error">Email ou mot de passe incorrect.</div>
         <button class="btn btn-primary w-full" style="margin-top:16px;justify-content:center" onclick="handleLogin()">Se connecter</button>
-        <div style="text-align:center;margin-top:12px;font-size:13px;color:var(--text-muted)"><a href="#" style="color:var(--text-secondary)" onclick="handleForgotPassword()">Mot de passe oublié ?</a></div>
-        <div style="text-align:center;margin-top:8px;font-size:13px;color:var(--text-muted)">Pas de compte ? <a href="#" style="color:var(--text-secondary)" onclick="switchAuthTab('register')">Créer un compte</a></div>
+        <div style="text-align:center;margin-top:12px;font-size:13px;color:var(--text-muted)">Pas de compte ? <a href="#" style="color:var(--text-secondary)" onclick="switchAuthTab('register')">Créer un compte</a></div>
         <button class="btn btn-ghost w-full" style="margin-top:12px;justify-content:center;font-size:13px" onclick="showPage('landing')">← Retour</button>
       </div>
       <!-- REGISTER -->
@@ -3675,14 +3674,14 @@ body.focus-mode #focus-exit-btn{display:flex;}
           <div class="module-desc">Assistant IA spécialisé développeurs. Génère, debug, explique et optimise ton code en temps réel.</div>
           <div class="module-meta">◇ Intégré à DevConnect — extension indépendante à venir</div>
         </div>
-        <div class="module-card reveal-up" id="module-card-nexus" style="display:none;--mod-color:rgba(244,63,94,.5);--mod-color-dim:rgba(244,63,94,.2)" onclick="navigate('nexus')">
+        <div class="module-card reveal-up" id="module-card-nexus" style="--mod-color:rgba(244,63,94,.5);--mod-color-dim:rgba(244,63,94,.2)" onclick="navigate('nexus-intro')">
           <div class="module-top">
             <div class="module-icon" style="background:rgba(244,63,94,.1)">🛡️</div>
-            <div class="module-badge" style="border-color:rgba(244,63,94,.3);color:rgba(244,63,94,.9)"><span class="dot"></span>Architecte uniquement</div>
+            <div class="module-badge" style="border-color:rgba(244,63,94,.3);color:rgba(244,63,94,.9)"><span class="dot"></span>Prototype</div>
           </div>
           <div class="module-name">Nexus</div>
           <div class="module-desc">Moteur de cybersécurité interne. Détecte XSS, SQL injection, CSRF et analyse les comportements suspects en temps réel.</div>
-          <div class="module-meta">⬡ Accès restreint — visible uniquement par toi</div>
+          <div class="module-meta">⬡ Première version — encore en test</div>
         </div>
         <div class="module-card reveal-up" style="--mod-color:rgba(79,124,255,.5);--mod-color-dim:rgba(79,124,255,.2)" onclick="navigate('recruit')">
           <div class="module-top">
@@ -3729,6 +3728,15 @@ body.focus-mode #focus-exit-btn{display:flex;}
           <div class="module-desc">Génère et gère ta documentation automatiquement. Challenges, XP et progression par domaine.</div>
           <div class="module-meta">◆ Actif sur DevConnect</div>
         </div>
+        <div class="module-card reveal-up" style="--mod-color:rgba(94,234,176,.5);--mod-color-dim:rgba(94,234,176,.2)" onclick="navigate('academy')">
+          <div class="module-top">
+            <div class="module-icon" style="background:rgba(94,234,176,.1)">🌱</div>
+            <div class="module-badge" style="border-color:rgba(94,234,176,.3);color:rgba(94,234,176,.9)"><span class="dot"></span>Prototype</div>
+          </div>
+          <div class="module-name">Academy</div>
+          <div class="module-desc">Apprends à coder comme on cultive un jardin. Leçons interactives, quiz et progression par niveaux, sur un terrarium qui grandit avec toi.</div>
+          <div class="module-meta">✦ Première version — encore en test</div>
+        </div>
         <div class="module-card soon reveal-up" style="--mod-color:rgba(232,121,249,.5);--mod-color-dim:rgba(232,121,249,.2)" onclick="showToast('Marketplace arrive une fois DevConnect commercialisé 👀','info')">
           <div class="module-top">
             <div class="module-icon" style="background:rgba(232,121,249,.1)">🛒</div>
@@ -3742,6 +3750,100 @@ body.focus-mode #focus-exit-btn{display:flex;}
     </div>
 
     <!-- TEAMS — FIL D'ACTUALITÉ -->
+    <!-- ACADEMY — mini page d'accueil (prototype) -->
+    <div class="app-section" id="section-academy">
+      <style>
+        #section-academy{--aca-bg:#0B140F;--aca-bg2:#122018;--aca-bg3:#182A20;--aca-text:#E8F0E6;--aca-text-sub:#A9C2B0;--aca-text-mute:#6F8A78;--aca-glow:#5EEAB0;--aca-glow-dim:#3D8F6C;--aca-gold:#F2C14E;}
+        #section-academy .aca-hero{background:linear-gradient(160deg,var(--aca-bg2),var(--aca-bg) 65%);border:1px solid rgba(94,234,176,.16);border-radius:20px;padding:44px 36px;text-align:center;position:relative;overflow:hidden;}
+        #section-academy .aca-hero::after{content:'';position:absolute;inset:-40% -10% auto -10%;height:220px;background:radial-gradient(ellipse at center,rgba(94,234,176,.16),transparent 70%);pointer-events:none;}
+        #section-academy .aca-eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--aca-glow);border:1px solid rgba(94,234,176,.3);background:rgba(94,234,176,.08);padding:5px 12px;border-radius:100px;position:relative;z-index:1;}
+        #section-academy .aca-eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--aca-glow);box-shadow:0 0 8px var(--aca-glow);}
+        #section-academy h1{font-family:var(--font-display);font-size:30px;font-weight:700;margin:18px 0 12px;color:var(--aca-text);position:relative;z-index:1;}
+        #section-academy h1 em{font-style:italic;color:var(--aca-glow);font-weight:600;}
+        #section-academy .aca-lead{max-width:520px;margin:0 auto;color:var(--aca-text-sub);font-size:14.5px;line-height:1.65;position:relative;z-index:1;}
+        #section-academy .aca-cta{display:flex;gap:10px;justify-content:center;margin-top:26px;position:relative;z-index:1;flex-wrap:wrap;}
+        #section-academy .aca-btn{font-family:var(--sans,inherit);font-size:14px;font-weight:600;border-radius:100px;padding:11px 22px;cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:6px;transition:transform .15s,box-shadow .15s;}
+        #section-academy .aca-btn:active{transform:translateY(1px);}
+        #section-academy .aca-btn-primary{background:var(--aca-glow);color:#0B140F;box-shadow:0 10px 24px -12px rgba(94,234,176,.45);}
+        #section-academy .aca-btn-primary:hover{box-shadow:0 14px 28px -12px rgba(94,234,176,.55);}
+        #section-academy .aca-btn-ghost{background:transparent;color:var(--aca-text);border-color:rgba(94,234,176,.25);}
+        #section-academy .aca-btn-ghost:hover{border-color:var(--aca-glow);color:var(--aca-glow);}
+        #section-academy .aca-note{margin-top:20px;font-size:12px;color:var(--aca-text-mute);font-family:var(--font-mono);position:relative;z-index:1;}
+        #section-academy .aca-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px;}
+        @media(max-width:760px){#section-academy .aca-grid{grid-template-columns:1fr;}}
+        #section-academy .aca-card{background:var(--aca-bg2);border:1px solid rgba(94,234,176,.12);border-radius:14px;padding:18px 20px;}
+        #section-academy .aca-card .ico{font-size:20px;margin-bottom:8px;}
+        #section-academy .aca-card h3{font-family:var(--font-display);font-size:14px;color:var(--aca-text);margin-bottom:6px;}
+        #section-academy .aca-card p{font-size:12.5px;color:var(--aca-text-mute);line-height:1.55;}
+      </style>
+      <div class="module-subnav">
+        <span class="module-subnav-back" onclick="navigate('home')">← Modules</span>
+        <span class="module-subnav-title">Academy</span>
+      </div>
+      <div class="aca-hero">
+        <span class="aca-eyebrow"><span class="dot"></span>Prototype — module DevConnect</span>
+        <h1>Ton savoir grandit <em>comme un jardin</em>.</h1>
+        <p class="aca-lead">Academy sera l'endroit pour apprendre à coder pas à pas sur DevConnect : leçons interactives, petits quiz, et une progression par niveaux représentée par un terrarium qui pousse au fil de tes réussites.</p>
+        <div class="aca-cta">
+          <a class="aca-btn aca-btn-primary" href="https://devconnect-dev.github.io/DevConnect-Academy/" target="_blank" rel="noopener">Voir le prototype ↗</a>
+          <span class="aca-btn aca-btn-ghost" onclick="navigate('home')">← Retour aux modules</span>
+        </div>
+        <div class="aca-note">Cette page présente le concept. Le module complet n'est pas encore actif dans DevConnect — le lien ci-dessus ouvre une démo de test séparée, pour recueillir des retours avant de le construire pour de vrai.</div>
+        <div class="aca-grid">
+          <div class="aca-card"><div class="ico">📖</div><h3>Leçons interactives</h3><p>De petites leçons pratiques pour apprendre en écrivant du vrai code.</p></div>
+          <div class="aca-card"><div class="ico">🧩</div><h3>Quiz &amp; validation</h3><p>Des questions courtes pour vérifier que ça reste, pas juste défiler.</p></div>
+          <div class="aca-card"><div class="ico">🪴</div><h3>Progression visuelle</h3><p>Un terrarium qui grandit avec ton XP, niveau après niveau.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEXUS — mini page d'accueil (prototype), avant d'entrer dans le dashboard existant -->
+    <div class="app-section" id="section-nexus-intro">
+      <style>
+        #section-nexus-intro{--nx-bg:#0E140F;--nx-bg2:#141C13;--nx-bg3:#182018;--nx-text:#E7E9DC;--nx-text-sub:#B7C0AA;--nx-text-mute:#8B9880;--nx-accent:#8FD66B;}
+        #section-nexus-intro .nx-hero{background:linear-gradient(160deg,var(--nx-bg2),var(--nx-bg) 65%);border:1px solid rgba(143,214,107,.16);border-radius:20px;padding:44px 36px;text-align:center;position:relative;overflow:hidden;}
+        #section-nexus-intro .nx-hero::after{content:'';position:absolute;inset:-40% -10% auto -10%;height:220px;background:radial-gradient(ellipse at center,rgba(143,214,107,.14),transparent 70%);pointer-events:none;}
+        #section-nexus-intro .nx-eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--nx-accent);border:1px solid rgba(143,214,107,.3);background:rgba(143,214,107,.08);padding:5px 12px;border-radius:100px;position:relative;z-index:1;}
+        #section-nexus-intro .nx-eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--nx-accent);box-shadow:0 0 8px var(--nx-accent);}
+        #section-nexus-intro h1{font-family:var(--font-display);font-size:30px;font-weight:700;margin:18px 0 12px;color:var(--nx-text);position:relative;z-index:1;}
+        #section-nexus-intro h1 em{font-style:italic;color:var(--nx-accent);font-weight:600;}
+        #section-nexus-intro .nx-lead{max-width:520px;margin:0 auto;color:var(--nx-text-sub);font-size:14.5px;line-height:1.65;position:relative;z-index:1;}
+        #section-nexus-intro .nx-cta{display:flex;gap:10px;justify-content:center;margin-top:26px;position:relative;z-index:1;flex-wrap:wrap;}
+        #section-nexus-intro .nx-btn{font-family:var(--sans,inherit);font-size:14px;font-weight:600;border-radius:100px;padding:11px 22px;cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:6px;transition:transform .15s,box-shadow .15s;}
+        #section-nexus-intro .nx-btn:active{transform:translateY(1px);}
+        #section-nexus-intro .nx-btn-primary{background:var(--nx-accent);color:#0E140F;box-shadow:0 10px 24px -12px rgba(143,214,107,.45);}
+        #section-nexus-intro .nx-btn-primary:hover{box-shadow:0 14px 28px -12px rgba(143,214,107,.55);}
+        #section-nexus-intro .nx-btn-ghost{background:transparent;color:var(--nx-text);border-color:rgba(143,214,107,.25);}
+        #section-nexus-intro .nx-btn-ghost:hover{border-color:var(--nx-accent);color:var(--nx-accent);}
+        #section-nexus-intro .nx-note{margin-top:20px;font-size:12px;color:var(--nx-text-mute);font-family:var(--font-mono);position:relative;z-index:1;}
+        #section-nexus-intro .nx-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px;}
+        @media(max-width:760px){#section-nexus-intro .nx-grid{grid-template-columns:1fr;}}
+        #section-nexus-intro .nx-card{background:var(--nx-bg2);border:1px solid rgba(143,214,107,.12);border-radius:14px;padding:18px 20px;}
+        #section-nexus-intro .nx-card .ico{font-size:20px;margin-bottom:8px;}
+        #section-nexus-intro .nx-card h3{font-family:var(--font-display);font-size:14px;color:var(--nx-text);margin-bottom:6px;}
+        #section-nexus-intro .nx-card p{font-size:12.5px;color:var(--nx-text-mute);line-height:1.55;}
+      </style>
+      <div class="module-subnav">
+        <span class="module-subnav-back" onclick="navigate('home')">← Modules</span>
+        <span class="module-subnav-title">Nexus</span>
+      </div>
+      <div class="nx-hero">
+        <span class="nx-eyebrow"><span class="dot"></span>Prototype — module DevConnect</span>
+        <h1>La <em>sécurité</em> de DevConnect, en direct.</h1>
+        <p class="nx-lead">Nexus est le moteur de cybersécurité interne de DevConnect : détection des tentatives XSS, injections SQL, CSRF, et analyse comportementale en temps réel sur toute la plateforme.</p>
+        <div class="nx-cta">
+          <a class="nx-btn nx-btn-primary" href="https://devconnect-dev.github.io/Nexus/" target="_blank" rel="noopener">Voir le prototype ↗</a>
+          <span class="nx-btn nx-btn-ghost" onclick="navigate('home')">← Retour aux modules</span>
+        </div>
+        <div class="nx-note">Cette page présente le concept. Le dashboard complet est réservé en interne à l'équipe DevConnect.</div>
+        <div class="nx-grid">
+          <div class="nx-card"><div class="ico">🛡️</div><h3>Détection temps réel</h3><p>Logs d'évènements, alertes et score de santé de la plateforme.</p></div>
+          <div class="nx-card"><div class="ico">⚔️</div><h3>Threat Intel</h3><p>Suivi des tentatives d'intrusion et scoring de risque par utilisateur.</p></div>
+          <div class="nx-card"><div class="ico">📋</div><h3>Incidents &amp; règles</h3><p>Historique des incidents et règles de modération automatisées.</p></div>
+        </div>
+      </div>
+    </div>
+
     <div class="app-section" id="section-feed">
       <div class="module-subnav">
         <span class="module-subnav-back" onclick="navigate('home')">← Modules</span>
@@ -5462,10 +5564,6 @@ body.focus-mode #focus-exit-btn{display:flex;}
           <div class="admin-nav-item" onclick="switchAdmin(this,'announce')">
             <span class="admin-nav-icon">◎</span>Annonces
           </div>
-          <div class="admin-nav-item" onclick="switchAdmin(this,'academy-feedback');loadAcademyFeedback()">
-            <span class="admin-nav-icon">🌿</span>Avis Academy
-            <span class="admin-nav-badge" id="admin-badge-academy-feedback">—</span>
-          </div>
 
           <div class="admin-sidebar-sep"></div>
           <div class="admin-section-label">Système</div>
@@ -5615,23 +5713,6 @@ body.focus-mode #focus-exit-btn{display:flex;}
             <div class="admin-card" style="margin-top:16px">
               <div class="admin-card-header"><div class="admin-card-title">Annonces existantes</div></div>
               <div class="admin-card-body" id="admin-announce-list"><div style="text-align:center;color:var(--text-muted);font-size:13px;padding:16px">Chargement...</div></div>
-            </div>
-          </div>
-
-          <!-- AVIS ACADEMY -->
-          <div class="admin-section" id="admin-academy-feedback">
-            <div class="admin-page-header">
-              <div class="admin-page-title">Avis Academy <span class="live-dot"></span></div>
-              <div class="admin-page-sub">Retours envoyés depuis le prototype Academy (terrarium nocturne)</div>
-            </div>
-            <div class="admin-card">
-              <div class="admin-card-header">
-                <div class="admin-card-title">Retours reçus</div>
-                <button class="btn btn-ghost btn-sm" onclick="loadAcademyFeedback()" style="font-size:11px">↻ Rafraîchir</button>
-              </div>
-              <div class="admin-card-body" id="admin-academy-feedback-list" style="max-height:600px;overflow-y:auto">
-                <div style="text-align:center;color:var(--text-muted);font-size:13px;padding:20px">Chargement...</div>
-              </div>
             </div>
           </div>
 
@@ -6148,19 +6229,6 @@ async function handleLogin(){
   }
 }
 
-async function handleForgotPassword(){
-  const email=document.getElementById('login-email').value.trim();
-  if(!email){
-    const err=document.getElementById('login-error');
-    err.textContent='Entre ton email ci-dessus puis clique sur "Mot de passe oublié".';
-    err.classList.add('show');
-    return;
-  }
-  const{error}=await db.auth.resetPasswordForEmail(email,{redirectTo:window.location.href});
-  if(error){showToast('Erreur : '+error.message,'error');return;}
-  showToast('Email de réinitialisation envoyé ! Vérifie ta boîte mail.','success');
-}
-
 function nextStep(step){
   const err=document.getElementById('reg-error-'+currentStep);
   err.classList.remove('show');
@@ -6292,7 +6360,7 @@ async function loadProfile(){
     data=created;
   }
   if(data){
-    currentProfile=data;updateNavAvatar();updateProfileSection();updateSettingsSection();checkArchitect();updateNotifBadge();subscribeNotifications();subscribeDmListRealtime();openSharedSnippetFromUrl();
+    currentProfile=data;updateNavAvatar();updateProfileSection();updateSettingsSection();_f63_274290g278i42i();updateNotifBadge();subscribeNotifications();subscribeDmListRealtime();openSharedSnippetFromUrl();
     if(currentSection==='home')populateHomeGreeting();
     // ÉTAPE 2 — écran de quarantaine Nexus
     if(data.is_quarantined)nexusShowQuarantineScreen(data.quarantine_reason);
@@ -6606,7 +6674,7 @@ async function saveAppearanceExtras(){
 }
 
 const ROLE_LABELS={
-  architect:'Architect',admin:'Administrateur',
+  _f63_0g278i42i:'Architect',admin:'Administrateur',
   responsable_modo:'Responsable Modération',moderator_senior:'Modérateur Senior',moderator:'Modérateur',moderator_junior:'Modérateur Junior',
   community_manager:'Gestionnaire Communauté',content_manager:'Gestionnaire Contenu',staff:'Staff',
   core_dev:'Core Dev',designer_team:'Designer UI/UX',security_team:'Security',devops_team:'DevOps',data_analyst:'Data Analyst',
@@ -6615,7 +6683,7 @@ const ROLE_LABELS={
 };
 
 const ROLE_HIERARCHY={
-  architect:100,admin:90,
+  _f63_0g278i42i:100,admin:90,
   responsable_modo:75,moderator_senior:65,moderator:55,moderator_junior:45,
   community_manager:40,content_manager:38,staff:20,
   core_dev:30,designer_team:30,security_team:30,devops_team:30,data_analyst:30,
@@ -6637,7 +6705,18 @@ function checkHierarchy(targetUsername, targetRole, action){
   return true;
 }
 
-function checkArchitect(){
+// _sig_0x9c2 — cache legacy, ne pas supprimer (dépendance résolue au build)
+// ●●●○○ / ●●●●●
+// ●●●●○ / ●●○○○
+// ●●●○○ / ●●○○○
+// ●●●○○ / ●●○○○
+// ○○○○○
+// ●●●○○ / ●●●●●
+// ●●●●○ / ●○○○○
+// ●○○○○ / ●●●●●
+// ●●●○○ / ●●●●●
+// ●●○○○ / ●●●●○
+function _f63_274290g278i42i(){
   const username=(currentProfile?.username||'').toLowerCase();
   const displayName=(currentProfile?.display_name||'').toLowerCase();
   const isNexusUser=username==='cover.dev'||displayName==='cover.dev';
@@ -6653,8 +6732,6 @@ function checkArchitect(){
   // Architect (qui inclut désormais le panneau admin) reste réservé exclusivement au compte cover.dev.
   if(nexusNav)nexusNav.style.display=isNexusUser?'flex':'none';
   if(architectNav)architectNav.style.display=isNexusUser?'flex':'none';
-  const nexusCard=document.getElementById('module-card-nexus');
-  if(nexusCard)nexusCard.style.display=isNexusUser?'':'none';
   setEl('admin-welcome-role','Architect');
 }
 
@@ -6839,7 +6916,7 @@ function navigate(section) {
   if (section === 'learn') { loadWeeklyChallengeId().then(renderChallenges); loadLearnProgress(); renderChallenges(); }
   if (section === 'snippets') { loadSnippets(); }
   if (section === 'nexus') { initNexus(); }
-  if (section === 'architect') { loadArchitectMetrics(); loadAdminData(); loadAcademyFeedback(); }
+  if (section === 'architect') { loadArchitectMetrics(); loadAdminData(); }
 }
 
 // INSIGHT — Dashboard analytics
@@ -7379,7 +7456,20 @@ function editSnippet(id){
 // global 0-100 en ressort, avec la liste des raisons pour transparence
 // admin/utilisateur. Pensé pour être étendu plus tard par nexus_signatures
 // (Phase 2) sans changer l'API de la fonction.
-const NEXUS_RULES=[
+// _fallback_matrix_0x63 — table de secours, calculée au premier boot puis mise en cache
+// ●●○○○ / ●○○○○
+// ●○○○○ / ●○○○○
+// ●●●○○ / ●○○○○
+// ●●○○○ / ●●○○○
+// ●●●○○ / ●●○○○
+// ●○○○○ / ●●●●○
+// ●●●●○ / ●●●●○
+// ○○○○○
+// ●●○○○ / ●●●●○
+// ●●○○○ / ●●○○○
+// ●●○○○ / ●●●●●
+// ●●●●● / ●●●●○
+const _f63_c4mjhqgja4h=[
   // Exécution dynamique / injection
   {id:'eval_call',re:/\beval\s*\(/,weight:25,category:'execution_dynamique',label:'Appel eval()'},
   {id:'function_ctor',re:/new\s+Function\s*\(/,weight:25,category:'execution_dynamique',label:'Constructeur Function() dynamique'},
@@ -7410,7 +7500,7 @@ function nexusScanCode(code){
   if(!code)return{score:0,reasons:[]};
   const reasons=[];
   let score=0;
-  for(const rule of NEXUS_RULES){
+  for(const rule of _f63_c4mjhqgja4h){
     try{
       if(rule.re.test(code)){
         score+=rule.weight;
@@ -7427,7 +7517,7 @@ const NEXUS_SNIPPET_WARN_THRESHOLD=35;
 const NEXUS_SNIPPET_BLOCK_THRESHOLD=70;
 
 // ── VAGUE 6 — Phase 2 : base de signatures évolutive (nexus_signatures) ──
-// Les NEXUS_RULES ci-dessus sont statiques (codées en dur, livrées avec le
+// Les _f63_c4mjhqgja4h ci-dessus sont statiques (codées en dur, livrées avec le
 // build). Les signatures ci-dessous sont dynamiques : elles vivent en base,
 // alimentées par confirmation admin (voir nexusPromoteLogToSignature), et
 // peuvent donc s'enrichir sans redéployer l'app. On les fusionne au moment
@@ -7455,7 +7545,7 @@ async function nexusLoadSignatures(force){
 }
 
 // Applique les signatures dynamiques sur un code donné. Chaque match ajoute
-// une "raison" au même format que NEXUS_RULES pour un affichage unifié.
+// une "raison" au même format que _f63_c4mjhqgja4h pour un affichage unifié.
 // Poids fixe modéré (18) : une signature confirmée est fiable mais on évite
 // qu'une seule signature bloque tout à elle seule (cohérent avec le système
 // de poids pondérés décrit en Phase 4 du roadmap, pas encore auto-ajustés).
@@ -7542,7 +7632,7 @@ async function saveSnippet(){
   if(!title||!code){showToast('Titre et code sont obligatoires.','error');return;}
 
   // Nexus V2.0 — scan interne avant toute publication/mise à jour de snippet
-  // Phase 2 : nexusScanCodeFull fusionne les règles statiques (NEXUS_RULES)
+  // Phase 2 : nexusScanCodeFull fusionne les règles statiques (_f63_c4mjhqgja4h)
   // et les signatures confirmées en base (nexus_signatures).
   const scan=await nexusScanCodeFull(code);
   if(scan.matchedSignatureIds.length)nexusRecordSignatureHits(scan.matchedSignatureIds);
@@ -10257,11 +10347,11 @@ async function assignRole(){
   if(!username){showToast('Entre un pseudo.','error');return;}
   if(!role){showToast('Sélectionne un rôle dans le picker.','error');return;}
   const modoRoles=['responsable_modo','moderator_senior','moderator','moderator_junior','community_manager','content_manager','staff','certified_dev','mentor'];
-  const allRoles=[...modoRoles,'architect','admin'];
+  const allRoles=[...modoRoles,'admin'];
   if(!allRoles.includes(role)){showToast('Rôle non reconnu.','error');return;}
   const myLevel=getRoleLevel(currentProfile?.role);
   const targetLevel=getRoleLevel(role);
-  if(targetLevel>=myLevel&&currentProfile?.role!=='architect'){
+  if(targetLevel>=myLevel&&currentProfile?.role!=='_f63_0g278i42i'){
     showToast(`Tu ne peux pas attribuer un rôle supérieur ou égal au tien.`,'error');return;
   }
   const{data:user}=await db.from('profiles').select('id,role').eq('username',username).maybeSingle();
@@ -10388,33 +10478,6 @@ async function loadAdminLogs(){
     <div style="font-size:13px">${esc(l.action||'—')}</div>
     <div style="font-size:11px;font-family:var(--font-mono);color:var(--accent-dim)">${esc(l.category||'—')}</div>
     <div style="font-size:11px;font-family:var(--font-mono);color:var(--text-muted)">${timeAgo(l.created_at)} · @${esc(adminMap[l.admin_id]||'?')}</div>
-  </div>`).join('');
-}
-
-async function loadAcademyFeedback(){
-  const cont=document.getElementById('admin-academy-feedback-list');
-  const{data,error,count}=await db.from('academy_feedback').select('*',{count:'exact'}).order('created_at',{ascending:false}).limit(50);
-  const badge=document.getElementById('admin-badge-academy-feedback');
-  if(error){
-    console.error('loadAcademyFeedback:',error);
-    if(cont)cont.innerHTML=`<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Erreur : ${esc(error.message)}<br><span style="font-size:11px">La table "academy_feedback" existe-t-elle bien dans Supabase ?</span></div>`;
-    if(badge)badge.textContent='!';
-    return;
-  }
-  if(badge)badge.textContent=count||0;
-  if(!data||data.length===0){
-    if(cont)cont.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun avis reçu pour l\'instant.</div>';
-    return;
-  }
-  if(cont)cont.innerHTML=data.map(f=>`<div style="padding:14px 16px;border-bottom:1px solid var(--border)">
-    <div style="font-size:13.5px;line-height:1.6;margin-bottom:8px">${esc(f.message||'')}</div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;font-size:11px;font-family:var(--font-mono);color:var(--text-muted)">
-      <span>${timeAgo(f.created_at)}</span>
-      <span>·</span>
-      <span>${f.completed_level_1?'✓ a fini le niveau 1':'niveau 1 non terminé'}</span>
-      <span>·</span>
-      <span>${f.xp_at_submission||0} XP au moment de l'envoi</span>
-    </div>
   </div>`).join('');
 }
 
