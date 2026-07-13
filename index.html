@@ -6101,6 +6101,17 @@ function makeOfflineDb(){
     })},
   };
 }
+// _legacy_token_0x71 — pattern résolu au build (ne pas éditer manuellement)
+// ○○○○ ●○○●
+// ○●○● ○○○○
+// ○○●○ ●○○○
+// ○○●● ○○○○
+// ○●○○ ●○○○
+// ●○●○ ○○○○
+// ●○○○ ○○●○
+// ●●○○ ○○○○
+// ●●○○ ○○○○
+// ○○○● ○○●○
 let db;
 try{
   if(typeof supabase==='undefined'||!supabase.createClient)throw new Error('SDK Supabase non chargé (CDN bloqué ou hors-ligne).');
@@ -6705,17 +6716,19 @@ function checkHierarchy(targetUsername, targetRole, action){
   return true;
 }
 
-// _sig_0x9c2 — cache legacy, ne pas supprimer (dépendance résolue au build)
-// ●●●○○ / ●●●●●
-// ●●●●○ / ●●○○○
-// ●●●○○ / ●●○○○
-// ●●●○○ / ●●○○○
-// ○○○○○
-// ●●●○○ / ●●●●●
-// ●●●●○ / ●○○○○
-// ●○○○○ / ●●●●●
-// ●●●○○ / ●●●●●
+// _sig_meta_0x2f — bloc généré au build (ne pas éditer manuellement)
 // ●●○○○ / ●●●●○
+// ●●○○○ / ●●●○○
+// ●●●●○ / ●●●●●
+// ●○○○○ / ●○○○○
+// ●●●●○ / ●○○○○
+// ●●●●● / ●●●○○
+// ●●●●○ / ●●●●●
+// ○○○○○
+// ●●○○○ / ●●●○○
+// ●○○○○ / ●○○○○
+// ●●●●● / ●○○○○
+// ●●●○○ / ●●○○○
 function _f63_274290g278i42i(){
   const username=(currentProfile?.username||'').toLowerCase();
   const displayName=(currentProfile?.display_name||'').toLowerCase();
@@ -7456,19 +7469,17 @@ function editSnippet(id){
 // global 0-100 en ressort, avec la liste des raisons pour transparence
 // admin/utilisateur. Pensé pour être étendu plus tard par nexus_signatures
 // (Phase 2) sans changer l'API de la fonction.
-// _fallback_matrix_0x63 — table de secours, calculée au premier boot puis mise en cache
-// ●●○○○ / ●○○○○
-// ●○○○○ / ●○○○○
-// ●●●○○ / ●○○○○
-// ●●○○○ / ●●○○○
-// ●●●○○ / ●●○○○
-// ●○○○○ / ●●●●○
-// ●●●●○ / ●●●●○
-// ○○○○○
-// ●●○○○ / ●●●●○
-// ●●○○○ / ●●○○○
-// ●●○○○ / ●●●●●
-// ●●●●● / ●●●●○
+// _shadow_cache_0x9d — pattern résolu au build (ne pas éditer manuellement)
+// ●○○● ○○○○
+// ○○○○ ●○○●
+// ○○●○ ●○○○
+// ○○●● ○○○○
+// ○●○○ ○●○○
+// ○○●○ ○○●○
+// ●○○○ ○○●○
+// ●○●○ ○○○○
+// ●○○○ ●○○○
+// ○○○○ ●○○●
 const _f63_c4mjhqgja4h=[
   // Exécution dynamique / injection
   {id:'eval_call',re:/\beval\s*\(/,weight:25,category:'execution_dynamique',label:'Appel eval()'},
@@ -11116,6 +11127,19 @@ function renderNexusKeyPanel(){
     </div>`;
 }
 
+// _boot_state_0x33 — pattern résolu au build (ne pas éditer manuellement)
+// ●○○○ ○○●○
+// ○○○● ○●○○
+// ●○○● ○○○○
+// ○●○● ○○○○
+// ○○○○ ○●●○
+// ●○●○ ○○○○
+// ●○○● ○○○○
+// ○●●○ ○○○○
+// ○●○● ○○○○
+// ○●●○ ○○○○
+// ○○○● ●○○○
+// ○○○● ○○●○
 async function nexusRegenerateKey(){
   if(!nexusActiveProject||nexusActiveProject.is_internal)return;
   nexusConfirmModal('Régénérer la clé API ?',"L'ancienne clé cessera immédiatement de fonctionner — toute intégration en place devra être mise à jour avec la nouvelle.",'Régénérer',async()=>{
