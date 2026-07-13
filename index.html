@@ -1408,6 +1408,15 @@ body.focus-mode #focus-exit-btn{display:flex;}
 .nexus-score-fill.warn{background:#9a9a5a;}
 .nexus-score-fill.danger{background:#9a5a5a;}
 .nexus-setting-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(27,36,25,.04);}
+.nexus-widget-row{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid rgba(27,36,25,.04);}
+.nexus-widget-row:last-child{border-bottom:none;}
+.nexus-widget-row input[type=checkbox]{width:16px;height:16px;margin-top:2px;accent-color:#5a8a6a;cursor:pointer;flex-shrink:0;}
+.nexus-widget-row label{cursor:pointer;flex:1;}
+.nexus-widget-name{font-size:13px;font-weight:500;color:var(--text);}
+.nexus-widget-desc{font-size:11px;color:rgba(27,36,25,.35);font-family:var(--font-mono);margin-top:1px;}
+.nexus-onboard-label{font-size:11px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.06em;color:rgba(27,36,25,.35);margin-bottom:6px;display:block;}
+select.nexus-modal-input{cursor:pointer;}
+textarea.nexus-modal-input{resize:vertical;min-height:64px;font-family:var(--font-body);}
 .nexus-switcher .cdrop-trigger{padding:8px 10px;font-size:12px;font-family:var(--font-display);background:rgba(27,36,25,.03);}
 .nexus-switcher .cdrop-menu{font-size:12px;}
 .nexus-switcher .cdrop-option{padding:8px 10px;font-size:12px;}
@@ -1463,6 +1472,19 @@ body.focus-mode #focus-exit-btn{display:flex;}
 .nexus-risk-bar.critical{background:#cc3333;}
 .nexus-risk-score{font-family:var(--font-mono);font-size:11px;width:28px;text-align:right;flex-shrink:0;}
 .nexus-risk-user{font-size:12px;width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:0;}
+.nexus-stat.auto-stat{border-color:rgba(143,214,107,.3);}
+.nexus-stat.auto-stat .nexus-stat-val{color:#4a8a5a;}
+.nexus-decision-card{margin-bottom:16px;}
+.nexus-decision-uptime{font-family:var(--font-mono);font-size:11px;color:rgba(27,36,25,.3);white-space:nowrap;}
+.nexus-decision-feed{padding:2px 0;max-height:260px;overflow-y:auto;}
+.nexus-decision-item{display:flex;align-items:flex-start;gap:12px;padding:10px 18px;border-bottom:1px solid rgba(27,36,25,.04);}
+.nexus-decision-item:last-child{border-bottom:none;}
+.nexus-decision-item.new-row{animation:nexusRowIn .4s ease;}
+.nexus-decision-icon{width:22px;height:22px;border-radius:50%;background:rgba(90,154,106,.12);color:#4a8a5a;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;font-family:var(--font-mono);margin-top:1px;}
+.nexus-decision-text{flex:1;font-size:12px;line-height:1.55;color:rgba(27,36,25,.55);}
+.nexus-decision-text strong{color:var(--text);font-weight:600;}
+.nexus-decision-time{font-family:var(--font-mono);font-size:10px;color:rgba(27,36,25,.25);flex-shrink:0;white-space:nowrap;margin-top:2px;}
+.nexus-decision-empty{text-align:center;padding:30px 18px;font-size:12px;color:rgba(27,36,25,.25);font-family:var(--font-mono);line-height:1.6;}
 /* Incidents */
 .nexus-incident{background:rgba(254,252,246,.94);border:1px solid rgba(27,36,25,.06);border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:10px;display:flex;align-items:flex-start;gap:14px;transition:border-color .2s;}
 .nexus-incident.open{border-left:3px solid #9a4a4a;}
@@ -2212,6 +2234,14 @@ body.focus-mode #focus-exit-btn{display:flex;}
 #page-app #section-nexus .nexus-anomaly-item,#page-app #section-nexus .nexus-risk-row{border-bottom:1px solid var(--nx-line);}
 #page-app #section-nexus .nexus-risk-bar-wrap,#page-app #section-nexus .nexus-bf-bar-wrap{background:var(--nx-line);}
 #page-app #section-nexus .nexus-risk-user,#page-app #section-nexus .nexus-anomaly-label{color:var(--nx-text);}
+#page-app #section-nexus .nexus-stat.auto-stat{border-color:rgba(143,214,107,.22) !important;}
+#page-app #section-nexus .nexus-stat.auto-stat .nexus-stat-val{color:var(--nx-leaf);}
+#page-app #section-nexus .nexus-decision-uptime{color:var(--nx-mute);}
+#page-app #section-nexus .nexus-decision-item{border-bottom:1px solid var(--nx-line);}
+#page-app #section-nexus .nexus-decision-icon{background:rgba(143,214,107,.12);color:var(--nx-leaf);}
+#page-app #section-nexus .nexus-decision-text{color:var(--nx-mute);}
+#page-app #section-nexus .nexus-decision-text strong{color:var(--nx-text);}
+#page-app #section-nexus .nexus-decision-time,#page-app #section-nexus .nexus-decision-empty{color:rgba(148,160,133,.4);}
 #page-app #section-nexus .nexus-threat-card.danger{background:rgba(180,50,50,.08) !important;border-color:rgba(200,60,60,.25) !important;}
 #page-app #section-nexus .nexus-threat-card.warn{background:rgba(180,140,50,.08) !important;border-color:rgba(200,160,60,.22) !important;}
 #page-app #section-nexus .nexus-switcher .cdrop-trigger{background:rgba(240,242,232,.05);color:var(--nx-text);}
@@ -4802,7 +4832,7 @@ body.focus-mode #focus-exit-btn{display:flex;}
           <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-tests');initNexusTests()"><span class="nexus-nav-icon"><svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px"><path d="M7.2 2.6h3.6M7.8 2.6v4.1L4.6 12c-.6 1.1.2 2.4 1.4 2.4h6c1.2 0 2-1.3 1.4-2.4L10.2 6.7V2.6"/><path d="M6.2 10.2h5.6"/></svg></span>Tests</div>
           <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-docs');renderNexusDocs()"><span class="nexus-nav-icon"><svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px"><path d="M3.2 4.2c1.6-.9 3.7-.9 5.3 0v9.6c-1.6-.9-3.7-.9-5.3 0Z"/><path d="M14.3 4.2c-1.6-.9-3.7-.9-5.3 0v9.6c1.6-.9 3.7-.9 5.3 0Z"/></svg></span>Docs / Intégration</div>
           <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-roadmap')"><span class="nexus-nav-icon"><svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px"><path d="M2.5 14.5c2-3 4-3 5.5-1.5s3.5 1.5 5.5-1.5"/><circle cx="3.2" cy="14.5" r="1"/><circle cx="14.8" cy="11.5" r="1"/><path d="M9 3v6"/><path d="M6.5 5.5 9 3l2.5 2.5"/></svg></span>Roadmap</div>
-          <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-settings');renderNexusKeyPanel()"><span class="nexus-nav-icon"><svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px"><path d="M4.5 3.5v4M4.5 9.8v4.7M9 3.5v7M9 12.8v1.7M13.5 3.5v2.2M13.5 8v6.5"/><circle cx="4.5" cy="8.4" r="1.4"/><circle cx="9" cy="11.3" r="1.4"/><circle cx="13.5" cy="6.7" r="1.4"/></svg></span>Parametres</div>
+          <div class="nexus-nav-item" onclick="switchNexus(this,'nexus-settings');renderNexusKeyPanel();renderNexusWidgetPicker();renderNexusAutoResponseSuggestion()"><span class="nexus-nav-icon"><svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px"><path d="M4.5 3.5v4M4.5 9.8v4.7M9 3.5v7M9 12.8v1.7M13.5 3.5v2.2M13.5 8v6.5"/><circle cx="4.5" cy="8.4" r="1.4"/><circle cx="9" cy="11.3" r="1.4"/><circle cx="13.5" cy="6.7" r="1.4"/></svg></span>Parametres</div>
         </div>
 
         <div class="nexus-main">
@@ -4812,8 +4842,16 @@ body.focus-mode #focus-exit-btn{display:flex;}
             <div class="nexus-stats-row">
               <div class="nexus-stat"><div class="nexus-stat-val" id="ns-total">&mdash;</div><div class="nexus-stat-label">Events (24h)</div><div class="nexus-stat-delta neutral" id="ns-total-d">chargement...</div></div>
               <div class="nexus-stat alert-stat"><div class="nexus-stat-val" id="ns-critical">&mdash;</div><div class="nexus-stat-label">Critiques</div><div class="nexus-stat-delta down" id="ns-critical-d">&mdash;</div></div>
+              <div class="nexus-stat auto-stat"><div class="nexus-stat-val" id="ns-auto-actions">&mdash;</div><div class="nexus-stat-label">Actions autonomes</div><div class="nexus-stat-delta up" id="ns-auto-actions-d">&mdash;</div></div>
               <div class="nexus-stat"><div class="nexus-stat-val" id="ns-rules-fired">&mdash;</div><div class="nexus-stat-label">Regles actives</div><div class="nexus-stat-delta up" id="ns-rules-d">&mdash;</div></div>
               <div class="nexus-stat"><div class="nexus-stat-val" id="ns-users-flagged">&mdash;</div><div class="nexus-stat-label">Users flagges</div><div class="nexus-stat-delta neutral" id="ns-users-d">&mdash;</div></div>
+            </div>
+            <div class="nexus-card nexus-decision-card">
+              <div class="nexus-card-head">
+                <div class="nexus-card-title"><span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:#4a8a5a;vertical-align:1px;margin-right:1px"></span> Decisions du moteur <span class="live-dot" style="margin-left:4px"></span></div>
+                <div class="nexus-decision-uptime" id="nexus-decision-uptime">&mdash;</div>
+              </div>
+              <div class="nexus-decision-feed" id="nexus-decision-feed"><div class="nexus-decision-empty">Chargement...</div></div>
             </div>
             <div style="display:grid;grid-template-columns:1fr 320px;gap:16px">
               <div class="nexus-card">
@@ -4840,8 +4878,8 @@ body.focus-mode #focus-exit-btn{display:flex;}
                   </div>
                 </div>
                 <div class="nexus-card">
-                  <div class="nexus-card-head"><div class="nexus-card-title"><span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.35;vertical-align:1px;margin-right:1px"></span> Top events</div></div>
-                  <div style="padding:10px 18px" id="nexus-top-events"><div style="text-align:center;padding:16px;color:rgba(27,36,25,.2);font-size:12px;font-family:var(--font-mono)">Chargement...</div></div>
+                  <div class="nexus-card-head"><div class="nexus-card-title"><span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.35;vertical-align:1px;margin-right:1px"></span> Comptes sous surveillance</div></div>
+                  <div style="padding:10px 18px" id="nexus-overview-watchlist"><div style="text-align:center;padding:16px;color:rgba(27,36,25,.2);font-size:12px;font-family:var(--font-mono)">Chargement...</div></div>
                 </div>
               </div>
             </div>
@@ -5331,6 +5369,15 @@ body.focus-mode #focus-exit-btn{display:flex;}
               <div id="nexus-key-panel"><div style="padding:14px 20px;color:rgba(27,36,25,.35);font-size:12px">Chargement...</div></div>
             </div>
             <div class="nexus-card">
+              <div class="nexus-card-head">
+                <div class="nexus-card-title">Personnalisation du dashboard</div>
+                <button class="btn btn-ghost btn-sm" style="font-size:11px" onclick="showNexusOnboardingModal(true)">Modifier le profil du site</button>
+              </div>
+              <div id="nexus-onboard-summary" style="padding:12px 20px;font-size:12px;color:rgba(27,36,25,.4);font-family:var(--font-mono)">Chargement...</div>
+              <div id="nexus-widget-picker" style="padding:2px 20px 16px"></div>
+            </div>
+            <div id="nexus-auto-response-suggestion"></div>
+            <div class="nexus-card">
               <div class="nexus-card-head"><div class="nexus-card-title">General</div></div>
               <div style="padding:0 20px">
                 <div class="nexus-setting-row"><div><div class="nexus-setting-label">Nexus actif</div><div class="nexus-setting-sub">Active/desactive tout le moteur Nexus</div></div><button class="toggle on" id="nexus-toggle-active" onclick="toggleNexusSetting(this,'active')"></button></div>
@@ -5424,6 +5471,137 @@ body.focus-mode #focus-exit-btn{display:flex;}
           <div class="arch-hero-sub">Roadmap complète · Statut de chaque module · Features planifiées</div>
         </div>
       </div>
+      <div class="arch-section-label"><span>Outils Architect</span><div class="line"></div></div>
+      <div class="arch-card" style="margin-bottom:20px">
+        <div class="arch-card-title"><span>⛓️</span> Traducteur Fig63</div>
+        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+          <button class="fig63-tab active" data-fig63-tab="grid" onclick="fig63SwitchTab(this,'grid')">Code Formation (grille)</button>
+          <button class="fig63-tab" data-fig63-tab="rythm" onclick="fig63SwitchTab(this,'rythm')">Fig63 Rythmique</button>
+        </div>
+
+        <div id="fig63-panel-grid">
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+            <div style="flex:1;min-width:200px">
+              <label style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">Texte en clair (encoder) ou code ●/○ (décoder)</label>
+              <textarea id="fig63-grid-text" rows="4" placeholder="SALUT MALIK" style="width:100%;font-family:var(--font-mono);font-size:12px;background:var(--bg0);border:1px solid var(--border);border-radius:var(--radius);padding:8px;color:var(--text);resize:vertical"></textarea>
+            </div>
+            <div style="width:160px">
+              <label style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">Clé secrète (optionnel)</label>
+              <input id="fig63-grid-key" type="text" placeholder="ex: NEXUS" style="width:100%;font-family:var(--font-mono);font-size:12px;background:var(--bg0);border:1px solid var(--border);border-radius:var(--radius);padding:8px;color:var(--text)">
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:10px">
+            <button class="nexus-mini-btn" onclick="fig63GridRun('encode')">Encoder →</button>
+            <button class="nexus-mini-btn" onclick="fig63GridRun('decode')">← Décoder</button>
+          </div>
+          <textarea id="fig63-grid-out" rows="8" placeholder="Résultat..." style="width:100%;font-family:var(--font-mono);font-size:12px;background:var(--bg0);border:1px solid var(--border);border-radius:var(--radius);padding:8px;color:var(--text);resize:vertical"></textarea>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:6px">Décoder : colle un bloc de lignes ●/○ (2 lignes par lettre, ligne ○○○○○ seule = espace) dans le champ du haut. Même clé requise si le message a été encodé avec une clé.</div>
+        </div>
+
+        <div id="fig63-panel-rythm" style="display:none">
+          <label style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">Texte en clair (encoder) ou motifs 8 positions (décoder)</label>
+          <textarea id="fig63-rythm-text" rows="4" placeholder="SALUT" style="width:100%;font-family:var(--font-mono);font-size:12px;background:var(--bg0);border:1px solid var(--border);border-radius:var(--radius);padding:8px;color:var(--text);resize:vertical;margin-bottom:10px"></textarea>
+          <div style="display:flex;gap:8px;margin-bottom:10px">
+            <button class="nexus-mini-btn" onclick="fig63RythmRun('encode')">Encoder →</button>
+            <button class="nexus-mini-btn" onclick="fig63RythmRun('decode')">← Décoder</button>
+          </div>
+          <textarea id="fig63-rythm-out" rows="8" placeholder="Résultat..." style="width:100%;font-family:var(--font-mono);font-size:12px;background:var(--bg0);border:1px solid var(--border);border-radius:var(--radius);padding:8px;color:var(--text);resize:vertical"></textarea>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:6px">Décoder : colle les motifs (2 ● sur 8 positions par lettre, un par ligne) dans le champ du haut.</div>
+        </div>
+      </div>
+      <script>
+      (function(){
+        var FIG63_GRID=[['A','B','C','D','E'],['F','G','H','I','K'],['L','M','N','O','P'],['Q','R','S','T','U'],['V','W','X','Y','Z']];
+        function gridFind(letter){
+          letter=letter.toUpperCase();if(letter==='J')letter='I';
+          for(var r=0;r<5;r++)for(var c=0;c<5;c++)if(FIG63_GRID[r][c]===letter)return{col:c,row:r};
+          return null;
+        }
+        function bits(n){var s='';for(var i=0;i<5;i++)s+=(i<n?'●':'○');return s;}
+        function countBits(line){var n=0;for(var i=0;i<line.length;i++)if(line[i]==='●')n++;return n;}
+        function keyShift(key,index){
+          if(!key)return{col:0,row:0};
+          var k=key.toUpperCase().replace(/[^A-Z]/g,'');
+          if(!k.length)return{col:0,row:0};
+          var pos=gridFind(k[index%k.length]);
+          return pos||{col:0,row:0};
+        }
+        window.fig63SwitchTab=function(btn,tab){
+          document.querySelectorAll('.fig63-tab').forEach(function(b){b.classList.remove('active')});
+          btn.classList.add('active');
+          document.getElementById('fig63-panel-grid').style.display=tab==='grid'?'block':'none';
+          document.getElementById('fig63-panel-rythm').style.display=tab==='rythm'?'block':'none';
+        };
+        window.fig63GridRun=function(mode){
+          var key=document.getElementById('fig63-grid-key').value;
+          var out=document.getElementById('fig63-grid-out');
+          if(mode==='encode'){
+            var text=document.getElementById('fig63-grid-text').value.toUpperCase();
+            var lines=[];var letterIdx=0;
+            for(var i=0;i<text.length;i++){
+              var ch=text[i];
+              if(ch===' '){lines.push('○○○○○  ← ESPACE');continue;}
+              if(!/[A-Z]/.test(ch))continue;
+              var pos=gridFind(ch);if(!pos)continue;
+              var shift=keyShift(key,letterIdx);
+              var col=(pos.col+shift.col)%5, row=(pos.row+shift.row)%5;
+              lines.push(bits(col+1)+' / '+bits(row+1)+'  ← '+ch);
+              letterIdx++;
+            }
+            out.value=lines.join('\n');
+          }else{
+            var raw=document.getElementById('fig63-grid-text').value.trim().split('\n').map(function(l){return l.replace(/[^●○]/g,'')}).filter(Boolean);
+            var result='';var letterIdx=0;
+            for(var i=0;i<raw.length;i++){
+              if(countBits(raw[i])===0){result+=' ';continue;}
+              var l1=raw[i], l2=raw[i+1];
+              if(!l2){break;}
+              var col=countBits(l1)-1, row=countBits(l2)-1;
+              var shift=keyShift(key,letterIdx);
+              var realCol=(col-shift.col+5)%5, realRow=(row-shift.row+5)%5;
+              result+=FIG63_GRID[realRow][realCol];
+              letterIdx++;i++;
+            }
+            out.value=result;
+          }
+        };
+        var RYTHM_TABLE={A:[1,2],B:[1,3],C:[1,4],D:[1,5],E:[1,6],F:[1,7],G:[1,8],H:[2,3],I:[2,4],J:[2,5],K:[2,6],L:[2,7],M:[2,8],N:[3,4],O:[3,5],P:[3,6],Q:[3,7],R:[3,8],S:[4,5],T:[4,6],U:[4,7],V:[4,8],W:[5,6],X:[5,7],Y:[5,8],Z:[6,7]};
+        var RYTHM_SPACE=[6,8];
+        function rythmBits(positions){var s='';for(var i=1;i<=8;i++)s+=(positions.indexOf(i)>-1?'●':'○');return s.slice(0,4)+' '+s.slice(4);}
+        window.fig63RythmRun=function(mode){
+          var out=document.getElementById('fig63-rythm-out');
+          if(mode==='encode'){
+            var text=document.getElementById('fig63-rythm-text').value.toUpperCase();
+            var lines=[];
+            for(var i=0;i<text.length;i++){
+              var ch=text[i];
+              if(ch===' '){lines.push(rythmBits(RYTHM_SPACE)+'  ← ESPACE');continue;}
+              if(!RYTHM_TABLE[ch])continue;
+              lines.push(rythmBits(RYTHM_TABLE[ch])+'  ← '+ch);
+            }
+            out.value=lines.join('\n');
+          }else{
+            var raw=document.getElementById('fig63-rythm-text').value.trim().split('\n').map(function(l){return l.replace(/[^●○]/g,'')}).filter(Boolean);
+            var result='';
+            for(var i=0;i<raw.length;i++){
+              var pos=[];for(var p=0;p<raw[i].length;p++)if(raw[i][p]==='●')pos.push(p+1);
+              if(pos.length!==2)continue;
+              if(pos[0]===RYTHM_SPACE[0]&&pos[1]===RYTHM_SPACE[1]){result+=' ';continue;}
+              var found='?';
+              for(var letter in RYTHM_TABLE){var pp=RYTHM_TABLE[letter];if(pp[0]===pos[0]&&pp[1]===pos[1]){found=letter;break;}}
+              result+=found;
+            }
+            out.value=result;
+          }
+        };
+      })();
+      </script>
+      <style>
+      .fig63-tab{font-family:var(--font-mono);font-size:11px;padding:6px 12px;border-radius:var(--radius);border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;transition:all .15s}
+      .fig63-tab.active{background:rgba(139,92,246,.1);color:#a78bfa;border-color:rgba(139,92,246,.3)}
+      .fig63-tab:hover{color:var(--text)}
+      </style>
+
       <div class="arch-metric-row">
         <div class="arch-metric"><div class="arch-metric-val" style="color:#34d399">4</div><div class="arch-metric-label">Modules live</div></div>
         <div class="arch-metric"><div class="arch-metric-val" style="color:#a78bfa">4</div><div class="arch-metric-label">Modules bientôt</div></div>
@@ -7674,11 +7852,13 @@ async function saveSnippet(){
       code:current.code,tags:current.tags||[],version_index:nextIndex,edited_by:currentUser.id
     });
     if(vErr){showToast('Erreur historique : '+vErr.message,'error');return;}
+    if(!(await nexusPrecheck(code,'snippet')))return;
     const{error}=await db.from('snippets').update({title,code,language,description,tags}).eq('id',editId).eq('user_id',currentUser.id);
     if(error){showToast('Erreur : '+error.message,'error');return;}
     closeSnippetModal();
     showToast('Snippet mis à jour !','success');
   }else{
+    if(!(await nexusPrecheck(code,'snippet')))return;
     const{error}=await db.from('snippets').insert({user_id:currentUser.id,title,code,language,description,tags,likes_count:0});
     if(error){showToast('Erreur : '+error.message,'error');return;}
     closeSnippetModal();
@@ -7946,6 +8126,7 @@ async function submitSnippetComment(snippetId){
   const input=document.getElementById('snip-comment-input-'+snippetId);
   const content=input.value.trim();
   if(!content)return;
+  if(!(await nexusPrecheck(content,'snippet_comment')))return;
   const{error}=await db.from('snippet_comments').insert({snippet_id:snippetId,user_id:currentUser.id,content});
   if(error){showToast('Erreur : '+error.message,'error');return;}
   input.value='';
@@ -8366,6 +8547,8 @@ async function sendMessage(){
   await nexusAnalyzeMessage(content,isDmMode?'dm':'channel');
   // NEXUS VAGUE 3 — rate limit générique sur l'envoi de messages
   nexusTrackApiCall('send_message',15,10000);
+  // Précheck : log garanti même si le trigger bloque l'insert juste après
+  if(!(await nexusPrecheck(content,'message')))return;
 
   if(isDmMode){
     if(!currentDmConvId){showToast('Aucune conversation ouverte.','error');return;}
@@ -8601,6 +8784,7 @@ async function publishPost() {
   const content = document.getElementById('post-composer').value.trim();
   if (!content) return;
   if (content.length > 2000) { showToast('Post trop long (2000 caractères max).', 'error'); return; }
+  if (!(await nexusPrecheck(content, 'post'))) return;
   const { error } = await db.from('posts').insert({ user_id: currentUser.id, content });
   if (error) { showToast('Erreur lors de la publication : ' + error.message, 'error'); return; }
   document.getElementById('post-composer').value = '';
@@ -10800,9 +10984,56 @@ let NEXUS_PROJECT_ID=NEXUS_DEVCONNECT_PROJECT_ID; // devient dynamique : projet 
 let nexusUserProjects=[]; // liste des projets Nexus possédés par l'utilisateur connecté
 let nexusActiveProject=null; // objet projet actif (id, name, plan, key_prefix, monthly_event_limit, is_internal)
 
+// ── Onboarding & personnalisation du dashboard par tenant ──────
+let nexusDashboardConfig=null; // { site_category, site_description, primary_concern, enabled_widgets, completed }
+const NEXUS_SITE_CATEGORIES=[
+  {v:'forum',l:'Forum / communauté de discussion'},
+  {v:'community',l:'Réseau communautaire'},
+  {v:'saas',l:'SaaS / application web'},
+  {v:'ecommerce',l:'E-commerce'},
+  {v:'game',l:'Jeu / plateforme de jeu'},
+  {v:'portfolio',l:'Portfolio / vitrine'},
+  {v:'other',l:'Autre'},
+];
+const NEXUS_PRIMARY_CONCERNS=[
+  {v:'spam',l:'Spam'},
+  {v:'security',l:'Sécurité / intrusions'},
+  {v:'fraud',l:'Fraude'},
+  {v:'harassment',l:'Harcèlement'},
+  {v:'bots',l:'Bots / faux comptes'},
+  {v:'other',l:'Autre'},
+];
+// Catalogue des widgets pilotables + à quel(s) item(s) de nav ils sont rattachés
+const NEXUS_WIDGET_CATALOG=[
+  {id:'risk_scores',name:'Scores de risque',desc:'Scoring des comptes suspects',navGroup:'nexus-threats'},
+  {id:'threat_radar',name:'Radar de menaces',desc:'Anomalies & brute-force en direct',navGroup:'nexus-threats'},
+  {id:'honeypots',name:'Honeypots',desc:'Pièges anti-bot',navGroup:'nexus-threats'},
+  {id:'bot_clusters',name:'Clusters de bots',desc:'Détection de comptes coordonnés',navGroup:'nexus-threats'},
+  {id:'campaigns',name:'Campagnes coordonnées',desc:'Attaques groupées multi-comptes',navGroup:'nexus-threats'},
+  {id:'incidents',name:'Incidents',desc:'File des incidents à traiter',navGroup:'nexus-incidents'},
+  {id:'appeals',name:'Appels / contestations',desc:'Demandes de révision des sanctions',navGroup:'nexus-blocks'},
+];
+
 // Écrit un event à la fois dans l'ancien système (security_logs, pour
 // compat avec le code existant qui le lit encore ailleurs) et dans le
 // nouveau système multi-tenant (nexus_logs, scopé à DevConnect).
+// Précheck côté client : scanne + logue AVANT la tentative d'écriture réelle,
+// pour que le blocage laisse toujours une trace même quand l'insert/update
+// qui suit se fait rejeter (et rollback) par le trigger web_enforce_content_scan.
+// Le trigger reste le vrai garde-fou ; ceci ne fait qu'assurer l'audit + un
+// message d'erreur clair, plus tôt.
+async function nexusPrecheck(text,source){
+  try{
+    const{data,error}=await db.rpc('nexus_precheck_content',{p_text:text||'',p_source:source});
+    if(error)return true; // précheck indispo : on laisse le trigger trancher normalement
+    if(data?.blocked){
+      showToast(`Publication bloquée par Web/Nexus : contenu à risque (score ${data.score}).`,'error');
+      return false;
+    }
+  }catch(e){return true;}
+  return true;
+}
+
 async function nexusLog(eventType,userRef,details={}){
   if(currentUser){
     try{await db.from('security_logs').insert({user_id:currentUser.id,event_type:eventType,details});}catch(e){/* silencieux */}
@@ -10908,6 +11139,7 @@ async function initNexus(){
   applyNexusSettingsUI();
   await loadNexusOverview();
   renderNexusKeyPanel();
+  await nexusFetchDashboardConfig();
   subscribeNexusRealtime();
 }
 
@@ -11002,6 +11234,7 @@ async function nexusSwitchProject(projectId){
   applyNexusSettingsUI();
   await loadNexusOverview();
   renderNexusKeyPanel();
+  await nexusFetchDashboardConfig();
   subscribeNexusRealtime();
   showToast(`Projet actif : ${proj.name}`,'info');
 }
@@ -11070,20 +11303,23 @@ async function nexusCreateProjectFlow(name){
       localStorage.setItem('nexus_active_project',row.project_id);
       renderNexusProjectSwitcher();
     }
-    if(row?.api_key){
-      showNexusApiKeyModal(row.api_key,name);
-    }
     await nexusFetchSettings();
     await nexusFetchRules();
     applyNexusSettingsUI();
     await loadNexusOverview();
     renderNexusKeyPanel();
+    await nexusFetchDashboardConfig(true); // silencieux : on affiche l'onboarding nous-même, après la clé API
     nexusUnsubscribeRealtime();
     subscribeNexusRealtime();
+    if(row?.api_key){
+      showNexusApiKeyModal(row.api_key,name,()=>{if(!nexusDashboardConfig||!nexusDashboardConfig.completed)showNexusOnboardingModal(false);});
+    }else if(!nexusDashboardConfig||!nexusDashboardConfig.completed){
+      showNexusOnboardingModal(false);
+    }
   }catch(e){showToast('Erreur création projet.','error');}
 }
 
-function showNexusApiKeyModal(apiKey,projectName){
+function showNexusApiKeyModal(apiKey,projectName,onClose){
   document.getElementById('nexus-generic-modal-overlay')?.remove();
   const overlay=document.createElement('div');
   overlay.id='nexus-generic-modal-overlay';
@@ -11095,11 +11331,13 @@ function showNexusApiKeyModal(apiKey,projectName){
       <div class="nexus-modal-key">${esc(apiKey)}</div>
       <div class="nexus-modal-actions" style="margin-top:16px">
         <button class="btn btn-primary btn-sm" onclick="navigator.clipboard.writeText('${apiKey.replace(/'/g,"\\'")}');showToast('Clé copiée.','info')">Copier la clé</button>
-        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('nexus-generic-modal-overlay').remove()">Fermer</button>
+        <button class="btn btn-ghost btn-sm" id="nexus-apikey-close-btn">Fermer</button>
       </div>
     </div>`;
   document.body.appendChild(overlay);
-  overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
+  const closeAndContinue=()=>{overlay.remove();if(onClose)onClose();};
+  overlay.addEventListener('click',e=>{if(e.target===overlay)closeAndContinue();});
+  document.getElementById('nexus-apikey-close-btn').addEventListener('click',closeAndContinue);
 }
 
 function renderNexusKeyPanel(){
@@ -11125,6 +11363,149 @@ function renderNexusKeyPanel(){
         ${billingBtn}
       </div>
     </div>`;
+}
+
+// ── Onboarding & personnalisation du dashboard par tenant ──────
+async function nexusFetchDashboardConfig(suppressAutoModal){
+  if(!nexusActiveProject||nexusActiveProject.is_internal){nexusDashboardConfig=null;return;}
+  try{
+    const{data,error}=await db.rpc('nexus_get_dashboard_config',{p_project_id:NEXUS_PROJECT_ID});
+    if(error){nexusDashboardConfig=null;return;}
+    nexusDashboardConfig=data||{completed:false,enabled_widgets:[]};
+  }catch(e){nexusDashboardConfig=null;return;}
+  applyNexusWidgetVisibility(nexusDashboardConfig.enabled_widgets||[]);
+  if(!nexusDashboardConfig.completed&&!suppressAutoModal){showNexusOnboardingModal(false);}
+}
+
+function applyNexusWidgetVisibility(enabledWidgets){
+  const enabled=new Set(enabledWidgets||[]);
+  const groups={};
+  NEXUS_WIDGET_CATALOG.forEach(w=>{if(w.navGroup){(groups[w.navGroup]=groups[w.navGroup]||[]).push(w.id);}});
+  Object.keys(groups).forEach(navId=>{
+    const navItem=document.querySelector(`.nexus-nav-item[onclick*="'${navId}'"]`);
+    if(!navItem)return;
+    const anyEnabled=groups[navId].some(id=>enabled.has(id));
+    // Si l'onboarding n'est pas encore fait (aucun widget connu), on laisse tout visible.
+    const noConfigYet=!nexusDashboardConfig||!nexusDashboardConfig.completed;
+    navItem.style.display=(noConfigYet||anyEnabled)?'':'none';
+    if(!noConfigYet&&!anyEnabled&&navItem.classList.contains('active')){
+      const overviewNav=document.querySelector(`.nexus-nav-item[onclick*="'nexus-overview'"]`);
+      if(overviewNav)switchNexus(overviewNav,'nexus-overview');
+    }
+  });
+}
+
+function showNexusOnboardingModal(isEdit){
+  if(!nexusActiveProject||nexusActiveProject.is_internal)return;
+  document.getElementById('nexus-generic-modal-overlay')?.remove();
+  const cfg=nexusDashboardConfig||{};
+  const catOpts=NEXUS_SITE_CATEGORIES.map(c=>`<option value="${c.v}"${cfg.site_category===c.v?' selected':''}>${esc(c.l)}</option>`).join('');
+  const concernOpts=NEXUS_PRIMARY_CONCERNS.map(c=>`<option value="${c.v}"${cfg.primary_concern===c.v?' selected':''}>${esc(c.l)}</option>`).join('');
+  const overlay=document.createElement('div');
+  overlay.id='nexus-generic-modal-overlay';
+  overlay.className='nexus-modal-overlay';
+  overlay.innerHTML=`
+    <div class="nexus-modal-box" style="max-width:460px">
+      <div class="nexus-modal-title">${isEdit?'Modifier le profil de ton site':'Bienvenue sur Nexus'}</div>
+      <div class="nexus-modal-sub">${isEdit?'On recalcule des widgets par défaut adaptés — tu pourras toujours les ajuster juste après.':'Quelques infos sur ton site pour te proposer un dashboard adapté, plutôt qu\'une vue générique en vrac. Tu pourras tout changer plus tard.'}</div>
+      <span class="nexus-onboard-label">Type de site</span>
+      <select class="nexus-modal-input" id="nexus-onboard-category">${catOpts}</select>
+      <span class="nexus-onboard-label">Préoccupation principale</span>
+      <select class="nexus-modal-input" id="nexus-onboard-concern">${concernOpts}</select>
+      <span class="nexus-onboard-label">Décris ton site en une phrase</span>
+      <textarea class="nexus-modal-input" id="nexus-onboard-desc" maxlength="240" placeholder="ex : forum d'entraide pour devs juniors">${esc(cfg.site_description||'')}</textarea>
+      <div class="nexus-modal-actions">
+        <button class="btn btn-primary btn-sm" onclick="nexusSubmitOnboarding()">${isEdit?'Enregistrer':'Configurer mon dashboard'}</button>
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('nexus-generic-modal-overlay').remove()">${isEdit?'Annuler':'Plus tard'}</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
+}
+
+async function nexusSubmitOnboarding(){
+  const category=document.getElementById('nexus-onboard-category')?.value;
+  const concern=document.getElementById('nexus-onboard-concern')?.value;
+  const desc=(document.getElementById('nexus-onboard-desc')?.value||'').trim();
+  if(!category||!concern){showToast('Choisis un type de site et une préoccupation.','error');return;}
+  try{
+    const{data,error}=await db.rpc('nexus_complete_onboarding',{p_project_id:NEXUS_PROJECT_ID,p_site_category:category,p_site_description:desc,p_primary_concern:concern});
+    if(error){showToast('Erreur : '+error.message,'error');return;}
+    document.getElementById('nexus-generic-modal-overlay')?.remove();
+    nexusDashboardConfig={site_category:category,site_description:desc,primary_concern:concern,enabled_widgets:data?.enabled_widgets||[],completed:true};
+    applyNexusWidgetVisibility(nexusDashboardConfig.enabled_widgets);
+    renderNexusOnboardSummary();
+    renderNexusWidgetPicker();
+    renderNexusAutoResponseSuggestion();
+    showToast('Dashboard personnalisé.','info');
+  }catch(e){showToast('Erreur de connexion.','error');}
+}
+
+function renderNexusOnboardSummary(){
+  const el=document.getElementById('nexus-onboard-summary');
+  if(!el)return;
+  if(!nexusActiveProject||nexusActiveProject.is_internal){
+    el.innerHTML='Le projet interne DevConnect n\'a pas de profil de personnalisation.';
+    return;
+  }
+  const cfg=nexusDashboardConfig;
+  if(!cfg||!cfg.completed){
+    el.innerHTML=`Pas encore configuré. <a href="#" onclick="event.preventDefault();showNexusOnboardingModal(false)" style="color:var(--nx-leaf,#5a8a6a)">Lancer l'onboarding</a>`;
+    return;
+  }
+  const catLabel=(NEXUS_SITE_CATEGORIES.find(c=>c.v===cfg.site_category)||{}).l||cfg.site_category;
+  const concernLabel=(NEXUS_PRIMARY_CONCERNS.find(c=>c.v===cfg.primary_concern)||{}).l||cfg.primary_concern;
+  el.innerHTML=`${esc(catLabel)} &middot; préoccupation : ${esc(concernLabel)}${cfg.site_description?' &middot; "'+esc(cfg.site_description)+'"':''}`;
+}
+
+function renderNexusWidgetPicker(){
+  const container=document.getElementById('nexus-widget-picker');
+  if(!container)return;
+  renderNexusOnboardSummary();
+  if(!nexusActiveProject||nexusActiveProject.is_internal){container.innerHTML='';return;}
+  const cfg=nexusDashboardConfig;
+  if(!cfg||!cfg.completed){container.innerHTML='';return;}
+  const enabled=new Set(cfg.enabled_widgets||[]);
+  container.innerHTML=NEXUS_WIDGET_CATALOG.map(w=>`
+    <div class="nexus-widget-row">
+      <input type="checkbox" id="nexus-widget-${w.id}" ${enabled.has(w.id)?'checked':''}>
+      <label for="nexus-widget-${w.id}"><div class="nexus-widget-name">${esc(w.name)}</div><div class="nexus-widget-desc">${esc(w.desc)}</div></label>
+    </div>`).join('')
+    +`<button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="nexusSaveWidgetPreferences()">Enregistrer mes widgets</button>`;
+}
+
+async function nexusSaveWidgetPreferences(){
+  const chosen=NEXUS_WIDGET_CATALOG.map(w=>w.id).filter(id=>document.getElementById(`nexus-widget-${id}`)?.checked);
+  try{
+    const{error}=await db.rpc('nexus_update_widget_preferences',{p_project_id:NEXUS_PROJECT_ID,p_widgets:chosen});
+    if(error){showToast('Erreur : '+error.message,'error');return;}
+    if(nexusDashboardConfig)nexusDashboardConfig.enabled_widgets=chosen;
+    applyNexusWidgetVisibility(chosen);
+    showToast('Préférences enregistrées.','info');
+  }catch(e){showToast('Erreur de connexion.','error');}
+}
+
+function renderNexusAutoResponseSuggestion(){
+  const el=document.getElementById('nexus-auto-response-suggestion');
+  if(!el)return;
+  el.innerHTML='';
+  if(!nexusActiveProject||nexusActiveProject.is_internal)return;
+  if(!nexusDashboardConfig||!nexusDashboardConfig.completed)return;
+  const concern=nexusDashboardConfig.primary_concern;
+  if(!['harassment','security','fraud'].includes(concern))return;
+  if(_nexusSettingsCache?.auto_response)return; // déjà actif, rien à suggérer
+  const concernLabel=(NEXUS_PRIMARY_CONCERNS.find(c=>c.v===concern)||{}).l||concern;
+  el.innerHTML=`<div style="margin-bottom:16px;padding:12px 16px;background:rgba(90,138,106,.08);border:1px solid rgba(90,138,106,.25);border-radius:var(--radius);font-size:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+    <span>Vu ton profil (${esc(concernLabel)}), la <strong>réponse automatique</strong> est recommandée.</span>
+    <button class="btn btn-primary btn-sm" style="flex-shrink:0" onclick="nexusEnableRecommendedAutoResponse()">Activer</button>
+  </div>`;
+}
+
+function nexusEnableRecommendedAutoResponse(){
+  const el=document.getElementById('nexus-toggle-auto_response');
+  if(el&&!el.classList.contains('on'))toggleNexusSetting(el,'auto_response');
+  const banner=document.getElementById('nexus-auto-response-suggestion');
+  if(banner)banner.innerHTML='';
 }
 
 // _boot_state_0x33 — pattern résolu au build (ne pas éditer manuellement)
@@ -11240,7 +11621,7 @@ async function loadNexusOverview(){
   const weekAgo=new Date(Date.now()-7*86400000).toISOString();
 
   const{data:recent24h}=await db.from('nexus_logs').select('*').eq('project_id',NEXUS_PROJECT_ID).gte('created_at',dayAgo).order('created_at',{ascending:false});
-  const{data:recentWeek}=await db.from('nexus_logs').select('event_type,created_at,user_ref').eq('project_id',NEXUS_PROJECT_ID).gte('created_at',weekAgo);
+  const{data:recentWeek}=await db.from('nexus_logs').select('event_type,created_at,user_ref,details').eq('project_id',NEXUS_PROJECT_ID).gte('created_at',weekAgo).order('created_at',{ascending:false});
   const rules=await nexusFetchRules();
 
   const logs24h=recent24h||[];
@@ -11249,11 +11630,15 @@ async function loadNexusOverview(){
   const criticalCount=logs24h.filter(l=>(l.severity||nexusSeverity(l.event_type))==='critical'||(l.severity||nexusSeverity(l.event_type))==='high').length;
   const flaggedUsers=new Set(logs24h.map(l=>l.user_ref).filter(Boolean));
   const activeRules=rules.filter(r=>r.active!==false).length;
+  const autoActions24h=logs24h.filter(l=>l.event_type==='auto_response_triggered');
+  const autoActionsWeek=logsWeek.filter(l=>l.event_type==='auto_response_triggered');
 
   setEl('ns-total',logs24h.length);
   setEl('ns-total-d',logsWeek.length+' sur 7 jours');
   setEl('ns-critical',criticalCount);
   setEl('ns-critical-d',criticalCount>0?'à surveiller':'tout va bien');
+  setEl('ns-auto-actions',autoActions24h.length);
+  setEl('ns-auto-actions-d',autoActionsWeek.length+' sur 7 jours');
   setEl('ns-rules-fired',activeRules);
   setEl('ns-rules-d',rules.length+' configurée(s)');
   setEl('ns-users-flagged',flaggedUsers.size);
@@ -11262,14 +11647,37 @@ async function loadNexusOverview(){
   document.getElementById('nexus-logs-badge')&&(document.getElementById('nexus-logs-badge').textContent=logs24h.length);
   document.getElementById('nexus-rules-badge')&&(document.getElementById('nexus-rules-badge').textContent=rules.length);
 
-  // Feed temps réel (10 derniers)
+  // Décisions du moteur — ce que Nexus a fait TOUT SEUL, distinct du flux
+  // d'événements bruts (login/xp/etc). Source : nexus_logs où
+  // event_type='auto_response_triggered' (voir nexusEvaluateAutoResponse).
+  const decisionFeedEl=document.getElementById('nexus-decision-feed');
+  const uptimeEl=document.getElementById('nexus-decision-uptime');
+  const decisionUserIds=[...new Set(autoActionsWeek.slice(0,12).map(l=>l.user_ref).filter(Boolean))];
+  const feedUserIds=[...new Set(logs24h.slice(0,15).map(l=>l.user_ref).filter(Boolean))];
+  const userMap=await nexusFetchUsernames([...new Set([...decisionUserIds,...feedUserIds])]);
+
+  if(decisionFeedEl){
+    if(!autoActionsWeek.length){
+      decisionFeedEl.innerHTML='<div class="nexus-decision-empty">Aucune décision autonome sur les 7 derniers jours &mdash; rien n\'a justifié d\'action.</div>';
+    }else{
+      decisionFeedEl.innerHTML=autoActionsWeek.slice(0,12).map(l=>{
+        const d=l.details||{};
+        const uname=esc(userMap[l.user_ref]||'utilisateur');
+        const action=d.muted?`a <strong>muté @${uname}</strong>`:`a <strong>flaggé @${uname}</strong> et ouvert un incident`;
+        return`<div class="nexus-decision-item"><span class="nexus-decision-icon">&#9679;</span><span class="nexus-decision-text">Nexus ${action} &mdash; score de risque ${d.score??'?'}/100</span><span class="nexus-decision-time">${timeAgo(l.created_at)}</span></div>`;
+      }).join('');
+    }
+  }
+  if(uptimeEl){
+    uptimeEl.textContent=autoActionsWeek.length?`dernière décision ${timeAgo(autoActionsWeek[0].created_at)}`:'aucune décision requise';
+  }
+
+  // Feed temps réel (10 derniers) — événements bruts, distincts des décisions ci-dessus
   const feed=document.getElementById('nexus-realtime-feed');
   if(feed){
     if(!logs24h.length){
       feed.innerHTML='<div style="text-align:center;padding:32px;color:rgba(27,36,25,.2);font-size:12px;font-family:var(--font-mono)">Aucun événement sur les dernières 24h ✓</div>';
     }else{
-      const userIds=[...new Set(logs24h.slice(0,15).map(l=>l.user_ref).filter(Boolean))];
-      const userMap=await nexusFetchUsernames(userIds);
       feed.innerHTML=logs24h.slice(0,15).map(l=>{
         const sev=l.severity||nexusSeverity(l.event_type);
         return`<div class="nexus-feed-item"><span class="nexus-feed-dot nexus-sev ${sev}"></span><span class="nexus-feed-text"><strong>@${esc(userMap[l.user_ref]||'système')}</strong> — ${esc(nexusLabel(l.event_type))}</span><span class="nexus-feed-time">${timeAgo(l.created_at)}</span></div>`;
@@ -11294,15 +11702,9 @@ async function loadNexusOverview(){
   }
   setEl('nexus-spark-start',days[0].toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}));
 
-  // Top events
-  const tally={};
-  logsWeek.forEach(l=>{tally[l.event_type]=(tally[l.event_type]||0)+1;});
-  const top=Object.entries(tally).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  const topEl=document.getElementById('nexus-top-events');
-  if(topEl){
-    topEl.innerHTML=top.length?top.map(([type,count])=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0"><span class="nexus-event ${nexusEventClass(type)}">${esc(nexusLabel(type))}</span><span style="font-family:var(--font-mono);font-size:12px;color:rgba(27,36,25,.4)">${count}</span></div>`).join('')
-      :'<div style="text-align:center;padding:16px;color:rgba(27,36,25,.2);font-size:12px;font-family:var(--font-mono)">Pas encore de données</div>';
-  }
+  // Comptes sous surveillance — top risk scores, même logique que Threat Intel
+  // mais version compacte (5 comptes) pour le dashboard principal.
+  await nexusRenderOverviewWatchlist();
 
   // Score de santé (100 - pénalités)
   let score=100-criticalCount*8-Math.max(0,logs24h.length-20)*1;
@@ -11324,6 +11726,33 @@ async function loadNexusOverview(){
   // les mêmes règles deux fois (une fois côté DB, une fois côté client).
   // La fonction checkNexusRules() reste définie plus bas pour référence /
   // debug manuel, mais n'est plus appelée automatiquement.
+}
+
+async function nexusRenderOverviewWatchlist(){
+  const el=document.getElementById('nexus-overview-watchlist');
+  if(!el)return;
+  let topUsers=[];
+  try{
+    const{data:riskRows}=await db.from('nexus_risk_scores').select('*').eq('project_id',NEXUS_PROJECT_ID).order('score',{ascending:false}).limit(20);
+    topUsers=(riskRows||[]).map(r=>[r.user_ref,Math.round(nexusDecayScore(r.score,r.last_event_at)*10)/10]).filter(([,s])=>s>=1).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  }catch(e){/* table pas encore migrée — pas de fallback ici, le dashboard principal reste léger */}
+  if(!topUsers.length){
+    el.innerHTML='<div style="text-align:center;padding:16px;color:rgba(27,36,25,.2);font-size:12px;font-family:var(--font-mono)">Aucun compte à risque</div>';
+    return;
+  }
+  const userIds=topUsers.map(([id])=>id);
+  const userMap=await nexusFetchUsernames(userIds);
+  const maxScore=Math.max(topUsers[0][1],50);
+  el.innerHTML=topUsers.map(([uid,raw])=>{
+    const score=Math.min(100,Math.round((raw/maxScore)*100));
+    const cls=score>=70?'critical':score>=40?'high':score>=20?'mid':'low';
+    const color=score>=70?'#cc3333':score>=40?'#9a5a3a':score>=20?'#7a7a4a':'#4a8a5a';
+    return`<div class="nexus-risk-row">
+      <div class="nexus-risk-user" style="font-size:12px">@${esc(userMap[uid]||uid.substring(0,8)+'…')}</div>
+      <div class="nexus-risk-bar-wrap"><div class="nexus-risk-bar ${cls}" style="width:${score}%;background:${color}"></div></div>
+      <div class="nexus-risk-score" style="color:${color}">${Math.round(raw)}</div>
+    </div>`;
+  }).join('');
 }
 
 async function nexusFetchUsernames(ids){
