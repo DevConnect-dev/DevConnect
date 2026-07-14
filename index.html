@@ -11095,7 +11095,7 @@ const NEXUS_WIDGET_CATALOG=[
 // message d'erreur clair, plus tôt.
 async function nexusPrecheck(text,source){
   try{
-    const{data,error}=await db.rpc('nexus_precheck_content',{p_text:text||'',p_source:source});
+    const{data,error}=await db.rpc('nexus_precheck_content',{p_text:text||'',p_source:source,p_project_id:NEXUS_PROJECT_ID});
     if(error)return true; // précheck indispo : on laisse le trigger trancher normalement
     if(data?.blocked){
       showToast(`Publication bloquée par Web/Nexus : contenu à risque (score ${data.score}).`,'error');
@@ -12241,6 +12241,7 @@ function subscribeNexusRealtime(){
         if(document.getElementById('section-nexus')?.classList.contains('active')){
           loadNexusOverview();
           if(document.getElementById('nexus-threats')?.classList.contains('active'))loadNexusThreatIntel();
+          if(document.getElementById('nexus-logs')?.classList.contains('active'))loadNexusLogs();
         }
       })
       .subscribe();
