@@ -1040,6 +1040,12 @@ select.form-input{color-scheme:dark;background-color:#111;}
 .gradient-picker{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
 .gradient-picker input[type=color]{width:36px;height:36px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:transparent;padding:2px;}
 .gradient-preview-bar{height:32px;border-radius:6px;flex:1;border:1px solid var(--border);}
+.site-bg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;}
+.site-bg-swatch{border:2px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .15s;background:var(--bg2);}
+.site-bg-swatch:hover{border-color:var(--border-bright);transform:translateY(-1px);}
+.site-bg-swatch.active{border-color:var(--accent);box-shadow:0 0 0 3px rgba(44,74,46,.16);}
+.site-bg-swatch .preview{height:56px;}
+.site-bg-swatch .label{font-size:11px;padding:6px 8px;color:var(--text-secondary);text-align:center;}
 .badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin-top:12px;}
 .badge-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px;text-align:center;transition:all .2s;}
 .badge-card.unlocked{border-color:var(--border-light);}
@@ -1162,6 +1168,27 @@ select.form-input{color-scheme:dark;background-color:#111;}
 .modal-close:hover{color:var(--text);background:var(--bg2);transform:rotate(90deg);}
 .modal-body{padding:24px;}
 .modal-answer-input{width:100%;padding:12px 16px;background:var(--bg0);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--font-mono);font-size:14px;outline:none;margin-top:16px;transition:border-color .2s;}
+
+/* Discord-style profile card */
+.dpc-close{position:absolute;top:10px;right:10px;z-index:2;background:rgba(0,0,0,.35);color:#fff;border:none;font-size:18px;width:28px;height:28px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.dpc-close:hover{background:rgba(0,0,0,.55);transform:rotate(90deg);}
+.dpc-banner{height:100px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;background:linear-gradient(135deg,var(--bg3),var(--bg2));margin:-1px -1px 0;}
+.dpc-avatar-row{padding:0 20px;margin-top:-38px;display:flex;}
+.dpc-avatar{width:76px;height:76px;border-radius:50%;background:var(--bg2);border:4px solid var(--bg1);overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);color:var(--accent);font-size:22px;}
+.dpc-avatar.tier-plus{border-color:#8CB25A;}
+.dpc-body{padding:14px 20px 20px;text-align:left;}
+.dpc-name-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.dpc-name{font-weight:700;font-size:17px;}
+.dpc-handle{font-size:12px;color:var(--text-muted);font-family:var(--font-mono);margin-top:2px;}
+.dpc-stats-row{display:flex;gap:16px;margin:10px 0;font-size:12px;color:var(--text-muted);}
+.dpc-stats-row strong{color:var(--text);}
+.dpc-divider{height:1px;background:var(--border);margin:12px 0;}
+.dpc-section-label{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);font-family:var(--font-mono);margin-bottom:6px;}
+.dpc-bio{font-size:13px;color:var(--text-secondary);line-height:1.5;}
+.dpc-widgets{display:flex;flex-wrap:wrap;gap:8px;}
+.dpc-actions{margin-top:16px;display:flex;flex-direction:column;gap:8px;}
+.dpc-actions-row{display:flex;gap:8px;}
+.dpc-actions-row .btn{flex:1;}
 .modal-answer-input:focus{border-color:var(--border-light);}
 .solution-item{padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:6px;font-size:13px;color:var(--text-secondary);font-family:var(--font-mono);}
 
@@ -2892,6 +2919,31 @@ textarea.nexus-modal-input{resize:vertical;min-height:64px;font-family:var(--fon
 }
 #page-app #section-editor #editor-lang-label{color:var(--hb-forest) !important;font-family:var(--hb-hand) !important;}
 
+/* ============================================================
+   THÈME NUIT — forêt nocturne (toggle jour/nuit/auto)
+   Le toggle existant ne changeait rien visuellement jusqu'ici :
+   aucune variable .light/.dark n'était définie. On ajoute une
+   vraie palette sombre, cohérente avec les tons --dark* déjà
+   utilisés sur la landing page.
+   ============================================================ */
+html.dark{
+  --bg0:#0E140F;--bg1:#151D14;--bg2:#1B241A;--bg3:#222D20;
+  --border:rgba(231,233,220,.1);--border-light:rgba(231,233,220,.18);--border-bright:rgba(231,233,220,.3);
+  --text:#E7E9DC;--text-secondary:#B9C0A9;--text-muted:#7C8B72;
+  --accent:#8CB25A;--accent-dim:#6F8F45;
+}
+html.dark body{background:#0E140F;}
+html.dark #page-app,html.dark #page-auth{
+  --bg0:#0E140F;--bg1:#151D14;--bg2:#1B241A;--bg3:#222D20;
+  --border:rgba(231,233,220,.1);--border-light:rgba(231,233,220,.18);--border-bright:rgba(231,233,220,.3);
+  --text:#E7E9DC;--text-secondary:#B9C0A9;--text-muted:#7C8B72;
+  --accent:#8CB25A;--accent-dim:#6F8F45;
+  background:
+    radial-gradient(ellipse 50% 35% at 12% 0%, rgba(111,143,69,.10), transparent 60%),
+    radial-gradient(ellipse 45% 40% at 88% 100%, rgba(44,74,46,.14), transparent 55%),
+    #0E140F;
+}
+html.dark #page-app{background-color:#0E140F;}
 </style>
 </head>
 <body>
@@ -4578,6 +4630,7 @@ textarea.nexus-modal-input{resize:vertical;min-height:64px;font-family:var(--fon
                 <div style="display:flex;gap:6px">
                   <button class="theme-toggle-btn" id="btn-theme-dark" onclick="setTheme('dark')" style="border-color:var(--border-light)">🌙 Sombre</button>
                   <button class="theme-toggle-btn" id="btn-theme-light" onclick="setTheme('light')">☀️ Clair</button>
+                  <button class="theme-toggle-btn" id="btn-theme-auto" onclick="setTheme('auto')">🌗 Auto</button>
                 </div>
               </div>
             </div>
@@ -4652,17 +4705,11 @@ textarea.nexus-modal-input{resize:vertical;min-height:64px;font-family:var(--fon
               </div>
               <div id="site-bg-unlocked" style="display:none">
                 <div style="margin-bottom:8px">
-                  <div class="settings-row-label">Dégradé de fond</div>
-                  <div class="settings-row-sub" style="font-size:12px;color:var(--text-muted);margin-bottom:12px">Mélange 3 couleurs pour personnaliser le fond de l'application</div>
-                  <div class="gradient-picker">
-                    <input type="color" id="grad-color-1" value="#0a0a12" oninput="updateGradientPreview()">
-                    <input type="color" id="grad-color-2" value="#0d0d1e" oninput="updateGradientPreview()">
-                    <input type="color" id="grad-color-3" value="#12101e" oninput="updateGradientPreview()">
-                    <div class="gradient-preview-bar" id="gradient-preview-bar" style="min-width:80px"></div>
-                  </div>
+                  <div class="settings-row-label">Fond pré-designé</div>
+                  <div class="settings-row-sub" style="font-size:12px;color:var(--text-muted);margin-bottom:12px">Choisis une ambiance visuelle assortie au thème Canopée</div>
+                  <div class="site-bg-grid" id="site-bg-grid"></div>
                   <div style="display:flex;gap:8px;margin-top:10px">
-                    <button class="btn btn-primary btn-sm" onclick="saveSiteGradient()">Appliquer</button>
-                    <button class="btn btn-ghost btn-sm" onclick="clearSiteGradient()">Réinitialiser</button>
+                    <button class="btn btn-ghost btn-sm" onclick="clearSiteBg()">Réinitialiser</button>
                   </div>
                 </div>
               </div>
@@ -6146,15 +6193,12 @@ textarea.nexus-modal-input{resize:vertical;min-height:64px;font-family:var(--fon
   </div>
 </div>
 
-<!-- VIEW PROFILE MODAL (universel, cliquable depuis n'importe où) -->
+<!-- VIEW PROFILE MODAL (universel, cliquable depuis n'importe où) — style carte Discord -->
 <div class="modal-overlay" id="view-profile-modal">
-  <div class="modal" style="max-width:420px">
-    <div class="modal-header">
-      <div class="modal-title">Profil</div>
-      <button class="modal-close" onclick="closeProfileModal()">×</button>
-    </div>
-    <div class="modal-body" id="view-profile-body" style="text-align:center;padding:8px 4px">
-      <div style="padding:24px;color:var(--text-muted);font-size:13px">Chargement...</div>
+  <div class="modal" style="max-width:420px;padding:0">
+    <button class="dpc-close" onclick="closeProfileModal()">×</button>
+    <div class="modal-body" id="view-profile-body" style="padding:0">
+      <div style="padding:24px;color:var(--text-muted);font-size:13px;text-align:center">Chargement...</div>
     </div>
   </div>
 </div>
@@ -6318,10 +6362,8 @@ let currentUser=null,currentProfile=null,currentSection='home',selectedSpecialty
 window.addEventListener('load',async()=>{
   initTheme();
   initLandingFx();
-  updateGradientPreview();
-  // Restaurer le gradient du site si DevConnect+
-  const _sg=localStorage.getItem('dc_site_gradient');
-  if(_sg){try{const g=JSON.parse(_sg);applySiteGradient(g[0],g[1],g[2]);}catch(e){}}
+  // Restaurer le fond du site si DevConnect+
+  applySavedSiteBg();
   let session=null;
   try{
     const{data,error}=await db.auth.getSession();
@@ -6781,12 +6823,8 @@ function updateSettingsSection(){
     const bPrev=document.getElementById('s-banner-preview');
     if(bPrev)bPrev.style.background=p.banner_url?`url('${safeUrl(p.banner_url)}') center/cover`:'var(--bg2)';
   }
-  // Init gradient
-  const savedGrad=localStorage.getItem('dc_site_gradient');
-  if(savedGrad){
-    try{const g=JSON.parse(savedGrad);setVal('grad-color-1',g[0]);setVal('grad-color-2',g[1]);setVal('grad-color-3',g[2]);}catch(e){}
-  }
-  updateGradientPreview();
+  // Init fond du site
+  renderSiteBgGrid();
   if(dcPlus){
     setVal('s-status',p.status_text||'');
     document.getElementById('s-emoji-preview').innerHTML=p.custom_emoji_url?`<img src="${esc(p.custom_emoji_url)}" style="width:100%;height:100%;object-fit:contain">`:'';
@@ -8244,23 +8282,48 @@ async function saveBannerGradient() {
   showToast('Dégradé appliqué !', 'success');
 }
 
-async function saveSiteGradient() {
+// ============================================================
+// FOND DU SITE — presets pré-designés (thème Canopée)
+// ============================================================
+const SITE_BG_PRESETS=[
+  {id:'default',label:'Canopée',css:''},
+  {id:'sousbois',label:'Sous-bois',css:'linear-gradient(150deg,#EAE6D8,#DCE3CB,#C9D6B0)'},
+  {id:'brume',label:'Brume matinale',css:'radial-gradient(ellipse 70% 60% at 20% 15%,#FBF9F1,transparent 60%),radial-gradient(ellipse 60% 50% at 85% 80%,#E3EAD6,transparent 55%),#EAE6D8'},
+  {id:'mousse',label:'Mousse',css:'linear-gradient(160deg,#E3DDC9,#C9D6B0,#8CB25A22),#E3DDC9'},
+  {id:'ecorce',label:'Écorce',css:'linear-gradient(140deg,#EDE8D8,#D8CDAE,#B8A47C33)'},
+  {id:'clairiere',label:'Clairière',css:'radial-gradient(circle at 30% 30%,#FBF9F1,#EAE6D8 70%)'},
+  {id:'automne',label:'Feuillage',css:'linear-gradient(155deg,#F2EEE1,#E6D9B8,#C9A86A22)'},
+  {id:'nuitforet',label:'Forêt nocturne',css:'linear-gradient(160deg,#151D14,#0E140F,#1E362066)'}
+];
+function renderSiteBgGrid(){
+  const grid=document.getElementById('site-bg-grid');
+  if(!grid)return;
+  const active=localStorage.getItem('dc_site_bg_preset')||'default';
+  grid.innerHTML=SITE_BG_PRESETS.map(p=>`
+    <div class="site-bg-swatch${active===p.id?' active':''}" onclick="applySiteBg('${p.id}')">
+      <div class="preview" style="background:${p.css||'linear-gradient(135deg,var(--bg3),var(--bg2))'}"></div>
+      <div class="label">${p.label}</div>
+    </div>`).join('');
+}
+function applySiteBg(id){
   if(!isDevConnectPlus()){showToast('Réservé aux membres DevConnect+.','error');return;}
-  const c1=getVal('grad-color-1')||'#0a0a12';
-  const c2=getVal('grad-color-2')||'#0d0d1e';
-  const c3=getVal('grad-color-3')||'#12101e';
-  localStorage.setItem('dc_site_gradient',JSON.stringify([c1,c2,c3]));
-  applySiteGradient(c1,c2,c3);
+  const preset=SITE_BG_PRESETS.find(p=>p.id===id);
+  if(!preset)return;
+  localStorage.setItem('dc_site_bg_preset',id);
+  document.getElementById('page-app').style.background=preset.css;
+  renderSiteBgGrid();
   showToast('Fond du site mis à jour !','success');
 }
-
-function applySiteGradient(c1,c2,c3){
-  document.getElementById('page-app').style.background=`linear-gradient(135deg,${c1},${c2},${c3})`;
+function applySavedSiteBg(){
+  const id=localStorage.getItem('dc_site_bg_preset');
+  if(!id)return;
+  const preset=SITE_BG_PRESETS.find(p=>p.id===id);
+  if(preset)document.getElementById('page-app').style.background=preset.css;
 }
-
-async function clearSiteGradient(){
-  localStorage.removeItem('dc_site_gradient');
+async function clearSiteBg(){
+  localStorage.removeItem('dc_site_bg_preset');
   document.getElementById('page-app').style.background='';
+  renderSiteBgGrid();
   showToast('Fond réinitialisé.','success');
 }
 
@@ -8300,15 +8363,33 @@ async function removeAvatar() {
 // ============================================================
 // THÈME CLAIR / SOMBRE
 // ============================================================
-function setTheme(theme) {
-  document.documentElement.classList.toggle('light', theme === 'light');
-  localStorage.setItem('dc_theme', theme);
-  document.getElementById('btn-theme-dark').style.borderColor = theme === 'dark' ? 'var(--border-light)' : 'var(--border)';
-  document.getElementById('btn-theme-light').style.borderColor = theme === 'light' ? 'var(--border-light)' : 'var(--border)';
+function _resolveAutoTheme(){
+  const h=new Date().getHours();
+  return (h>=7&&h<19)?'light':'dark';
+}
+function _applyResolvedTheme(theme,mode){
+  document.documentElement.classList.toggle('dark', theme === 'dark');
+  const btnDark=document.getElementById('btn-theme-dark');
+  const btnLight=document.getElementById('btn-theme-light');
+  const btnAuto=document.getElementById('btn-theme-auto');
+  if(btnDark)btnDark.style.borderColor = mode === 'dark' ? 'var(--border-light)' : 'var(--border)';
+  if(btnLight)btnLight.style.borderColor = mode === 'light' ? 'var(--border-light)' : 'var(--border)';
+  if(btnAuto)btnAuto.style.borderColor = mode === 'auto' ? 'var(--border-light)' : 'var(--border)';
+}
+let _autoThemeInterval=null;
+function setTheme(mode) {
+  localStorage.setItem('dc_theme', mode);
+  if(_autoThemeInterval){clearInterval(_autoThemeInterval);_autoThemeInterval=null;}
+  if(mode==='auto'){
+    _applyResolvedTheme(_resolveAutoTheme(),'auto');
+    _autoThemeInterval=setInterval(()=>_applyResolvedTheme(_resolveAutoTheme(),'auto'),10*60*1000);
+  }else{
+    _applyResolvedTheme(mode,mode);
+  }
 }
 
 function initTheme() {
-  const t = localStorage.getItem('dc_theme') || 'dark';
+  const t = localStorage.getItem('dc_theme') || 'light';
   setTheme(t);
 }
 
@@ -8635,7 +8716,17 @@ function switchChannel(el,name){
 // KEYBOARD
 const KB={symbols:['←','→','↑','↓','↔','⇒','⇐','•','◆','◇','◈','◉','⬡','⬢','★','☆','©','®','™','°','±','×','÷','≈','≠','≤','≥','∞','∑','√','π','Δ','Ω','λ','μ','σ'],code:['</','/> ','{}','[]','()=>','===','!==','&&','||','??','?.','...','`','${','}','#','@','null','async','await','return','const','let'],math:['∀','∃','∈','∉','∪','∩','⊂','⊃','∧','∨','¬','∂','∫','∇','∏','∑','√','∛','∝','∞','∅','ℕ','ℤ','ℝ','ℂ']};
 
-function initKeyboard(){renderKB('symbols');}
+function initKeyboard(){
+  // FIX — le panneau était enfant de .chat-area (overflow:hidden) et de
+  // #section-messages (.app-section, animation appSectionIn qui touche au
+  // transform). Un ancêtre avec transform animé devient containing block
+  // pour les descendants position:fixed, donc le panneau perdait son
+  // positionnement viewport et se faisait couper par l'overflow:hidden.
+  // On le sort du DOM interne et on le rattache direct à <body>.
+  const panel=document.getElementById('keyboard-panel');
+  if(panel&&panel.parentElement!==document.body)document.body.appendChild(panel);
+  renderKB('symbols');
+}
 function renderKB(tab){document.getElementById('keyboard-chars').innerHTML=(KB[tab]||[]).map(c=>`<div class="keyboard-char" onclick="insertChar(${JSON.stringify(c)})">${c}</div>`).join('');}
 // ── Version / changelog ──────────────────────────────────────
 const APP_VERSION='1.22.0';
@@ -9353,30 +9444,54 @@ async function openProfile(username){
   const avatarH=p.avatar_url?`<img src="${esc(p.avatar_url)}" alt="avatar" style="width:100%;height:100%;object-fit:cover">`:init;
   const bannerStyle=p.banner_url?`background:url('${esc(p.banner_url)}') center/cover`:p.profile_color?`background:${esc(p.profile_color)}`:`background:linear-gradient(135deg,var(--bg3),var(--bg2))`;
   const prem=p.premium_tier==='devconnect-plus'?'<span class="premium-badge devconnectplus">DevConnect+</span>':p.is_premium?'<span class="premium-badge devplus">Dev+</span>':'';
+  // Widgets — manquaient totalement dans ce popup (contrairement à la page profil complète)
+  let widgetsHtml='';
+  if(p.premium_tier==='devconnect-plus'){
+    const w=p.widgets&&typeof p.widgets==='object'&&!Array.isArray(p.widgets)?p.widgets:{};
+    const enabled=w.enabled||[];
+    const cards=[];
+    if(enabled.includes('stats'))cards.push(`<div class="profile-widget-card"><div class="widget-title">📊 Stats</div><div style="font-size:13px;margin-top:4px">${p.xp||0} XP · ${p.streak||0} jours de streak</div></div>`);
+    if(enabled.includes('badges'))cards.push(`<div class="profile-widget-card"><div class="widget-title">🏆 Derniers badges</div><div style="font-size:13px;margin-top:4px">Fondateur</div></div>`);
+    if(enabled.includes('activity')&&w.activity_text)cards.push(`<div class="profile-widget-card"><div class="widget-title">🎮 Activité</div><div style="font-size:13px;margin-top:4px">${esc(w.activity_text)}</div></div>`);
+    if(enabled.includes('avail')&&w.available!==undefined&&w.available!==null)cards.push(`<div class="profile-widget-card"><div class="widget-title">🌍 Disponibilité</div><div style="font-size:13px;margin-top:4px">${w.available?'Dispo pour mission':'Non disponible'}</div></div>`);
+    if(cards.length)widgetsHtml=cards.join('');
+  }
   const stack=(p.tech_stack||[]).slice(0,6).map(t=>`<span class="stack-tag">${esc(t)}</span>`).join('');
   const links=[p.github_url?`<a href="${esc(p.github_url)}" target="_blank" class="profile-link">GitHub</a>`:'',p.linkedin_url?`<a href="${esc(p.linkedin_url)}" target="_blank" class="profile-link">LinkedIn</a>`:'',p.portfolio_url?`<a href="${esc(p.portfolio_url)}" target="_blank" class="profile-link">Portfolio</a>`:''].filter(Boolean).join('');
+  const isOther=currentUser&&p.id!==currentUser.id;
+  const statusHtml=(isDevConnectPlus&&isDevConnectPlus()&&p.status_text)?`<div class="profile-status-pill" style="display:inline-flex">${esc(p.status_text)}</div>`:(p.premium_tier==='devconnect-plus'&&p.status_text?`<div class="profile-status-pill" style="display:inline-flex">${esc(p.status_text)}</div>`:'');
   body.innerHTML=`
-    <div style="height:70px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;margin:-8px -4px 0;${bannerStyle}"></div>
-    <div style="width:60px;height:60px;border-radius:50%;background:var(--bg2);border:3px solid var(--bg1);overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);color:var(--accent);font-size:18px;margin:-30px auto 8px">${avatarH}</div>
-    <div style="font-weight:600;font-size:16px">${esc(p.username||'Utilisateur')} ${prem}</div>
-    <div style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono)">@${esc(p.username||'')}</div>
-    <div style="font-size:13px;color:var(--text-secondary);margin:10px 0">${esc(p.bio||'Aucune bio renseignée.')}</div>
-    ${p.specialty?`<div class="profile-badge" style="display:inline-block;margin-bottom:10px">${esc(specLabels[p.specialty]||p.specialty)}</div>`:''}
-    <div style="display:flex;justify-content:center;gap:18px;margin:10px 0;font-size:12px;color:var(--text-muted)">
-      <span><strong style="color:var(--text)">${p.xp||0}</strong> xp</span>
-      <span id="profile-followers-count"><strong style="color:var(--text)">…</strong> abonnés</span>
-      <span id="profile-following-count"><strong style="color:var(--text)">…</strong> abonnements</span>
+    <div class="dpc-banner" style="${bannerStyle}"></div>
+    <div class="dpc-avatar-row">
+      <div class="dpc-avatar${p.premium_tier==='devconnect-plus'?' tier-plus':''}">${avatarH}</div>
     </div>
-    ${stack?`<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:10px">${stack}</div>`:''}
-    ${links?`<div class="profile-links" style="justify-content:center">${links}</div>`:''}
-    ${p.available_for_pairing?'<div class="badge-inline" style="margin-top:8px">🤝 Dispo pour pair programming</div>':''}
-    ${githubHeatmapHtml(p.github_url)}
-    <div id="view-profile-projects" style="text-align:left;margin-top:14px"></div>
-    ${currentUser&&p.id!==currentUser?.id?`<button class="btn btn-primary w-full" style="margin-top:14px" id="follow-btn" onclick="toggleFollow('${esc(p.id)}')">Suivre</button>`:''}
-    ${currentUser&&p.id!==currentUser?.id?`<button class="btn btn-ghost w-full" style="margin-top:8px" onclick="closeProfileModal();startDm('${esc(p.id)}','${esc(p.username||'')}')">✉ Message direct</button>`:''}
-    ${currentUser&&p.id!==currentUser?.id&&p.available_for_pairing?`<button class="btn btn-ghost w-full" style="margin-top:8px" onclick="requestPairingSession('${esc(p.id)}','${esc(p.username||'')}')">🤝 Demander une session de pair programming</button>`:''}
-    ${currentUser&&p.id!==currentUser?.id?`<button class="btn btn-ghost w-full" style="margin-top:8px;color:#e05a5a" onclick="closeProfileModal();openReportModal('${esc(p.id)}','${esc(p.username||'')}')">⚠ Signaler ce profil</button>`:''}
-  `;
+    <div class="dpc-body">
+      <div class="dpc-name-row">
+        <span class="dpc-name">${esc(p.display_name||p.username||'Utilisateur')}</span>${prem}
+      </div>
+      <div class="dpc-handle">@${esc(p.username||'')}</div>
+      ${statusHtml}
+      ${p.specialty?`<div class="profile-badge" style="display:inline-block;margin-top:8px">${esc(specLabels[p.specialty]||p.specialty)}</div>`:''}
+      <div class="dpc-stats-row">
+        <span><strong>${p.xp||0}</strong> xp</span>
+        <span id="profile-followers-count"><strong>…</strong> abonnés</span>
+        <span id="profile-following-count"><strong>…</strong> abonnements</span>
+      </div>
+      <div class="dpc-divider"></div>
+      <div class="dpc-section-label">À propos</div>
+      <div class="dpc-bio">${esc(p.bio||'Aucune bio renseignée.')}</div>
+      ${p.available_for_pairing?'<div class="badge-inline" style="margin-top:10px">🤝 Dispo pour pair programming</div>':''}
+      ${widgetsHtml?`<div class="dpc-divider"></div><div class="dpc-section-label">Widgets</div><div class="dpc-widgets">${widgetsHtml}</div>`:''}
+      ${stack?`<div class="dpc-divider"></div><div class="dpc-section-label">Stack</div><div style="display:flex;flex-wrap:wrap;gap:6px">${stack}</div>`:''}
+      ${links?`<div class="dpc-divider"></div><div class="dpc-section-label">Liens</div><div class="profile-links">${links}</div>`:''}
+      ${githubHeatmapHtml(p.github_url)}
+      <div id="view-profile-projects" style="margin-top:14px"></div>
+      <div class="dpc-actions">
+        ${isOther?`<div class="dpc-actions-row"><button class="btn btn-primary" id="follow-btn" onclick="toggleFollow('${esc(p.id)}')">Suivre</button><button class="btn btn-ghost" onclick="closeProfileModal();startDm('${esc(p.id)}','${esc(p.username||'')}')">✉ Message</button></div>`:''}
+        ${isOther&&p.available_for_pairing?`<button class="btn btn-ghost w-full" onclick="requestPairingSession('${esc(p.id)}','${esc(p.username||'')}')">🤝 Demander une session de pair programming</button>`:''}
+        ${isOther?`<button class="btn btn-ghost w-full" style="color:#e05a5a" onclick="closeProfileModal();openReportModal('${esc(p.id)}','${esc(p.username||'')}')">⚠ Signaler ce profil</button>`:''}
+      </div>
+    </div>`;
   loadFollowCounts(p.id);
   if(currentUser&&p.id!==currentUser.id)checkFollowState(p.id);
   loadProfileModalProjects(p.id,p.username);
@@ -11095,7 +11210,7 @@ const NEXUS_WIDGET_CATALOG=[
 // message d'erreur clair, plus tôt.
 async function nexusPrecheck(text,source){
   try{
-    const{data,error}=await db.rpc('nexus_precheck_content',{p_text:text||'',p_source:source,p_project_id:NEXUS_PROJECT_ID});
+    const{data,error}=await db.rpc('nexus_precheck_content',{p_text:text||'',p_source:source});
     if(error)return true; // précheck indispo : on laisse le trigger trancher normalement
     if(data?.blocked){
       showToast(`Publication bloquée par Web/Nexus : contenu à risque (score ${data.score}).`,'error');
@@ -12241,7 +12356,6 @@ function subscribeNexusRealtime(){
         if(document.getElementById('section-nexus')?.classList.contains('active')){
           loadNexusOverview();
           if(document.getElementById('nexus-threats')?.classList.contains('active'))loadNexusThreatIntel();
-          if(document.getElementById('nexus-logs')?.classList.contains('active'))loadNexusLogs();
         }
       })
       .subscribe();
