@@ -457,7 +457,7 @@ a{color:inherit;}::selection{background:#333;color:#fff;}
   background:linear-gradient(90deg,transparent,var(--mod-color,rgba(47,99,224,.4)),transparent);
   opacity:0;transition:opacity .4s;
 }
-.module-card:hover{transform:translateY(-6px) scale(1.01);border-color:var(--mod-color-dim,var(--border-light));box-shadow:0 20px 60px -20px var(--mod-color,rgba(47,99,224,.2));}
+.module-card:hover{transform:translateY(-6px);border-color:var(--mod-color-dim,var(--border-light));box-shadow:0 20px 60px -20px var(--mod-color,rgba(47,99,224,.2));}
 .module-card:hover::before,.module-card:hover::after{opacity:1;}
 .module-card.soon{border-style:dashed;opacity:.7;}
 .module-card.soon:hover{opacity:.95;transform:translateY(-3px);}
@@ -1024,10 +1024,32 @@ select.form-input{color-scheme:dark;background-color:#111;}
 .danger-zone .settings-card-title{color:#e05555;}
 .premium-status-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:16px;transition:border-color .3s var(--ease),box-shadow .3s var(--ease),background .3s var(--ease);}
 .premium-status-icon{font-size:28px;transition:filter .3s var(--ease);}
-.premium-status-card.tier-dev{border-color:rgba(200,168,106,.5);background:linear-gradient(135deg,rgba(200,168,106,.07),var(--bg2));}
-.premium-status-card.tier-dev .premium-status-icon{filter:drop-shadow(0 0 6px rgba(200,168,106,.5));}
-.premium-status-card.tier-devconnect{border-color:rgba(200,168,106,.65);background:linear-gradient(135deg,rgba(200,168,106,.12),var(--bg2));box-shadow:0 0 20px -6px rgba(200,168,106,.4);animation:premiumGlow 3.5s ease-in-out infinite;}
-.premium-status-card.tier-devconnect .premium-status-icon{filter:drop-shadow(0 0 8px rgba(200,168,106,.7));}
+.premium-status-card.tier-dev{border-color:#c8a86a;border-width:2px;background:linear-gradient(135deg,rgba(200,168,106,.16),var(--bg2));}
+.premium-status-card.tier-dev .premium-status-icon{filter:drop-shadow(0 0 6px rgba(200,168,106,.6));}
+.premium-status-card.tier-devconnect{border-color:#c8a86a;border-width:2px;background:linear-gradient(135deg,rgba(200,168,106,.24),var(--bg2));box-shadow:0 0 22px -5px rgba(200,168,106,.55);animation:premiumGlow 3.5s ease-in-out infinite;}
+.premium-status-card.tier-devconnect .premium-status-icon{filter:drop-shadow(0 0 8px rgba(200,168,106,.8));}
+
+.serre-eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin:26px 0 10px;}
+.serre-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:28px;}
+.serre-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;position:relative;transition:border-color .3s var(--ease),transform .25s var(--ease),box-shadow .3s var(--ease);}
+.serre-card:hover{transform:translateY(-2px);}
+.serre-icon{font-size:22px;margin-bottom:12px;line-height:1;}
+.serre-name{font-family:var(--font-display);font-weight:700;font-size:15px;margin-bottom:3px;}
+.serre-stage{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);}
+.serre-card#serre-dev{border-color:#c8a86a;border-width:2px;background:linear-gradient(135deg,rgba(200,168,106,.14),var(--bg2));}
+.serre-card#serre-dev .serre-stage{color:#7a611f;font-weight:600;}
+.serre-card#serre-devconnect{background:linear-gradient(135deg,#1c2519,#151D14);border-color:#c8a86a;border-width:2px;box-shadow:0 0 20px -6px rgba(200,168,106,.5);}
+.serre-card#serre-devconnect .serre-name{color:#F2EEE1;}
+.serre-card#serre-devconnect .serre-stage{color:#e6c789;font-weight:600;}
+.serre-card.current{box-shadow:0 0 0 2px rgba(200,168,106,.55);}
+.serre-card.current::after{content:'PALIER ACTUEL';position:absolute;top:10px;right:10px;font-family:var(--font-mono);font-size:8px;letter-spacing:.05em;color:#9a7f42;background:rgba(200,168,106,.12);border:1px solid rgba(200,168,106,.4);padding:2px 6px;border-radius:100px;}
+.serre-card#serre-devconnect.current::after{color:#e6c789;background:rgba(200,168,106,.16);border-color:rgba(200,168,106,.5);}
+@media (max-width:640px){.serre-grid{grid-template-columns:1fr;}}
+
+.settings-block-title{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.settings-block.locked .settings-row{opacity:.45;filter:grayscale(.3);}
+.tier-lock-tag{display:none;font-family:var(--font-mono);font-size:9px;letter-spacing:.04em;color:#9a7f42;border:1px solid rgba(200,168,106,.4);padding:2px 7px;border-radius:100px;white-space:nowrap;}
+.settings-block.locked .tier-lock-tag{display:inline-flex;align-items:center;gap:3px;}
 .premium-status-info{flex:1;}
 .premium-status-name{font-weight:600;font-size:15px;margin-bottom:3px;}
 .premium-status-desc{font-size:12px;color:var(--text-muted);}
@@ -1151,14 +1173,14 @@ select.form-input{color-scheme:dark;background-color:#111;}
 .feed-banner-close:hover{color:var(--text);}
 
 /* Badges & roles */
-.premium-badge{display:inline-flex;align-items:center;gap:3px;padding:1px 6px;border-radius:100px;font-size:9px;font-family:var(--font-mono);font-weight:500;position:relative;overflow:hidden;transition:filter .2s var(--ease),transform .2s var(--ease);}
-.premium-badge.devplus{background:rgba(200,168,106,.08);border:1px solid rgba(200,168,106,.4);color:#9a7f42;}
-.premium-badge.devconnectplus{background:linear-gradient(135deg,rgba(200,168,106,.16),rgba(230,199,137,.08));border:1px solid rgba(200,168,106,.55);color:#8a6f2e;box-shadow:0 0 10px -4px rgba(200,168,106,.5);}
-.premium-badge.devplus:hover,.premium-badge.devconnectplus:hover{filter:brightness(1.08);transform:translateY(-1px);}
+.premium-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:100px;font-size:9px;font-family:var(--font-mono);font-weight:700;letter-spacing:.02em;position:relative;overflow:hidden;transition:filter .2s var(--ease),transform .2s var(--ease);}
+.premium-badge.devplus{background:rgba(200,168,106,.22);border:1.5px solid #c8a86a;color:#7a611f;}
+.premium-badge.devconnectplus{background:linear-gradient(135deg,#e6c789,#c8a86a);border:1.5px solid #a3822f;color:#2c2410;box-shadow:0 0 12px -3px rgba(200,168,106,.75);}
+.premium-badge.devplus:hover,.premium-badge.devconnectplus:hover{filter:brightness(1.1);transform:translateY(-1px);}
 .premium-badge.devplus::after,.premium-badge.devconnectplus::after{content:'';position:absolute;top:0;left:0;bottom:0;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:translateX(-220%) skewX(-12deg);}
 .premium-badge.devplus:hover::after,.premium-badge.devconnectplus:hover::after{animation:sheen 1.1s var(--ease);}
 .premium-badge.devconnectplus{animation:premiumGlow 3.5s ease-in-out infinite;}
-@keyframes premiumGlow{0%,100%{box-shadow:0 0 10px -4px rgba(200,168,106,.5);}50%{box-shadow:0 0 14px -3px rgba(200,168,106,.75);}}
+@keyframes premiumGlow{0%,100%{box-shadow:0 0 12px -3px rgba(200,168,106,.75);}50%{box-shadow:0 0 18px -2px rgba(200,168,106,1);}}
 .architect-badge{display:inline-flex;align-items:center;padding:1px 6px;border-radius:100px;font-size:9px;font-family:var(--font-mono);background:var(--text);color:var(--bg0);}
 .role-badge-profile{display:inline-flex;align-items:center;padding:2px 10px;border-radius:100px;font-size:11px;font-family:var(--font-mono);border:1px solid var(--border);color:var(--text-muted);background:var(--bg2);margin-left:6px;vertical-align:middle;}
 .role-badge-profile._f63_0g278i42i{border-color:#9a8a5a;color:#c8a86a;background:rgba(200,168,106,.08);}
@@ -1184,8 +1206,8 @@ select.form-input{color-scheme:dark;background-color:#111;}
 .dpc-banner{height:100px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;background:linear-gradient(135deg,var(--bg3),var(--bg2));margin:-1px -1px 0;}
 .dpc-avatar-row{padding:0 20px;margin-top:-38px;display:flex;}
 .dpc-avatar{width:76px;height:76px;border-radius:50%;background:var(--bg2);border:4px solid var(--bg1);overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);color:var(--accent);font-size:22px;transition:box-shadow .3s var(--ease);}
-.dpc-avatar.tier-dev{border-color:#c8a86a;}
-.dpc-avatar.tier-devconnect{border-color:#e6c789;box-shadow:0 0 0 2px rgba(200,168,106,.18),0 0 16px -2px rgba(200,168,106,.55);animation:premiumGlow 3.5s ease-in-out infinite;}
+.dpc-avatar.tier-dev{border-color:#c8a86a;box-shadow:0 0 0 2px rgba(200,168,106,.3);}
+.dpc-avatar.tier-devconnect{border-color:#e6c789;box-shadow:0 0 0 3px rgba(200,168,106,.35),0 0 18px -2px rgba(200,168,106,.7);animation:premiumGlow 3.5s ease-in-out infinite;}
 .dpc-body{padding:14px 20px 20px;text-align:left;}
 .dpc-name-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .dpc-name{font-weight:700;font-size:17px;}
@@ -2465,49 +2487,41 @@ textarea.nexus-modal-input{resize:vertical;min-height:64px;font-family:var(--fon
 
 /* ---- INSIGHT : "Atelier / Blueprint" — palette DevConnect, feuille technique ---- */
 #page-app #section-ranking{
-  --bp-paper:#F2EEE1;
-  --bp-sheet:#FBF9F1;
-  --bp-line:rgba(27,36,25,.12);
-  --bp-line-bright:rgba(27,36,25,.26);
-  --bp-ink:#1B2419;
-  --bp-ink-soft:#4A5442;
-  --bp-ink-mute:#7C8570;
-  --bp-forest:#2C4A2E;
-  --bp-moss:#6F8F45;
+  --bp-paper:#EDE3D0;
+  --bp-sheet:#F8F2E4;
+  --bp-line:rgba(58,47,34,.12);
+  --bp-line-bright:rgba(58,47,34,.22);
+  --bp-ink:#3A2F22;
+  --bp-ink-soft:#5C4A34;
+  --bp-ink-mute:#8C7A5E;
+  --bp-forest:#6B5738;
+  --bp-moss:#A9895C;
   --bp-mono:'JetBrains Mono',monospace;
   background:
-    repeating-linear-gradient(0deg, rgba(44,74,46,.05) 0, rgba(44,74,46,.05) 1px, transparent 1px, transparent 28px),
-    repeating-linear-gradient(90deg, rgba(44,74,46,.05) 0, rgba(44,74,46,.05) 1px, transparent 1px, transparent 28px),
+    radial-gradient(ellipse 900px 600px at 10% -10%, rgba(169,137,92,.14), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 100% 30%, rgba(107,87,56,.08), transparent 55%),
     var(--bp-paper) !important;
   color:var(--bp-ink);
 }
 #page-app #section-ranking .module-subnav{border-bottom:1px solid var(--bp-line-bright);}
 #page-app #section-ranking .module-subnav-back{color:var(--bp-ink-mute);font-family:var(--bp-mono);font-size:12px;}
-#page-app #section-ranking .module-subnav-title{font-family:var(--bp-mono);font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--bp-forest);}
+#page-app #section-ranking .module-subnav-title{font-family:var(--bp-mono);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--bp-forest);}
 #page-app #section-ranking .module-subnav-title::before{content:'// ';color:var(--bp-moss);}
 
-#page-app #section-ranking .insight-tabs{border-bottom:1px solid var(--bp-line-bright);gap:0;}
-#page-app #section-ranking .insight-tab{font-family:var(--bp-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--bp-ink-mute);}
-#page-app #section-ranking .insight-tab.active{color:var(--bp-forest);border-bottom-color:var(--bp-forest);}
+#page-app #section-ranking .insight-tabs{border-bottom:1px solid var(--bp-line-bright);gap:4px;}
+#page-app #section-ranking .insight-tab{font-family:var(--bp-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--bp-ink-mute);border-radius:8px 8px 0 0;padding:8px 14px;}
+#page-app #section-ranking .insight-tab.active{color:var(--bp-forest);border-bottom-color:var(--bp-forest);background:rgba(169,137,92,.1);}
 
-/* KPI en fiches techniques (coins en équerre, sans fond sombre) */
+/* KPI — cartes toutes rondes, plus de coins techniques */
 #page-app #section-ranking .insight-kpi{
   background:var(--bp-sheet);
   border:1px solid var(--bp-line-bright);
-  border-radius:2px;
-  padding:18px 16px 14px;
+  border-radius:18px;
+  padding:18px 18px 15px;
   position:relative;
 }
-#page-app #section-ranking .insight-kpi::before{
-  content:'';position:absolute;top:0;left:0;width:9px;height:9px;
-  border-top:1px solid var(--bp-forest);border-left:1px solid var(--bp-forest);
-}
-#page-app #section-ranking .insight-kpi::after{
-  content:'';position:absolute;bottom:0;right:0;width:9px;height:9px;
-  border-bottom:1px solid var(--bp-forest);border-right:1px solid var(--bp-forest);
-}
 #page-app #section-ranking .insight-kpi-val{font-family:var(--bp-mono);font-size:28px;font-weight:700;color:var(--bp-ink);letter-spacing:-.02em;}
-#page-app #section-ranking .insight-kpi-label{font-family:var(--bp-mono);font-size:10px;color:var(--bp-ink-mute);letter-spacing:.14em;text-transform:uppercase;margin-top:8px;}
+#page-app #section-ranking .insight-kpi-label{font-family:var(--bp-mono);font-size:10px;color:var(--bp-ink-mute);letter-spacing:.1em;text-transform:uppercase;margin-top:8px;}
 #page-app #section-ranking .insight-kpi-delta{font-family:var(--bp-mono);font-size:11px;letter-spacing:.04em;}
 #page-app #section-ranking .insight-kpi-delta.up{color:var(--bp-forest);}
 #page-app #section-ranking .insight-kpi-delta.down{color:#a8503f;}
@@ -2515,211 +2529,339 @@ textarea.nexus-modal-input{resize:vertical;min-height:64px;font-family:var(--fon
 #page-app #section-ranking .insight-chart-card{
   background:var(--bp-sheet);
   border:1px solid var(--bp-line-bright);
-  border-radius:2px;
+  border-radius:18px;
   position:relative;
 }
-#page-app #section-ranking .insight-chart-card::before{
-  content:'';position:absolute;top:0;right:0;width:9px;height:9px;
-  border-top:1px solid var(--bp-forest);border-right:1px solid var(--bp-forest);
-}
-#page-app #section-ranking .insight-chart-title{font-family:var(--bp-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--bp-ink-mute);font-weight:500;}
+#page-app #section-ranking .insight-chart-title{font-family:var(--bp-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--bp-ink-mute);font-weight:500;}
 #page-app #section-ranking .insight-chart-title span{color:var(--bp-forest) !important;}
 
-#page-app #section-ranking .insight-bar{background:var(--bp-forest);border-radius:0;box-shadow:none;}
+#page-app #section-ranking .insight-bar{background:var(--bp-forest);border-radius:6px 6px 0 0;box-shadow:none;}
 #page-app #section-ranking .insight-bar-label{font-family:var(--bp-mono);font-size:9px;color:var(--bp-ink-mute);}
 
 #page-app #section-ranking .insight-lang-name{font-family:var(--bp-mono);font-size:11px;color:var(--bp-ink-mute);}
-#page-app #section-ranking .insight-lang-track{background:transparent;border-radius:0;border:1px solid var(--bp-line-bright);height:6px;}
-#page-app #section-ranking .insight-lang-fill{background:var(--bp-moss);box-shadow:none;}
+#page-app #section-ranking .insight-lang-track{background:transparent;border-radius:100px;border:1px solid var(--bp-line-bright);height:6px;}
+#page-app #section-ranking .insight-lang-fill{background:var(--bp-moss);box-shadow:none;border-radius:100px;}
 #page-app #section-ranking .insight-lang-pct{font-family:var(--bp-mono);color:var(--bp-ink-mute);}
 #page-app #section-ranking .insight-empty{font-family:var(--bp-mono);font-size:12px;color:var(--bp-ink-mute);}
 
-/* Classement — feuille de relevé, pas de scoreboard lumineux */
+/* Classement — feuille de relevé, coins ronds, plus détendu */
 #page-app #section-ranking .ranking-header .feed-title{font-family:var(--bp-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--bp-forest);font-size:16px;}
-#page-app #section-ranking .filter-chip{background:var(--bp-sheet);border:1px solid var(--bp-line-bright);border-radius:2px;color:var(--bp-ink-mute);font-family:var(--bp-mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;}
+#page-app #section-ranking .filter-chip{background:var(--bp-sheet);border:1px solid var(--bp-line-bright);border-radius:100px;color:var(--bp-ink-mute);font-family:var(--bp-mono);font-size:11px;letter-spacing:.03em;text-transform:uppercase;padding:7px 14px;}
 #page-app #section-ranking .filter-chip.active{background:var(--bp-forest);border-color:var(--bp-forest);color:var(--bp-paper);}
-#page-app #section-ranking .ranking-table{background:var(--bp-sheet);border:1px solid var(--bp-line-bright);border-radius:2px;overflow:hidden;}
+/* Le toggle "Ma spécialité" est un interrupteur indépendant, pas un choix du même groupe : couleur distincte pour ne pas le confondre avec les 3 boutons de période */
+#page-app #section-ranking .filter-chip-toggle{border-color:var(--bp-line-bright);}
+#page-app #section-ranking .filter-chip-toggle.active{background:rgba(169,137,92,.22);border-color:var(--bp-moss);color:var(--bp-forest);}
+#page-app #section-ranking .ranking-table{background:var(--bp-sheet);border:1px solid var(--bp-line-bright);border-radius:18px;overflow:hidden;}
 #page-app #section-ranking .ranking-row{border-bottom:1px solid var(--bp-line);font-family:var(--bp-mono);}
-#page-app #section-ranking .ranking-row.header{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--bp-ink-mute);background:rgba(27,36,25,.03);}
+#page-app #section-ranking .ranking-row.header{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--bp-ink-mute);background:rgba(58,47,34,.04);}
 #page-app #section-ranking .ranking-row:not(.header){color:var(--bp-ink);}
-#page-app #section-ranking .ranking-row:not(.header):hover{background:rgba(44,74,46,.05);}
+#page-app #section-ranking .ranking-row:not(.header):hover{background:rgba(107,87,56,.06);}
 #page-app #section-ranking #ranking-rows .ranking-row:nth-child(-n+3) span:first-child{color:var(--bp-forest);font-weight:700;}
-#page-app #section-ranking #ranking-rows .ranking-row:nth-child(-n+3){border-left:2px solid var(--bp-forest);}
+#page-app #section-ranking #ranking-rows .ranking-row:nth-child(-n+3){background:rgba(169,137,92,.09);border-left:none;}
 
-/* ---- DEPLOY : "Chantier / Permis de construire" — palette DevConnect, univers BTP ---- */
+/* Mascotte mycélium — une seule étoile pour tout Insight, racines qui pulsent en continu */
+#page-app #section-ranking .my-star-mascot{position:relative;width:26px;height:26px;cursor:pointer;display:inline-block;flex:none;overflow:visible;}
+#page-app #section-ranking .my-star-mascot svg{width:26px;height:26px;display:block;overflow:visible;}
+#page-app #section-ranking .my-star-roots{opacity:.5;animation:myRootsBreathe 3.4s ease-in-out infinite;}
+@keyframes myRootsBreathe{0%,100%{opacity:.35}50%{opacity:.65}}
+#page-app #section-ranking .my-star-pulse{opacity:0;stroke-dasharray:34;stroke-dashoffset:34;}
+#page-app #section-ranking .my-star-pulse.play{animation:myPulseDraw 1s ease-out 1;}
+@keyframes myPulseDraw{0%{opacity:1;stroke-dashoffset:34}70%{opacity:1;stroke-dashoffset:0}100%{opacity:0;stroke-dashoffset:0}}
+#page-app #section-ranking .my-star-core.pop{animation:myCorePop .5s ease-out 1;}
+@keyframes myCorePop{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
+#page-app #section-ranking .my-star-bubble{
+  position:absolute;top:32px;left:0;z-index:6;
+  background:var(--bp-sheet);border:1px solid var(--bp-line-bright);border-radius:12px;
+  padding:9px 12px;width:210px;font-family:var(--font-sans, inherit);text-transform:none;
+  letter-spacing:normal;font-size:12px;line-height:1.45;color:var(--bp-ink-soft);
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+#page-app #section-ranking .my-star-bubble.show{opacity:1;}
+
+
+/* ---- DEPLOY : "Ciel nocturne" — étoiles, lavande, calme ---- */
 #page-app #section-recruit{
-  --ch-paper:#F2EEE1;
-  --ch-paper-dim:#EAE4D2;
-  --ch-sheet:#FBF9F1;
-  --ch-line:rgba(27,36,25,.14);
-  --ch-line-bright:rgba(27,36,25,.32);
-  --ch-ink:#1B2419;
-  --ch-ink-soft:#4A5442;
-  --ch-ink-mute:#7C8570;
-  --ch-forest:#2C4A2E;
-  --ch-moss:#6F8F45;
-  --ch-ochre:#B8863F;
-  --ch-brick:#A8503F;
-  --ch-cond:'Oswald',sans-serif;
-  --ch-mono:'JetBrains Mono',monospace;
-  background:var(--ch-paper) !important;
-  color:var(--ch-ink);
+  --dp-bg:#141B36;
+  --dp-bg-soft:#1B2348;
+  --dp-bg-softer:#232C58;
+  --dp-line:rgba(255,255,255,.08);
+  --dp-line-bright:rgba(255,255,255,.16);
+  --dp-cream:#F5F1E6;
+  --dp-cream-soft:rgba(245,241,230,.68);
+  --dp-cream-mute:rgba(245,241,230,.42);
+  --dp-lavender:#B4AEEC;
+  --dp-lavender-dim:rgba(180,174,236,.16);
+  --dp-mint:#8FE3C0;
+  --dp-amber:#F0C374;
+  --dp-coral:#E58B84;
+  --dp-head:var(--font-display);
+  --dp-mono:var(--font-mono);
+  background:transparent !important;
+  color:var(--dp-cream);
+  position:relative;
+  isolation:isolate;
+}
+#page-app #section-recruit::before{
+  content:'';
+  position:fixed;
+  top:60px;left:0;right:0;bottom:0;
+  background:var(--dp-bg);
+  z-index:0;
+  pointer-events:none;
+}
+#page-app #section-recruit > *{
+  position:relative;
+  z-index:1;
 }
 
-/* bandeau diagonal (jalon visuel chantier), utilisé avec parcimonie */
-#page-app #section-recruit .ch-stripes{
-  background-image:repeating-linear-gradient(135deg,var(--ch-forest) 0 14px,var(--ch-moss) 14px 28px);
-  height:6px;
-}
+/* --- entête module + onglets --- */
+#page-app #section-recruit .module-subnav{border-bottom:1px solid var(--dp-line);}
+#page-app #section-recruit .module-subnav-back{color:var(--dp-cream-mute);font-family:var(--dp-mono);font-size:12px;}
+#page-app #section-recruit .module-subnav-title{font-family:var(--dp-head);font-weight:600;letter-spacing:0;text-transform:none;color:var(--dp-cream);display:flex;align-items:center;gap:8px;}
+#page-app #section-recruit .module-subnav-title::before{content:none;}
 
-/* --- entête module + onglets = panneau boulonné --- */
-#page-app #section-recruit .module-subnav{border-bottom:2px solid var(--ch-line-bright);}
-#page-app #section-recruit .module-subnav-back{color:var(--ch-ink-mute);font-family:var(--ch-mono);font-size:12px;}
-#page-app #section-recruit .module-subnav-title{font-family:var(--ch-cond);font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ch-forest);}
-#page-app #section-recruit .module-subnav-title::before{content:'⚠ ';color:var(--ch-ochre);}
-
-#page-app #section-recruit .deploy-tabs{border-bottom:none;gap:0;padding:0 0 6px;position:relative;}
-#page-app #section-recruit .deploy-tabs::before{
-  content:'';display:block;position:absolute;left:0;right:0;bottom:0;height:4px;
-  background-image:repeating-linear-gradient(135deg,var(--ch-forest) 0 8px,var(--ch-paper-dim) 8px 16px);
-  opacity:.5;
-}
+#page-app #section-recruit .deploy-tabs{border-bottom:none;gap:2px;position:relative;background:var(--dp-bg-soft);border-radius:100px;display:inline-flex;padding:4px;}
+#page-app #section-recruit .deploy-tabs::before{display:none;}
 #page-app #section-recruit .deploy-tab{
-  font-family:var(--ch-cond);font-weight:600;font-size:13px;letter-spacing:.05em;text-transform:uppercase;
-  color:var(--ch-ink-mute);border:2px solid transparent;border-bottom:none;border-radius:3px 3px 0 0;
-  padding:9px 18px;margin-right:2px;background:transparent;
+  font-family:var(--dp-head);font-weight:500;font-size:13px;letter-spacing:0;text-transform:none;
+  color:var(--dp-cream-mute);border:none;border-radius:100px;
+  padding:8px 16px;margin-right:0;background:transparent;transition:all .2s;
 }
-#page-app #section-recruit .deploy-tab:hover{color:var(--ch-ink);background:rgba(44,74,46,.05);}
+#page-app #section-recruit .deploy-tab:hover{color:var(--dp-cream);background:rgba(255,255,255,.05);}
 #page-app #section-recruit .deploy-tab.active{
-  color:var(--ch-forest);background:var(--ch-sheet);
-  border-color:var(--ch-line-bright);border-bottom:2px solid var(--ch-sheet);margin-bottom:-2px;
+  color:var(--dp-bg);background:var(--dp-lavender);border-color:transparent;margin-bottom:0;
 }
 
-/* --- hero = panneau de permis de construire, boulons aux coins --- */
+/* --- hero = panneau ciel étoilé --- */
 #page-app #section-recruit .recruit-hero{
-  background:var(--ch-sheet);border:2px solid var(--ch-ink);border-radius:2px;
-  position:relative;box-shadow:4px 4px 0 rgba(27,36,25,.08);
+  background:var(--dp-bg-soft);border:1px solid var(--dp-line);border-radius:18px;
+  position:relative;box-shadow:0 8px 30px rgba(0,0,0,.3);overflow:hidden;
 }
-#page-app #section-recruit .recruit-hero::before{
-  background:repeating-linear-gradient(135deg,var(--ch-forest) 0 10px,var(--ch-ochre) 10px 20px);
-  height:5px;opacity:.9;
-}
+#page-app #section-recruit .recruit-hero::before{display:none;}
 #page-app #section-recruit .recruit-hero::after{
   content:'';position:absolute;inset:0;pointer-events:none;
   background-image:
-    radial-gradient(circle,var(--ch-ink) 2px,transparent 2.4px),
-    radial-gradient(circle,var(--ch-ink) 2px,transparent 2.4px),
-    radial-gradient(circle,var(--ch-ink) 2px,transparent 2.4px),
-    radial-gradient(circle,var(--ch-ink) 2px,transparent 2.4px);
-  background-position:8px 8px,calc(100% - 8px) 8px,8px calc(100% - 8px),calc(100% - 8px) calc(100% - 8px);
-  background-repeat:no-repeat;opacity:.55;
+    radial-gradient(circle,var(--dp-cream) 1px,transparent 1.4px),
+    radial-gradient(circle,var(--dp-cream) 1px,transparent 1.4px),
+    radial-gradient(circle,var(--dp-cream) 1px,transparent 1.4px);
+  background-size:140px 90px,180px 120px,110px 70px;
+  background-position:10px 14px,72% 30%,32% 74%;
+  background-repeat:no-repeat;opacity:.2;
 }
-#page-app #section-recruit .recruit-hero-icon{color:var(--ch-ochre);font-size:24px;}
-#page-app #section-recruit .recruit-hero-title{font-family:var(--ch-cond);font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:var(--ch-ink);font-size:16px;}
-#page-app #section-recruit .recruit-hero-sub{color:var(--ch-ink-soft);}
+#page-app #section-recruit .recruit-hero-icon{color:var(--dp-lavender);font-size:22px;}
+#page-app #section-recruit .recruit-hero-title{font-family:var(--dp-head);font-weight:600;letter-spacing:-.01em;text-transform:none;color:var(--dp-cream);font-size:17px;}
+#page-app #section-recruit .recruit-hero-sub{color:var(--dp-cream-soft);}
 
 /* --- titres de section --- */
-#page-app #section-recruit .feed-title{font-family:var(--ch-cond);font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--ch-forest);font-size:18px;}
+#page-app #section-recruit .feed-title{font-family:var(--dp-head);font-weight:600;letter-spacing:-.005em;text-transform:none;color:var(--dp-cream);font-size:18px;}
 
-/* --- cartes déploiement = panneaux de chantier --- */
+/* --- cartes déploiement --- */
 #page-app #section-recruit .deploy-card,
 #page-app #section-recruit .job-card{
-  background:var(--ch-sheet);border:2px solid var(--ch-line-bright);border-radius:2px;
-  box-shadow:3px 3px 0 rgba(27,36,25,.06);position:relative;
+  background:var(--dp-bg-soft);border:1px solid var(--dp-line);border-radius:14px;
+  box-shadow:0 2px 12px rgba(0,0,0,.18);position:relative;transition:border-color .2s,box-shadow .2s;
 }
 #page-app #section-recruit .deploy-card:hover,
-#page-app #section-recruit .job-card:hover{border-color:var(--ch-ink);box-shadow:4px 4px 0 rgba(27,36,25,.1);}
+#page-app #section-recruit .job-card:hover{border-color:var(--dp-lavender-dim);box-shadow:0 4px 20px rgba(0,0,0,.28),0 0 0 1px var(--dp-lavender-dim);}
 #page-app #section-recruit .job-card::before{display:none;}
 #page-app #section-recruit .deploy-card::before{
-  content:'';position:absolute;top:-2px;bottom:-2px;left:-2px;width:6px;
-  background-image:repeating-linear-gradient(-45deg,var(--ch-forest) 0 6px,var(--ch-ochre) 6px 12px);
-  border-radius:2px 0 0 2px;
+  content:'';position:absolute;top:0;bottom:0;left:0;width:3px;
+  background:var(--dp-lavender);opacity:.55;border-radius:14px 0 0 14px;
 }
-#page-app #section-recruit .deploy-card{padding-left:28px;}
+#page-app #section-recruit .deploy-card{padding-left:24px;}
 #page-app #section-recruit .deploy-card-name,
-#page-app #section-recruit .job-title{font-family:var(--ch-cond);font-weight:600;letter-spacing:.01em;color:var(--ch-ink);}
+#page-app #section-recruit .job-title{font-family:var(--dp-head);font-weight:600;letter-spacing:0;color:var(--dp-cream);}
 #page-app #section-recruit .deploy-card-meta,
 #page-app #section-recruit .job-company,
-#page-app #section-recruit .job-desc{color:var(--ch-ink-soft);}
-#page-app #section-recruit .job-budget{font-family:var(--ch-mono);color:var(--ch-forest);}
+#page-app #section-recruit .job-desc{color:var(--dp-cream-soft);}
+#page-app #section-recruit .job-budget{font-family:var(--dp-mono);color:var(--dp-mint);}
 
-/* --- statuts = tampons de permis, légèrement désaxés --- */
+/* --- statuts = pastilles douces --- */
 #page-app #section-recruit .deploy-status{
-  font-family:var(--ch-cond);font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  border-radius:2px;border-width:2px;transform:rotate(-2deg);padding:3px 10px;
+  font-family:var(--dp-head);font-weight:500;letter-spacing:0;text-transform:none;
+  border-radius:100px;border-width:1px;transform:none;padding:4px 12px;
 }
-#page-app #section-recruit .deploy-status.live{background:rgba(44,74,46,.08);color:var(--ch-forest);border-color:var(--ch-forest);}
-#page-app #section-recruit .deploy-status.building{background:rgba(184,134,63,.1);color:var(--ch-ochre);border-color:var(--ch-ochre);}
-#page-app #section-recruit .deploy-status.failed{background:rgba(168,80,63,.1);color:var(--ch-brick);border-color:var(--ch-brick);}
-#page-app #section-recruit .deploy-status.idle{background:rgba(27,36,25,.05);color:var(--ch-ink-mute);border-color:var(--ch-line-bright);}
+#page-app #section-recruit .deploy-status.live{background:rgba(143,227,192,.12);color:var(--dp-mint);border-color:rgba(143,227,192,.3);}
+#page-app #section-recruit .deploy-status.building{background:rgba(240,195,116,.12);color:var(--dp-amber);border-color:rgba(240,195,116,.3);}
+#page-app #section-recruit .deploy-status.failed{background:rgba(229,139,132,.12);color:var(--dp-coral);border-color:rgba(229,139,132,.3);}
+#page-app #section-recruit .deploy-status.idle{background:rgba(255,255,255,.04);color:var(--dp-cream-mute);border-color:var(--dp-line-bright);}
 
-/* --- logs = bordereau de chantier --- */
+/* --- logs = journal de bord --- */
 #page-app #section-recruit .deploy-log-box{
-  background:var(--ch-paper-dim);border:1px solid var(--ch-line-bright);border-left:3px solid var(--ch-forest);
-  border-radius:0 2px 2px 0;font-family:var(--ch-mono);color:var(--ch-ink-soft);
+  background:var(--dp-bg);border:1px solid var(--dp-line);border-left:2px solid var(--dp-lavender);
+  border-radius:0 10px 10px 0;font-family:var(--dp-mono);color:var(--dp-cream-soft);
 }
-#page-app #section-recruit .deploy-log-line.ok{color:var(--ch-forest);}
-#page-app #section-recruit .deploy-log-line.warn{color:var(--ch-ochre);}
+#page-app #section-recruit .deploy-log-line.ok{color:var(--dp-mint);}
+#page-app #section-recruit .deploy-log-line.warn{color:var(--dp-amber);}
 
 /* --- tags offres --- */
 #page-app #section-recruit .job-tags .tag-item,
-#page-app #section-recruit .job-tags span{font-family:var(--ch-mono);}
+#page-app #section-recruit .job-tags span{font-family:var(--dp-mono);}
 
-/* --- sidebar widgets = fiches techniques --- */
+/* --- sidebar widgets --- */
 #page-app #section-recruit .sidebar-widget{
-  background:var(--ch-sheet);border:2px solid var(--ch-line-bright);border-radius:2px;
-  box-shadow:3px 3px 0 rgba(27,36,25,.05);
+  background:var(--dp-bg-soft);border:1px solid var(--dp-line);border-radius:14px;
+  box-shadow:0 2px 12px rgba(0,0,0,.18);
 }
-#page-app #section-recruit .widget-title{font-family:var(--ch-cond);font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ch-forest);font-size:11px;}
-#page-app #section-recruit .how-it-works-step{border-bottom-color:var(--ch-line);}
+#page-app #section-recruit .widget-title{font-family:var(--dp-head);font-weight:600;letter-spacing:0;text-transform:none;color:var(--dp-cream);font-size:12px;}
+#page-app #section-recruit .how-it-works-step{border-bottom-color:var(--dp-line);}
 #page-app #section-recruit .hiw-num{
-  background:var(--ch-forest);color:var(--ch-paper);border:none;border-radius:0;
-  font-family:var(--ch-cond);font-weight:700;
+  background:var(--dp-lavender);color:var(--dp-bg);border:none;border-radius:100px;
+  font-family:var(--dp-head);font-weight:600;
 }
-#page-app #section-recruit .hiw-title{color:var(--ch-ink);}
-#page-app #section-recruit .hiw-sub{color:var(--ch-ink-mute);}
-#page-app #section-recruit .form-input{background:var(--ch-paper);border:1px solid var(--ch-line-bright);border-radius:2px;color:var(--ch-ink);}
-#page-app #section-recruit .form-label{color:var(--ch-ink-mute);font-family:var(--ch-mono);}
+#page-app #section-recruit .hiw-title{color:var(--dp-cream);}
+#page-app #section-recruit .hiw-sub{color:var(--dp-cream-mute);}
+#page-app #section-recruit .form-input{background:var(--dp-bg);border:1px solid var(--dp-line-bright);border-radius:10px;color:var(--dp-cream);}
+#page-app #section-recruit .form-label{color:var(--dp-cream-mute);font-family:var(--dp-mono);}
 
-/* --- boutons = tamponnés --- */
+/* --- boutons --- */
 #page-app #section-recruit .btn-primary{
-  background:var(--ch-forest);color:var(--ch-paper);border-radius:2px;
-  font-family:var(--ch-cond);font-weight:600;letter-spacing:.04em;text-transform:uppercase;
-  box-shadow:2px 2px 0 rgba(27,36,25,.18);
+  background:var(--dp-lavender);color:var(--dp-bg);border-radius:100px;
+  font-family:var(--dp-head);font-weight:500;letter-spacing:0;text-transform:none;
+  box-shadow:none;
 }
-#page-app #section-recruit .btn-primary:hover{box-shadow:3px 3px 0 rgba(27,36,25,.24);transform:translate(-1px,-1px);}
+#page-app #section-recruit .btn-primary:hover{box-shadow:0 4px 16px rgba(180,174,236,.35);transform:translateY(-1px);}
 
-/* --- kanban candidatures = zones de chantier --- */
+/* --- kanban candidatures --- */
 #page-app #section-recruit .kanban-col{
-  background:var(--ch-paper-dim);border:2px solid var(--ch-line-bright);border-radius:2px;position:relative;padding-top:16px;
+  background:var(--dp-bg-soft);border:1px solid var(--dp-line);border-radius:14px;position:relative;padding-top:16px;
 }
-#page-app #section-recruit .kanban-col::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:4px;
-  background-image:repeating-linear-gradient(135deg,var(--ch-forest) 0 8px,var(--ch-ochre) 8px 16px);
-  opacity:.7;
-}
+#page-app #section-recruit .kanban-col::before{display:none;}
 #page-app #section-recruit .kanban-col-title{
-  font-family:var(--ch-cond);font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ch-forest);font-size:12px;
+  font-family:var(--dp-head);font-weight:600;letter-spacing:0;text-transform:none;color:var(--dp-cream);font-size:12px;
 }
 #page-app #section-recruit .kanban-col-title span:last-child{
-  background:var(--ch-forest);color:var(--ch-paper);border-radius:2px;padding:1px 7px;font-family:var(--ch-mono);
+  background:var(--dp-lavender);color:var(--dp-bg);border-radius:100px;padding:1px 8px;font-family:var(--dp-mono);
 }
 #page-app #section-recruit .kanban-card{
-  background:var(--ch-sheet);border:1px solid var(--ch-line-bright);border-radius:2px;box-shadow:2px 2px 0 rgba(27,36,25,.05);
+  background:var(--dp-bg);border:1px solid var(--dp-line);border-radius:10px;box-shadow:none;
 }
-#page-app #section-recruit .kanban-card:hover{border-color:var(--ch-ink);}
+#page-app #section-recruit .kanban-card:hover{border-color:var(--dp-lavender-dim);}
 
 /* --- empty states --- */
-#page-app #section-recruit .empty-state{color:var(--ch-ink-mute);}
-#page-app #section-recruit .empty-state-text{font-family:var(--ch-cond);text-transform:uppercase;letter-spacing:.03em;color:var(--ch-ink-soft);}
+#page-app #section-recruit .empty-state{color:var(--dp-cream-mute);}
+#page-app #section-recruit .empty-state-text{font-family:var(--dp-head);text-transform:none;letter-spacing:0;color:var(--dp-cream-soft);}
 
 /* --- toggle alertes --- */
-#page-app #section-recruit .toggle{background:var(--ch-line-bright);}
-#page-app #section-recruit .toggle.on{background:var(--ch-forest);}
+#page-app #section-recruit .toggle{background:var(--dp-line-bright);}
+#page-app #section-recruit .toggle.on{background:var(--dp-lavender);}
 
 /* --- commission / transactions rows --- */
-#page-app #section-recruit .premium-badge.devplus{background:rgba(111,143,69,.1);border:1px solid var(--ch-moss);color:var(--ch-forest);}
-#page-app #section-recruit .premium-badge.devconnectplus{background:rgba(44,74,46,.12);border:1px solid var(--ch-forest);color:var(--ch-forest);}
+#page-app #section-recruit .premium-badge.devplus{background:rgba(143,227,192,.12);border:1px solid var(--dp-mint);color:var(--dp-mint);}
+#page-app #section-recruit .premium-badge.devconnectplus{background:rgba(180,174,236,.14);border:1px solid var(--dp-lavender);color:var(--dp-lavender);}
+
+/* --- mascotte étoile --- */
+#page-app #section-recruit .dp-star-mascot{position:relative;width:22px;height:22px;cursor:pointer;display:inline-block;flex:none;}
+#page-app #section-recruit .dp-star-mascot svg{width:22px;height:22px;display:block}
+#page-app #section-recruit .dp-star-face{opacity:0;transition:opacity .1s}
+#page-app #section-recruit .dp-star-face.show{opacity:1}
+#page-app #section-recruit .dp-star-mascot.dp-fly{animation:dpStarFly 1.8s ease-in-out 1;position:relative;z-index:5;}
+@keyframes dpStarFly{
+  0%{transform:translate(0,0) scale(1) rotate(0deg);opacity:1}
+  15%{transform:translate(2px,-6px) scale(1.3) rotate(20deg);opacity:1}
+  40%{transform:translate(10px,-22px) scale(.8) rotate(190deg);opacity:1}
+  54%{transform:translate(-7px,-28px) scale(.55) rotate(320deg);opacity:1}
+  70%{transform:translate(-4px,-14px) scale(.85) rotate(340deg);opacity:1}
+  85%{transform:translate(2px,-3px) scale(1.15) rotate(355deg);opacity:1}
+  100%{transform:translate(0,0) scale(1) rotate(360deg);opacity:1}
+}
+
+/* --- mascottes-humeurs (4 étoiles) — placement définitif à définir --- */
+#page-app #section-recruit .dp-mood-stars{display:flex;gap:20px;flex-wrap:wrap;padding:18px 24px 4px;}
+#page-app #section-recruit .dp-mood-cell{background:var(--dp-bg-soft);border:1px solid var(--dp-line);border-radius:14px;padding:12px;text-align:center;width:140px;flex:none;overflow:hidden;}
+#page-app #section-recruit .dp-mood-stage{position:relative;height:150px;}
+#page-app #section-recruit .dp-mood-wrap{position:absolute;left:50%;top:50%;margin:-22px 0 0 -22px;width:44px;height:44px;transform-origin:center center;cursor:pointer;z-index:2;}
+#page-app #section-recruit .dp-mood-wrap svg{width:44px;height:44px;display:block;overflow:visible}
+#page-app #section-recruit .dp-mood-ghost{position:absolute;left:50%;top:50%;margin:-22px 0 0 -22px;width:44px;height:44px;z-index:1;pointer-events:none}
+#page-app #section-recruit .dp-mood-ghost svg{width:44px;height:44px;display:block}
+#page-app #section-recruit .dp-mood-label{font-family:var(--dp-head);font-weight:600;font-size:12px;color:var(--dp-cream);margin-top:4px;}
+#page-app #section-recruit .dp-mood-status{font-family:var(--dp-mono);font-size:10px;color:var(--dp-cream-mute);margin-top:2px;min-height:14px;}
+#page-app #section-recruit .dp-mood-bubble{position:absolute;top:-4px;left:50%;transform:translateX(-50%);background:var(--dp-bg-softer);border:1px solid var(--dp-line-bright);border-radius:8px;padding:3px 8px;font-size:11px;color:var(--dp-cream);white-space:nowrap;opacity:0;transition:opacity .25s;z-index:3}
+#page-app #section-recruit .dp-mood-bubble.show{opacity:1}
+#page-app #section-recruit .dp-mood-crack{position:absolute;inset:0;opacity:0;pointer-events:none;z-index:4}
+#page-app #section-recruit .dp-mood-crack.play{animation:dpCrackFlash 1.4s ease-out 1}
+#page-app #section-recruit .dp-mood-crack.play .dp-shard{animation:dpShardFly 1.4s ease-out 1}
+#page-app #section-recruit .dp-mood-crack.play .dp-flash{animation:dpFlashPop 1.4s ease-out 1}
+#page-app #section-recruit .dp-mood-crack.play .dp-ring{animation:dpRingPop 1.4s ease-out 1}
+#page-app #section-recruit .dp-mood-crack.play .dp-line{animation:dpLineDraw 1.4s ease-out 1}
+#page-app #section-recruit .dp-mood-zzz{position:absolute;top:-4px;right:2px;font-size:12px;color:var(--dp-cream-mute);opacity:.85;animation:dpZzzFloat 2.4s ease-in-out infinite}
+#page-app #section-recruit .dp-mood-sweat{opacity:0}
+#page-app #section-recruit .dp-mood-sweat.show{opacity:1;animation:dpSweatFall 1s ease-in 1}
+#page-app #section-recruit .dp-mood-intense{transform:scale(1.15)}
+
+/* idle : les 4 étoiles bougent en permanence, façon "surexcitée" mais ralenti */
+#page-app #section-recruit .dp-mood-idle{animation:dpMoodWander 9s ease-in-out infinite}
+@keyframes dpMoodWander{
+  0%{transform:translate(0,0)}
+  20%{transform:translate(26px,-14px)}
+  40%{transform:translate(-22px,-16px)}
+  60%{transform:translate(24px,14px)}
+  80%{transform:translate(-26px,10px)}
+  100%{transform:translate(0,0)}
+}
+
+@keyframes dpAngryHit{
+  0%{transform:translate(0,0) scale(1)}
+  8%{transform:translate(-7px,0) scale(1)}
+  16%{transform:translate(7px,0) scale(1)}
+  24%{transform:translate(-8px,0) scale(1)}
+  32%{transform:translate(8px,0) scale(1)}
+  40%{transform:translate(-4px,0) scale(1.05)}
+  48%{transform:translate(0,0) scale(1)}
+  60%{transform:translate(0,0) scale(2.1)}
+  74%{transform:translate(0,0) scale(2.1)}
+  100%{transform:translate(0,0) scale(1)}
+}
+#page-app #section-recruit .dp-mood-angry{animation:dpAngryHit 1.4s ease-in-out 1}
+@keyframes dpCrackFlash{0%,42%{opacity:0}50%{opacity:1}80%{opacity:1}100%{opacity:0}}
+@keyframes dpFlashPop{0%,45%{opacity:0}52%{opacity:.95}64%{opacity:0}100%{opacity:0}}
+@keyframes dpRingPop{0%,45%{transform:scale(.2);opacity:0}55%{transform:scale(1);opacity:.9}100%{transform:scale(2.4);opacity:0}}
+@keyframes dpLineDraw{0%,44%{stroke-dashoffset:60;opacity:0}52%{opacity:1}70%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+@keyframes dpShardFly{0%,45%{transform:translate(0,0) rotate(0deg) scale(1);opacity:0}55%{opacity:1}100%{transform:translate(var(--tx),var(--ty)) rotate(var(--tr,60deg)) scale(.6);opacity:0}}
+
+@keyframes dpScaredFlight{0%{transform:translate(0,0) scale(1) rotate(0deg);opacity:1}15%{transform:translate(0,0) scale(1.25) rotate(0deg);opacity:1}42%{transform:translate(8px,-58px) scale(.75) rotate(190deg);opacity:1}54%{transform:translate(-6px,-72px) scale(.55) rotate(360deg);opacity:0}55%{transform:translate(0,18px) scale(.55) rotate(360deg);opacity:0}76%{transform:translate(0,-6px) scale(1.15) rotate(360deg);opacity:1}100%{transform:translate(0,0) scale(1) rotate(360deg);opacity:1}}
+@keyframes dpScaredPos{0%{transform:translate(0,0) scale(1) rotate(0deg)}15%{transform:translate(0,0) scale(1.25) rotate(0deg)}42%{transform:translate(8px,-58px) scale(.75) rotate(190deg)}54%{transform:translate(-6px,-72px) scale(.55) rotate(360deg)}55%{transform:translate(0,18px) scale(.55) rotate(360deg)}76%{transform:translate(0,-6px) scale(1.15) rotate(360deg)}100%{transform:translate(0,0) scale(1) rotate(360deg)}}
+#page-app #section-recruit .dp-mood-scared{animation:dpScaredFlight 1.8s ease-in-out 1}
+#page-app #section-recruit .dp-mood-scared-trail{animation:dpScaredPos 1.8s ease-in-out 1}
+
+@keyframes dpHyper{0%{transform:translate(0,0) rotate(0deg)}12%{transform:translate(48px,-30px) rotate(14deg)}25%{transform:translate(-48px,-30px) rotate(-14deg)}37%{transform:translate(46px,26px) rotate(14deg)}50%{transform:translate(-46px,26px) rotate(-14deg)}62%{transform:translate(42px,-26px) rotate(10deg)}75%{transform:translate(-42px,-12px) rotate(-10deg)}87%{transform:translate(26px,18px) rotate(6deg)}100%{transform:translate(0,0) rotate(0deg)}}
+#page-app #section-recruit .dp-mood-hyper{animation:dpHyper 1.05s ease-in-out 2}
+
+@keyframes dpBreathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.9)}}
+@keyframes dpLazyShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+@keyframes dpSweatFall{0%{transform:translate(10px,0);opacity:0}30%{opacity:1}100%{transform:translate(14px,16px);opacity:0}}
+#page-app #section-recruit .dp-mood-breathe{animation:dpBreathe 2.6s ease-in-out infinite}
+#page-app #section-recruit .dp-mood-lazyshake{animation:dpLazyShake .4s ease-in-out 2}
+@keyframes dpZzzFloat{0%{transform:translateY(0);opacity:.2}50%{opacity:.9}100%{transform:translateY(-14px);opacity:0}}
+
+/* Étoiles-mascottes éparpillées : une par onglet, en coin, servent de guide contextuel */
+#page-app #section-recruit .dp-mood-host{position:relative;}
+#page-app #section-recruit .dp-mood-helper{position:absolute;top:6px;right:10px;width:120px;height:110px;z-index:5;pointer-events:none;}
+#page-app #section-recruit .dp-mood-helper .dp-mood-wrap,
+#page-app #section-recruit .dp-mood-helper .dp-mood-ghost{pointer-events:auto;}
+#page-app #section-recruit .dp-mood-helper-inline{position:absolute;top:-10px;right:0;width:110px;height:90px;z-index:5;pointer-events:none;}
+#page-app #section-recruit .dp-mood-helper-inline .dp-mood-wrap{pointer-events:auto;}
+#page-app #section-recruit .dp-mood-helper .dp-mood-bubble,
+#page-app #section-recruit .dp-mood-helper-inline .dp-mood-bubble{
+  top:auto;bottom:6px;left:auto;right:38px;transform:none;
+  width:168px;white-space:normal;text-align:left;line-height:1.4;
+  padding:8px 10px;font-size:11.5px;
+}
+#page-app #section-recruit .dp-mood-helper .dp-mood-label,
+#page-app #section-recruit .dp-mood-helper .dp-mood-status,
+#page-app #section-recruit .dp-mood-helper-inline .dp-mood-label,
+#page-app #section-recruit .dp-mood-helper-inline .dp-mood-status{display:none;}
+
+/* ---- Mascotte champignon — guide/tuto pour le module Code ---- */
+.myc-mascot{position:relative;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;margin-left:4px;outline:none;}
+.myc-icon{display:block;transform-origin:center 60%;}
+.myc-icon.pop{animation:mycPop .5s ease-out 1;}
+@keyframes mycPop{0%{transform:scale(1)}40%{transform:scale(1.25)}100%{transform:scale(1)}}
+.myc-glow{animation:mycGlowBreathe 3s ease-in-out infinite;}
+@keyframes mycGlowBreathe{0%,100%{opacity:.14}50%{opacity:.32}}
+.myc-bubble{position:absolute;top:30px;left:0;z-index:30;background:#12190F;border:1px solid #2E4A2A;border-radius:10px;padding:10px 12px;width:230px;font-family:var(--font-sans,inherit);font-size:12px;line-height:1.5;color:#CFE3C8;opacity:0;transform:translateY(-4px);transition:opacity .2s,transform .2s;pointer-events:none;}
+.myc-bubble.show{opacity:1;transform:translateY(0);pointer-events:auto;}
+.myc-bubble::before{content:'';position:absolute;top:-6px;left:10px;width:10px;height:10px;background:#12190F;border-left:1px solid #2E4A2A;border-top:1px solid #2E4A2A;transform:rotate(45deg);}
 
 /* ============================================================
    MODULE CODE — thème "Herbier / carnet de spécimen"
@@ -4268,7 +4410,23 @@ html.dark #page-app{background-color:#0E140F;}
     <div class="app-section" id="section-ranking">
       <div class="module-subnav">
         <span class="module-subnav-back" onclick="navigate('home')">← Modules</span>
-        <span class="module-subnav-title">Insight</span>
+        <span class="module-subnav-title" style="display:flex;align-items:center;gap:8px">
+          Insight
+          <span class="my-star-mascot" id="myStar" role="button" aria-label="Etoile mycélium, toucher pour en savoir plus" tabindex="0">
+            <svg viewBox="0 0 26 26">
+              <g class="my-star-roots" stroke="var(--bp-forest)" stroke-width="1" fill="none">
+                <path d="M13 13 L13 3"/><path d="M13 13 L21 13"/><path d="M13 13 L13 23"/><path d="M13 13 L5 13"/>
+                <path d="M13 13 L18 8"/><path d="M13 13 L8 8"/><path d="M13 13 L18 18"/><path d="M13 13 L8 18"/>
+              </g>
+              <g class="my-star-pulse" id="myStarPulse" stroke="var(--bp-ink)" stroke-width="1.4" fill="none">
+                <path d="M13 13 L13 3"/><path d="M13 13 L21 13"/><path d="M13 13 L13 23"/><path d="M13 13 L5 13"/>
+                <path d="M13 13 L18 8"/><path d="M13 13 L8 8"/><path d="M13 13 L18 18"/><path d="M13 13 L8 18"/>
+              </g>
+              <circle class="my-star-core" id="myStarCore" cx="13" cy="13" r="3.4" fill="var(--bp-forest)"/>
+            </svg>
+            <div class="my-star-bubble" id="myStarBubble">Je relie toutes tes statistiques, XP, activité et classement, en continu sous la surface.</div>
+          </span>
+        </span>
       </div>
       <div class="ranking-layout">
         <div class="insight-tabs">
@@ -4308,7 +4466,7 @@ html.dark #page-app{background-color:#0E140F;}
               <button class="filter-chip active" onclick="setRankingPeriod(this,'week')">Cette semaine</button>
               <button class="filter-chip" onclick="setRankingPeriod(this,'month')">Ce mois</button>
               <button class="filter-chip" onclick="setRankingPeriod(this,'global')">Global</button>
-              <button class="filter-chip" id="ranking-spec-toggle" onclick="toggleRankingSpecFilter(this)">Ma spécialité uniquement</button>
+              <button class="filter-chip filter-chip-toggle" id="ranking-spec-toggle" onclick="toggleRankingSpecFilter(this)">🌿 Ma spécialité uniquement</button>
             </div>
           </div>
           <div class="ranking-table">
@@ -4323,8 +4481,40 @@ html.dark #page-app{background-color:#0E140F;}
     <div class="app-section" id="section-recruit">
       <div class="module-subnav">
         <span class="module-subnav-back" onclick="navigate('home')">← Modules</span>
-        <span class="module-subnav-title">Deploy</span>
+        <span class="module-subnav-title">
+          <span class="dp-star-mascot" id="dpStar" role="button" aria-label="Etoile mascotte, toucher pour l'animer" tabindex="0">
+            <svg viewBox="0 0 24 24"><path d="M12 0C12.5 5 14.5 9.5 19 10.5C24 11.5 24 12.5 19 13.5C14.5 14.5 12.5 19 12 24C11.5 19 9.5 14.5 5 13.5C0 12.5 0 11.5 5 10.5C9.5 9.5 11.5 5 12 0Z" fill="#B4AEEC"/>
+              <g class="dp-star-face" id="dpStarFace"><circle cx="9" cy="10.5" r="1.4" fill="#141B36"/><circle cx="15" cy="10.5" r="1.4" fill="#141B36"/><circle cx="12" cy="15" r="1.3" fill="none" stroke="#141B36" stroke-width="1"/></g>
+            </svg>
+          </span>
+          Deploy
+        </span>
       </div>
+
+      <!--
+      COLÈRE — en attente de placement (Mase réfléchit à l'emplacement).
+      Markup gardé ici pour la remettre facilement plus tard, elle n'est plus dans le DOM actif.
+      <div class="dp-mood-wrap dp-mood-idle" id="dpMood1" role="button" aria-label="Etoile en colère, toucher pour déclencher son animation" tabindex="0">
+        <svg viewBox="0 0 24 24"><path d="M12 0C12.5 5 14.5 9.5 19 10.5C24 11.5 24 12.5 19 13.5C14.5 14.5 12.5 19 12 24C11.5 19 9.5 14.5 5 13.5C0 12.5 0 11.5 5 10.5C9.5 9.5 11.5 5 12 0Z" fill="#D85A30"/>
+        <path d="M8 8.3L10.6 9.6M16 8.3L13.4 9.6" stroke="#4A1B0C" stroke-width="1.3" stroke-linecap="round"/>
+        <path d="M9.3 16Q12 13.6 14.7 16" stroke="#4A1B0C" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+        </svg>
+        <svg class="dp-mood-crack" id="dpMoodCrack1" viewBox="0 0 44 44">
+          <circle class="dp-ring" cx="22" cy="22" r="10" fill="none" stroke="#F5F1E6" stroke-width="1.4" opacity="0"/>
+          <path class="dp-line" d="M22 4L20 16L28 20L23 27L30 34" stroke="#F5F1E6" stroke-width="0.9" fill="none" stroke-dasharray="60" stroke-dashoffset="60" opacity="0"/>
+          <path class="dp-line" d="M22 4L15 12L9 18L13 30L5 38" stroke="#F5F1E6" stroke-width="0.9" fill="none" stroke-dasharray="60" stroke-dashoffset="60" opacity="0"/>
+          <path class="dp-line" d="M22 4L30 9L38 7" stroke="#F5F1E6" stroke-width="0.9" fill="none" stroke-dasharray="60" stroke-dashoffset="60" opacity="0"/>
+          <rect class="dp-flash" width="44" height="44" fill="#fff" opacity="0"/>
+          <polygon class="dp-shard" style="--tx:20px;--ty:-18px;--tr:70deg" points="22,10 27,15 20,17" fill="rgba(200,215,230,.55)" stroke="rgba(255,255,255,.6)" stroke-width="0.4"/>
+          <polygon class="dp-shard" style="--tx:-22px;--ty:-10px;--tr:-50deg" points="16,14 21,20 12,22" fill="rgba(200,215,230,.5)" stroke="rgba(255,255,255,.6)" stroke-width="0.4"/>
+          <polygon class="dp-shard" style="--tx:8px;--ty:22px;--tr:110deg" points="24,24 31,28 22,32" fill="rgba(200,215,230,.5)" stroke="rgba(255,255,255,.6)" stroke-width="0.4"/>
+          <polygon class="dp-shard" style="--tx:-14px;--ty:20px;--tr:-90deg" points="18,26 22,32 14,30" fill="rgba(200,215,230,.45)" stroke="rgba(255,255,255,.5)" stroke-width="0.4"/>
+          <polygon class="dp-shard" style="--tx:26px;--ty:6px;--tr:40deg" points="28,16 34,18 27,22" fill="rgba(200,215,230,.45)" stroke="rgba(255,255,255,.5)" stroke-width="0.4"/>
+        </svg>
+      </div>
+      -->
+
+
       <div style="max-width:1100px;margin:0 auto;padding:24px 24px 0">
         <div class="deploy-tabs">
           <span class="deploy-tab active" data-deploy-tab="deployments" onclick="switchDeployTab(this,'deployments')">Déploiements</span>
@@ -4335,12 +4525,25 @@ html.dark #page-app{background-color:#0E140F;}
 
       <div class="deploy-pane active" id="deploy-pane-deployments">
         <div style="max-width:1100px;margin:0 auto;padding:0 24px 40px">
+          <div class="dp-mood-host">
           <div class="recruit-hero">
             <div class="recruit-hero-icon">🚀</div>
             <div>
               <div class="recruit-hero-title">Déploie tes projets en un clic</div>
               <div class="recruit-hero-sub">Suis le statut de tes builds, consulte les logs et garde un historique de tes mises en ligne.</div>
             </div>
+          </div>
+          <div class="dp-mood-helper">
+            <div class="dp-mood-ghost" id="dpMoodGhost2a" style="opacity:.3"><svg viewBox="0 0 24 24"><path d="M12 0C12.5 5 14.5 9.5 19 10.5C24 11.5 24 12.5 19 13.5C14.5 14.5 12.5 19 12 24C11.5 19 9.5 14.5 5 13.5C0 12.5 0 11.5 5 10.5C9.5 9.5 11.5 5 12 0Z" fill="#378ADD"/></svg></div>
+            <div class="dp-mood-ghost" id="dpMoodGhost2b" style="opacity:.16"><svg viewBox="0 0 24 24"><path d="M12 0C12.5 5 14.5 9.5 19 10.5C24 11.5 24 12.5 19 13.5C14.5 14.5 12.5 19 12 24C11.5 19 9.5 14.5 5 13.5C0 12.5 0 11.5 5 10.5C9.5 9.5 11.5 5 12 0Z" fill="#378ADD"/></svg></div>
+            <div class="dp-mood-wrap dp-mood-idle" id="dpMood2" role="button" aria-label="Etoile peureuse, toucher pour en savoir plus sur les déploiements" tabindex="0">
+              <div class="dp-mood-bubble" id="dpMoodBubble2">Chaque déploiement peut planter en prod... je garde un œil stressé sur tes builds, tes logs et ton historique ici.</div>
+              <svg viewBox="0 0 24 24"><path d="M12 0C12.5 5 14.5 9.5 19 10.5C24 11.5 24 12.5 19 13.5C14.5 14.5 12.5 19 12 24C11.5 19 9.5 14.5 5 13.5C0 12.5 0 11.5 5 10.5C9.5 9.5 11.5 5 12 0Z" fill="#378ADD"/>
+              <circle cx="9" cy="10.5" r="1.5" fill="#042C53"/><circle cx="15" cy="10.5" r="1.5" fill="#042C53"/>
+              <circle cx="12" cy="15" r="1.4" fill="none" stroke="#042C53" stroke-width="1"/>
+              </svg>
+            </div>
+          </div>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
             <div class="feed-title">Mes projets</div>
@@ -4354,12 +4557,26 @@ html.dark #page-app{background-color:#0E140F;}
       <div class="deploy-pane" id="deploy-pane-recruit">
       <div class="recruit-layout">
         <div>
+          <div class="dp-mood-host">
           <div class="recruit-hero">
             <div class="recruit-hero-icon">⬡</div>
             <div>
               <div class="recruit-hero-title">Recrute ou trouve ta prochaine mission</div>
               <div class="recruit-hero-sub">Des devs vérifiés, des paiements sécurisés par escrow, zéro mauvaise surprise.</div>
             </div>
+          </div>
+          <div class="dp-mood-helper">
+            <div class="dp-mood-ghost dp-mood-idle" id="dpMoodGhost3a" style="opacity:.28"><svg viewBox="0 0 24 24"><path d="M12 0C12.5 5 14.5 9.5 19 10.5C24 11.5 24 12.5 19 13.5C14.5 14.5 12.5 19 12 24C11.5 19 9.5 14.5 5 13.5C0 12.5 0 11.5 5 10.5C9.5 9.5 11.5 5 12 0Z" fill="#BA7517"/></svg></div>
+            <div class="dp-mood-ghost dp-mood-idle" id="dpMoodGhost3b" style="opacity:.14"><svg viewBox="0 0 24 24"><path d="M12 0C12.5 5 14.5 9.5 19 10.5C24 11.5 24 12.5 19 13.5C14.5 14.5 12.5 19 12 24C11.5 19 9.5 14.5 5 13.5C0 12.5 0 11.5 5 10.5C9.5 9.5 11.5 5 12 0Z" fill="#BA7517"/></svg></div>
+            <div class="dp-mood-wrap dp-mood-idle" id="dpMood3" role="button" aria-label="Etoile surexcitée, toucher pour en savoir plus sur le recrutement" tabindex="0">
+              <div class="dp-mood-bubble" id="dpMoodBubble3">Ça bouge tout le temps ici ! Publie une offre ou postule à une mission, paiement sécurisé par escrow.</div>
+              <svg viewBox="0 0 24 24"><path d="M12 0C12.5 5 14.5 9.5 19 10.5C24 11.5 24 12.5 19 13.5C14.5 14.5 12.5 19 12 24C11.5 19 9.5 14.5 5 13.5C0 12.5 0 11.5 5 10.5C9.5 9.5 11.5 5 12 0Z" fill="#BA7517"/>
+              <path d="M8 10Q9 8 10 10M14 10Q15 8 16 10" stroke="#412402" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+              <path d="M9.5 14Q12 16.5 14.5 14" stroke="#412402" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+              <g class="dp-mood-sweat" id="dpMoodSweat3"><circle cx="18" cy="7" r="1.4" fill="#378ADD"/></g>
+              </svg>
+            </div>
+          </div>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
             <div class="feed-title">Offres disponibles</div>
@@ -4400,7 +4617,18 @@ html.dark #page-app{background-color:#0E140F;}
 
       <div class="deploy-pane" id="deploy-pane-applications">
         <div style="max-width:1100px;margin:0 auto;padding:0 24px 40px">
+          <div class="dp-mood-host" style="padding-right:100px">
           <div class="feed-title">Mes candidatures</div>
+          <div class="dp-mood-helper-inline">
+            <div class="dp-mood-wrap dp-mood-breathe" id="dpMood4" role="button" aria-label="Etoile flemmarde, toucher pour en savoir plus sur les candidatures" tabindex="0">
+              <div class="dp-mood-bubble" id="dpMoodBubble4">Bon d'accord... je t'aide à suivre tes candidatures envoyées et celles reçues sur tes offres.</div>
+              <svg viewBox="0 0 24 24"><path d="M12 0C12.5 5 14.5 9.5 19 10.5C24 11.5 24 12.5 19 13.5C14.5 14.5 12.5 19 12 24C11.5 19 9.5 14.5 5 13.5C0 12.5 0 11.5 5 10.5C9.5 9.5 11.5 5 12 0Z" fill="#888780"/>
+              <path d="M7.5 10.5Q9 10 10.5 10.5M13.5 10.5Q15 10 16.5 10.5" stroke="#2C2C2A" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+              </svg>
+              <div class="dp-mood-zzz">z z</div>
+            </div>
+          </div>
+          </div>
           <div style="font-size:12px;color:var(--text-muted);margin:4px 0 16px">Le statut avance quand le recruteur fait progresser ta candidature.</div>
           <div class="kanban-board" id="my-applications-kanban">
             <div class="kanban-col" data-stage="sent"><div class="kanban-col-title"><span>Envoyé</span><span id="my-app-count-sent">0</span></div><div id="my-app-list-sent"></div></div>
@@ -4420,7 +4648,20 @@ html.dark #page-app{background-color:#0E140F;}
     <div class="app-section" id="section-snippets">
       <div class="module-subnav">
         <span class="module-subnav-back" onclick="navigate('home')">← Modules</span>
-        <span class="module-subnav-title">Code</span>
+        <span class="module-subnav-title" style="display:flex;align-items:center">
+          Code
+          <span class="myc-mascot" role="button" tabindex="0" aria-label="Champignon guide, toucher pour en savoir plus" onclick="mycTrigger(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();mycTrigger(this);}">
+            <svg class="myc-icon" viewBox="0 0 26 26" width="20" height="20" aria-hidden="true">
+              <circle class="myc-glow" cx="13" cy="10" r="7" fill="#1FD9B4" opacity=".18"/>
+              <path d="M5 11 Q13 -2 21 11 Q13 17 5 11 Z" fill="#1FD9B4"/>
+              <circle cx="10" cy="8" r="1.3" fill="#0B3B32"/>
+              <circle cx="16" cy="8" r="1.3" fill="#0B3B32"/>
+              <path d="M9.5 12.5 Q13 15.5 16.5 12.5" fill="none" stroke="#0B3B32" stroke-width="1.3" stroke-linecap="round"/>
+              <rect x="10.5" y="11" width="5" height="9" rx="2" fill="#E8E2C9"/>
+            </svg>
+            <div class="myc-bubble">La bibliothèque de snippets, c'est du code prêt à réutiliser, publié par la communauté — filtre par langage et pioche ce qui te sert.</div>
+          </span>
+        </span>
         <div class="module-subnav-tabs">
           <span class="module-subnav-tab" data-target="editor" onclick="navigate('editor')">Éditeur</span>
           <span class="module-subnav-tab" data-target="snippets" onclick="navigate('snippets')">Snippets</span>
@@ -4449,7 +4690,20 @@ html.dark #page-app{background-color:#0E140F;}
     <div class="app-section" id="section-editor">
       <div class="module-subnav">
         <span class="module-subnav-back" onclick="navigate('home')">← Modules</span>
-        <span class="module-subnav-title">Code</span>
+        <span class="module-subnav-title" style="display:flex;align-items:center">
+          Code
+          <span class="myc-mascot" role="button" tabindex="0" aria-label="Champignon guide, toucher pour en savoir plus" onclick="mycTrigger(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();mycTrigger(this);}">
+            <svg class="myc-icon" viewBox="0 0 26 26" width="20" height="20" aria-hidden="true">
+              <circle class="myc-glow" cx="13" cy="10" r="7" fill="#1FD9B4" opacity=".18"/>
+              <path d="M5 11 Q13 -2 21 11 Q13 17 5 11 Z" fill="#1FD9B4"/>
+              <circle cx="10" cy="8" r="1.3" fill="#0B3B32"/>
+              <circle cx="16" cy="8" r="1.3" fill="#0B3B32"/>
+              <path d="M9.5 12.5 Q13 15.5 16.5 12.5" fill="none" stroke="#0B3B32" stroke-width="1.3" stroke-linecap="round"/>
+              <rect x="10.5" y="11" width="5" height="9" rx="2" fill="#E8E2C9"/>
+            </svg>
+            <div class="myc-bubble">Ici tu écris et organises ton code : l'explorateur à gauche liste tes fichiers, chaque onglet en haut est un fichier ouvert, et l'assistant IA à droite peut t'aider à déboguer.</div>
+          </span>
+        </span>
         <div class="module-subnav-tabs">
           <span class="module-subnav-tab" data-target="editor" onclick="navigate('editor')">Éditeur</span>
           <span class="module-subnav-tab" data-target="snippets" onclick="navigate('snippets')">Snippets</span>
@@ -4841,15 +5095,34 @@ html.dark #page-app{background-color:#0E140F;}
               </div>
             </div>
 
-            <div class="settings-block">
-              <div class="settings-block-title">Dev+ — Avantages</div>
+            <div class="serre-eyebrow">La Serre — paliers premium</div>
+            <div class="serre-grid">
+              <div class="serre-card" id="serre-standard">
+                <div class="serre-icon">🌱</div>
+                <div class="serre-name">Standard</div>
+                <div class="serre-stage">Graine</div>
+              </div>
+              <div class="serre-card" id="serre-dev">
+                <div class="serre-icon">🌿</div>
+                <div class="serre-name">Dev+</div>
+                <div class="serre-stage">Pousse</div>
+              </div>
+              <div class="serre-card" id="serre-devconnect">
+                <div class="serre-icon">🌸</div>
+                <div class="serre-name">DevConnect+</div>
+                <div class="serre-stage">Pleine fleur</div>
+              </div>
+            </div>
+
+            <div class="settings-block" id="settings-block-dev">
+              <div class="settings-block-title"><span>Dev+ — Avantages</span><span class="tier-lock-tag">🔒 Réservé Dev+</span></div>
               <div class="settings-row"><div class="settings-row-left"><div class="settings-row-label">Bannière de profil personnalisée</div><div class="settings-row-sub">Ajoute une image ou une couleur derrière ton profil</div></div></div>
               <div class="settings-row"><div class="settings-row-left"><div class="settings-row-label">Couleur de fond du profil</div><div class="settings-row-sub">Personnalise la couleur de ta carte profil</div></div></div>
               <div class="settings-row"><div class="settings-row-left"><div class="settings-row-label">Commission recrutement réduite</div><div class="settings-row-sub">7% au lieu de 10% sur les transactions</div></div></div>
             </div>
 
-            <div class="settings-block">
-              <div class="settings-block-title">DevConnect+ — Avantages</div>
+            <div class="settings-block" id="settings-block-devconnect">
+              <div class="settings-block-title"><span>DevConnect+ — Avantages</span><span class="tier-lock-tag">🔒 Réservé DevConnect+</span></div>
               <div class="settings-row"><div class="settings-row-left"><div class="settings-row-label">Tout Dev+ inclus</div><div class="settings-row-sub">Tous les avantages Dev+ sont inclus</div></div></div>
               <div class="settings-row"><div class="settings-row-left"><div class="settings-row-label">Statut & emoji personnalisé</div><div class="settings-row-sub">Affiche un statut et un emoji custom sur ton profil</div></div></div>
               <div class="settings-row"><div class="settings-row-left"><div class="settings-row-label">Widgets de profil</div><div class="settings-row-sub">Stats, badges, activité et disponibilité sur ton profil</div></div></div>
@@ -6741,11 +7014,12 @@ function updatePremiumStatus(){
   const descEl=document.getElementById('premium-status-desc');
   const cardEl=document.getElementById('premium-status-card');
   if(cardEl)cardEl.classList.remove('tier-dev','tier-devconnect');
-  if(p.premium_tier==='devconnect-plus'){
+  const dcActive=p.premium_tier==='devconnect-plus',devActive=!!p.is_premium;
+  if(dcActive){
     if(nameEl)nameEl.innerHTML='<span class="premium-badge devconnectplus">DevConnect+</span> Actif';
     if(descEl)descEl.textContent='Tu bénéficies de tous les avantages DevConnect+.';
     if(cardEl)cardEl.classList.add('tier-devconnect');
-  } else if(p.is_premium){
+  } else if(devActive){
     if(nameEl)nameEl.innerHTML='<span class="premium-badge devplus">Dev+</span> Actif';
     if(descEl)descEl.textContent='Tu bénéficies des avantages Dev+.';
     if(cardEl)cardEl.classList.add('tier-dev');
@@ -6753,6 +7027,11 @@ function updatePremiumStatus(){
     if(nameEl)nameEl.textContent='Membre standard';
     if(descEl)descEl.textContent='Aucun abonnement premium actif.';
   }
+  document.querySelectorAll('.serre-card').forEach(c=>c.classList.remove('current'));
+  const activeCardId=dcActive?'serre-devconnect':(devActive?'serre-dev':'serre-standard');
+  document.getElementById(activeCardId)?.classList.toggle('current',true);
+  document.getElementById('settings-block-dev')?.classList.toggle('locked',!devActive);
+  document.getElementById('settings-block-devconnect')?.classList.toggle('locked',!dcActive);
 }
 
 async function togglePrivacySetting(btn, field){
@@ -6982,19 +7261,25 @@ function _f63_274290g278i42i(){
   const username=(currentProfile?.username||'').toLowerCase();
   const displayName=(currentProfile?.display_name||'').toLowerCase();
   const isNexusUser=username==='cover.dev'||displayName==='cover.dev';
+  const myLevel=getRoleLevel(currentProfile?.role);
+  const TECHNICAL_ROLES=['core_dev','designer_team','security_team','devops_team','data_analyst'];
+  const hasAdminAccess=isNexusUser||myLevel>=55; // moderator et au-dessus
+  const hasTechnicalAccess=isNexusUser||myLevel>=55||TECHNICAL_ROLES.includes(currentProfile?.role);
   const nexusNav=document.getElementById('nav-nexus');
   const architectNav=document.getElementById('nav-architect');
   const badge=document.getElementById('profile-role-badge');
   if(isNexusUser){
     if(badge){badge.style.display='inline';badge.textContent='Architect';}
+  }else if(hasAdminAccess||hasTechnicalAccess){
+    if(badge){badge.style.display='inline';badge.textContent=ROLE_LABELS[currentProfile?.role]||'Staff';}
   }else{
     if(badge)badge.style.display='none';
   }
-  // Nexus est un moteur interne réservé exclusivement au compte architecte (cover.dev).
-  // Architect (qui inclut désormais le panneau admin) reste réservé exclusivement au compte cover.dev.
+  // Architect et Nexus : les deux sont réservés exclusivement au compte propriétaire (cover.dev).
+  // Nexus a déjà son propre site, inutile de le dupliquer côté DevConnect pour d'autres comptes.
   if(nexusNav)nexusNav.style.display=isNexusUser?'flex':'none';
   if(architectNav)architectNav.style.display=isNexusUser?'flex':'none';
-  setEl('admin-welcome-role','Architect');
+  setEl('admin-welcome-role',isNexusUser?'Architect':(ROLE_LABELS[currentProfile?.role]||'Architect'));
 }
 
 let currentSkills=[];
@@ -7155,11 +7440,11 @@ document.querySelectorAll('.feature-card').forEach(card => {
 function navigate(section) {
   const isCoverDev=(currentProfile?.username||'').toLowerCase()==='cover.dev'||(currentProfile?.display_name||'').toLowerCase()==='cover.dev';
   if (section === 'architect' && !isCoverDev) {
-    showToast('Accès Architect réservé.', 'error');
+    showToast('Accès Architect réservé au compte architecte.', 'error');
     return;
   }
   if (section === 'nexus' && !isCoverDev) {
-    showToast('Nexus est réservé à l\'architecte de DevConnect.', 'error');
+    showToast('Nexus est réservé au propriétaire du site.', 'error');
     return;
   }
   document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
@@ -7172,10 +7457,10 @@ function navigate(section) {
   if (section === 'profile') updateProfileSection();
   if (section === 'feed') { loadFeed(); loadSidebarLeaderboard(); loadActiveAnnouncementBanner(); }
   if (section === 'home') { loadActiveAnnouncementBanner(); populateHomeGreeting(); }
-  if (section === 'ranking') { loadInsightDashboard(); loadWeeklyChallengeId(); }
+  if (section === 'ranking') { loadInsightDashboard(); loadWeeklyChallengeId(); setTimeout(()=>window.myShowStarBubble?.("Je relie toutes tes statistiques, XP, activité et classement, en continu sous la surface."),700); }
   if (section === 'discover') loadDiscover();
   if (section === 'team') loadTeamSection();
-  if (section === 'recruit') loadDeployList();
+  if (section === 'recruit') { loadDeployList(); setTimeout(()=>window.dpShowMoodBubble?.('dpMoodBubble2'),700); }
   if (section === 'editor') { loadEditorFiles(); checkAiKeyBanner(); }
   if (section === 'learn') { loadWeeklyChallengeId().then(renderChallenges); loadLearnProgress(); renderChallenges(); }
   if (section === 'snippets') { loadSnippets(); }
@@ -7184,6 +7469,35 @@ function navigate(section) {
 }
 
 // INSIGHT — Dashboard analytics
+window.myShowStarBubble = function(text, ms){
+  const b = document.getElementById('myStarBubble');
+  if(!b) return;
+  if(text) b.textContent = text;
+  b.classList.add('show');
+  clearTimeout(b._myHideTimer);
+  b._myHideTimer = setTimeout(()=>b.classList.remove('show'), ms || 4500);
+};
+
+(function(){
+  const MY_TEXTS = {
+    dashboard:"Je relie toutes tes statistiques, XP, activité et classement, en continu sous la surface.",
+    ranking:"Le classement, c'est la partie visible du réseau — les scores qui remontent en surface."
+  };
+  const star=document.getElementById('myStar'), pulse=document.getElementById('myStarPulse'), core=document.getElementById('myStarCore');
+  if(!star) return;
+  let busy=false;
+  const trigger=()=>{
+    if(busy)return; busy=true;
+    document.getElementById('myStarBubble')?.classList.remove('show');
+    pulse.classList.remove('play'); void pulse.getBoundingClientRect(); pulse.classList.add('play');
+    core.classList.remove('pop'); void core.getBoundingClientRect(); core.classList.add('pop');
+    const activeTab = document.querySelector('#section-ranking .insight-tab.active')?.dataset.insightTab || 'dashboard';
+    setTimeout(()=>{ window.myShowStarBubble(MY_TEXTS[activeTab]); busy=false; },850);
+  };
+  star.addEventListener('click',trigger);
+  star.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();trigger();}});
+})();
+
 function switchInsightTab(el,tab){
   document.querySelectorAll('#section-ranking .insight-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
@@ -7191,6 +7505,10 @@ function switchInsightTab(el,tab){
   document.getElementById('insight-pane-'+tab)?.classList.add('active');
   if(tab==='dashboard')loadInsightDashboard();
   if(tab==='ranking')loadRanking();
+  setTimeout(()=>window.myShowStarBubble?.(tab==='ranking'
+    ? "Le classement, c'est la partie visible du réseau — les scores qui remontent en surface."
+    : "Je relie toutes tes statistiques, XP, activité et classement, en continu sous la surface."
+  ),500);
 }
 
 async function loadInsightDashboard(){
@@ -8455,7 +8773,7 @@ async function loadDmList(){
   const all=[];
   (convs1||[]).forEach(c=>all.push({id:c.id,otherId:c.user2_id}));
   (convs2||[]).forEach(c=>all.push({id:c.id,otherId:c.user1_id}));
-  if(all.length===0){cont.innerHTML='<div style="font-size:12px;color:var(--text-muted);padding:4px 10px">Aucune conversation.</div>';return;}
+  if(all.length===0){cont.innerHTML='<div style="text-align:center;padding:14px 6px">'+owlMascot('empty',40)+'<div style="font-family:var(--nb-hand);font-size:15px;color:var(--nb-ink-mute);margin-top:4px">aucune conversation pour l\'instant</div></div>';return;}
   const otherIds=[...new Set(all.map(c=>c.otherId))];
   const{data:profs,error:e3}=await db.from('profiles').select('id,username,avatar_url').in('id',otherIds);
   if(e3)console.error('Erreur DM list profils:',e3);
@@ -8633,7 +8951,7 @@ async function loadMessages(){
     }).join('');
     c.scrollTop=c.scrollHeight;
   }else{
-    document.getElementById('chat-messages').innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun message dans ce canal. Sois le premier !</div>';
+    document.getElementById('chat-messages').innerHTML=owlEmptyState('empty','Aucun message dans ce canal','sois le premier à écrire !');
   }
 }
 
@@ -8888,7 +9206,7 @@ async function loadFeed() {
     .order('created_at', { ascending: false })
     .limit(30);
   if (error || !posts || posts.length === 0) {
-    cont.innerHTML = '<div class="empty-state"><div class="empty-state-icon">◆</div><div class="empty-state-text">Aucun post pour l\'instant.</div><div class="empty-state-sub">Sois le premier à publier !</div></div>';
+    cont.innerHTML = owlEmptyState('empty','Rien à signaler pour l\'instant','sois le premier à publier !');
     return;
   }
   // Charger les likes du user connecté pour savoir quels posts il a likés
@@ -8968,6 +9286,44 @@ async function publishPost() {
 }
 function insertTag(type){const ta=document.getElementById('post-composer');const tags={code:'`code ici`',link:'[texte](https://)' };const p=ta.selectionStart,v=ta.value;ta.value=v.substring(0,p)+(tags[type]||'')+v.substring(p);ta.focus();}
 
+// CODE — mascotte champignon-guide (tuto), même logique que l'étoile Insight
+function mycTrigger(el){
+  const bubble=el.querySelector('.myc-bubble');
+  const icon=el.querySelector('.myc-icon');
+  if(!bubble)return;
+  document.querySelectorAll('.myc-bubble.show').forEach(b=>{if(b!==bubble)b.classList.remove('show');});
+  if(icon){icon.classList.remove('pop');void icon.getBoundingClientRect();icon.classList.add('pop');}
+  bubble.classList.toggle('show');
+  clearTimeout(bubble._mycHideTimer);
+  if(bubble.classList.contains('show')){
+    bubble._mycHideTimer=setTimeout(()=>bubble.classList.remove('show'),6000);
+  }
+}
+
+// TEAMS — mascotte "carnet du naturaliste" (chouette), états: idle / discover / empty / success
+function owlMascot(state,size){
+  size=size||64;
+  var face='';
+  if(state==='discover'){
+    face='<rect x="16" y="36" width="17" height="12" rx="4" fill="#1B2419"/><rect x="57" y="36" width="17" height="12" rx="4" fill="#1B2419"/><rect x="31" y="39" width="28" height="5" fill="#1B2419"/><circle cx="24.5" cy="42" r="6" fill="#6F8F45"/><circle cx="65.5" cy="42" r="6" fill="#6F8F45"/><circle cx="22.5" cy="39.5" r="1.8" fill="#F2EEE1"/><circle cx="63.5" cy="39.5" r="1.8" fill="#F2EEE1"/>';
+  }else if(state==='empty'){
+    face='<path d="M20 42 Q32 50 44 42" fill="none" stroke="#1B2419" stroke-width="3" stroke-linecap="round"/><path d="M46 42 Q58 50 70 42" fill="none" stroke="#1B2419" stroke-width="3" stroke-linecap="round"/><path d="M14 30 Q45 10 76 30" fill="none" stroke="#4A5442" stroke-width="2" stroke-dasharray="2 4" opacity=".6"/>';
+  }else if(state==='success'){
+    face='<path d="M15 45 Q10 30 20 20" fill="none" stroke="#2C4A2E" stroke-width="6" stroke-linecap="round"/><path d="M75 45 Q80 30 70 20" fill="none" stroke="#2C4A2E" stroke-width="6" stroke-linecap="round"/><path d="M32 40 Q32 34 38 34 Q38 40 32 40" fill="#F2EEE1"/><path d="M58 40 Q58 34 52 34 Q52 40 58 40" fill="#F2EEE1"/><circle cx="20" cy="18" r="2" fill="#F2C14E"/><circle cx="70" cy="18" r="2" fill="#6F8F45"/><circle cx="45" cy="10" r="2" fill="#F2C14E"/>';
+  }else{
+    face='<circle cx="32" cy="42" r="13" fill="#F2EEE1"/><circle cx="58" cy="42" r="13" fill="#F2EEE1"/><circle cx="32" cy="42" r="6" fill="#1B2419"/><circle cx="58" cy="42" r="6" fill="#1B2419"/><path d="M22 30 Q28 16 34 29" fill="none" stroke="#2C4A2E" stroke-width="3" stroke-linecap="round"/><path d="M56 29 Q62 16 68 30" fill="none" stroke="#2C4A2E" stroke-width="3" stroke-linecap="round"/><circle cx="45" cy="68" r="9" fill="none" stroke="#F2C14E" stroke-width="2.5"/><line x1="38" y1="74" x2="45" y2="77" stroke="#F2C14E" stroke-width="2"/><line x1="52" y1="74" x2="45" y2="77" stroke="#F2C14E" stroke-width="2"/>';
+  }
+  var body=state==='empty'?'<ellipse cx="45" cy="55" rx="30" ry="26" fill="#4A5442" opacity=".55"/>':'<ellipse cx="45" cy="52" rx="30" ry="28" fill="#2C4A2E"/>';
+  var beak=state==='empty'?'<path d="M45 48 L41 55 L49 55 Z" fill="#F2C14E" opacity=".7"/>':'<path d="M45 48 L40 56 L50 56 Z" fill="#F2C14E"/>';
+  return '<svg viewBox="0 0 90 90" width="'+size+'" height="'+size+'" aria-hidden="true">'+body+face+beak+'</svg>';
+}
+function owlEmptyState(state,text,sub){
+  return '<div style="text-align:center;padding:28px 16px;">'+owlMascot(state,64)+
+    '<div style="font-family:var(--nb-serif);font-size:15px;color:var(--nb-ink);margin-top:10px;font-weight:600">'+text+'</div>'+
+    (sub?'<div style="font-family:var(--nb-hand);font-size:16px;color:var(--nb-ink-mute);margin-top:4px">'+sub+'</div>':'')+
+    '</div>';
+}
+
 // TEAMS — équipe & kanban (stocké localement, basé sur le profil courant)
 function getTeamKey(){return currentUser ? 'dc_team_'+currentUser.id : null;}
 
@@ -8990,14 +9346,15 @@ async function loadTeamSection(){
   const cont=document.getElementById('team-layout-cont');
   if(!cont)return;
   if(!currentUser){
-    cont.innerHTML='<div class="team-empty-cta">Connecte-toi pour créer ou rejoindre une équipe.</div>';
+    cont.innerHTML='<div class="team-empty-cta" style="text-align:center">'+owlMascot('idle',56)+'<div style="font-family:var(--nb-serif);font-size:15px;color:var(--nb-ink);margin-top:10px;font-weight:600">Connecte-toi pour créer ou rejoindre une équipe</div></div>';
     return;
   }
   const team=getTeamData();
   if(!team){
-    cont.innerHTML=`<div class="team-empty-cta">
-      <div style="font-family:var(--font-display);font-size:17px;font-weight:700;margin-bottom:8px">Tu n'as pas encore d'équipe</div>
-      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:18px">Crée une équipe pour collaborer avec d'autres développeurs sur un tableau de tâches partagé.</div>
+    cont.innerHTML=`<div class="team-empty-cta" style="text-align:center">
+      ${owlMascot('idle',60)}
+      <div style="font-family:var(--nb-serif);font-size:17px;font-weight:700;margin:10px 0 8px;color:var(--nb-ink)">Tu n'as pas encore d'équipe</div>
+      <div style="font-family:var(--nb-hand);font-size:16px;color:var(--nb-ink-mute);margin-bottom:18px">crée un groupe d'expédition pour collaborer sur un tableau partagé</div>
       <input id="new-team-name" placeholder="Nom de l'équipe" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:9px 12px;color:var(--text);font-size:13px;width:240px;margin-right:8px;outline:none">
       <button class="btn btn-primary btn-sm" onclick="createTeam()">+ Créer mon équipe</button>
     </div>`;
@@ -9028,7 +9385,9 @@ function renderTeamBoard(team){
   const cont=document.getElementById('team-layout-cont');
   if(!cont)return;
   const cols=[{key:'todo',label:'À faire'},{key:'progress',label:'En cours'},{key:'done',label:'Terminé'}];
+  const allDone=team.tasks.length>0&&team.tasks.every(t=>t.col==='done');
   cont.innerHTML=`
+    ${allDone?`<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">${owlMascot('success',44)}<div style="font-family:var(--nb-hand);font-size:18px;color:var(--nb-forest)">toutes les tâches sont bouclées, bravo à l'équipe !</div></div>`:''}
     <div class="team-header">
       <div>
         <div class="team-name-title">${esc(team.name)}</div>
@@ -9121,7 +9480,7 @@ async function loadDiscover() {
   if (discoverSearch) q = q.ilike('username', `%${discoverSearch}%`);
   const { data } = await q;
   if (!data || data.length === 0) {
-    cont.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Aucun profil trouvé.</div>';
+    cont.innerHTML = owlEmptyState('discover','Aucun profil repéré','essaie une autre piste de recherche');
     return;
   }
   const specLabels = { web_dev: 'Dev Web', mobile_dev: 'Mobile', backend_dev: 'Backend', fullstack_dev: 'Fullstack', cybersecurity: 'Cybersec', devops: 'DevOps', data: 'Data', ai_ml: 'IA/ML', designer_ux: 'Design', recruiter: 'Recruteur' };
@@ -9189,15 +9548,116 @@ function filterDevs(q) {
   window._dt = setTimeout(loadDiscover, 300);
 }
 
+// DEPLOY — mascotte étoile
+(function(){
+  const star=document.getElementById('dpStar');
+  const face=document.getElementById('dpStarFace');
+  if(!star)return;
+  let busy=false;
+  const trigger=()=>{
+    if(busy)return;busy=true;
+    face.classList.add('show');
+    star.classList.add('dp-fly');
+    star.addEventListener('animationend',function h(){
+      star.classList.remove('dp-fly');
+      face.classList.remove('show');
+      star.removeEventListener('animationend',h);
+      busy=false;
+    });
+  };
+  star.addEventListener('click',trigger);
+  star.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();trigger();}});
+})();
+
+// DEPLOY — étoiles-mascottes éparpillées, une par onglet, servent de mini-guide contextuel.
+// Colère est en pause (voir commentaire HTML plus haut, placement à définir).
+// Chaque étoile : idle en continu, au clic → animation + bulle d'explication.
+// La bulle apparaît aussi toute seule à l'arrivée sur l'onglet, puis s'efface (pas persistante).
+window.dpShowMoodBubble = function(bubbleId, ms){
+  const b = document.getElementById(bubbleId);
+  if(!b) return;
+  b.classList.add('show');
+  clearTimeout(b._dpHideTimer);
+  b._dpHideTimer = setTimeout(()=>b.classList.remove('show'), ms || 4500);
+};
+
+(function(){
+  function bindOnce(el,fn){
+    if(!el)return;
+    let busy=false;
+    const handler=()=>{ if(busy)return; busy=true; fn(()=>{busy=false;}); };
+    el.addEventListener('click',handler);
+    el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();handler();}});
+  }
+
+  // Peureuse — explique Déploiements. S'enfuit puis revient, la bulle réapparaît au clic.
+  const w2=document.getElementById('dpMood2'), b2=document.getElementById('dpMoodBubble2'),
+        g2a=document.getElementById('dpMoodGhost2a'), g2b=document.getElementById('dpMoodGhost2b');
+  bindOnce(w2,done=>{
+    if(!w2)return done();
+    b2?.classList.remove('show');
+    w2.classList.remove('dp-mood-idle');
+    w2.classList.add('dp-mood-scared','dp-mood-intense');
+    g2a?.classList.add('dp-mood-scared-trail');
+    g2b?.classList.add('dp-mood-scared-trail');
+    w2.addEventListener('animationend',function h(){
+      w2.classList.remove('dp-mood-scared','dp-mood-intense');
+      g2a?.classList.remove('dp-mood-scared-trail');
+      g2b?.classList.remove('dp-mood-scared-trail');
+      w2.classList.add('dp-mood-idle');
+      w2.removeEventListener('animationend',h);
+      window.dpShowMoodBubble('dpMoodBubble2');
+      done();
+    });
+  });
+
+  // Surexcitée — explique Recrutement. Part en surrégime puis souffle, la bulle revient ensuite.
+  const w3=document.getElementById('dpMood3'), sw3=document.getElementById('dpMoodSweat3'), b3=document.getElementById('dpMoodBubble3'),
+        g3a=document.getElementById('dpMoodGhost3a'), g3b=document.getElementById('dpMoodGhost3b');
+  bindOnce(w3,done=>{
+    if(!w3)return done();
+    b3?.classList.remove('show');
+    [w3,g3a,g3b].forEach(e=>e?.classList.remove('dp-mood-idle'));
+    void w3.offsetWidth;
+    [w3,g3a,g3b].forEach(e=>e?.classList.add('dp-mood-hyper'));
+    w3.addEventListener('animationend',function h(){
+      [w3,g3a,g3b].forEach(e=>e?.classList.remove('dp-mood-hyper'));
+      sw3?.classList.add('show');
+      setTimeout(()=>{
+        sw3?.classList.remove('show');
+        [w3,g3a,g3b].forEach(e=>e?.classList.add('dp-mood-idle'));
+        window.dpShowMoodBubble('dpMoodBubble3');
+        done();
+      },1000);
+      w3.removeEventListener('animationend',h);
+    });
+  });
+
+  // Flemmarde — explique Candidatures. Petit refus grognon, puis la bulle revient.
+  const w4=document.getElementById('dpMood4'), b4=document.getElementById('dpMoodBubble4');
+  bindOnce(w4,done=>{
+    if(!w4)return done();
+    b4?.classList.remove('show');
+    w4.classList.remove('dp-mood-breathe');
+    w4.classList.add('dp-mood-lazyshake');
+    setTimeout(()=>{
+      w4.classList.remove('dp-mood-lazyshake');
+      w4.classList.add('dp-mood-breathe');
+      window.dpShowMoodBubble('dpMoodBubble4');
+      done();
+    },700);
+  });
+})();
+
 // DEPLOY — déploiements simulés sur la base des projets
 function switchDeployTab(el,tab){
   document.querySelectorAll('#section-recruit .deploy-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
   document.querySelectorAll('#section-recruit .deploy-pane').forEach(p=>p.classList.remove('active'));
   document.getElementById('deploy-pane-'+tab)?.classList.add('active');
-  if(tab==='deployments')loadDeployList();
-  if(tab==='recruit')loadJobs();
-  if(tab==='applications')loadApplicationsKanban();
+  if(tab==='deployments'){ loadDeployList(); setTimeout(()=>window.dpShowMoodBubble('dpMoodBubble2'),500); }
+  if(tab==='recruit'){ loadJobs(); setTimeout(()=>window.dpShowMoodBubble('dpMoodBubble3'),500); }
+  if(tab==='applications'){ loadApplicationsKanban(); setTimeout(()=>window.dpShowMoodBubble('dpMoodBubble4'),500); }
 }
 
 const DEPLOY_STATE_KEY='dc_deploy_state';
@@ -9221,7 +9681,7 @@ async function loadDeployList(){
   const states=getDeployState();
   cont.innerHTML=projects.map(p=>{
     const st=states[p.id]||{status:'idle',lastDeploy:null,logs:[]};
-    const statusLabel={live:'Live',building:'Build en cours',failed:'Échec',idle:'Jamais déployé'}[st.status];
+    const statusLabel={live:'En orbite',building:'Décollage',failed:'Échec',idle:'Jamais déployé'}[st.status];
     return `<div class="deploy-card" id="deploy-card-${esc(p.id)}">
       <div class="deploy-card-head">
         <div class="deploy-card-name">${esc(p.name||'Sans nom')}</div>
@@ -11390,9 +11850,11 @@ const isCoverDevAccount=()=>(currentProfile?.username||'').toLowerCase()==='cove
 
 async function nexusLoadMyProjects(){
   nexusUserProjects=[];
-  if(isCoverDevAccount()){
+  const hasNexusAccess=isCoverDevAccount(); // Nexus a déjà son propre site : réservé au propriétaire côté DevConnect
+  if(hasNexusAccess){
     nexusUserProjects.push({id:NEXUS_DEVCONNECT_PROJECT_ID,name:'DevConnect (interne)',plan:'internal',is_internal:true});
   }
+  if(isCoverDevAccount()){
   try{
     const{data,error}=await db.rpc('nexus_list_my_projects');
     if(!error&&Array.isArray(data)){
@@ -11403,6 +11865,7 @@ async function nexusLoadMyProjects(){
       });
     }
   }catch(e){/* silencieux */}
+  }
   if(nexusUserProjects.length===0){
     // Nouveau client sans aucun projet : on le laisse arriver sur un état "créer mon premier projet"
     nexusActiveProject=null;
@@ -11428,7 +11891,8 @@ function renderNexusProjectSwitcher(){
     head.appendChild(box);
   }
   if(!nexusUserProjects.length){
-    box.innerHTML=`<button class="btn btn-primary btn-sm" style="width:100%;font-size:12px" onclick="showNexusCreateProjectModal()">+ Créer mon projet Nexus</button>`;
+    if(isCoverDevAccount())box.innerHTML=`<button class="btn btn-primary btn-sm" style="width:100%;font-size:12px" onclick="showNexusCreateProjectModal()">+ Créer mon projet Nexus</button>`;
+    else box.innerHTML='';
     return;
   }
   const current=nexusUserProjects.find(p=>p.id===NEXUS_PROJECT_ID)||nexusUserProjects[0];
@@ -11441,7 +11905,7 @@ function renderNexusProjectSwitcher(){
       </div>
       <div class="cdrop-menu">${optsHtml}</div>
     </div>
-    <button class="btn btn-ghost btn-sm" style="width:100%;font-size:11px" onclick="showNexusCreateProjectModal()">+ Nouveau projet</button>
+    ${isCoverDevAccount()?`<button class="btn btn-ghost btn-sm" style="width:100%;font-size:11px" onclick="showNexusCreateProjectModal()">+ Nouveau projet</button>`:''}
   `;
 }
 
@@ -11482,6 +11946,7 @@ async function nexusSwitchProject(projectId){
 }
 
 function showNexusCreateProjectModal(){
+  if(!isCoverDevAccount()){showToast('Réservé au compte architecte.','error');return;}
   document.getElementById('nexus-generic-modal-overlay')?.remove();
   const overlay=document.createElement('div');
   overlay.id='nexus-generic-modal-overlay';
