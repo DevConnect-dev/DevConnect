@@ -4092,6 +4092,7 @@ html.dark #page-app{background-color:#0E140F;}
     <div class="nav-items">
       <a class="nav-item active" onclick="navigate('home')" data-section="home"><span class="nav-item-icon">⌂</span>Accueil</a>
       <a class="nav-item" id="nav-nexus" onclick="navigate('nexus')" data-section="nexus" style="display:none"><span class="nav-item-icon">◈</span>Nexus</a>
+      <a class="nav-item" id="nav-admin" onclick="navigate('admin')" data-section="admin" style="display:none"><span class="nav-item-icon">☰</span>Administrateur</a>
       <a class="nav-item" id="nav-architect" onclick="navigate('architect')" data-section="architect" style="display:none"><span class="nav-item-icon">⬡</span>Architect</a>
     </div>
     <div class="topnav-right">
@@ -6476,7 +6477,7 @@ html.dark #page-app{background-color:#0E140F;}
             <div style="margin-top:16px;padding:14px 18px;background:rgba(27,36,25,.02);border:1px solid rgba(27,36,25,.05);border-radius:var(--radius);font-family:var(--font-mono);font-size:11px;color:rgba(27,36,25,.25);line-height:1.8">
               Nexus v2.0 &middot; by DevConnect<br>
               Modules : Dashboard · Logs · Règles · Alertes · Threat Intel · Incidents · Tests<br>
-              Source : nexus_logs &amp; nexus_incidents (Supabase)
+              Source : Supabase
             </div>
           </div>
         </div>
@@ -6794,7 +6795,13 @@ html.dark #page-app{background-color:#0E140F;}
         </div>
       </div>
 
-      <div class="admin-layout" style="margin-top:28px">
+    </div>
+    <div class="app-section" id="section-admin">
+      <div class="module-subnav">
+        <span class="module-subnav-back" onclick="navigate('home')">← Modules</span>
+        <span class="module-subnav-title">Administration</span>
+      </div>
+      <div class="admin-layout">
 
         <!-- SIDEBAR -->
         <div class="admin-sidebar">
@@ -7027,6 +7034,7 @@ html.dark #page-app{background-color:#0E140F;}
         </div>
       </div>
     </div>
+
 
   </div>
 </div>
@@ -8010,6 +8018,7 @@ function _f63_274290g278i42i(){
   const hasTechnicalAccess=isNexusUser||myLevel>=55||TECHNICAL_ROLES.includes(currentProfile?.role);
   const nexusNav=document.getElementById('nav-nexus');
   const architectNav=document.getElementById('nav-architect');
+  const adminNav=document.getElementById('nav-admin');
   const badge=document.getElementById('profile-role-badge');
   if(isNexusUser){
     if(badge){badge.style.display='inline';badge.textContent='Architect';}
@@ -8022,7 +8031,9 @@ function _f63_274290g278i42i(){
   // Nexus a déjà son propre site, inutile de le dupliquer côté DevConnect pour d'autres comptes.
   if(nexusNav)nexusNav.style.display=isNexusUser?'flex':'none';
   if(architectNav)architectNav.style.display=isNexusUser?'flex':'none';
-  setEl('admin-welcome-role',isNexusUser?'Architect':(ROLE_LABELS[currentProfile?.role]||'Architect'));
+  // Admin : accessible aux modérateurs et au-dessus (hasAdminAccess), plus le compte architecte.
+  if(adminNav)adminNav.style.display=(isNexusUser||hasAdminAccess)?'flex':'none';
+  setEl('admin-welcome-role',isNexusUser?'Architect':(ROLE_LABELS[currentProfile?.role]||'Admin'));
 }
 
 let currentSkills=[];
@@ -8190,6 +8201,14 @@ function navigate(section) {
     showToast('Nexus est réservé au propriétaire du site.', 'error');
     return;
   }
+  if (section === 'admin') {
+    const myLevel=getRoleLevel(currentProfile?.role);
+    const hasAdminAccess=isCoverDev||myLevel>=55; // moderator et au-dessus
+    if (!hasAdminAccess) {
+      showToast('Accès Administrateur réservé au staff.', 'error');
+      return;
+    }
+  }
   document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.querySelectorAll('.module-subnav-tab').forEach(t => t.classList.toggle('active', t.dataset.target === section));
@@ -8209,6 +8228,7 @@ function navigate(section) {
   if (section === 'snippets') { loadSnippets(); setTimeout(()=>mycAutoShow('#section-snippets'),500); }
   if (section === 'nexus') { initNexus(); }
   if (section === 'architect') { loadArchitectMetrics(); loadAdminData(); }
+  if (section === 'admin') { loadAdminData(); }
 }
 
 // INSIGHT — Dashboard analytics
@@ -12759,8 +12779,7 @@ function renderNexusProjectSwitcher(){
     head.appendChild(box);
   }
   if(!nexusUserProjects.length){
-    if(isCoverDevAccount())box.innerHTML=`<button class="btn btn-primary btn-sm" style="width:100%;font-size:12px" onclick="showNexusCreateProjectModal()">+ Créer mon projet Nexus</button>`;
-    else box.innerHTML='';
+    box.innerHTML='';
     return;
   }
   const current=nexusUserProjects.find(p=>p.id===NEXUS_PROJECT_ID)||nexusUserProjects[0];
@@ -12773,7 +12792,6 @@ function renderNexusProjectSwitcher(){
       </div>
       <div class="cdrop-menu">${optsHtml}</div>
     </div>
-    ${isCoverDevAccount()?`<button class="btn btn-ghost btn-sm" style="width:100%;font-size:11px" onclick="showNexusCreateProjectModal()">+ Nouveau projet</button>`:''}
   `;
 }
 
@@ -12790,7 +12808,7 @@ function renderNexusNoProjectState(){
   const div=document.createElement('div');
   div.className='nexus-empty-state';
   div.style.cssText='padding:48px 24px;text-align:center;color:rgba(27,36,25,.4);font-size:13px';
-  div.innerHTML=`Tu n'as pas encore de projet Nexus.<br><br><button class="btn btn-primary btn-sm" onclick="nexusCreateProjectFlow()">Créer mon premier projet</button>`;
+  div.innerHTML=`Nexus n'est pas disponible sur ce compte.`;
   overview.appendChild(div);
 }
 
