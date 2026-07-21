@@ -1927,7 +1927,7 @@ textarea.nexus-modal-input{resize:vertical;min-height:64px;font-family:var(--fon
    BLACK DIAMOND — App Shell Extension (Phase 3 → 3.1)
    Même langage visuel que landing/auth : obsidienne, platine,
    glint diamant-bleu froid. Scopé à #page-app. Les couleurs
-   fonctionnelles des modules (Nexus rouge, DevAI vert, etc.)
+   fonctionnelles des modules (Nexus rouge, Solara AI vert, etc.)
    sont conservées telles quelles.
    v3.1 : contraste fond/surface fortement augmenté (les cards
    ne devaient plus se fondre dans le canvas), élévation réelle
@@ -3682,7 +3682,7 @@ html.dark #page-app{background-color:#0E140F;}
         <button class="dbtn dbtn-ghost dbtn-lg" onclick="smoothScroll('modules')">Découvrir les modules ↓</button>
       </div>
       <div class="dcf-hero-chips">
-        <span class="dcf-chip" style="--chip-c:#6F8F45"><span class="dt"></span>DevAI</span>
+        <span class="dcf-chip" style="--chip-c:#6F8F45"><span class="dt"></span>Solara AI</span>
         <span class="dcf-chip" style="--chip-c:#2C4A2E"><span class="dt"></span>Nexus</span>
         <span class="dcf-chip" style="--chip-c:#8A6F49"><span class="dt"></span>Code</span>
         <span class="dcf-chip" style="--chip-c:#7C6690"><span class="dt"></span>Teams</span>
@@ -3747,7 +3747,7 @@ html.dark #page-app{background-color:#0E140F;}
             <use class="dcf-leaf-shape" href="#dcfLeafShape"/>
             <path class="dcf-leaf-vein" d="M0,-17 L0,17"/>
             <text x="0" y="4" text-anchor="middle" font-size="14">🤖</text>
-            <text x="28" y="4" font-size="11">DevAI</text>
+            <text x="28" y="4" font-size="11">Solara AI</text>
           </g>
         </g>
         <g class="dcf-leaf-node n5" transform="translate(358,150)">
@@ -3788,7 +3788,7 @@ html.dark #page-app{background-color:#0E140F;}
   <div class="dcf-modules">
     <div class="dcf-mod">
       <div class="dcf-mod-top"><div class="dcf-mod-icon">🤖</div><div class="dcf-mod-badge soon"><span class="d"></span>Bientôt</div></div>
-      <div class="dcf-mod-name">DevAI</div>
+      <div class="dcf-mod-name">Solara AI</div>
       <div class="dcf-mod-desc">Assistant IA spécialisé développeurs. Génère, debug, explique et optimise ton code en temps réel.</div>
     </div>
     <div class="dcf-mod">
@@ -3859,7 +3859,7 @@ html.dark #page-app{background-color:#0E140F;}
         <div class="dcf-code">
 <div><span class="kw">const</span> fetchUsers = <span class="kw">async</span> () => {</div>
 <div style="padding-left:16px"><span class="kw">const</span> res = <span class="kw">await</span> fetch(<span class="str">'/api/users'</span>);</div>
-<div style="padding-left:16px;opacity:.6">// ✨ DevAI : ajouter gestion erreur</div>
+<div style="padding-left:16px;opacity:.6">// ✨ Solara AI : ajouter gestion erreur</div>
 <div style="padding-left:16px" class="add">+ <span class="kw">if</span> (!res.ok) <span class="kw">throw new</span> Error(res.status);</div>
 <div>}</div>
         </div>
@@ -4192,7 +4192,7 @@ html.dark #page-app{background-color:#0E140F;}
             <div class="module-icon" style="background:rgba(0,255,163,.1)">🤖</div>
             <div class="module-badge" style="border-color:rgba(0,255,163,.3);color:rgba(0,255,163,.9)"><span class="dot"></span>Disponible</div>
           </div>
-          <div class="module-name">DevAI</div>
+          <div class="module-name">Solara AI</div>
           <div class="module-desc">Assistant IA spécialisé développeurs. Génère, debug, explique et optimise ton code en temps réel.</div>
           <div class="module-meta">◇ Intégré à DevConnect</div>
         </div>
@@ -4538,29 +4538,41 @@ html.dark #page-app{background-color:#0E140F;}
         #section-devai .da-chat-input-row{display:flex;gap:8px;padding:12px;border-top:1px solid rgba(0,0,0,.08);}
         #section-devai .da-chat-input-row input{flex:1;padding:10px 14px;border-radius:8px;border:1px solid rgba(0,0,0,.1);font-size:13px;}
         #section-devai .da-thinking{opacity:.5;}
+        #section-devai .da-code-block{margin:6px 0;border-radius:10px;overflow:hidden;border:1px solid rgba(0,0,0,.12);background:#1e1e1e;}
+        #section-devai .da-code-head{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:rgba(0,255,163,.1);font-family:var(--font-mono);font-size:11px;color:#00FFA3;text-transform:uppercase;letter-spacing:.03em;}
+        #section-devai .da-code-head .btn{padding:3px 8px;font-size:11px;line-height:1.4;color:#c9e8dd;}
+        #section-devai .da-code-head .btn:hover{color:#00FFA3;}
+        #section-devai .da-code-pre{margin:0;padding:12px 14px;font-family:var(--font-mono);font-size:12px;line-height:1.5;color:#e6e6e6;overflow-x:auto;white-space:pre;}
         #section-devai .da-key-banner{display:none;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-radius:10px;background:rgba(194,65,12,.08);border:1px solid rgba(194,65,12,.25);font-size:12.5px;margin-bottom:14px;}
       </style>
       <div class="da-header">
         <div>
-          <div class="da-title"><span class="ico">🤖</span>DevAI</div>
-          <div class="da-sub">Assistant IA pour développeurs — chat, revue de code, tests, explications. Propulsé par OpenRouter.</div>
+          <div class="da-title"><span class="ico">🤖</span>Solara AI</div>
+          <div class="da-sub">Assistant IA pour développeurs — chat, revue de code, tests, explications. Solara n'a pas encore son propre modèle : en attendant, ça tourne via OpenRouter avec ta clé perso (gratuite).</div>
         </div>
-        <div class="da-quota" id="devai-quota-badge">—</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="da-quota" id="devai-quota-badge">—</div>
+          <button class="btn btn-ghost" style="font-size:11px;padding:5px 10px;white-space:nowrap" onclick="promptAiKey();checkAiKeyBanner();checkDevaiKeyBanner();" title="Voir, changer ou supprimer ta clé API OpenRouter">🔑 Gérer ma clé</button>
+        </div>
       </div>
       <div class="da-key-banner" id="devai-key-banner">
-        <span>🔑 Clé API requise (gratuit, pas de CB) — <a href="https://openrouter.ai/keys" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Obtenir une clé ↗</a> puis la coller</span>
+        <span>🔑 Clé API requise (gratuit, pas de CB) — <a href="https://openrouter.ai/keys" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Obtenir une clé ↗</a> puis la coller · <a href="#" onclick="toggleAiWhyInfo(event)" style="color:inherit;text-decoration:underline">pourquoi ?</a></span>
         <button class="btn btn-ghost" style="font-size:12px;padding:6px 12px" onclick="promptAiKey();checkAiKeyBanner();checkDevaiKeyBanner();">Coller ma clé</button>
+      </div>
+      <div id="devai-key-why" style="display:none;font-size:12.5px;color:var(--text-muted);line-height:1.6;margin:-6px 0 14px;padding:10px 14px;border-radius:10px;background:var(--surface-2,rgba(0,0,0,.03));border:1px solid rgba(0,0,0,.06);">
+        On travaille sur un modèle Solara maison, entraîné spécifiquement pour DevConnect, qui tournera nativement sans clé à fournir. En attendant qu'il soit prêt, l'assistant passe par des modèles gratuits externes (OpenRouter) — d'où cette étape le temps de récupérer une clé gratuite (2 min, sans carte bancaire). On sait que c'est une friction, merci de votre patience le temps qu'on finisse le chantier.
       </div>
       <div class="da-tabs">
         <div class="da-tab active" data-devai-tab="chat" onclick="switchDevaiTab(this,'chat')">💬 Chat</div>
         <div class="da-tab" data-devai-tab="review" onclick="switchDevaiTab(this,'review')">🔍 Revue de code</div>
         <div class="da-tab" data-devai-tab="tests" onclick="switchDevaiTab(this,'tests')">🧪 Génération de tests</div>
         <div class="da-tab" data-devai-tab="explain" onclick="switchDevaiTab(this,'explain')">📖 Explication ligne par ligne</div>
+        <div class="da-tab" data-devai-tab="preview" onclick="switchDevaiTab(this,'preview')">🔮 Aperçu Solara</div>
       </div>
 
       <div class="da-panel active" id="devai-panel-chat">
         <div class="da-chat-box">
-          <div class="da-chat-messages" id="devai-chat-messages"><div class="da-msg ai">Salut, je suis DevAI 👋 Pose-moi une question de code, colle-moi un bout de code à débugger, ou demande-moi d'écrire une fonction.</div></div>
+          <div class="da-chat-messages" id="devai-chat-messages"><div class="da-msg ai">Salut, je suis Solara AI 👋 Pose-moi une question de code, colle-moi un bout de code à débugger, ou demande-moi d'écrire une fonction. Je peux aussi te générer des fichiers HTML/CSS/JS complets, prêts à télécharger.</div></div>
           <div class="da-chat-input-row">
             <input type="text" id="devai-chat-input" placeholder="Écris ton message…" onkeydown="if(event.key==='Enter')sendDevaiChat()">
             <button class="btn btn-primary" onclick="sendDevaiChat()">Envoyer</button>
@@ -4594,7 +4606,26 @@ html.dark #page-app{background-color:#0E140F;}
         </div>
         <div class="da-result" id="devai-explain-result"></div>
       </div>
-    </div>
+
+      <div class="da-panel" id="devai-panel-preview">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:10px 14px;border-radius:10px;background:var(--da-accent-dim);border:1px solid rgba(0,255,163,.25);font-size:12.5px;">
+          <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#00997a;border:1px solid rgba(0,153,122,.3);background:rgba(0,255,163,.12);padding:3px 8px;border-radius:100px;white-space:nowrap;">En entraînement</span>
+          <span style="color:var(--text-muted)">Ceci n'est pas une IA branchée en direct — juste un aperçu du ton et du style qu'aura Solara une fois son modèle maison prêt et hébergé.</span>
+        </div>
+        <div class="da-chat-box" style="height:auto;max-height:520px;">
+          <div class="da-chat-messages" style="overflow-y:auto;">
+            <div class="da-msg user">Salut, ça va ?</div>
+            <div class="da-msg ai">Ça roule ! Prêt à débugger des trucs si t'en as sous la main, sinon on papote 😄</div>
+            <div class="da-msg user">C'est quoi la différence entre let et var en JS ?</div>
+            <div class="da-msg ai">En gros : var est scopé à la fonction (et remonte en haut, effet "hoisting" un peu piégeux), alors que let est scopé au bloc {} — donc plus prévisible. Dans 99% des cas aujourd'hui, on utilise let (ou const si la valeur change pas) et on laisse var au placard.</div>
+            <div class="da-msg user">Mon bouton fait rien au clic, voici le code : &lt;button onclick="handleClick()"&gt;Go&lt;/button&gt;</div>
+            <div class="da-msg ai">Le souci c'est probablement que la fonction handleClick n'existe pas encore dans le scope global au moment où le HTML se charge (par exemple si elle est déclarée en `const handleClick = () =&gt; {}` dans un module, ou après le bouton avec un `defer`). Vérifie qu'elle est bien accessible globalement, ou passe par `addEventListener` dans un script classique plutôt que par l'attribut onclick.</div>
+            <div class="da-msg user">Nan mais t'es sûr ? Je pensais que ça venait du CSS moi</div>
+            <div class="da-msg ai">Possible aussi si un élément par-dessus bloque le clic (z-index ou position mal gérée), mais ça donnerait plutôt un clic qui ne déclenche rien visuellement sans erreur console. Si t'as une erreur du style "handleClick is not defined" dans la console, c'est bien le JS le coupable — check ça en premier, c'est le plus rapide à confirmer.</div>
+          </div>
+        </div>
+      </div>
+      </div>
 
     <!-- NEXUS — mini page d'accueil (prototype), avant d'entrer dans le dashboard existant -->
     <div class="app-section" id="section-nexus-intro">
@@ -5618,6 +5649,10 @@ html.dark #page-app{background-color:#0E140F;}
           <div class="editor-ai-header"><div class="ai-dot"></div>Assistant IA <span style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono);margin-left:auto">Qwen · OpenRouter</span><button onclick="clearAiHistory()" title="Nouvelle conversation" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:12px;padding:0 0 0 8px;line-height:1" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">↺</button></div>
           <div id="editor-ai-key-banner" style="display:none;padding:8px 10px;background:rgba(224,160,90,.08);border-bottom:1px solid rgba(224,160,90,.2);font-size:11px;font-family:var(--font-mono);color:#e0a05a">
             🔑 <span>Clé API requise (gratuit, pas de CB) — </span><a href="https://openrouter.ai/keys" target="_blank" rel="noopener" style="color:#e0a05a;text-decoration:underline">Obtenir une clé ↗</a> <span> puis </span><button onclick="promptAiKey()" style="background:none;border:none;color:#e0a05a;cursor:pointer;font-family:var(--font-mono);font-size:11px;text-decoration:underline;padding:0">coller ici</button>
+            <span> · </span><a href="#" onclick="toggleAiWhyInfo(event)" style="color:#e0a05a;text-decoration:underline">pourquoi ?</a>
+          </div>
+          <div id="editor-ai-key-why" style="display:none;font-size:11px;color:var(--text-muted);line-height:1.5;padding:8px 10px;border-bottom:1px solid rgba(0,0,0,.06);">
+            Solara n'a pas encore de modèle maison hébergé — en attendant, chaque requête passe par un modèle gratuit externe via OpenRouter, d'où la clé perso à coller. On bosse dessus pour supprimer cette étape.
           </div>
           <div class="editor-ai-messages" id="editor-ai-messages">
             <div class="ai-msg ai">Bonjour ! Je suis ton assistant de code. Je peux t'aider à déboguer, suggérer des améliorations ou expliquer du code.<br><br>Pose-moi une question sur ton code ou colle un extrait à analyser.</div>
@@ -6970,6 +7005,36 @@ html.dark #page-app{background-color:#0E140F;}
   </div>
 </div>
 
+<!-- TEAM RANKS MODAL -->
+<div class="modal-overlay" id="team-ranks-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Gérer les rangs</div>
+      <button class="modal-close" onclick="closeRanksModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div id="team-ranks-list"></div>
+      <div style="border-top:1px solid var(--border);margin-top:16px;padding-top:16px">
+        <div class="form-group"><label class="form-label">Nom du rang</label><input type="text" class="form-input" id="rank-name" placeholder="Officier"></div>
+        <div class="form-group"><label class="form-label">Couleur</label><input type="color" id="rank-color" value="#8a8a8a" style="width:60px;height:32px;padding:2px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius)"></div>
+        <div class="form-group">
+          <label class="form-label">Permissions</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;color:var(--text)">
+            <label><input type="checkbox" id="perm-invite"> Inviter des membres</label>
+            <label><input type="checkbox" id="perm-kick"> Exclure des membres</label>
+            <label><input type="checkbox" id="perm-manage-ranks"> Gérer les rangs</label>
+            <label><input type="checkbox" id="perm-promote"> Promouvoir/rétrograder</label>
+            <label><input type="checkbox" id="perm-edit-tasks" checked> Éditer les tâches</label>
+            <label><input type="checkbox" id="perm-delete-tasks"> Supprimer les tâches</label>
+            <label><input type="checkbox" id="perm-edit-team"> Éditer l'équipe</label>
+          </div>
+        </div>
+        <button class="btn btn-primary w-full" onclick="createRank()">+ Créer ce rang</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ADD/EDIT SNIPPET MODAL -->
 <div class="modal-overlay" id="snippet-modal">
   <div class="modal">
@@ -8157,7 +8222,7 @@ function navigate(section) {
   if (section === 'home') { loadActiveAnnouncementBanner(); populateHomeGreeting(); }
   if (section === 'ranking') { loadInsightDashboard(); loadWeeklyChallengeId(); setTimeout(()=>window.myShowStarBubble?.("Je relie toutes tes statistiques, XP, activité et classement, en continu sous la surface."),700); }
   if (section === 'discover') loadDiscover();
-  if (section === 'team') loadTeamSection();
+  if (section === 'team') loadTeamSection(); else unsubscribeTeamRealtime();
   if (section === 'recruit') { loadDeployList(); setTimeout(()=>window.dpShowMoodBubble?.('dpMoodBubble2'),700); }
   if (section === 'editor') { loadEditorFiles(); checkAiKeyBanner(); setTimeout(()=>mycAutoShow('#section-editor'),500); }
   if (section === 'learn') { loadWeeklyChallengeId().then(renderChallenges); loadLearnProgress(); renderChallenges(); setTimeout(()=>window.hvShowQueenBubble?.(HV_QUEEN_TEXTS[document.querySelector('#section-learn .docs-tab.active')?.dataset.docsTab || 'generator']),700); }
@@ -10084,22 +10149,39 @@ function owlEmptyState(state,text,sub){
     '</div>';
 }
 
-// TEAMS — équipe & kanban (stocké localement, basé sur le profil courant)
-function getTeamKey(){return currentUser ? 'dc_team_'+currentUser.id : null;}
+// TEAMS — équipe multi-joueur (Supabase) avec hiérarchie de rangs & permissions fines
+let teamState={team:null,perms:{},members:[],ranks:[],tasks:[]};
+let teamRealtimeSub=null,teamInviteRealtimeSub=null;
 
-function getTeamData(){
-  const key=getTeamKey();
-  if(!key)return null;
-  try{
-    const raw=localStorage.getItem(key);
-    return raw?JSON.parse(raw):null;
-  }catch(e){return null;}
+function subscribeTeamRealtime(teamId){
+  if(teamRealtimeSub){db.removeChannel(teamRealtimeSub);teamRealtimeSub=null;}
+  if(!teamId)return;
+  const refresh=()=>{if(currentSection==='team')loadTeamBoardData(teamId);};
+  teamRealtimeSub=db.channel('team-'+teamId)
+    .on('postgres_changes',{event:'*',schema:'public',table:'team_members',filter:'team_id=eq.'+teamId},refresh)
+    .on('postgres_changes',{event:'*',schema:'public',table:'team_ranks',filter:'team_id=eq.'+teamId},refresh)
+    .on('postgres_changes',{event:'*',schema:'public',table:'team_tasks',filter:'team_id=eq.'+teamId},refresh)
+    .on('postgres_changes',{event:'DELETE',schema:'public',table:'teams',filter:'id=eq.'+teamId},()=>{
+      showToast('L\u2019équipe a été dissoute.','info');
+      if(teamRealtimeSub){db.removeChannel(teamRealtimeSub);teamRealtimeSub=null;}
+      if(currentSection==='team')loadTeamSection();
+    });
+  teamRealtimeSub.subscribe();
 }
 
-function setTeamData(data){
-  const key=getTeamKey();
-  if(!key)return;
-  try{localStorage.setItem(key,JSON.stringify(data));}catch(e){}
+function subscribeTeamInviteRealtime(){
+  if(teamInviteRealtimeSub){db.removeChannel(teamInviteRealtimeSub);teamInviteRealtimeSub=null;}
+  if(!currentUser)return;
+  teamInviteRealtimeSub=db.channel('team-invites-'+currentUser.id)
+    .on('postgres_changes',{event:'*',schema:'public',table:'team_invites',filter:'invited_user_id=eq.'+currentUser.id},()=>{
+      if(currentSection==='team')loadTeamSection();
+    });
+  teamInviteRealtimeSub.subscribe();
+}
+
+function unsubscribeTeamRealtime(){
+  if(teamRealtimeSub){db.removeChannel(teamRealtimeSub);teamRealtimeSub=null;}
+  if(teamInviteRealtimeSub){db.removeChannel(teamInviteRealtimeSub);teamInviteRealtimeSub=null;}
 }
 
 async function loadTeamSection(){
@@ -10109,123 +10191,263 @@ async function loadTeamSection(){
     cont.innerHTML='<div class="team-empty-cta" style="text-align:center">'+owlMascot('idle',56)+'<div style="font-family:var(--nb-serif);font-size:15px;color:var(--nb-ink);margin-top:10px;font-weight:600">Connecte-toi pour créer ou rejoindre une équipe</div></div>';
     return;
   }
-  const team=getTeamData();
-  if(!team){
-    cont.innerHTML=`<div class="team-empty-cta" style="text-align:center">
-      ${owlMascot('idle',60)}
-      <div style="font-family:var(--nb-serif);font-size:17px;font-weight:700;margin:10px 0 8px;color:var(--nb-ink)">Tu n'as pas encore d'équipe</div>
-      <div style="font-family:var(--nb-hand);font-size:16px;color:var(--nb-ink-mute);margin-bottom:18px">crée un groupe d'expédition pour collaborer sur un tableau partagé</div>
-      <input id="new-team-name" placeholder="Nom de l'équipe" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:9px 12px;color:var(--text);font-size:13px;width:240px;margin-right:8px;outline:none">
-      <button class="btn btn-primary btn-sm" onclick="createTeam()">+ Créer mon équipe</button>
-    </div>`;
+  cont.innerHTML='<div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement...</div>';
+  const{data:membership}=await db.from('team_members').select('team_id').eq('user_id',currentUser.id).maybeSingle();
+  if(!membership){
+    if(teamRealtimeSub){db.removeChannel(teamRealtimeSub);teamRealtimeSub=null;}
+    subscribeTeamInviteRealtime();
+    const{data:invites}=await db.from('team_invites').select('id,teams(name,description),profiles!team_invites_invited_by_fkey(username)').eq('invited_user_id',currentUser.id).eq('status','pending');
+    renderNoTeamState(invites||[]);
     return;
   }
-  renderTeamBoard(team);
+  if(teamInviteRealtimeSub){db.removeChannel(teamInviteRealtimeSub);teamInviteRealtimeSub=null;}
+  subscribeTeamRealtime(membership.team_id);
+  await loadTeamBoardData(membership.team_id);
 }
 
-function createTeam(){
+function renderNoTeamState(invites){
+  const cont=document.getElementById('team-layout-cont');
+  if(!cont)return;
+  const invitesHtml=invites.map(inv=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;margin:8px 0">
+      <span style="font-size:12px"><b>${esc(inv.teams?.name||'Équipe')}</b> — invité par @${esc(inv.profiles?.username||'?')}</span>
+      <span style="display:flex;gap:6px">
+        <button class="btn btn-primary btn-sm" onclick="acceptTeamInvite('${inv.id}')">Accepter</button>
+        <button class="btn btn-ghost btn-sm" onclick="declineTeamInvite('${inv.id}')">Refuser</button>
+      </span>
+    </div>`).join('');
+  cont.innerHTML=`<div class="team-empty-cta" style="text-align:center">
+    ${owlMascot('idle',60)}
+    <div style="font-family:var(--nb-serif);font-size:17px;font-weight:700;margin:10px 0 8px;color:var(--nb-ink)">Tu n'as pas encore d'équipe</div>
+    <div style="font-family:var(--nb-hand);font-size:16px;color:var(--nb-ink-mute);margin-bottom:18px">crée un groupe d'expédition pour collaborer sur un tableau partagé</div>
+    ${invites.length?`<div style="text-align:left;max-width:440px;margin:0 auto 18px">${invitesHtml}</div>`:''}
+    <input id="new-team-name" placeholder="Nom de l'équipe" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:9px 12px;color:var(--text);font-size:13px;width:240px;margin-right:8px;outline:none">
+    <button class="btn btn-primary btn-sm" onclick="createTeam()">+ Créer mon équipe</button>
+  </div>`;
+}
+
+async function createTeam(){
   const nameInput=document.getElementById('new-team-name');
   const name=(nameInput?.value||'').trim();
   if(!name){showToast('Donne un nom à ton équipe.','error');return;}
-  const team={
-    name,
-    owner:currentProfile?.username||'moi',
-    members:[{username:currentProfile?.username||'moi',role:'owner'}],
-    tasks:[
-      {id:'t1',title:'Bienvenue sur ton tableau Teams !',col:'todo'},
-      {id:'t2',title:'Invite un coéquipier avec son pseudo',col:'todo'},
-    ]
-  };
-  setTeamData(team);
+  const{error}=await db.rpc('create_team',{p_name:name,p_description:null});
+  if(error){showToast(error.message,'error');return;}
   showToast('Équipe créée !','success');
   loadTeamSection();
 }
 
-function renderTeamBoard(team){
+async function acceptTeamInvite(inviteId){
+  const{error}=await db.rpc('accept_team_invite',{p_invite_id:inviteId});
+  if(error){showToast(error.message,'error');return;}
+  showToast('Tu as rejoint l\u2019équipe !','success');
+  loadTeamSection();
+}
+
+async function declineTeamInvite(inviteId){
+  await db.rpc('decline_team_invite',{p_invite_id:inviteId});
+  showToast('Invitation refusée.','info');
+  loadTeamSection();
+}
+
+async function loadTeamBoardData(teamId){
+  const[{data:team},{data:permsRows},{data:members},{data:ranks},{data:tasks}]=await Promise.all([
+    db.from('teams').select('*').eq('id',teamId).maybeSingle(),
+    db.rpc('team_role_of',{p_team_id:teamId,p_user_id:currentUser.id}),
+    db.from('team_members').select('id,user_id,rank_id,profiles(username),team_ranks(id,name,color,position)').eq('team_id',teamId),
+    db.from('team_ranks').select('*').eq('team_id',teamId).order('position'),
+    db.from('team_tasks').select('*').eq('team_id',teamId).order('position').order('created_at')
+  ]);
+  if(!team){showToast('Équipe introuvable.','error');loadTeamSection();return;}
+  teamState={team,perms:(permsRows&&permsRows[0])||{},members:members||[],ranks:ranks||[],tasks:tasks||[]};
+  renderTeamBoard();
+}
+
+function renderTeamBoard(){
   const cont=document.getElementById('team-layout-cont');
   if(!cont)return;
+  const{team,perms,members,ranks,tasks}=teamState;
+  const sortedMembers=[...members].sort((a,b)=>{
+    const posA=a.user_id===team.owner_id?-1:(a.team_ranks?.position??999);
+    const posB=b.user_id===team.owner_id?-1:(b.team_ranks?.position??999);
+    if(posA!==posB)return posA-posB;
+    return (a.profiles?.username||'').localeCompare(b.profiles?.username||'');
+  });
   const cols=[{key:'todo',label:'À faire'},{key:'progress',label:'En cours'},{key:'done',label:'Terminé'}];
-  const allDone=team.tasks.length>0&&team.tasks.every(t=>t.col==='done');
+  const allDone=tasks.length>0&&tasks.every(t=>t.col==='done');
+  const memberChips=sortedMembers.map(m=>{
+    const isOwner=m.user_id===team.owner_id;
+    const rankName=isOwner?'Chef':(m.team_ranks?.name||'Membre');
+    const rankColor=isOwner?'#F2C14E':(m.team_ranks?.color||'#8a8a8a');
+    let controls='';
+    if(!isOwner&&perms.can_promote){
+      controls+=`<select onchange="changeMemberRank('${m.id}',this.value)" style="font-size:10px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;margin-left:4px;color:var(--text)">
+        ${ranks.map(r=>`<option value="${r.id}" ${m.rank_id===r.id?'selected':''}>${esc(r.name)}</option>`).join('')}
+      </select>`;
+    }
+    if(!isOwner&&perms.can_kick){
+      controls+=`<button class="btn btn-ghost btn-sm" style="color:#e08080;padding:2px 6px;margin-left:4px" onclick="kickMember('${m.id}','${m.user_id}','${esc(m.profiles?.username||'?')}')" title="Exclure">×</button>`;
+    }
+    return `<span class="team-member-chip">
+      <span class="team-member-avatar">${esc((m.profiles?.username||'?').slice(0,2).toUpperCase())}</span>
+      ${esc(m.profiles?.username||'?')}
+      <span style="font-size:9px;color:${rankColor};font-family:var(--font-mono);margin-left:4px">${isOwner?'👑 ':''}${esc(rankName)}</span>
+      ${controls}
+    </span>`;
+  }).join('');
   cont.innerHTML=`
     ${allDone?`<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">${owlMascot('success',44)}<div style="font-family:var(--nb-hand);font-size:18px;color:var(--nb-forest)">toutes les tâches sont bouclées, bravo à l'équipe !</div></div>`:''}
     <div class="team-header">
       <div>
         <div class="team-name-title">${esc(team.name)}</div>
-        <div class="team-members-row">
-          ${team.members.map(m=>`<span class="team-member-chip"><span class="team-member-avatar">${esc((m.username||'?').slice(0,2).toUpperCase())}</span>${esc(m.username)}${m.role==='owner'?' 👑':''}</span>`).join('')}
-        </div>
+        ${team.description?`<div style="font-size:12px;color:var(--text-muted);margin-top:2px">${esc(team.description)}</div>`:''}
+        <div class="team-members-row">${memberChips}</div>
       </div>
-      <div style="display:flex;gap:8px">
-        <input id="invite-username" placeholder="@pseudo à inviter" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:7px 10px;color:var(--text);font-size:12px;width:160px;outline:none">
-        <button class="btn btn-ghost btn-sm" onclick="inviteToTeam()">+ Inviter</button>
-        <button class="btn btn-ghost btn-sm" style="color:#e08080" onclick="leaveOrDeleteTeam()">Quitter l'équipe</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start">
+        ${perms.can_invite?`<input id="invite-username" placeholder="@pseudo à inviter" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:7px 10px;color:var(--text);font-size:12px;width:160px;outline:none">
+        <button class="btn btn-ghost btn-sm" onclick="inviteToTeam()">+ Inviter</button>`:''}
+        ${perms.can_manage_ranks?`<button class="btn btn-ghost btn-sm" onclick="openRanksModal()">⚙ Rangs</button>`:''}
+        <button class="btn btn-ghost btn-sm" style="color:#e08080" onclick="leaveOrDeleteTeam()">${team.owner_id===currentUser.id?'Dissoudre':'Quitter'} l'équipe</button>
       </div>
     </div>
     <div class="kanban-board">
       ${cols.map(c=>`<div class="kanban-col" data-col="${c.key}">
-        <div class="kanban-col-title"><span>${c.label}</span><span>${team.tasks.filter(t=>t.col===c.key).length}</span></div>
+        <div class="kanban-col-title"><span>${c.label}</span><span>${tasks.filter(t=>t.col===c.key).length}</span></div>
         <div id="kanban-list-${c.key}">
-          ${team.tasks.filter(t=>t.col===c.key).map(t=>`<div class="kanban-card">
+          ${tasks.filter(t=>t.col===c.key).map(t=>`<div class="kanban-card">
             ${esc(t.title)}
             <div class="kanban-card-actions">
-              ${c.key!=='todo'?`<button class="btn btn-ghost btn-sm" onclick="moveTask('${t.id}','${c.key==='done'?'progress':'todo'}')">←</button>`:''}
-              ${c.key!=='done'?`<button class="btn btn-ghost btn-sm" onclick="moveTask('${t.id}','${c.key==='todo'?'progress':'done'}')">→</button>`:''}
-              <button class="btn btn-ghost btn-sm" style="color:#e08080" onclick="deleteTask('${t.id}')">×</button>
+              ${c.key!=='todo'&&perms.can_edit_tasks?`<button class="btn btn-ghost btn-sm" onclick="moveTask('${t.id}','${c.key==='done'?'progress':'todo'}')">←</button>`:''}
+              ${c.key!=='done'&&perms.can_edit_tasks?`<button class="btn btn-ghost btn-sm" onclick="moveTask('${t.id}','${c.key==='todo'?'progress':'done'}')">→</button>`:''}
+              ${perms.can_delete_tasks?`<button class="btn btn-ghost btn-sm" style="color:#e08080" onclick="deleteTask('${t.id}')">×</button>`:''}
             </div>
           </div>`).join('')}
         </div>
-        ${c.key==='todo'?`<button class="kanban-add-btn" onclick="addTask()">+ Ajouter une tâche</button>`:''}
+        ${c.key==='todo'&&perms.can_edit_tasks?`<button class="kanban-add-btn" onclick="addTask()">+ Ajouter une tâche</button>`:''}
       </div>`).join('')}
     </div>
   `;
 }
 
-function inviteToTeam(){
+async function inviteToTeam(){
   const input=document.getElementById('invite-username');
   const username=(input?.value||'').trim().replace(/^@/,'');
   if(!username){showToast('Indique un pseudo à inviter.','error');return;}
-  const team=getTeamData();
-  if(!team)return;
-  if(team.members.some(m=>m.username.toLowerCase()===username.toLowerCase())){
-    showToast('Ce membre est déjà dans l\u2019équipe.','error');return;
+  const{data:user}=await db.from('profiles').select('id,username').eq('username',username).maybeSingle();
+  if(!user){showToast('Utilisateur introuvable.','error');return;}
+  if(user.id===currentUser.id){showToast('Tu ne peux pas t\u2019inviter toi-même.','error');return;}
+  const{error}=await db.from('team_invites').insert({team_id:teamState.team.id,invited_user_id:user.id,invited_by:currentUser.id});
+  if(error){
+    showToast(error.code==='23505'?'Cette personne a déjà une invitation en attente.':error.message,'error');
+    return;
   }
-  team.members.push({username,role:'member'});
-  setTeamData(team);
-  showToast(`@${username} ajouté à l'équipe (note : invitation locale, simulation).`,'success');
-  renderTeamBoard(team);
+  await notifyUser(user.id,'team_invite',`${currentProfile?.username||'Quelqu\u2019un'} t\u2019invite à rejoindre l\u2019équipe « ${teamState.team.name} »`,'team','Invitation d\u2019équipe');
+  showToast(`Invitation envoyée à @${username}.`,'success');
+  if(input)input.value='';
 }
 
-function addTask(){
+async function addTask(){
   const title=prompt('Titre de la tâche :');
   if(!title||!title.trim())return;
-  const team=getTeamData();
-  if(!team)return;
-  team.tasks.push({id:'t'+Date.now(),title:title.trim(),col:'todo'});
-  setTeamData(team);
-  renderTeamBoard(team);
+  const{error}=await db.from('team_tasks').insert({team_id:teamState.team.id,title:title.trim(),col:'todo',created_by:currentUser.id});
+  if(error){showToast(error.message,'error');return;}
+  await loadTeamBoardData(teamState.team.id);
 }
 
-function moveTask(id,newCol){
-  const team=getTeamData();
-  if(!team)return;
-  const task=team.tasks.find(t=>t.id===id);
-  if(task){task.col=newCol;setTeamData(team);renderTeamBoard(team);}
+async function moveTask(id,newCol){
+  const{error}=await db.from('team_tasks').update({col:newCol}).eq('id',id);
+  if(error){showToast(error.message,'error');return;}
+  await loadTeamBoardData(teamState.team.id);
 }
 
-function deleteTask(id){
-  const team=getTeamData();
-  if(!team)return;
-  team.tasks=team.tasks.filter(t=>t.id!==id);
-  setTeamData(team);
-  renderTeamBoard(team);
+async function deleteTask(id){
+  const{error}=await db.from('team_tasks').delete().eq('id',id);
+  if(error){showToast(error.message,'error');return;}
+  await loadTeamBoardData(teamState.team.id);
 }
 
-function leaveOrDeleteTeam(){
-  if(!confirm('Quitter / supprimer cette équipe ? (action locale, irréversible)'))return;
-  const key=getTeamKey();
-  if(key)localStorage.removeItem(key);
-  showToast('Équipe supprimée.','success');
+async function kickMember(memberId,userId,username){
+  if(!confirm(`Exclure @${username} de l'équipe ?`))return;
+  const teamName=teamState.team.name;
+  const{error}=await db.from('team_members').delete().eq('id',memberId);
+  if(error){showToast(error.message,'error');return;}
+  notifyUser(userId,'team_invite',`Tu as été exclu de l\u2019équipe « ${teamName} »`,'team','Exclusion d\u2019équipe').catch(()=>{});
+  showToast(`@${username} a été exclu.`,'success');
+  await loadTeamBoardData(teamState.team.id);
+}
+
+async function changeMemberRank(memberId,rankId){
+  const{error}=await db.from('team_members').update({rank_id:rankId}).eq('id',memberId);
+  if(error){showToast(error.message,'error');await loadTeamBoardData(teamState.team.id);return;}
+  showToast('Rang mis à jour.','success');
+  await loadTeamBoardData(teamState.team.id);
+}
+
+async function leaveOrDeleteTeam(){
+  const isOwner=teamState.team.owner_id===currentUser.id;
+  if(!confirm(isOwner?'Dissoudre définitivement cette équipe ? Cette action est irréversible.':'Quitter cette équipe ?'))return;
+  if(isOwner){
+    const{error}=await db.rpc('delete_team',{p_team_id:teamState.team.id});
+    if(error){showToast(error.message,'error');return;}
+    showToast('Équipe dissoute.','success');
+  }else{
+    const{error}=await db.from('team_members').delete().eq('user_id',currentUser.id);
+    if(error){showToast(error.message,'error');return;}
+    showToast('Tu as quitté l\u2019équipe.','success');
+  }
   loadTeamSection();
+}
+
+// TEAMS — gestion des rangs (modal)
+function openRanksModal(){
+  renderRanksList();
+  document.getElementById('team-ranks-modal').classList.add('show');
+}
+function closeRanksModal(){
+  document.getElementById('team-ranks-modal').classList.remove('show');
+}
+function renderRanksList(){
+  const list=document.getElementById('team-ranks-list');
+  if(!list)return;
+  list.innerHTML=teamState.ranks.map(r=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:13px"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${r.color};margin-right:6px;vertical-align:middle"></span>${esc(r.name)}${r.is_default?' <span style="font-size:10px;color:var(--text-muted)">(par défaut)</span>':''}</span>
+      ${!r.is_default?`<button class="btn btn-ghost btn-sm" style="color:#e08080" onclick="deleteRank('${r.id}')">Supprimer</button>`:''}
+    </div>`).join('')||'<div style="color:var(--text-muted);font-size:12px">Aucun rang.</div>';
+}
+async function createRank(){
+  const name=(document.getElementById('rank-name')?.value||'').trim();
+  if(!name){showToast('Donne un nom au rang.','error');return;}
+  const color=document.getElementById('rank-color')?.value||'#8a8a8a';
+  const payload={
+    team_id:teamState.team.id,name,color,
+    position:(teamState.ranks.length?Math.max(...teamState.ranks.map(r=>r.position)):0)+1,
+    can_invite:!!document.getElementById('perm-invite')?.checked,
+    can_kick:!!document.getElementById('perm-kick')?.checked,
+    can_manage_ranks:!!document.getElementById('perm-manage-ranks')?.checked,
+    can_edit_tasks:!!document.getElementById('perm-edit-tasks')?.checked,
+    can_delete_tasks:!!document.getElementById('perm-delete-tasks')?.checked,
+    can_edit_team:!!document.getElementById('perm-edit-team')?.checked,
+    can_promote:!!document.getElementById('perm-promote')?.checked
+  };
+  const{error}=await db.from('team_ranks').insert(payload);
+  if(error){showToast(error.message,'error');return;}
+  showToast('Rang créé.','success');
+  document.getElementById('rank-name').value='';
+  document.getElementById('rank-color').value='#8a8a8a';
+  ['perm-invite','perm-kick','perm-manage-ranks','perm-delete-tasks','perm-edit-team','perm-promote'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=false;});
+  const editTasks=document.getElementById('perm-edit-tasks');if(editTasks)editTasks.checked=true;
+  await loadTeamBoardData(teamState.team.id);
+  renderRanksList();
+}
+async function deleteRank(id){
+  if(!confirm('Supprimer ce rang ? Les membres qui l\u2019ont seront rétrogradés au rang par défaut.'))return;
+  const defaultRank=teamState.ranks.find(r=>r.is_default);
+  if(defaultRank)await db.from('team_members').update({rank_id:defaultRank.id}).eq('rank_id',id);
+  const{error}=await db.from('team_ranks').delete().eq('id',id);
+  if(error){showToast(error.message,'error');return;}
+  showToast('Rang supprimé.','success');
+  await loadTeamBoardData(teamState.team.id);
+  renderRanksList();
 }
 
 // DISCOVER
@@ -11675,6 +11897,13 @@ function checkAiKeyBanner(){
   const banner=document.getElementById('editor-ai-key-banner');
   if(banner)banner.style.display=getAiKey()?'none':'flex';
 }
+function toggleAiWhyInfo(e){
+  e.preventDefault();
+  ['devai-key-why','editor-ai-key-why'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.style.display=el.style.display==='none'?'block':'none';
+  });
+}
 
 // Historique de conversation IA (mémoire entre les messages)
 let _aiHistory=[];
@@ -11720,7 +11949,7 @@ async function sendEditorAI(){
     const res=await fetch('https://openrouter.ai/api/v1/chat/completions',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`,'HTTP-Referer':'https://devconnect-dev.github.io','X-Title':'DevConnect Editor'},
-      body:JSON.stringify({model:'qwen/qwen3-coder:free',models:['qwen/qwen3-coder:free','openrouter/free'],messages:[{role:'system',content:systemPrompt},..._aiHistory],max_tokens:600,temperature:0.3})
+      body:JSON.stringify({model:'openai/gpt-oss-120b:free',models:['openai/gpt-oss-120b:free','deepseek/deepseek-v3:free','meta-llama/llama-3.3-70b-instruct:free','qwen/qwen3-coder:free'],messages:[{role:'system',content:systemPrompt},..._aiHistory],max_tokens:600,temperature:0.3})
     });
     if(!res.ok){
       const err=await res.json().catch(()=>({}));
@@ -11791,7 +12020,7 @@ function switchDevaiTab(el,tab){
 
 // Appel générique OpenRouter, partagé par les 4 features — gère clé API + quota + scan sécu Nexus
 async function devaiCallAI(systemPrompt, userContent, maxTokens){
-  if(!currentUser){showToast('Connecte-toi pour utiliser DevAI.','error');throw new Error('not-logged-in');}
+  if(!currentUser){showToast('Connecte-toi pour utiliser Solara AI.','error');throw new Error('not-logged-in');}
   const key=getAiKey();
   checkDevaiKeyBanner();
   if(!key){promptAiKey();checkDevaiKeyBanner();throw new Error('no-key');}
@@ -11804,8 +12033,8 @@ async function devaiCallAI(systemPrompt, userContent, maxTokens){
   nexusTrackEdgeCall('devai');
   const res=await fetch('https://openrouter.ai/api/v1/chat/completions',{
     method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`,'HTTP-Referer':'https://devconnect-dev.github.io','X-Title':'DevConnect DevAI'},
-    body:JSON.stringify({model:'qwen/qwen3-coder:free',models:['qwen/qwen3-coder:free','openrouter/free'],messages:[{role:'system',content:systemPrompt},{role:'user',content:userContent}],max_tokens:maxTokens||900,temperature:0.25})
+    headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`,'HTTP-Referer':'https://devconnect-dev.github.io','X-Title':'DevConnect Solara AI'},
+    body:JSON.stringify({model:'openai/gpt-oss-120b:free',models:['openai/gpt-oss-120b:free','deepseek/deepseek-v3:free','meta-llama/llama-3.3-70b-instruct:free','qwen/qwen3-coder:free'],messages:[{role:'system',content:systemPrompt},{role:'user',content:userContent}],max_tokens:maxTokens||900,temperature:0.25})
   });
   if(!res.ok){
     const err=await res.json().catch(()=>({}));
@@ -11821,6 +12050,56 @@ async function devaiCallAI(systemPrompt, userContent, maxTokens){
 
 // Chat — historique conservé en mémoire (comme l'assistant de l'éditeur)
 let _devaiHistory=[];
+const DA_LANG_EXT={html:'html',css:'css',js:'js',javascript:'js',json:'json',jsx:'jsx',ts:'ts',typescript:'ts',python:'py',py:'py',sql:'sql',bash:'sh',sh:'sh',md:'md',markdown:'md'};
+
+function renderDevaiMessage(text){
+  const re=/```(\w+)?\n?([\s\S]*?)```/g;
+  let lastIndex=0,out='',m;
+  while((m=re.exec(text))){
+    if(m.index>lastIndex)out+=esc(text.slice(lastIndex,m.index)).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\n/g,'<br>');
+    const lang=(m[1]||'txt').toLowerCase();
+    const code=m[2].replace(/\n$/,'');
+    const id='da-code-'+Math.random().toString(36).slice(2,9);
+    const ext=DA_LANG_EXT[lang]||'txt';
+    out+=`<div class="da-code-block">
+      <div class="da-code-head"><span>${esc(lang)}</span>
+        <span style="display:flex;gap:4px">
+          <button class="btn btn-ghost btn-sm" onclick="solaraCopyCode('${id}')">Copier</button>
+          <button class="btn btn-ghost btn-sm" onclick="solaraDownloadCode('${id}','${ext}')">📄 Créer le fichier</button>
+        </span>
+      </div>
+      <pre id="${id}" class="da-code-pre">${esc(code)}</pre>
+    </div>`;
+    lastIndex=re.lastIndex;
+  }
+  if(lastIndex<text.length)out+=esc(text.slice(lastIndex)).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\n/g,'<br>');
+  return out;
+}
+
+function solaraCopyCode(id){
+  const pre=document.getElementById(id);
+  if(!pre)return;
+  navigator.clipboard.writeText(pre.textContent).then(()=>showToast('Code copié ✓','success')).catch(()=>showToast('Impossible de copier.','error'));
+}
+
+function solaraDownloadCode(id,ext){
+  const pre=document.getElementById(id);
+  if(!pre)return;
+  const code=pre.textContent;
+  const filename=(prompt('Nom du fichier :','solara-code.'+ext)||('solara-code.'+ext)).trim();
+  const blob=new Blob([code],{type:'text/plain'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  // Ajoute aussi le fichier dans le module Code, pour que l'aperçu en direct le trouve tout de suite.
+  editorFiles[filename]=code;
+  activeEditorFile=filename;
+  persistEditorFile(filename,code);
+  if(typeof renderEditorFileTree==='function')renderEditorFileTree();
+  showToast(`Fichier "${filename}" créé ✓ (téléchargé + ajouté au module Code)`,'success');
+}
+
 async function sendDevaiChat(){
   const input=document.getElementById('devai-chat-input');
   const msg=input.value.trim();if(!msg)return;
@@ -11828,14 +12107,14 @@ async function sendDevaiChat(){
   const c=document.getElementById('devai-chat-messages');
   c.innerHTML+=`<div class="da-msg user">${esc(msg)}</div><div class="da-msg ai da-thinking" id="devai-typing">●●●</div>`;
   c.scrollTop=c.scrollHeight;
-  const systemPrompt=`Tu es DevAI, un assistant de code expert pour développeurs sur DevConnect. Réponds en français, de façon concise et précise. Utilise des backticks pour le code inline. Pas de markdown avec ##.`;
+  const systemPrompt=`Tu es Solara AI, un assistant de code expert pour développeurs sur DevConnect, spécialisé en HTML, CSS et JavaScript. Réponds en français, de façon concise, claire et pédagogue — explique le "pourquoi", pas juste le "quoi". Utilise des backticks simples pour le code inline très court. Dès que tu écris un extrait de code destiné à être utilisé tel quel (une fonction complète, un fichier, un composant), place-le dans un bloc de code avec trois backticks et le langage juste après (par exemple \`\`\`html ou \`\`\`css ou \`\`\`js) — cela permet à l'utilisateur de le télécharger directement en fichier. Pas de markdown avec ##.`;
   try{
     _devaiHistory.push({role:'user',content:msg});
     if(_devaiHistory.length>20)_devaiHistory=_devaiHistory.slice(-20);
-    const text=await devaiCallAI(systemPrompt, msg, 600);
+    const text=await devaiCallAI(systemPrompt, msg, 900);
     _devaiHistory.push({role:'assistant',content:text});
     const el=document.getElementById('devai-typing');
-    if(el){el.classList.remove('da-thinking');el.innerHTML=esc(text).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\n/g,'<br>');el.removeAttribute('id');}
+    if(el){el.classList.remove('da-thinking');el.innerHTML=renderDevaiMessage(text);el.removeAttribute('id');}
   }catch(e){
     _devaiHistory.pop();
     const el=document.getElementById('devai-typing');
@@ -12637,7 +12916,7 @@ function toggleProfileDropdown(){document.getElementById('profile-dropdown').cla
 // NOTIFICATIONS
 // ============================================================
 
-const NOTIF_ICONS={mention:'@',dm:'✉',follow:'★',like:'♥',report:'⚠',nexus_warning:'⚠',nexus_restriction:'🔇',nexus_quarantine:'🛡'};
+const NOTIF_ICONS={mention:'@',dm:'✉',follow:'★',like:'♥',report:'⚠',nexus_warning:'⚠',nexus_restriction:'🔇',nexus_quarantine:'🛡',team_invite:'⚑'};
 function toggleNotifDropdown(){
   const dd=document.getElementById('notif-dropdown');
   dd.classList.toggle('show');
