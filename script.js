@@ -1049,9 +1049,10 @@ function navigate(section) {
   currentSection = section;
   if (section === 'messages') { loadMessages(); loadDmList(); }
   if (section === 'profile') updateProfileSection();
-  if (section === 'feed') { loadFeed(); loadSidebarLeaderboard(); loadActiveAnnouncementBanner(); }
+  if (section === 'feed') { loadFeed(); loadSidebarLeaderboard(); loadActiveAnnouncementBanner(); loadHallSidebarTeaser(); }
   if (section === 'home') { loadActiveAnnouncementBanner(); populateHomeGreeting(); }
   if (section === 'ranking') { loadInsightDashboard(); loadWeeklyChallengeId(); setTimeout(()=>window.myShowStarBubble?.("Je relie toutes tes statistiques, XP, activité et classement, en continu sous la surface."),700); }
+  if (section === 'hall') { loadHallPage(); }
   if (section === 'discover') loadDiscover();
   if (section === 'team') loadTeamSection(); else unsubscribeTeamRealtime();
   if (section === 'recruit') { loadDeployList(); setTimeout(()=>window.dpShowMoodBubble?.('dpMoodBubble2'),700); }
@@ -1113,8 +1114,11 @@ function switchInsightTab(el,tab){
   document.getElementById('insight-pane-'+tab)?.classList.add('active');
   if(tab==='dashboard')loadInsightDashboard();
   if(tab==='ranking')loadRanking();
+  if(tab==='hall')loadHallInsightPreview();
   setTimeout(()=>window.myShowStarBubble?.(tab==='ranking'
     ? "Le classement, c'est la partie visible du réseau — les scores qui remontent en surface."
+    : tab==='hall'
+    ? "Le Hall, c'est la mémoire longue du réseau — ceux qui ont marqué la saison, pour de bon."
     : "Je relie toutes tes statistiques, XP, activité et classement, en continu sous la surface."
   ),500);
 }
@@ -1267,7 +1271,7 @@ function toggleRankingSpecFilter(el){
 
 async function loadRanking() {
   const cont = document.getElementById('ranking-rows');
-  cont.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement...</div>';
+  cont.innerHTML=skelRows(5,{avatar:true});
 
   const specLabels = { web_dev: 'web dev', mobile_dev: 'mobile', backend_dev: 'backend', fullstack_dev: 'fullstack', cybersecurity: 'cybersecurity', devops: 'devops', data: 'data', ai_ml: 'ia / ml', designer_ux: 'design', recruiter: 'recruteur' };
   const medals = ['gold', 'silver', 'bronze'];
@@ -1318,6 +1322,309 @@ async function loadRanking() {
       </div>
     </div>`;
   }).join('');
+}
+
+// ============================================================
+// HALL DES LÉGENDES
+// ============================================================
+const HALL_SPECIALTIES = [
+  { key: 'web_dev', label: 'Dev Web', icon: '◉' },
+  { key: 'mobile_dev', label: 'Mobile', icon: '◈' },
+  { key: 'backend_dev', label: 'Backend', icon: '⬡' },
+  { key: 'fullstack_dev', label: 'Fullstack', icon: '◆' },
+  { key: 'cybersecurity', label: 'Cybersécurité', icon: '⬢' },
+  { key: 'devops', label: 'DevOps', icon: '⬟' },
+  { key: 'data', label: 'Data', icon: '◇' },
+  { key: 'ai_ml', label: 'IA / ML', icon: '✦' },
+  { key: 'designer_ux', label: 'Designer UX', icon: '◐' },
+];
+const HALL_REVIEW_TAGS = ['Fiable','Pédagogue','Réactif','Code propre','Rigoureux','Bienveillant','Créatif','Bon esprit d\'équipe'];
+
+let hallCurrentSpecialty = null;
+let hallCurrentTab = 'leaderboard';
+let hallActiveSeason = null;
+let hallCountdownTimer = null;
+let hallReviewStars = 0;
+let hallReviewTags = [];
+let hallReviewTargetId = null;
+
+async function loadHallPage(){
+  hallCurrentSpecialty = hallCurrentSpecialty || currentProfile?.specialty || 'web_dev';
+  renderHallSpecialtyChips();
+  await loadHallSeasonInfo();
+  loadHallLeaderboard(hallCurrentSpecialty);
+  loadHallArchive(hallCurrentSpecialty);
+}
+
+function renderHallSpecialtyChips(){
+  const cont = document.getElementById('hall-specialty-chips');
+  if(!cont) return;
+  cont.innerHTML = HALL_SPECIALTIES.map(s =>
+    `<button class="filter-chip${s.key===hallCurrentSpecialty?' active':''}" onclick="selectHallSpecialty('${s.key}',this)">${s.icon} ${esc(s.label)}</button>`
+  ).join('');
+}
+
+function selectHallSpecialty(key, el){
+  hallCurrentSpecialty = key;
+  document.querySelectorAll('#hall-specialty-chips .filter-chip').forEach(c=>c.classList.remove('active'));
+  el?.classList.add('active');
+  if(hallCurrentTab==='leaderboard') loadHallLeaderboard(key);
+  else loadHallArchive(key);
+}
+
+function switchHallTab(el, tab){
+  hallCurrentTab = tab;
+  document.querySelectorAll('#section-hall .hall-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('#section-hall .hall-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('hall-pane-'+tab)?.classList.add('active');
+  if(tab==='leaderboard') loadHallLeaderboard(hallCurrentSpecialty);
+  else loadHallArchive(hallCurrentSpecialty);
+}
+
+async function loadHallSeasonInfo(){
+  const { data } = await db.from('hall_seasons').select('id,starts_at,ends_at,status').eq('status','active').maybeSingle();
+  hallActiveSeason = data || null;
+  clearInterval(hallCountdownTimer);
+  const bigEl = document.getElementById('hall-countdown-val');
+  const previewEl = document.getElementById('hall-preview-countdown');
+  if(!data){
+    if(bigEl) bigEl.textContent = '—';
+    if(previewEl) previewEl.textContent = 'Aucune saison active pour le moment.';
+    return;
+  }
+  const tick = () => {
+    const txt = formatHallCountdown(data.ends_at);
+    if(bigEl) bigEl.textContent = txt;
+    if(previewEl) previewEl.textContent = `Fin de saison dans ${txt}`;
+  };
+  tick();
+  hallCountdownTimer = setInterval(tick, 60000);
+}
+
+function formatHallCountdown(endsAt){
+  const diff = new Date(endsAt).getTime() - Date.now();
+  if(diff <= 0) return 'Clôture imminente';
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  if(days > 0) return `${days}j ${hours}h`;
+  const mins = Math.floor((diff % 3600000) / 60000);
+  return `${hours}h ${mins}min`;
+}
+
+async function loadHallLeaderboard(specialty){
+  const podiumCont = document.getElementById('hall-podium');
+  const rowsCont = document.getElementById('hall-rows');
+  if(podiumCont) podiumCont.innerHTML = '<div class="insight-empty">Chargement...</div>';
+  if(rowsCont) rowsCont.innerHTML = skelRows(5,{avatar:true});
+
+  const { data, error } = await db.rpc('get_hall_leaderboard', { p_specialty: specialty });
+  if(error){
+    if(podiumCont) podiumCont.innerHTML = '';
+    if(rowsCont) rowsCont.innerHTML = `<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Impossible de charger le classement.</div>`;
+    return;
+  }
+  const rows = data || [];
+  renderHallPodium(rows.slice(0,3));
+  renderHallTable(rows, rowsCont);
+}
+
+function hallSpecLabel(key){ return HALL_SPECIALTIES.find(s=>s.key===key)?.label || key; }
+
+function renderHallPodium(top3){
+  const cont = document.getElementById('hall-podium');
+  if(!cont) return;
+  if(top3.length === 0){
+    cont.innerHTML = `<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Personne n'est encore éligible (3 avis minimum requis).</div>`;
+    return;
+  }
+  const order = [1,0,2]; // affiche 2e, 1er, 3e
+  cont.innerHTML = `<div class="hall-podium">${order.filter(i=>top3[i]).map(i=>{
+    const u = top3[i]; const rank = i+1;
+    const name = u.username || 'Inconnu';
+    const init = esc(name.substring(0,2).toUpperCase());
+    const avatarH = u.avatar_url ? `<img src="${esc(safeUrl(u.avatar_url))}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : init;
+    return `<div class="hall-podium-item rank-${rank}" onclick="openProfile('${esc(name)}')">
+      <div class="hall-podium-avatar">${avatarH}</div>
+      <div class="hall-podium-name">${esc(name)}</div>
+      <div class="hall-podium-score">${(u.final_score||0).toFixed(2)} pts</div>
+      <div class="hall-podium-step">${rank}</div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function renderHallTable(rows, cont){
+  cont = cont || document.getElementById('hall-rows');
+  if(!cont) return;
+  if(rows.length === 0){
+    cont.innerHTML = `<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucun membre éligible pour l'instant — il faut ≥ 3 avis reçus cette saison.</div>`;
+    return;
+  }
+  const medals = ['gold','silver','bronze'];
+  cont.innerHTML = rows.map((u,i)=>{
+    const name = u.username || 'Inconnu';
+    const init = esc(name.substring(0,2).toUpperCase());
+    const avatarH = u.avatar_url ? `<img src="${esc(safeUrl(u.avatar_url))}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : init;
+    const rankClass = medals[i] ? `rank-num ${medals[i]}` : 'rank-num';
+    const canReview = currentUser && u.user_id !== currentUser.id;
+    return `<div class="ranking-row">
+      <div class="${rankClass}">${i+1}</div>
+      <div class="rank-user" style="cursor:pointer" onclick="openProfile('${esc(name)}')">
+        <div class="rank-avatar">${avatarH}</div>
+        <div>
+          <div class="rank-name">${esc(name)}</div>
+          <div class="rank-spec">${u.review_count} avis · ★ ${(u.bayes_rating||0).toFixed(1)}</div>
+        </div>
+      </div>
+      <div class="rank-score"><div class="rank-xp">${(u.final_score||0).toFixed(2)} pts</div></div>
+      <div>${canReview ? `<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openHallReviewModal('${u.user_id}','${esc(name).replace(/'/g,"\\'")}')">Noter</button>` : ''}</div>
+    </div>`;
+  }).join('');
+}
+
+async function loadHallArchive(specialty){
+  const cont = document.getElementById('hall-archive-list');
+  if(!cont) return;
+  cont.innerHTML = '<div class="insight-empty">Chargement...</div>';
+  const { data, error } = await db.from('hall_archive')
+    .select('rank,final_score,bayes_rating,review_count,season_xp,archived_at,season_id,user_id,profiles(username,avatar_url),hall_seasons(starts_at,ends_at)')
+    .eq('specialty', specialty)
+    .order('archived_at', { ascending: false })
+    .limit(60);
+  if(error || !data || data.length === 0){
+    cont.innerHTML = `<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Aucune saison archivée pour ${esc(hallSpecLabel(specialty))} pour l'instant.</div>`;
+    return;
+  }
+  const bySeason = {};
+  data.forEach(row=>{
+    const sid = row.season_id;
+    if(!bySeason[sid]) bySeason[sid] = { season: row.hall_seasons, rows: [] };
+    bySeason[sid].rows.push(row);
+  });
+  const medals = ['🥇','🥈','🥉'];
+  cont.innerHTML = Object.values(bySeason).map(group=>{
+    const start = group.season?.starts_at ? new Date(group.season.starts_at).toLocaleDateString('fr-FR',{month:'long',year:'numeric'}) : '—';
+    const rows = group.rows.sort((a,b)=>a.rank-b.rank).map(r=>{
+      const u = r.profiles;
+      const name = u?.username || 'Inconnu';
+      const init = esc(name.substring(0,2).toUpperCase());
+      const avatarH = u?.avatar_url ? `<img src="${esc(safeUrl(u.avatar_url))}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : init;
+      return `<div class="hall-archive-row" onclick="openProfile('${esc(name)}')">
+        <span class="hall-archive-medal">${medals[r.rank-1]||''}</span>
+        <div class="hall-podium-avatar" style="width:34px;height:34px;font-size:12px">${avatarH}</div>
+        <span class="hall-archive-name">${esc(name)}</span>
+        <span class="hall-archive-score">${(r.final_score||0).toFixed(2)} pts</span>
+      </div>`;
+    }).join('');
+    return `<div class="hall-archive-card">
+      <div class="hall-archive-card-title">Saison ${esc(start)}</div>
+      ${rows}
+    </div>`;
+  }).join('');
+}
+
+async function loadHallInsightPreview(){
+  const specialty = currentProfile?.specialty || 'web_dev';
+  await loadHallSeasonInfo();
+  const cont = document.getElementById('hall-preview-podium');
+  if(!cont) return;
+  cont.innerHTML = '<div class="insight-empty">Chargement...</div>';
+  const { data, error } = await db.rpc('get_hall_leaderboard', { p_specialty: specialty });
+  if(error || !data || data.length === 0){
+    cont.innerHTML = `<div style="padding:16px;text-align:center;color:var(--text-muted);font-size:12.5px">Personne n'est encore éligible dans ta spécialité (${esc(hallSpecLabel(specialty))}). ≥ 3 avis reçus requis.</div>`;
+    return;
+  }
+  const top3 = data.slice(0,3);
+  const order = [1,0,2];
+  cont.innerHTML = `<div class="hall-podium hall-podium-mini">${order.filter(i=>top3[i]).map(i=>{
+    const u = top3[i]; const rank = i+1;
+    const name = u.username || 'Inconnu';
+    const init = esc(name.substring(0,2).toUpperCase());
+    const avatarH = u.avatar_url ? `<img src="${esc(safeUrl(u.avatar_url))}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : init;
+    return `<div class="hall-podium-item rank-${rank}" onclick="openProfile('${esc(name)}')">
+      <div class="hall-podium-avatar">${avatarH}</div>
+      <div class="hall-podium-name">${esc(name)}</div>
+      <div class="hall-podium-score">${(u.final_score||0).toFixed(2)} pts</div>
+      <div class="hall-podium-step">${rank}</div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+async function loadHallSidebarTeaser(){
+  const cont = document.getElementById('sidebar-hall-teaser');
+  if(!cont) return;
+  const specialty = currentProfile?.specialty || 'web_dev';
+  const { data, error } = await db.rpc('get_hall_leaderboard', { p_specialty: specialty });
+  if(error || !data || data.length === 0){
+    cont.innerHTML = `<div style="font-size:12px;color:var(--text-muted)">Personne d'éligible pour l'instant dans ta spécialité.</div>`;
+    return;
+  }
+  const leader = data[0];
+  const name = leader.username || 'Inconnu';
+  const init = esc(name.substring(0,2).toUpperCase());
+  const avatarH = leader.avatar_url ? `<img src="${esc(safeUrl(leader.avatar_url))}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : init;
+  cont.innerHTML = `<div style="display:flex;align-items:center;gap:10px">
+    <div class="lb-podium-avatar" style="width:36px;height:36px;font-size:13px">${avatarH}</div>
+    <div style="min-width:0">
+      <div style="font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">👑 ${esc(name)}</div>
+      <div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">${(leader.final_score||0).toFixed(2)} pts · ${esc(hallSpecLabel(specialty))}</div>
+    </div>
+  </div>`;
+}
+
+// HALL — modale de notation
+function openHallReviewModal(userId, username){
+  if(!currentUser){ showToast('Connecte-toi pour noter un membre.','error'); return; }
+  hallReviewTargetId = userId;
+  hallReviewStars = 0;
+  hallReviewTags = [];
+  setEl('hall-review-target-name', username);
+  document.getElementById('hall-review-target-spec').textContent = hallSpecLabel(hallCurrentSpecialty);
+  document.querySelectorAll('#hall-star-input .hall-star').forEach(s=>s.classList.remove('active'));
+  const feedback = document.getElementById('hall-review-feedback');
+  feedback.style.display='none'; feedback.textContent='';
+  const tagsCont = document.getElementById('hall-tags-grid');
+  tagsCont.innerHTML = HALL_REVIEW_TAGS.map(t=>`<span class="hall-tag-chip" onclick="toggleHallTag(this,'${esc(t).replace(/'/g,"\\'")}')">${esc(t)}</span>`).join('');
+  document.getElementById('hall-review-modal').classList.add('show');
+}
+function closeHallReviewModal(){
+  document.getElementById('hall-review-modal').classList.remove('show');
+}
+function setHallStars(n){
+  hallReviewStars = n;
+  document.querySelectorAll('#hall-star-input .hall-star').forEach(s=>{
+    s.classList.toggle('active', Number(s.dataset.star) <= n);
+  });
+}
+function toggleHallTag(el, tag){
+  const idx = hallReviewTags.indexOf(tag);
+  if(idx > -1){
+    hallReviewTags.splice(idx,1);
+    el.classList.remove('active');
+  }else{
+    if(hallReviewTags.length >= 3){ showToast('3 points forts maximum.','error'); return; }
+    hallReviewTags.push(tag);
+    el.classList.add('active');
+  }
+}
+async function submitHallReview(){
+  const feedback = document.getElementById('hall-review-feedback');
+  if(hallReviewStars === 0){
+    feedback.style.display='block'; feedback.style.color='#c0392b'; feedback.textContent='Choisis une note en étoiles.';
+    return;
+  }
+  const { error } = await db.rpc('submit_hall_review', {
+    p_target_user_id: hallReviewTargetId,
+    p_stars: hallReviewStars,
+    p_tags: hallReviewTags
+  });
+  if(error){
+    feedback.style.display='block'; feedback.style.color='#c0392b'; feedback.textContent = error.message || 'Une erreur est survenue.';
+    return;
+  }
+  showToast('Avis envoyé !','success');
+  closeHallReviewModal();
+  loadHallLeaderboard(hallCurrentSpecialty);
 }
 
 // SIDEBAR TOP 5
@@ -1493,7 +1800,7 @@ async function renderProjectsTab() {
 async function renderCvTab(){
   const cont=document.getElementById('cv-list');
   if(!cont||!currentUser)return;
-  cont.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Chargement...</div>';
+  cont.innerHTML=skelRows(3);
   const{data,error}=await db.from('cv_experiences').select('*').eq('user_id',currentUser.id).order('start_date',{ascending:false});
   if(error){
     cont.innerHTML=`<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">Impossible de charger les expériences (table absente ou inaccessible).<br><span style="font-family:var(--font-mono);font-size:11px;opacity:.6">${esc(error.message||'')}</span></div>`;
@@ -1976,7 +2283,7 @@ function openSnippetHistory(id){
   if(!s){showToast('Snippet introuvable.','error');return;}
   setEl('snippet-history-title',s.title||'');
   const listEl=document.getElementById('snippet-history-list');
-  listEl.innerHTML='<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:13px">Chargement...</div>';
+  listEl.innerHTML=skelRows(3);
   document.getElementById('snippet-history-modal').classList.add('show');
   loadSnippetVersions(id);
 }
@@ -2045,7 +2352,7 @@ async function openSharedSnippetFromUrl(){
 async function loadSnippets(){
   const cont=document.getElementById('snippets-list');
   if(!cont)return;
-  cont.innerHTML='<div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement...</div>';
+  cont.innerHTML=skelRows(4,{avatar:true});
   let q=db.from('snippets').select('*,profiles(username,avatar_url)').order('created_at',{ascending:false}).limit(50);
   if(activeSnippetLang!=='all')q=q.eq('language',activeSnippetLang);
   const{data,error}=await q;
@@ -2113,7 +2420,7 @@ async function toggleSnippetComments(snippetId){
 async function loadSnippetComments(snippetId){
   const el=document.getElementById('snip-comments-'+snippetId);
   if(!el)return;
-  el.innerHTML='<div style="font-size:12px;color:var(--text-muted)">Chargement...</div>';
+  el.innerHTML=skelRows(2);
   const{data,error}=await db.from('snippet_comments').select('*,profiles(username)').eq('snippet_id',snippetId).order('created_at',{ascending:true}).limit(50);
   const list=(!error&&data)?data.map(c=>{
     const name=c.profiles?.username||'Inconnu';
@@ -3327,7 +3634,7 @@ async function loadTeamSection(){
     cont.innerHTML='<div class="team-empty-cta" style="text-align:center">'+owlMascot('idle',56)+'<div style="font-family:var(--nb-serif);font-size:15px;color:var(--nb-ink);margin-top:10px;font-weight:600">Connecte-toi pour créer ou rejoindre une équipe</div></div>';
     return;
   }
-  cont.innerHTML='<div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement...</div>';
+  cont.innerHTML=skelBlock(4);
   const{data:membership}=await db.from('team_members').select('team_id').eq('user_id',currentUser.id).maybeSingle();
   if(!membership){
     if(teamRealtimeSub){db.removeChannel(teamRealtimeSub);teamRealtimeSub=null;}
@@ -3592,7 +3899,7 @@ let discoverFilter = 'all', discoverSubFilters = [], discoverSearch = '';
 async function loadDiscover() {
   const cont = document.getElementById('dev-results');
 
-  cont.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement...</div>';
+  cont.innerHTML = skelRows(6,{avatar:true});
   let q = db.from('profiles').select('username,avatar_url,specialty,tech_stack,title,is_premium,premium_tier,xp,available_for_pairing').eq('is_banned', false).order('xp', { ascending: false }).limit(40);
   if (discoverFilter !== 'all') q = q.eq('specialty', discoverFilter);
   if (discoverSearch) q = q.ilike('username', `%${discoverSearch}%`);
@@ -4101,7 +4408,7 @@ async function openProfile(username){
   const modal=document.getElementById('view-profile-modal');
   const body=document.getElementById('view-profile-body');
   modal.classList.add('show');
-  body.innerHTML='<div style="padding:24px;color:var(--text-muted);font-size:13px">Chargement...</div>';
+  body.innerHTML=skelRows(1,{avatar:true})+skelBlock(3);
   const{data:p}=await db.from('profiles').select('*').eq('username',username).maybeSingle();
   if(!p){body.innerHTML='<div style="padding:24px;color:var(--text-muted);font-size:13px">Profil introuvable.</div>';return;}
   const specLabels={web_dev:'Dev Web',mobile_dev:'Dev Mobile',backend_dev:'Dev Backend',fullstack_dev:'Fullstack',cybersecurity:'Cybersécurité',devops:'DevOps',data:'Data',ai_ml:'IA / ML',designer_ux:'Designer UX',recruiter:'Recruteur tech'};
@@ -5540,7 +5847,7 @@ async function deleteMessage(msgId){
 async function loadContentMod(){
   // Posts
   const postsTbody=document.getElementById('admin-posts-list');
-  if(postsTbody)postsTbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:16px;font-size:13px">Chargement...</td></tr>';
+  if(postsTbody)postsTbody.innerHTML=skelTableRows(4,4);
   const{data:posts,error:pe}=await db.from('posts').select('id,content,created_at,user_id').order('created_at',{ascending:false}).limit(30);
   if(pe||!posts){if(postsTbody)postsTbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:16px;font-size:13px">Erreur : '+(pe?.message||'')+'</td></tr>';return;}
   const postUserIds=[...new Set(posts.map(p=>p.user_id))];
@@ -5560,7 +5867,7 @@ async function loadContentMod(){
 
   // Messages chat (non-DM seulement)
   const msgsTbody=document.getElementById('admin-messages-list');
-  if(msgsTbody)msgsTbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:16px;font-size:13px">Chargement...</td></tr>';
+  if(msgsTbody)msgsTbody.innerHTML=skelTableRows(4,4);
   const{data:msgs,error:me}=await db.from('messages').select('id,content,created_at,user_id,channel_id').eq('is_dm',false).order('created_at',{ascending:false}).limit(30);
   if(me||!msgs){if(msgsTbody)msgsTbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:16px;font-size:13px">Erreur : '+(me?.message||'')+'</td></tr>';return;}
   const msgUserIds=[...new Set(msgs.map(m=>m.user_id))];
@@ -6170,6 +6477,42 @@ function selectCustomDropdown(id,value){
 document.addEventListener('click',e=>{
   if(!e.target.closest('.cdrop'))document.querySelectorAll('.cdrop.open').forEach(d=>d.classList.remove('open'));
 });
+// ---------- Skeletons de chargement (remplace les anciens "Chargement..." statiques) ----------
+function skelRows(n,opts){
+  opts=opts||{};
+  var avatar=!!opts.avatar;
+  var widths=['72%','55%','64%','48%'];
+  var out='';
+  for(var i=0;i<n;i++){
+    var w1=widths[i%widths.length];
+    var w2=widths[(i+2)%widths.length];
+    out+='<div class="skel-row">'+(avatar?'<div class="skel skel-circle"></div>':'')+
+      '<div class="skel-lines"><div class="skel skel-line" style="width:'+w1+'"></div>'+
+      '<div class="skel skel-line" style="width:'+w2+';margin-top:6px;opacity:.6"></div></div></div>';
+  }
+  return out;
+}
+function skelTableRows(n,cols){
+  var out='';
+  for(var i=0;i<n;i++){
+    out+='<tr>';
+    for(var c=0;c<cols;c++){
+      out+='<td style="padding:10px 12px"><div class="skel skel-line" style="width:'+(35+((c*17+i*11)%45))+'%"></div></td>';
+    }
+    out+='</tr>';
+  }
+  return out;
+}
+function skelBlock(lines){
+  lines=lines||3;
+  var widths=['82%','68%','54%','60%'];
+  var out='<div style="padding:22px 20px">';
+  for(var i=0;i<lines;i++){
+    out+='<div class="skel skel-line" style="height:11px;margin-bottom:10px;width:'+widths[i%widths.length]+'"></div>';
+  }
+  out+='</div>';
+  return out;
+}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
 // Échappement dédié pour une valeur insérée à l'intérieur d'une chaîne JS
 // délimitée par des guillemets simples DANS un attribut HTML (ex:
@@ -7087,7 +7430,7 @@ async function loadMoreNexusLogs(){
 
 async function renderNexusLogs(reset){
   const tbody=document.getElementById('nexus-logs-tbody');
-  if(reset)tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:32px;color:rgba(27,36,25,.2)">Chargement...</td></tr>';
+  if(reset)tbody.innerHTML=skelTableRows(6,7);
 
   let query=db.from('nexus_logs').select('*').eq('project_id',NEXUS_PROJECT_ID).order('created_at',{ascending:false}).range(nexusLogsOffset,nexusLogsOffset+NEXUS_LOG_PAGE-1);
   if(nexusLogsFilter!=='all')query=query.ilike('event_type','%'+nexusLogsFilter+'%');
@@ -7922,7 +8265,7 @@ function nexusFilterIncidents(el,filter){
 async function loadNexusIncidents(){
   const el=document.getElementById('nexus-incidents-list');
   if(!el)return;
-  el.innerHTML='<div style="text-align:center;padding:32px;color:rgba(27,36,25,.2);font-size:12px;font-family:var(--font-mono)">Chargement...</div>';
+  el.innerHTML=skelRows(3);
   let query=db.from('nexus_incidents').select('*').eq('project_id',NEXUS_PROJECT_ID).order('created_at',{ascending:false});
   if(_incidentsFilter!=='all')query=query.eq('status',_incidentsFilter);
   const{data,error}=await query;
@@ -7964,8 +8307,8 @@ async function loadNexusBlocks(){
   const blockedEl=document.getElementById('nexus-blocked-list');
   const appealsEl=document.getElementById('nexus-appeals-list');
   if(!blockedEl||!appealsEl)return;
-  blockedEl.innerHTML='<div style="text-align:center;padding:32px;color:rgba(27,36,25,.2);font-size:12px;font-family:var(--font-mono)">Chargement...</div>';
-  appealsEl.innerHTML='<div style="text-align:center;padding:32px;color:rgba(27,36,25,.2);font-size:12px;font-family:var(--font-mono)">Chargement...</div>';
+  blockedEl.innerHTML=skelRows(2);
+  appealsEl.innerHTML=skelRows(2);
 
   const{data:blocked,error:err1}=await db.from('profiles')
     .select('id,username,quarantine_reason,nexus_strike_count,is_muted,is_quarantined,is_shadowbanned')

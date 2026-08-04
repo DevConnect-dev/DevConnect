@@ -3745,3 +3745,142 @@ html.dark #page-app{background-color:#0E140F;}
         #section-nexus-intro .nx-card .ico{font-size:20px;margin-bottom:8px;}
         #section-nexus-intro .nx-card h3{font-family:var(--font-display);font-size:14px;color:var(--nx-text);margin-bottom:6px;}
         #section-nexus-intro .nx-card p{font-size:12.5px;color:var(--nx-text-mute);line-height:1.55;}
+
+/* ---------- Skeletons de chargement (remplace les anciens "Chargement..." statiques) ---------- */
+@keyframes skel-shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.skel{background:linear-gradient(90deg,rgba(127,127,127,.14) 25%,rgba(127,127,127,.28) 37%,rgba(127,127,127,.14) 63%);background-size:400% 100%;animation:skel-shimmer 1.4s ease infinite;border-radius:var(--radius,6px);}
+.skel-row{display:flex;align-items:center;gap:10px;padding:9px 12px;}
+.skel-circle{width:32px;height:32px;border-radius:50%;flex-shrink:0;}
+.skel-lines{flex:1;min-width:0;}
+.skel-line{height:9px;}
+@media (prefers-reduced-motion: reduce){.skel{animation:none;}}
+
+/* ============================================================
+   HALL DES LÉGENDES
+   ============================================================ */
+
+/* ---- Bannière de saison (page complète) ---- */
+.hall-season-banner{
+  display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  background:linear-gradient(135deg,rgba(217,164,65,.14),rgba(217,164,65,.03));
+  border:1px solid rgba(217,164,65,.3);border-radius:var(--radius-lg);
+  padding:18px 22px;margin-bottom:20px;
+}
+.hall-season-eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#B9791F;margin-bottom:7px;}
+.hall-season-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:#D9A441;box-shadow:0 0 8px #D9A441;animation:hallDotPulse 2s ease-in-out infinite;}
+@keyframes hallDotPulse{0%,100%{opacity:.5}50%{opacity:1}}
+.hall-season-desc{font-size:13px;color:var(--text-secondary);line-height:1.55;max-width:560px;}
+.hall-season-countdown{text-align:center;flex-shrink:0;}
+.hall-countdown-val{font-family:var(--font-display);font-size:26px;font-weight:700;color:#B9791F;letter-spacing:-.01em;white-space:nowrap;}
+.hall-countdown-label{font-size:10px;color:var(--text-muted);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
+
+/* ---- Chips de spécialité ---- */
+.hall-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:22px;}
+
+/* ---- Podium top 3 ---- */
+.hall-podium{display:flex;align-items:flex-end;gap:14px;justify-content:center;padding:20px 10px 0;}
+.hall-podium-item{width:120px;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:transform .2s var(--ease);}
+.hall-podium-item:hover{transform:translateY(-4px);}
+.hall-podium-item.rank-1{order:2;}
+.hall-podium-item.rank-2{order:1;}
+.hall-podium-item.rank-3{order:3;}
+.hall-podium-avatar{
+  width:56px;height:56px;border-radius:50%;margin-bottom:9px;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-mono);font-size:16px;color:var(--text);background:var(--bg3);flex-shrink:0;
+}
+.hall-podium-item.rank-1 .hall-podium-avatar{
+  width:74px;height:74px;font-size:20px;
+  box-shadow:0 0 0 3px var(--bg1),0 0 0 5px #E8C24A,0 12px 28px -10px rgba(232,194,74,.55);
+}
+.hall-podium-item.rank-2 .hall-podium-avatar{
+  box-shadow:0 0 0 3px var(--bg1),0 0 0 5px #B9C2CE,0 10px 22px -10px rgba(185,194,206,.5);
+}
+.hall-podium-item.rank-3 .hall-podium-avatar{
+  box-shadow:0 0 0 3px var(--bg1),0 0 0 5px #CD8C52,0 10px 22px -10px rgba(205,140,82,.45);
+}
+.hall-podium-name{font-size:12.5px;font-weight:700;max-width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hall-podium-score{font-size:10.5px;font-family:var(--font-mono);color:var(--text-muted);margin-bottom:9px;}
+.hall-podium-step{
+  width:100%;display:flex;align-items:flex-start;justify-content:center;padding-top:8px;
+  font-family:var(--font-display);font-weight:800;
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);
+}
+.hall-podium-item.rank-1 .hall-podium-step{
+  height:78px;font-size:26px;color:#8A6412;
+  background:linear-gradient(160deg,rgba(232,194,74,.32),rgba(232,194,74,.06));
+}
+.hall-podium-item.rank-2 .hall-podium-step{
+  height:56px;font-size:20px;color:#5C6673;
+  background:linear-gradient(160deg,rgba(185,194,206,.32),rgba(185,194,206,.06));
+}
+.hall-podium-item.rank-3 .hall-podium-step{
+  height:38px;font-size:20px;color:#8A522B;
+  background:linear-gradient(160deg,rgba(205,140,82,.32),rgba(205,140,82,.06));
+}
+.hall-podium-mini{gap:8px;padding:12px 4px 0;}
+.hall-podium-mini .hall-podium-item{width:88px;}
+.hall-podium-mini .hall-podium-avatar{width:42px;height:42px;font-size:13px;}
+.hall-podium-mini .hall-podium-item.rank-1 .hall-podium-avatar{width:54px;height:54px;font-size:15px;}
+.hall-podium-mini .hall-podium-name{font-size:11px;max-width:82px;}
+.hall-podium-mini .hall-podium-item.rank-1 .hall-podium-step{height:46px;font-size:17px;}
+.hall-podium-mini .hall-podium-item.rank-2 .hall-podium-step{height:34px;font-size:14px;}
+.hall-podium-mini .hall-podium-item.rank-3 .hall-podium-step{height:24px;font-size:14px;}
+
+/* ---- Table classement Hall : reprend .ranking-table, 4 colonnes ---- */
+#section-hall .ranking-row{grid-template-columns:32px 1fr auto auto;}
+#section-hall .ranking-row.header{grid-template-columns:32px 1fr auto auto;}
+
+/* ---- Preview compacte dans l'onglet Insight ---- */
+.hall-preview-banner{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  background:linear-gradient(135deg,rgba(217,164,65,.13),rgba(217,164,65,.02));
+  border:1px solid rgba(217,164,65,.28);border-radius:var(--radius-lg);
+  padding:14px 18px;
+}
+.hall-preview-eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:#B9791F;margin-bottom:5px;}
+.hall-preview-eyebrow .dot{width:5px;height:5px;border-radius:50%;background:#D9A441;box-shadow:0 0 6px #D9A441;animation:hallDotPulse 2s ease-in-out infinite;}
+.hall-preview-countdown{font-size:13px;color:var(--text-secondary);}
+
+/* ---- Archives ---- */
+.hall-archive-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;margin-bottom:14px;}
+.hall-archive-card-title{font-family:var(--font-display);font-size:14px;font-weight:700;margin-bottom:10px;text-transform:capitalize;}
+.hall-archive-row{display:flex;align-items:center;gap:10px;padding:7px 0;cursor:pointer;border-top:1px solid var(--border);}
+.hall-archive-row:first-of-type{border-top:none;}
+.hall-archive-medal{font-size:16px;width:22px;text-align:center;flex-shrink:0;}
+.hall-archive-name{flex:1;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hall-archive-score{font-size:11.5px;font-family:var(--font-mono);color:var(--text-muted);flex-shrink:0;}
+
+/* ---- Widget teaser sidebar (Fil d'actualité) ---- */
+.hall-teaser-widget{cursor:pointer;transition:transform .2s var(--ease),border-color .2s;}
+.hall-teaser-widget:hover{transform:translateY(-2px);border-color:rgba(217,164,65,.4);}
+
+/* ---- Modale de notation : étoiles ---- */
+.hall-star-input{display:flex;gap:6px;}
+.hall-star{font-size:32px;line-height:1;color:var(--bg3);cursor:pointer;transition:color .15s,transform .1s;user-select:none;}
+.hall-star:hover{transform:scale(1.12);}
+.hall-star.active{color:#E8C24A;text-shadow:0 0 10px rgba(232,194,74,.5);}
+
+/* ---- Modale de notation : tags de comportement ---- */
+.hall-tags-grid{display:flex;flex-wrap:wrap;gap:7px;}
+.hall-tag-chip{
+  padding:7px 13px;border-radius:100px;font-size:12.5px;color:var(--text-secondary);
+  background:var(--bg2);border:1px solid var(--border);cursor:pointer;transition:all .18s var(--ease);
+}
+.hall-tag-chip:hover{border-color:var(--border-bright);color:var(--text);}
+.hall-tag-chip.active{background:rgba(217,164,65,.16);border-color:#D9A441;color:#8A6412;font-weight:600;}
+
+/* ---- Cohérence avec le thème "sous-bois" de #section-ranking (onglet Insight) ---- */
+#page-app #section-ranking .hall-preview-banner{background:linear-gradient(135deg,rgba(169,137,92,.16),rgba(169,137,92,.03));border-color:var(--bp-line-bright);}
+#page-app #section-ranking .hall-preview-eyebrow{color:var(--bp-forest);font-family:var(--bp-mono);}
+#page-app #section-ranking .hall-preview-countdown{color:var(--bp-ink-soft);font-family:var(--bp-mono);font-size:12px;}
+#page-app #section-ranking .hall-podium-step{font-family:var(--bp-mono);}
+#page-app #section-ranking .hall-podium-name{color:var(--bp-ink);}
+#page-app #section-ranking .hall-podium-score{color:var(--bp-ink-mute);font-family:var(--bp-mono);}
+
+@media(max-width:640px){
+  .hall-season-banner{flex-direction:column;align-items:flex-start;}
+  .hall-podium{gap:8px;}
+  .hall-podium-item{width:92px;}
+  .hall-podium-name{max-width:84px;font-size:11.5px;}
+}

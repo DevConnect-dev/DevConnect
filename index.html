@@ -742,6 +742,15 @@
           <div class="module-desc">Génère et gère ta documentation automatiquement. Challenges, XP et progression par domaine.</div>
           <div class="module-meta">◆ Actif sur DevConnect</div>
         </div>
+        <div class="module-card reveal-up" style="--mod-color:rgba(217,164,65,.5);--mod-color-dim:rgba(217,164,65,.2)" onclick="navigate('hall')">
+          <div class="module-top">
+            <div class="module-icon" style="background:rgba(217,164,65,.12)">🏆</div>
+            <div class="module-badge" style="border-color:rgba(217,164,65,.3);color:rgba(217,164,65,.95)"><span class="dot"></span>Disponible</div>
+          </div>
+          <div class="module-name">Hall des Légendes</div>
+          <div class="module-desc">Le classement d'élite de chaque spécialité. Réputation + activité, saison par saison, vitrine à vie pour le top 3.</div>
+          <div class="module-meta">◆ Nouvelle saison chaque mois</div>
+        </div>
         <div class="module-card soon reveal-up" style="--mod-color:rgba(232,121,249,.5);--mod-color-dim:rgba(232,121,249,.2)" onclick="navigate('marketplace')">
           <div class="module-top">
             <div class="module-icon" style="background:rgba(232,121,249,.1)">🛒</div>
@@ -996,6 +1005,43 @@
       </div>
     </div>
 
+    <!-- HALL DES LÉGENDES -->
+    <div class="app-section" id="section-hall">
+      <div class="module-subnav">
+        <span class="module-subnav-back" onclick="navigate('home')">← Modules</span>
+        <span class="module-subnav-title">🏆 Hall des Légendes</span>
+        <div class="module-subnav-tabs">
+          <span class="module-subnav-tab hall-tab active" data-hall-tab="leaderboard" onclick="switchHallTab(this,'leaderboard')">Classement</span>
+          <span class="module-subnav-tab hall-tab" data-hall-tab="archive" onclick="switchHallTab(this,'archive')">Archives</span>
+        </div>
+      </div>
+
+      <div class="hall-season-banner" id="hall-season-banner">
+        <div class="hall-season-info">
+          <div class="hall-season-eyebrow"><span class="dot"></span>Saison en cours</div>
+          <div class="hall-season-desc">Score = 50% réputation (avis reçus) + 50% activité (XP gagné cette saison). Top 3 archivés à vie et récompensés 30 jours de DevConnect+.</div>
+        </div>
+        <div class="hall-season-countdown" id="hall-season-countdown">
+          <div class="hall-countdown-val" id="hall-countdown-val">—</div>
+          <div class="hall-countdown-label">avant la fin de saison</div>
+        </div>
+      </div>
+
+      <div class="hall-chips" id="hall-specialty-chips"></div>
+
+      <div class="hall-pane active" id="hall-pane-leaderboard">
+        <div id="hall-podium"><div class="insight-empty">Chargement...</div></div>
+        <div class="ranking-table" style="margin-top:18px">
+          <div class="ranking-row header"><span>#</span><span>Membre</span><span>Score</span><span></span></div>
+          <div id="hall-rows"><div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement...</div></div>
+        </div>
+      </div>
+
+      <div class="hall-pane" id="hall-pane-archive">
+        <div id="hall-archive-list"><div class="insight-empty">Chargement...</div></div>
+      </div>
+    </div>
+
     <div class="app-section" id="section-feed">
       <div class="module-subnav">
         <span class="module-subnav-back" onclick="navigate('home')">← Modules</span>
@@ -1034,6 +1080,10 @@
           <div class="sidebar-widget">
             <div class="widget-title">★ Top cette semaine</div>
             <div id="sidebar-leaderboard"><div style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono)">Chargement...</div></div>
+          </div>
+          <div class="sidebar-widget hall-teaser-widget" onclick="navigate('hall')">
+            <div class="widget-title">🏆 Hall des Légendes</div>
+            <div id="sidebar-hall-teaser"><div style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono)">Chargement...</div></div>
           </div>
           <div class="sidebar-widget">
             <div class="widget-title">◷ Events à venir</div>
@@ -1515,6 +1565,7 @@
         <div class="insight-tabs">
           <span class="insight-tab active" data-insight-tab="dashboard" onclick="switchInsightTab(this,'dashboard')">Dashboard</span>
           <span class="insight-tab" data-insight-tab="ranking" onclick="switchInsightTab(this,'ranking')">Classement</span>
+          <span class="insight-tab" data-insight-tab="hall" onclick="switchInsightTab(this,'hall')">🏆 Hall des Légendes</span>
         </div>
 
         <div class="insight-pane active" id="insight-pane-dashboard">
@@ -1556,6 +1607,18 @@
             <div class="ranking-row header"><span>#</span><span>Membre</span><span>Score</span></div>
             <div id="ranking-rows"><div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px;font-family:var(--font-mono)">Chargement...</div></div>
           </div>
+        </div>
+
+        <div class="insight-pane" id="insight-pane-hall">
+          <div class="hall-preview-banner" id="hall-preview-banner">
+            <div class="hall-preview-banner-txt">
+              <div class="hall-preview-eyebrow"><span class="dot"></span>Saison en cours</div>
+              <div class="hall-preview-countdown" id="hall-preview-countdown">Chargement...</div>
+            </div>
+          </div>
+          <div class="feed-title" style="margin:18px 0 10px">Top de ta spécialité</div>
+          <div id="hall-preview-podium"><div class="insight-empty">Chargement...</div></div>
+          <button class="btn btn-primary" style="margin-top:16px" onclick="navigate('hall')">Voir le Hall complet →</button>
         </div>
       </div>
     </div>
@@ -3309,6 +3372,30 @@
         <div style="font-size:14px;font-weight:500;margin:24px 0 12px;padding-top:20px;border-top:1px solid var(--border)">Solutions de la communauté (top 10)</div>
         <div id="solutions-list"></div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- HALL DES LÉGENDES — MODALE DE NOTATION -->
+<div class="modal-overlay" id="hall-review-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div><div class="modal-title">Noter <span id="hall-review-target-name"></span></div><div style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono);margin-top:3px" id="hall-review-target-spec"></div></div>
+      <button class="modal-close" onclick="closeHallReviewModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <label class="form-label">Ta note</label>
+      <div class="hall-star-input" id="hall-star-input">
+        <span class="hall-star" data-star="1" onclick="setHallStars(1)">★</span>
+        <span class="hall-star" data-star="2" onclick="setHallStars(2)">★</span>
+        <span class="hall-star" data-star="3" onclick="setHallStars(3)">★</span>
+        <span class="hall-star" data-star="4" onclick="setHallStars(4)">★</span>
+        <span class="hall-star" data-star="5" onclick="setHallStars(5)">★</span>
+      </div>
+      <label class="form-label" style="margin-top:18px">Points forts <span style="color:var(--text-muted);font-weight:400">(3 max)</span></label>
+      <div class="hall-tags-grid" id="hall-tags-grid"></div>
+      <div id="hall-review-feedback" style="margin-top:12px;font-size:13px;display:none"></div>
+      <button class="btn btn-primary w-full" style="margin-top:18px" onclick="submitHallReview()">Envoyer l'avis</button>
     </div>
   </div>
 </div>
