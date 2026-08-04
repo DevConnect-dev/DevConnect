@@ -3285,11 +3285,15 @@ function initKeyboard(){
 }
 function renderKB(tab){document.getElementById('keyboard-chars').innerHTML=(KB[tab]||[]).map(c=>`<div class="keyboard-char" onclick="insertChar(${JSON.stringify(c)})">${c}</div>`).join('');}
 // ── Version / changelog ──────────────────────────────────────
-const APP_VERSION='1.24.0';
+const APP_VERSION='1.24.1';
 const APP_CHANGELOG=[
+  {v:'1.24.1',date:'05 août 2026',items:[
+    "Landing : le panneau Nexus affiche maintenant une démonstration interactive (bouton \"Lancer l'attaque\") qui rejoue un scénario de détection en direct",
+    "Changelog : retrait des détails techniques de base de données des notes de version (visibles publiquement, remplacées par des descriptions fonctionnelles)"
+  ]},
   {v:'1.24.0',date:'25 juil. 2026',items:[
     "Messages : les conversations passent en groupe — bascule \"Groupe\" dans la modal Nouveau message, sélection multi-membres, nom de groupe optionnel",
-    "Migration base : dm_conversations gagne is_group/group_name/created_by, nouvelle table dm_participants (les 1-à-1 existants sont préservés)"
+    "Migration base : structure de données mise à jour pour supporter les conversations de groupe (les 1-à-1 existants sont préservés)"
   ]},
   {v:'1.23.1',date:'16 juil. 2026',items:[
     "Fix : en thème nuit, l'écran de connexion/inscription héritait par erreur de la palette sombre alors qu'il doit toujours rester en thème clair — la carte et les champs apparaissaient délavés, quasi illisibles"
@@ -3304,7 +3308,7 @@ const APP_CHANGELOG=[
     "Ajout d'un numéro de version + petit historique des changements (ce panneau)"
   ]},
   {v:'1.20.0',date:'12 juil. 2026',items:[
-    "Retrait de report_queue et signatures du picker de widgets (pas de vue dédiée dans l'app)",
+    "Nettoyage du picker de widgets internes (options obsolètes retirées, pas de vue dédiée dans l'app)",
     "Ajout d'une bannière de suggestion pour la réponse automatique selon le concern principal du site"
   ]}
 ];
@@ -9062,3 +9066,41 @@ function toggleFeaturesPanel(id){
   init();
   if(!reduceMotion){ requestAnimationFrame(step); } else { step(); }
 })();
+
+// ── Landing: démo visuelle Nexus (aucun appel réseau, aucune écriture en base) ──
+let dcfNexusDemoRunning=false;
+async function playNexusLandingDemo(){
+  if(dcfNexusDemoRunning)return;
+  dcfNexusDemoRunning=true;
+  const btn=document.getElementById('dcf-nexus-demo-btn');
+  const status=document.getElementById('dcf-nexus-demo-status');
+  const rows=document.getElementById('dcf-nexus-demo-rows');
+  if(!btn||!status||!rows){dcfNexusDemoRunning=false;return;}
+  btn.disabled=true;
+  btn.textContent='Simulation en cours…';
+  status.textContent='analyse';
+  status.classList.add('live-alert');
+
+  const sequence=[
+    {ev:"Tentative de connexion suspecte",sev:'crit',label:'bloqué'},
+    {ev:"IP 10.0.0.99 · 4 échecs en 12s",sev:'crit',label:'brute force'},
+    {ev:"Règle Nexus déclenchée",sev:'ok',label:'auto-bloqué'},
+    {ev:"Compte source mis en quarantaine",sev:'ok',label:'0 dégât'},
+  ];
+
+  for(const item of sequence){
+    await new Promise(r=>setTimeout(r,650));
+    const row=document.createElement('div');
+    row.className='row dcf-row-new';
+    row.innerHTML=`<span class="ev">${item.ev}</span><span class="sev ${item.sev}">${item.label}</span>`;
+    rows.insertBefore(row,rows.firstChild);
+    while(rows.children.length>4){rows.removeChild(rows.lastChild);}
+  }
+
+  await new Promise(r=>setTimeout(r,500));
+  status.textContent='live';
+  status.classList.remove('live-alert');
+  btn.disabled=false;
+  btn.textContent="▶ Rejouer l'attaque";
+  dcfNexusDemoRunning=false;
+}
