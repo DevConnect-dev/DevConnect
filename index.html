@@ -546,7 +546,7 @@
         <div class="form-group"><label class="form-label">Email</label><input type="email" id="login-email" class="form-input" placeholder="toi@example.com"></div>
         <div class="form-group"><label class="form-label">Mot de passe</label><input type="password" id="login-password" class="form-input" placeholder="••••••••"></div>
         <div id="login-error" class="form-error">Email ou mot de passe incorrect.</div>
-        <button class="btn btn-primary w-full" style="margin-top:16px;justify-content:center" onclick="handleLogin()">Se connecter</button>
+        <button class="btn btn-primary w-full" style="margin-top:16px;justify-content:center" onclick="handleLogin(this)">Se connecter</button>
         <div style="text-align:center;margin-top:12px;font-size:13px;color:var(--text-muted)">Pas de compte ? <a href="#" style="color:var(--text-secondary)" onclick="switchAuthTab('register')">Créer un compte</a></div>
         <button class="btn btn-ghost w-full" style="margin-top:12px;justify-content:center;font-size:13px" onclick="showPage('landing')">← Retour</button>
       </div>
@@ -619,7 +619,7 @@
           <div id="reg-error-2" class="form-error"></div>
           <div style="display:flex;gap:8px;margin-top:8px">
             <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="nextStep(1)">← Retour</button>
-            <button class="btn btn-primary" style="flex:2;justify-content:center" onclick="handleRegister()">Créer mon compte ✓</button>
+            <button class="btn btn-primary" style="flex:2;justify-content:center" onclick="handleRegister(this)">Créer mon compte ✓</button>
           </div>
         </div>
       </div>

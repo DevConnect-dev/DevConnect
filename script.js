@@ -132,6 +132,15 @@ try{
 
 let currentUser=null,currentProfile=null,currentSection='home',selectedSpecialty=null,selectedTags=[],currentStep=0,currentChannel='général',challengeId=null,currentDmConvId=null,currentDmUser=null,isDmMode=false,dmRealtimeSub=null,channelRealtimeSub=null,currentDmIsGroup=false,dmModalMode='single',dmGroupSelectedUsers=[];
 
+// Filet de sécurité global : si une requête réseau échoue quelque part sans
+// try/catch dédié (ex. Supabase injoignable, timeout), on évite l'échec
+// 100% silencieux — l'utilisateur voit au moins un message plutôt qu'un
+// bouton qui ne répond plus sans explication.
+window.addEventListener('unhandledrejection',(e)=>{
+  console.error('[DevConnect] Unhandled rejection :',e.reason);
+  showToast('Une erreur réseau est survenue. Réessaie.','error');
+});
+
 // INIT
 window.addEventListener('load',async()=>{
   initTheme();
@@ -204,12 +213,16 @@ async function handleOAuthLogin(provider){
   }
 }
 
-async function handleLogin(){
+async function handleLogin(btn){
   const email=document.getElementById('login-email').value.trim();
   const pass=document.getElementById('login-password').value;
   const err=document.getElementById('login-error');
   err.classList.remove('show');
   if(!email||!pass){err.textContent='Remplis tous les champs.';err.classList.add('show');return;}
+  if(btn?.disabled)return;
+  const btnOrigText=btn?.textContent;
+  if(btn){btn.disabled=true;btn.textContent='Connexion...';}
+  try{
 
   // NEXUS — compteur local UNIQUEMENT pour l'UX (avertir l'utilisateur après
   // plusieurs échecs). Le vrai brute force est désormais détecté de façon
@@ -273,6 +286,12 @@ async function handleLogin(){
     try{await db.from('profiles').update({last_login_country:tz}).eq('id',data.user.id);}catch(e){}
     nexusResetLoginAttempts(email);
   }
+  }catch(e){
+    err.textContent='Connexion impossible (problème réseau). Réessaie dans un instant.';
+    err.classList.add('show');
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent=btnOrigText;}
+  }
 }
 
 function nextStep(step){
@@ -310,13 +329,17 @@ function loadTechTags(){
 
 function toggleTag(el,tag){el.classList.toggle('selected');if(el.classList.contains('selected'))selectedTags.push(tag);else selectedTags=selectedTags.filter(t=>t!==tag);}
 
-async function handleRegister(){
+async function handleRegister(btn){
   const username=document.getElementById('reg-username').value.trim();
   const email=document.getElementById('reg-email').value.trim();
   const pass=document.getElementById('reg-password').value;
   const level=document.getElementById('reg-level').value;
   const err=document.getElementById('reg-error-2');
   err.classList.remove('show');
+  if(btn?.disabled)return;
+  const btnOrigText=btn?.textContent;
+  if(btn){btn.disabled=true;btn.textContent='Création...';}
+  try{
   // NEXUS — honeypot : un humain ne remplit jamais ce champ caché.
   const honeypot=document.getElementById('reg-website')?.value||'';
   if(honeypot.trim()!==''){
@@ -362,6 +385,12 @@ async function handleRegister(){
     showToast('Compte créé ! Confirme ton email avant de te connecter.','success');
   }
   setTimeout(()=>switchAuthTab('login'),2500);
+  }catch(e){
+    err.textContent='Inscription impossible (problème réseau). Réessaie dans un instant.';
+    err.classList.add('show');
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent=btnOrigText;}
+  }
 }
 
 // NEXUS — fingerprint léger (pas de lib externe) : combine quelques
@@ -680,6 +709,7 @@ async function uploadToBucket(bucket,file){
 async function uploadAvatar(input){
   const file=input.files[0];if(!file)return;
   if(!validateImageFile(file,2*1024*1024,false))return;
+  showToast('Upload en cours...','info');
   const url=await uploadToBucket('avatars',file);if(!url)return;
   const{error}=await db.from('profiles').update({avatar_url:url}).eq('id',currentUser.id);
   if(error){showToast('Erreur lors de la sauvegarde.','error');return;}
@@ -857,7 +887,11 @@ async function saveProfile(){
   }
   const afterProfile={username,display_name:displayNameVal,bio,title:getVal('s-title'),github_url:getVal('s-github'),linkedin_url:getVal('s-linkedin'),portfolio_url:getVal('s-portfolio'),specialty:getVal('s-specialty'),tech_stack:currentSkills};
   const{error}=await db.from('profiles').update({...afterProfile,updated_at:new Date().toISOString()}).eq('id',currentUser.id);
-  if(error){showToast('Erreur lors de la sauvegarde.','error');return;}
+  if(error){
+    const isDup=error.code==='23505'||/duplicate|already exists|unique/i.test(error.message||'');
+    showToast(isDup?'Ce pseudo est déjà pris, choisis-en un autre.':'Erreur lors de la sauvegarde.','error');
+    return;
+  }
   webAudit('update','profiles',currentUser.id,{targetId:currentUser.id,before:currentProfile?{username:currentProfile.username,display_name:currentProfile.display_name,bio:currentProfile.bio,title:currentProfile.title,github_url:currentProfile.github_url,linkedin_url:currentProfile.linkedin_url,portfolio_url:currentProfile.portfolio_url,specialty:currentProfile.specialty,tech_stack:currentProfile.tech_stack}:null,after:afterProfile});
   await loadProfile();showToast('Profil mis à jour !','success');
 }
@@ -1507,6 +1541,7 @@ async function submitExperience(){
 }
 async function deleteExperience(id){
   if(!currentUser)return;
+  if(!confirm('Supprimer cette expérience ? Cette action est irréversible.'))return;
   const{error}=await db.from('cv_experiences').delete().eq('id',id).eq('user_id',currentUser.id);
   if(error){showToast('Erreur : '+error.message,'error');return;}
   renderCvTab();
@@ -4933,6 +4968,7 @@ function createEditorFile(){
 
 function deleteEditorFile(name){
   if(Object.keys(editorFiles).length<=1){showToast('Il doit rester au moins un fichier.','error');return;}
+  if(!confirm(`Supprimer le fichier "${name}" ? Cette action est irréversible.`))return;
   delete editorFiles[name];
   deleteEditorFilePersist(name);
   if(activeEditorFile===name)activeEditorFile=Object.keys(editorFiles)[0];
