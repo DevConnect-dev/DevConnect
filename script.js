@@ -3285,15 +3285,11 @@ function initKeyboard(){
 }
 function renderKB(tab){document.getElementById('keyboard-chars').innerHTML=(KB[tab]||[]).map(c=>`<div class="keyboard-char" onclick="insertChar(${JSON.stringify(c)})">${c}</div>`).join('');}
 // ── Version / changelog ──────────────────────────────────────
-const APP_VERSION='1.24.1';
+const APP_VERSION='1.24.0';
 const APP_CHANGELOG=[
-  {v:'1.24.1',date:'05 août 2026',items:[
-    "Landing : le panneau Nexus affiche maintenant une démonstration interactive (bouton \"Lancer l'attaque\") qui rejoue un scénario de détection en direct",
-    "Changelog : retrait des détails techniques de base de données des notes de version (visibles publiquement, remplacées par des descriptions fonctionnelles)"
-  ]},
   {v:'1.24.0',date:'25 juil. 2026',items:[
     "Messages : les conversations passent en groupe — bascule \"Groupe\" dans la modal Nouveau message, sélection multi-membres, nom de groupe optionnel",
-    "Migration base : structure de données mise à jour pour supporter les conversations de groupe (les 1-à-1 existants sont préservés)"
+    "Migration base : dm_conversations gagne is_group/group_name/created_by, nouvelle table dm_participants (les 1-à-1 existants sont préservés)"
   ]},
   {v:'1.23.1',date:'16 juil. 2026',items:[
     "Fix : en thème nuit, l'écran de connexion/inscription héritait par erreur de la palette sombre alors qu'il doit toujours rester en thème clair — la carte et les champs apparaissaient délavés, quasi illisibles"
@@ -3308,7 +3304,7 @@ const APP_CHANGELOG=[
     "Ajout d'un numéro de version + petit historique des changements (ce panneau)"
   ]},
   {v:'1.20.0',date:'12 juil. 2026',items:[
-    "Nettoyage du picker de widgets internes (options obsolètes retirées, pas de vue dédiée dans l'app)",
+    "Retrait de report_queue et signatures du picker de widgets (pas de vue dédiée dans l'app)",
     "Ajout d'une bannière de suggestion pour la réponse automatique selon le concern principal du site"
   ]}
 ];
